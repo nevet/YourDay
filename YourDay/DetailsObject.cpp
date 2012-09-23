@@ -5,10 +5,10 @@
 
 using namespace std;
 
-DetailsObject :: DetailsObject() : Object(ENTRY_DETAILS) {
+DetailsObject :: DetailsObject() {
 }
 
-DetailsObject :: DetailsObject(string inputEvent, string inputLocation, int inputPriority) : Object(ENTRY_DETAILS) {
+DetailsObject :: DetailsObject(string inputEvent, string inputLocation, int inputPriority) {
 	eventDetails=inputEvent;
 	location=inputLocation;
 	priority=inputPriority;
