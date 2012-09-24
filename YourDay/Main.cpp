@@ -4,6 +4,7 @@
 #include "Handler.h"
 #include "Object.h"
 #include "DateObject.h"
+#include "StatusHandler.h"
 
 using namespace std;
 
