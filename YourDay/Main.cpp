@@ -7,6 +7,9 @@
 
 using namespace std;
 
-int main() {
-	return 0;
+enum TerminateSignal { SUCCESS };
+
+int main()
+{
+	return TerminateSignal::SUCCESS;
 }
