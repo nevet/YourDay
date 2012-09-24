@@ -5,7 +5,7 @@
 
 using namespace std;
 
-EntryObject :: EntryObject() {
+EntryObject :: EntryObject() : Object(ENTRY_FULL_INFO) {
 }
 
 EntryObject :: EntryObject(DateObject inputDate, TimeObject inputTime, DetailsObject inputDetails) {

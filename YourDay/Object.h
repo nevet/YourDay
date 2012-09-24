@@ -4,7 +4,7 @@
 
 class Object {
 protected:
-	enum ObjectType { ENTRY_DATE, ENTRY_TIME, ENTRY_DETAILS, ENTRY_INFO };
+	enum ObjectType { ENTRY_DATE, ENTRY_TIME, ENTRY_DETAILS, ENTRY_FULL_INFO };
 	int objectType;
 public:
 	Object();
