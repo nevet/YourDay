@@ -1,8 +1,6 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include "Signal.h"
-
 class Handler
 {
 protected:
@@ -13,8 +11,6 @@ public:
 
 	Signal getStatus() { return status; };
 	virtual void setStatus() = 0;
-
-	~Handler();
-};
+}
 
 #endif
