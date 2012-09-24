@@ -85,6 +85,7 @@
     <ClInclude Include="DateObject.h" />
     <ClInclude Include="DetailsObject.h" />
     <ClInclude Include="EntryObject.h" />
+    <ClInclude Include="Signal.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="TimeObject.h" />
