@@ -26,5 +26,27 @@ int DetailsObject :: getPriority() {
 	return priority;
 }
 
+void DetailsObject :: setEvent(const string inputEvent)
+{
+	eventDetails = inputEvent;
+}
+
+void DetailsObject :: setLocation(const string inputLocation)
+{
+	location = inputLocation;
+}
+
+void DetailsObject :: setPriority(const int inputPriority)
+{
+	priority = inputPriority;
+}
+
+void DetailsObject :: setDetails(const string inputEvent, const string inputLocation, const int inputPriority)
+{
+	setEvent(inputEvent);
+	setLocation(inputLocation);
+	setPriority(inputPriority);
+}
+
 DetailsObject :: ~DetailsObject() {
 }

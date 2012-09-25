@@ -2,9 +2,10 @@
 #define OBJECT_H
 
 
-class Object {
+class Object
+{
 protected:
-	enum ObjectType { ENTRY_DATE, ENTRY_TIME, ENTRY_DETAILS, ENTRY_FULL_INFO };
+	enum ObjectType { ENTRY_DATE, ENTRY_TIME, ENTRY_DETAILS, ENTRY_FULL_INFO, ENTRY_TEXT };
 	int objectType;
 public:
 	Object();
