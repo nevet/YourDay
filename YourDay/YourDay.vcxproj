@@ -74,42 +74,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< local
-=======
-    <ClInclude Include="DateObject.h" />
-    <ClInclude Include="DetailsObject.h" />
-    <ClInclude Include="EntryObject.h" />
-    <ClInclude Include="Handler.h" />
-    <ClInclude Include="IO.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Signal.h" />
-    <ClInclude Include="StatusHandler.h" />
-    <ClInclude Include="TimeObject.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="UIHandler.h" />
-  </ItemGroup>
-  <ItemGroup>
->>>>>>> other
     <ClCompile Include="DateObject.cpp" />
     <ClCompile Include="DetailsObject.cpp" />
     <ClCompile Include="EntryObject.cpp" />
-<<<<<<< local
-    <ClCompile Include="LangHandler.cpp" />
-=======
     <ClCompile Include="IO.cpp" />
->>>>>>> other
+    <ClCompile Include="LangHandler.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="StatusHandler.cpp" />
-<<<<<<< local
     <ClCompile Include="StorageHandler.cpp" />
     <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="TimeObject.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DateObject.h" />
     <ClInclude Include="DetailsObject.h" />
     <ClInclude Include="EntryObject.h" />
+    <ClInclude Include="IO.h" />
     <ClInclude Include="LangHandler.h" />
     <ClInclude Include="Signal.h" />
     <ClInclude Include="Handler.h" />
@@ -118,10 +101,8 @@
     <ClInclude Include="StorageHandler.h" />
     <ClInclude Include="TextObject.h" />
     <ClInclude Include="TimeObject.h" />
-=======
-    <ClCompile Include="UI.cpp" />
-    <ClCompile Include="UIHandler.cpp" />
->>>>>>> other
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="UIHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
