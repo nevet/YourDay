@@ -49,17 +49,17 @@ int main()
 					switch (obj->getCommand())
 					{
 						case ADD:
-							storage.add(obj);
+							storage.addEntry(obj);
 							if (fail) output error message(same mechanism as previous)
 							break;
 
 						case DELETE:
-							storage.del(obj);
+							storage.delEntry(obj);
 							if (fail) output error message(same mechanism as previous)
 							break;
 
 						case UPDATE:
-							storage.upd(obj);
+							storage.updEntry(obj);
 							if (fail) output error message(same mechanism as previous)
 							break;
 
