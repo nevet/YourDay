@@ -15,6 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< local
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,16 +54,29 @@
     <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+=======
+>>>>>>> other
     <ClInclude Include="DateObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
     <ClInclude Include="TimeObject.h">
+=======
+    <ClInclude Include="DetailsObject.h">
+>>>>>>> other
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EntryObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
     <ClInclude Include="DetailsObject.h">
+=======
+    <ClInclude Include="Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+>>>>>>> other
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Signal.h">
@@ -71,14 +85,61 @@
     <ClInclude Include="StatusHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
     <ClInclude Include="TextObject.h">
+=======
+    <ClInclude Include="TimeObject.h">
+>>>>>>> other
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
     <ClInclude Include="LangHandler.h">
+=======
+    <ClInclude Include="IO.h">
+>>>>>>> other
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
     <ClInclude Include="StorageHandler.h">
+=======
+    <ClInclude Include="UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIHandler.h">
+>>>>>>> other
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+<<<<<<< local
+=======
+  <ItemGroup>
+    <ClCompile Include="DateObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DetailsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+>>>>>>> other
 </Project>
