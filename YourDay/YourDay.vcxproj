@@ -77,19 +77,23 @@
     <ClCompile Include="DateObject.cpp" />
     <ClCompile Include="DetailsObject.cpp" />
     <ClCompile Include="EntryObject.cpp" />
+    <ClCompile Include="LangHandler.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="StatusHandler.cpp" />
+    <ClCompile Include="StorageHandler.cpp" />
     <ClCompile Include="TimeObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DateObject.h" />
     <ClInclude Include="DetailsObject.h" />
     <ClInclude Include="EntryObject.h" />
+    <ClInclude Include="LangHandler.h" />
     <ClInclude Include="Signal.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="StatusHandler.h" />
+    <ClInclude Include="StorageHandler.h" />
     <ClInclude Include="TimeObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
