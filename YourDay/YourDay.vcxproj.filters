@@ -36,15 +36,20 @@
     <ClCompile Include="StatusHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< local
+=======
     <ClCompile Include="TextObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+>>>>>>> other
     <ClCompile Include="LangHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StorageHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< local
+=======
     <ClCompile Include="IO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +59,7 @@
     <ClCompile Include="UIHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+>>>>>>> other
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Handler.h">
@@ -80,15 +86,20 @@
     <ClInclude Include="StatusHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
+=======
     <ClInclude Include="TextObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+>>>>>>> other
     <ClInclude Include="LangHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StorageHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< local
+=======
     <ClInclude Include="IO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -98,5 +109,6 @@
     <ClInclude Include="UIHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+>>>>>>> other
   </ItemGroup>
 </Project>
