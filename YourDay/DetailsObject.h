@@ -8,22 +8,17 @@
 
 using namespace std;
 
-class DetailsObject : public Object
-{
+class DetailsObject : public Object {
 private:
 	string eventDetails;
 	string location;
 	int priority;
 public:
 	DetailsObject();
-	DetailsObject(string inputEvent, string inputLocation, int inputPriority);
+	DetailsObject(string inputEvent, string inputLocation, int priority);
 	string getEvent();
 	string getLocation();
 	int getPriority();
-	void setEvent(const string inputEvent);
-	void setLocation(const string inputLociation);
-	void setPriority(const int inputPriority);
-	void setDetails(const string inputEvent, const string inputLocation, const int inputPriority);
 	~DetailsObject();
 };
 
