@@ -5,64 +5,35 @@
 
 using namespace std;
 
-EntryObject :: EntryObject() : Object(ENTRY_FULL_INFO)
-{
+EntryObject :: EntryObject() : Object(ENTRY_FULL_INFO) {
 }
 
-EntryObject :: EntryObject(DateObject inputDate, TimeObject inputTime, DetailsObject inputDetails): Object(ENTRY_FULL_INFO)
-{
-	entryDate = inputDate;
-	entryTime = inputTime;
-	entryDetails = inputDetails;
+EntryObject :: EntryObject(DateObject inputDate, TimeObject inputTime, DetailsObject inputDetails) {
+	entryDate=inputDate;
+	entryTime=inputTime;
+	entryDetails=inputDetails;
 }
 
-DateObject EntryObject :: getEntryDate()
-{
+DateObject EntryObject :: getEntryDate() {
 	return entryDate;
 }
 
-TimeObject EntryObject :: getEntryTime()
-{
+TimeObject EntryObject :: getEntryTime() {
 	return entryTime;
 }
 
-DetailsObject EntryObject :: getEntryDetails()
-{
+DetailsObject EntryObject :: getEntryDetails() {
 	return entryDetails;
 }
 
-string EntryObject :: getEntryEvent()
-{
+string EntryObject :: getEntryEvent() {
 	return entryDetails.getEvent();
 }
 
-string EntryObject :: getEntryLocation()
-{
+string EntryObject :: getEntryLocation() {
 	return entryDetails.getLocation();
 }
 
-int EntryObject :: getEntryPriority()
-{
+int EntryObject :: getEntryPriority() {
 	return entryDetails.getPriority();
-}
-
-void EntryObject :: setEntryTime(const TimeObject inputTime)
-{
-	entryTime = inputTime;
-}
-void EntryObject :: setEntryDate(const DateObject inputDate)
-{
-	entryDate = inputDate;
-}
-
-void EntryObject :: setEntryDetails(const DetailsObject inputDetails)
-{
-	entryDetails = inputDetails;
-}
-
-void EntryObject :: setEntry(const DateObject inputDate, const TimeObject inputTime, const DetailsObject inputDetails)
-{
-	setEntryDate(inputDate);
-	setEntryTime(inputTime);
-	setEntryDetails(inputDetails);
 }

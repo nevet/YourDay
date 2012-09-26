@@ -7,8 +7,7 @@
 
 using namespace std;
 
-class DateObject : public Object
-{
+class DateObject : public Object {
 private:
 	string day;
 	string month;
@@ -20,10 +19,6 @@ public:
 	string getDay();
 	string getMonth();
 	string getYear();
-	void setDay(const string inputDay);
-	void setMonth(const string inputMonth);
-	void setYear(const string inputYear);
-	void setDate(const string inputDay,const string inputMonth,const string inputYear);
 	~DateObject();
 };
 
