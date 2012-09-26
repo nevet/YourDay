@@ -77,13 +77,19 @@
     <ClCompile Include="DateObject.cpp" />
     <ClCompile Include="DetailsObject.cpp" />
     <ClCompile Include="EntryObject.cpp" />
+<<<<<<< local
+=======
     <ClCompile Include="IO.cpp" />
+>>>>>>> other
     <ClCompile Include="LangHandler.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="StatusHandler.cpp" />
     <ClCompile Include="StorageHandler.cpp" />
+<<<<<<< local
+=======
     <ClCompile Include="TextObject.cpp" />
+>>>>>>> other
     <ClCompile Include="TimeObject.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIHandler.cpp" />
@@ -92,14 +98,20 @@
     <ClInclude Include="DateObject.h" />
     <ClInclude Include="DetailsObject.h" />
     <ClInclude Include="EntryObject.h" />
+<<<<<<< local
+=======
     <ClInclude Include="IO.h" />
+>>>>>>> other
     <ClInclude Include="LangHandler.h" />
     <ClInclude Include="Signal.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="StatusHandler.h" />
     <ClInclude Include="StorageHandler.h" />
+<<<<<<< local
+=======
     <ClInclude Include="TextObject.h" />
+>>>>>>> other
     <ClInclude Include="TimeObject.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIHandler.h" />
