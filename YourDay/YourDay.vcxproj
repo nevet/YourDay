@@ -83,6 +83,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="StatusHandler.cpp" />
     <ClCompile Include="StorageHandler.cpp" />
+    <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="TimeObject.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIHandler.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="StatusHandler.h" />
     <ClInclude Include="StorageHandler.h" />
+    <ClInclude Include="TextObject.h" />
     <ClInclude Include="TimeObject.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIHandler.h" />
