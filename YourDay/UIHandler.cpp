@@ -18,7 +18,7 @@ void UIHandler::clearStatus()
 	status = CLEAR;
 }
 
-void UIHandler::interpreteSignal(Signal outSignal, plainTextObject* outMessage)
+void UIHandler::interpreteSignal(Signal outSignal, TextObject* outMessage)
 {
 	string outString;
 
@@ -60,7 +60,7 @@ void UIHandler::interpreteSignal(Signal outSignal, plainTextObject* outMessage)
 		}
 	}
 
-	outMessage = new plainTextObject (outString);
+	outMessage = new TextObject (outString);
 }
 
 UIHandler::UIHandler()
@@ -90,7 +90,7 @@ void UIHandler::displayMessage(Signal outSignal)
 {
 	clearStatus();
 
-	plainTextObject* outMessage = NULL;
+	TextObject* outMessage = NULL;
 	
 	interpreteSignal(outSignal, outMessage);
 	io.printOutput(outMessage);
@@ -127,7 +127,7 @@ void UIHandler::mainScreenDisplay()
 	setStatus(uiStatus);
 }
 
-plainTextObject* UIHandler::retreiveObject()
+TextObject* UIHandler::retreiveObject()
 {
 	return textObject;
 }

@@ -1,13 +1,13 @@
 #ifndef IO_H
 #define IO_H
 
-#include "plainTextObject.h"
+#include "TextObject.h"
 #include "Signal.h"
 
 class IO
 {
 private:
-	plainTextObject* textObject;
+	TextObject* textObject;
 	Signal status;
 
 	void createObject(string text);
@@ -19,10 +19,10 @@ public:
 	IO();
 
 	void getInput();
-	void printOutput(plainTextObject* output);
+	void printOutput(TextObject* output);
 
 	Signal getStatus();
-	plainTextObject* retreiveObject();
+	TextObject* retreiveObject();
 
 	~IO();
 

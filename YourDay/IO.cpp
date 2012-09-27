@@ -6,7 +6,7 @@ using namespace std;
 
 void IO::createObject(string text)
 {
-	textObject = new plainTextObject (text);
+	textObject = new TextObject (text);
 }
 
 void IO::deleteObject()
@@ -41,7 +41,7 @@ void IO::getInput()
 	setStatus(SUCCESS);
 }
 
-void IO::printOutput(plainTextObject* output)
+void IO::printOutput(TextObject* output)
 {
 	clearStatus();
 
@@ -56,7 +56,7 @@ Signal IO::getStatus()
 	return status;
 }
 
-plainTextObject* IO::retreiveObject()
+TextObject* IO::retreiveObject()
 {
 	return textObject;
 }
