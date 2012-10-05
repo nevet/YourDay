@@ -5,6 +5,9 @@
 #include "Object.h"
 #include "DateObject.h"
 #include "StatusHandler.h"
+#include "UIHandler.h"
+#include "LangHandler.h"
+#include "StorageHandler.h"
 
 using namespace std;
 
@@ -46,21 +49,49 @@ int main()
 				{
 					obj = lang.retrieve();
 					
-					switch (obj->getCommand())
+					switch (static_cast<DetailsObject*>(obj)->getCommand())
 					{
 						case ADD:
 							storage.addEntry(obj);
-							if (fail) output error message(same mechanism as previous)
+							signal = storage.getStatus();
+
+							if (status.success(signal))
+							{
+								ui.successDisplay(signal);
+							}
+							else
+							{
+								ui.errorDisplay(signal);
+							}
+
 							break;
 
 						case DELETE:
 							storage.delEntry(obj);
-							if (fail) output error message(same mechanism as previous)
+
+							if (status.success(signal))
+							{
+								ui.successDisplay(signal);
+							}
+							else
+							{
+								ui.errorDisplay(signal);
+							}
+
 							break;
 
 						case UPDATE:
 							storage.updEntry(obj);
-							if (fail) output error message(same mechanism as previous)
+							
+							if (status.success(signal))
+							{
+								ui.successDisplay(signal);
+							}
+							else
+							{
+								ui.errorDisplay(signal);
+							}
+
 							break;
 
 						default:

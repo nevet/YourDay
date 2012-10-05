@@ -1,15 +1,21 @@
 #ifndef LANGHANDLER_H
 #define LANGHANDLER_H
 
-#include "Object.h";
+#include "DetailsObject.h"
 #include "Handler.h";
 
 class LangHandler : Handler
 {
+private:
+	DetailsObject details;
+
 public :
 	LangHandler();
-	void seperate(Object);
-	Object retrieve();
+
+	void setStatus();
+	void seperate(Object obj);
+
+	DetailsObject* retrieve();
 
 	~LangHandler();
 protected :
