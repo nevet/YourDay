@@ -7,7 +7,8 @@
 #include "DetailsObject.h"
 
 
-class EntryObject : public Object {
+class EntryObject : public Object
+{
 private:
 	DateObject entryDate;
 	TimeObject entryTime;
@@ -21,6 +22,10 @@ public:
 	string getEntryEvent();
 	string getEntryLocation();
 	int getEntryPriority();
+	void setEntryTime(const TimeObject inputTime);
+	void setEntryDate(const DateObject inputDate);
+	void setEntryDetails(const DetailsObject inputDetails);
+	void setEntry(const DateObject inputDate, const TimeObject inputTime, const DetailsObject inputDetails);
 	//additional method such as get entry hours and minutes can be applied later utilizing the methods of other classes
 };
 
