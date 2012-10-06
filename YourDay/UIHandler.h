@@ -29,8 +29,6 @@ private:
 	TextObject* textObject;
 
 	void setStatus(Signal statusSignal);
-	void clearStatus();
-
 	void interpreteSignal(Signal outSignal, TextObject* outMessage);
 public:
 
@@ -46,6 +44,7 @@ public:
 
 	TextObject* retreiveObject();
 	Signal getStatus();
+	void clearStatus();
 
 	~UIHandler()
 };

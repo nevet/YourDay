@@ -14,13 +14,13 @@ private:
 	void deleteObject();
 
 	void setStatus(Signal statusSignal);
-	void clearStatus();
 public:
 	IO();
 
 	void getInput();
 	void printOutput(TextObject* output);
 
+	void clearStatus();
 	Signal getStatus();
 	TextObject* retreiveObject();
 
