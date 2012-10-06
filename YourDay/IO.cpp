@@ -20,11 +20,6 @@ void IO::setStatus(Signal statusSignal)
 	status = statusSignal;
 }
 
-void IO::clearStatus()
-{
-	status = CLEAR;
-}
-
 IO::IO()
 {
 	textObject = NULL;
@@ -32,8 +27,6 @@ IO::IO()
 
 void IO::getInput()
 {
-	clearStatus();
-
 	string inString;
 	getline(cin, inString);
 	createObject(inString);
@@ -43,12 +36,15 @@ void IO::getInput()
 
 void IO::printOutput(TextObject* output)
 {
-	clearStatus();
-
-	cout << output->getString();
+	cout << output->getText();
 	deleteObject();
 
 	setStatus(SUCCESS);
+}
+
+void IO::clearStatus()
+{
+	status = CLEAR;
 }
 
 Signal IO::getStatus()

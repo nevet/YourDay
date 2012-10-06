@@ -9,12 +9,12 @@ private:
 	Signal status;
 
 	void setStatus(Signal statusSignal);
-	void clearStatus();
 public:
 
 	UI();
 
 	Signal getStatus();
+	void clearStatus();
 
 	void startingScreenDisplay();
 	void mainScreenDisplay();
