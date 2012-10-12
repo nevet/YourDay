@@ -7,7 +7,6 @@ class Handler
 {
 protected:
 	Signal status;
-
 public:
 	Handler();
 
