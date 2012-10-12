@@ -36,10 +36,7 @@
     <ClCompile Include="StatusHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FunctionHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Command.cpp">
+    <ClCompile Include="CommandExecutor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +65,7 @@
     <ClInclude Include="StatusHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FunctionHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
+    <ClInclude Include="CommandExecutor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

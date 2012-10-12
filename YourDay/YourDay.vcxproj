@@ -74,7 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandExecutor.cpp" />
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="LangHandler.cpp" />
@@ -85,7 +85,7 @@
     <ClCompile Include="UIHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Command.h" />
+    <ClInclude Include="CommandExecutor.h" />
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="LangHandler.h" />
