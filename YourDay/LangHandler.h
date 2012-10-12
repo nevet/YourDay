@@ -7,20 +7,19 @@
 class LangHandler : Handler
 {
 private:
-	DetailsObject details;
+	string* details;
+	Command command;
 
 public :
+	enum Command {ADD, DELETE, UPDATE, SEARCH};
 	LangHandler();
 
 	void setStatus();
-	void seperate(Object obj);
+	void seperate(string* userInput, Command & command);
 
-	DetailsObject* retrieve();
+	void retrieve(string * details, Command command);
 
 	~LangHandler();
-protected :
-	
-
 };
 
 
