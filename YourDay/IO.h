@@ -19,7 +19,7 @@ public:
 	IO();
 
 	void getInput();
-	void printOutput(string output);
+	void displayMessage(string output);
 
 	void clearStatus();
 	Signal getStatus();

@@ -20,7 +20,7 @@ int main()
 	 while (!quit)
 	 {
 		 ui.getInput();
-		 string* userInput = ui.retreiveObject();
+		 string* userInput = ui.retreiveInput();
 
 		 function.excute(userInput, quit);
 

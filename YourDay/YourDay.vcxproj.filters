@@ -18,24 +18,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DateObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EntryObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DetailsObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StatusHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LangHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,33 +33,12 @@
     <ClCompile Include="UIHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextObject.cpp">
+    <ClCompile Include="StatusHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Handler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DateObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EntryObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DetailsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Signal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StatusHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LangHandler.h">
@@ -95,7 +56,10 @@
     <ClInclude Include="UIHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextObject.h">
+    <ClInclude Include="Signal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

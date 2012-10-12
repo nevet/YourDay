@@ -24,7 +24,7 @@ void IO::getInput()
 	setStatus(SUCCESS);
 }
 
-void IO::printOutput(string output)
+void IO::displayMessage(string output)
 {
 	cout << output;
 
