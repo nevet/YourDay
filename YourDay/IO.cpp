@@ -1,18 +1,8 @@
-#include <string>
-#include <iostream>
 #include "IO.h"
 
-using namespace std;
-
-void IO::createObject(string text)
+void IO::setText(string inText)
 {
-	textObject = new TextObject (text);
-}
-
-void IO::deleteObject()
-{
-	delete textObject;
-	textObject = NULL;
+	text = inText;
 }
 
 void IO::setStatus(Signal statusSignal)
@@ -22,22 +12,21 @@ void IO::setStatus(Signal statusSignal)
 
 IO::IO()
 {
-	textObject = NULL;
+	text = "";
 }
 
 void IO::getInput()
 {
 	string inString;
 	getline(cin, inString);
-	createObject(inString);
+	setText(inString);
 
 	setStatus(SUCCESS);
 }
 
-void IO::printOutput(TextObject* output)
+void IO::printOutput(string output)
 {
-	cout << output->getText();
-	deleteObject();
+	cout << output;
 
 	setStatus(SUCCESS);
 }
@@ -52,9 +41,9 @@ Signal IO::getStatus()
 	return status;
 }
 
-TextObject* IO::retreiveObject()
+string IO::getText()
 {
-	return textObject;
+	return text;
 }
 
 IO::~IO()

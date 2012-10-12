@@ -13,7 +13,7 @@ void UIHandler::setStatus(Signal statusSignal)
 	status = statusSignal;
 }
 
-void UIHandler::interpreteSignal(Signal outSignal, TextObject* outMessage)
+string UIHandler::interpreteSignal(Signal outSignal)
 {
 	string outString;
 
@@ -51,25 +51,26 @@ void UIHandler::interpreteSignal(Signal outSignal, TextObject* outMessage)
 		}
 	default:
 		{
+			outString = "";
 			break;
 		}
 	}
 
-	outMessage = new TextObject (outString);
+	return outString;
 }
 
 UIHandler::UIHandler()
 {
-	textObject = NULL;
+	input = "";
 }
 
 void UIHandler::getInput()
 {
 	io.getInput();
-	textObject = io.retreiveObject();
+	input = io.getText();
 	Signal ioStatus = io.getStatus();
 
-	if (textObject == NULL)
+	if (input == "")
 	{
 		setStatus(ERROR);
 	}
@@ -81,12 +82,12 @@ void UIHandler::getInput()
 
 void UIHandler::displayMessage(Signal outSignal)
 {
-	TextObject* outMessage = NULL;
+	string outMessage = "";
 	
-	interpreteSignal(outSignal, outMessage);
+	outMessage = interpreteSignal(outSignal);
 	io.printOutput(outMessage);
 
-	if (outMessage == NULL)
+	if (outMessage == "")
 	{
 		setStatus(DISPLAY_E);
 	}
@@ -95,7 +96,6 @@ void UIHandler::displayMessage(Signal outSignal)
 		setStatus(SUCCESS);
 	}
 
-	delete outMessage;
 }
 
 void UIHandler::startingScreenDisplay()
@@ -114,9 +114,9 @@ void UIHandler::mainScreenDisplay()
 	setStatus(uiStatus);
 }
 
-TextObject* UIHandler::retreiveObject()
+string UIHandler::retrieveInput()
 {
-	return textObject;
+	return input;
 }
 
 Signal UIHandler::getStatus()

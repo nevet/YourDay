@@ -1,28 +1,29 @@
 #ifndef IO_H
 #define IO_H
 
-#include "TextObject.h"
+#include <iostream>
+#include <string>
 #include "Signal.h"
+
+using namespace std;
 
 class IO
 {
 private:
-	TextObject* textObject;
 	Signal status;
+	string text;
 
-	void createObject(string text);
-	void deleteObject();
-
+	void setText(string inText);
 	void setStatus(Signal statusSignal);
 public:
 	IO();
 
 	void getInput();
-	void printOutput(TextObject* output);
+	void printOutput(string output);
 
 	void clearStatus();
 	Signal getStatus();
-	TextObject* retreiveObject();
+	string getText();
 
 	~IO();
 
