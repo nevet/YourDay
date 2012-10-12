@@ -41,6 +41,14 @@ public :
 	void seperate(string* userInput);
 
 	/**
+	Encodes the raw string into the correct saving format
+	
+	@param input string that needs to be encoded
+	@return encoded string
+	*/
+	string encoder(string input);
+
+	/**
 	Retrieves the processed string pointer after seperation method
 	
 	@param void

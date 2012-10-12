@@ -7,6 +7,7 @@
     @version 0.1 10/13/2012
 */
 #include <sstream>
+#include <string>
 
 #include "LangHandler.h"
 
@@ -47,13 +48,83 @@ void LangHandler::setStatus()
 void LangHandler::seperate(string* userInput)
 {
 	stringstream tempHolder;
+	string rawString;
+	string encodedString;
 	char blankSpaceEater;
 	tempHolder << *userInput;
 	tempHolder >> userCommand;
 	tempHolder >> blankSpaceEater;
+	
+	getline( tempHolder, rawString );
+	if ( userCommand == "add" )
+	{
+		encodedString = encoder(rawString);
+	}
+	else
+	{
+		encodedString = rawString;
+	}
+	
 	details = new string;
-	getline( tempHolder, *details );
+	*details= encodedString;
+}
 
+
+// Encodes the raw string into the correct saving format
+string LangHandler::encoder(string input)
+{
+	stringstream tempHolder;
+	string temp;
+	string date = "";
+	string time = "";
+	string details = "";
+	string location = "";
+	string priority = "";
+	string processed = "";
+
+	if ( input == "" )
+	{
+		return "";
+	}
+
+	tempHolder << input;
+	
+
+
+	while (tempHolder >> temp)
+	{
+		if ((temp[2] == '/') && (temp[5] == '/') && ((temp.size() == 10) || (temp.size() == 8)))
+		{
+			date = temp;
+		}
+		else if (( temp[2]==':' ) && ( temp[5] == '-' ) && ( temp[8] == ':') && (temp.size() == 11))
+		{
+			time = temp;
+		}
+		else if ( temp == "at" )
+		{
+			while ( tempHolder >> temp )
+			{
+				if ( temp == "priority" )
+				{
+					tempHolder >> priority;					
+					break;
+				}
+				else
+				{
+					location += temp;
+					location += " ";
+				}
+			}
+		}
+		else 
+		{
+			details += temp;
+			details += " ";
+		}
+	} 
+	processed = date+"#"+time+"#"+details+"#"+location+"#"+priority;
+	
 }
 
 // Retrieves the processed string pointer after seperation method
