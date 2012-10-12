@@ -1,5 +1,6 @@
 #include "UIHandler.h"
 
+const string UIHandler::CLEAR_SIGNAL_MESSAGE = "Command done";
 const string UIHandler::ADD_SUCCESSFUL_MESSAGE = "Added successfully";
 const string UIHandler::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully";
 const string UIHandler::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully";
@@ -19,6 +20,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 
 	switch (outSignal)
 	{
+	case CLEAR:
+		{
+			outString = CLEAR_SIGNAL_MESSAGE;
+			break;
+		}
 	case ADD_S:
 		{
 			outString = ADD_SUCCESSFUL_MESSAGE;

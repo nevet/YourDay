@@ -13,6 +13,7 @@ class UIHandler
 private:
 
 	/*These are successful display message*/
+	static const string CLEAR_SIGNAL_MESSAGE;
 	static const string ADD_SUCCESSFUL_MESSAGE;
 	static const string UPDATE_SUCCESSFUL_MESSAGE;
 	static const string DELETE_SUCCESSFUL_MESSAGE;
