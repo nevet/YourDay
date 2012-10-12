@@ -1,23 +1,52 @@
+/**
+    YourDay
+    LangHandler.h
+    Purpose: Calculates the total of 6 checks
+
+    @author a0088455
+    @version 0.1 10/13/2012
+*/
 #ifndef LANGHANDLER_H
 #define LANGHANDLER_H
 
-#include "DetailsObject.h"
-#include "Handler.h";
+#include <iostream>
+
+#include "Signal.h"
+#include "Handler.h"
+using namespace std;
 
 class LangHandler : Handler
 {
 private:
-	string* details;
-	Command command;
-
+	string* details;	
+	string userCommand;
 public :
-	enum Command {ADD, DELETE, UPDATE, SEARCH};
+	
 	LangHandler();
 
+	/**
+	Sets the status of the language handler after input processing
+	
+	@param void
+	@return void
+	*/
 	void setStatus();
-	void seperate(string* userInput, Command & command);
 
-	void retrieve(string * details, Command command);
+	/**
+	Seperates user input's string into 2 parts, the input and the string to be processed
+	
+	@param user's input string
+	@return void
+	*/
+	void seperate(string* userInput);
+
+	/**
+	Retrieves the processed string pointer after seperation method
+	
+	@param void
+	@return processed string pointer
+	*/
+	string* retrieve();
 
 	~LangHandler();
 };

@@ -18,7 +18,6 @@ public:
 	~FunctionHandler();
 
 private:
-	enum Command {ADD, DELETE, UPDATE, SEARCH};
 	vector<string> *ram;
 
 };
