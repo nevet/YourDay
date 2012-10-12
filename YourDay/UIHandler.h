@@ -5,7 +5,6 @@
 #include "Signal.h"
 #include "UI.h"
 #include "IO.h"
-#include "TextObject.h"
 
 using namespace std;
 
@@ -26,10 +25,10 @@ private:
 	IO io;
 	UI ui;
 	Signal status;
-	TextObject* textObject;
+	string input;
 
 	void setStatus(Signal statusSignal);
-	void interpreteSignal(Signal outSignal, TextObject* outMessage);
+	string interpreteSignal(Signal outSignal);
 public:
 
 	UIHandler();
@@ -42,7 +41,7 @@ public:
 	void startingScreenDisplay();
 	void mainScreenDisplay();
 
-	TextObject* retreiveObject();
+	string retrieveInput();
 	Signal getStatus();
 	void clearStatus();
 
