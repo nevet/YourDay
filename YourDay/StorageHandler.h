@@ -1,7 +1,6 @@
 #ifndef STORAGEHANDLER_H
 #define STORAGEHANDLER_H
 
-#include "Object.h"
 #include "Handler.h"
 #include <fstream>
 #include <string>
@@ -18,10 +17,8 @@ class StorageHandler : Handler
 {
 public :
 	StorageHandler();
-	string addEntry(Object);
-	string delEntry(Object);
-	string updEntry(Object);
 
+	void readFile(vector<string> * ram);
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,

@@ -2,7 +2,7 @@
 #include <string>
 #include "UIHandler.h"
 #include "Signal.h"
-
+#include "FunctionHandler.h"
 using namespace std;
 
 #define EXIT_SUCCESS 0
