@@ -3,12 +3,13 @@
 
 #include <string>
 #include "Signal.h"
+#include "Handler.h"
 #include "UI.h"
 #include "IO.h"
 
 using namespace std;
 
-class UIHandler
+class UIHandler:Handler
 {
 private:
 
@@ -43,7 +44,6 @@ public:
 	void mainScreenDisplay();
 
 	string retrieveInput();
-	Signal getStatus();
 	void clearStatus();
 
 	~UIHandler()
