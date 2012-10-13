@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <cstdio>
+#include <vector>
 
 #define MAXMIUM_WORDS 255 
 enum OPEN_TYPE
@@ -18,7 +19,8 @@ class StorageHandler : Handler
 public :
 	StorageHandler();
 
-	void readFile(vector<string> * ram);
+	void readData(vector<string> * ram);
+	void writeData(vector<string> *ram);
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,
