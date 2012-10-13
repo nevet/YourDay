@@ -11,6 +11,31 @@ string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
 StorageHandler::StorageHandler()
 {}
 
+void StorageHandler::readData(vector<string> * ram)
+{
+	ifstream infile(DataBaseFile);
+	string textLine;
+	while(getline(infile,textLine))
+	{
+		ram->push_back(textLine);
+	}
+	
+	infile.close();
+	return ;
+}
+
+void StorageHandler::writeData(vector<string> *ram)
+{
+	ofstream outfile(DataBaseFile,ofstream::app);
+	outfile.clear();
+	for(int i=0;i<ram->size();i++)
+	{
+		outfile<<(ram->at(i))<<endl;
+	}
+	outfile.close();
+	return ;
+}
+
 bool StorageHandler::checkFileExistence(string filePath, string fileName)
 {
 	fstream testFile;
@@ -20,7 +45,6 @@ bool StorageHandler::checkFileExistence(string filePath, string fileName)
 	disassociateFile(testFile);
 	return isExist;
 }
-
 
 void StorageHandler::disassociateFile(fstream & file)
 {
