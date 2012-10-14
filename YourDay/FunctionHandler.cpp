@@ -4,7 +4,6 @@ using namespace std;
 
 FunctionHandler::FunctionHandler()
 {
-	StorageHandler store;
 	vector<string>* passer;
 	passer=&ram;
 	ram.clear();
@@ -13,7 +12,6 @@ FunctionHandler::FunctionHandler()
 
 FunctionHandler::~FunctionHandler()
 {
-	StorageHandler store;
 	vector<string>* passer;
 	passer=&ram;
 	store.writeData(passer);

@@ -8,18 +8,8 @@ const string StorageHandler::ENTRY_STORE_FORMAT = "%s %s %s\n";
 string StorageHandler::DataBaseFile = "YourDayEntry.txt";
 string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
 
-//StorageHandler::StorageHandler()
-//{}
-
-void StorageHandler::setStatus()
-{
-
-}
-
-void StorageHandler::setStatus()
-{
-	status = CLEAR;
-}
+StorageHandler::StorageHandler()
+{}
 
 void StorageHandler::readData(vector<string> * ram)
 {

@@ -14,7 +14,7 @@ enum OPEN_TYPE
 {
 	APP, IN, OUT
 };
-
+using namespace std;
 /**
 * StorageHandler is the database handler in the logic component. Storage handler
 * would be only called by CommandExecutor and FunctionHandler,which is used to
