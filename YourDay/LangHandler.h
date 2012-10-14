@@ -38,7 +38,7 @@ public :
 	@param user's input string
 	@return void
 	*/
-	void seperate(string* userInput);
+	void seperate(string userInput);
 
 	/**
 	Encodes the raw string into the correct saving format
@@ -54,7 +54,7 @@ public :
 	@param void
 	@return processed string pointer
 	*/
-	string* retrieve();
+	string retrieve();
 
 	~LangHandler();
 };
