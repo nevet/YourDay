@@ -28,6 +28,8 @@ int main()
 	 while (!quit)
 	 {
 		 ui.getInput();
+		 //for debugging using
+		 ui.setStatus();
 		 string userInput = ui.retrieveInput();
 
 		 function.execute(userInput, quit);
