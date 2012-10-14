@@ -26,13 +26,18 @@ IO::IO()
 }
 
 //get the user input through command line
-void IO::getText()
+void IO::getRawInput()
 {
 	string inString = "";
 	getline(cin, inString);
 	setInput(inString);
 
 	setStatus(SUCCESS);
+}
+
+string IO::getText()
+{
+	return input;
 }
 
 //display feedback message
