@@ -9,15 +9,15 @@
 #include "UIHandler.h"
 
 //Set output strings for successful feedback signals
-const string UIHandler::CLEAR_SIGNAL_MESSAGE = "Command done";
-const string UIHandler::ADD_SUCCESSFUL_MESSAGE = "Added successfully";
-const string UIHandler::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully";
-const string UIHandler::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully";
+const string UIHandler::CLEAR_SIGNAL_MESSAGE = "Command done\n";
+const string UIHandler::ADD_SUCCESSFUL_MESSAGE = "Added successfully\n";
+const string UIHandler::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
+const string UIHandler::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
 
 //set output strings for error feedback signals
-const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error";
-const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error";
-const string UIHandler::OPTION_ERROR_MESSAGE = "Option error";
+const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error\n";
+const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error\n";
+const string UIHandler::OPTION_ERROR_MESSAGE = "Option error\n";
 
 void UIHandler::setUIStatus(Signal statusSignal)
 {

@@ -43,6 +43,6 @@ void FunctionHandler::execute(string input, bool quit)
 
 	command.executeCommand(passer,langSignal,formatInput);
 	cmdSignal=command.getStatus();
-
+	store.writeData(passer);
 }
 
