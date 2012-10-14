@@ -17,7 +17,7 @@
 * copy of the file, which is a private vector of strings, and an instance of
 * StorageHandler.
 */
-class FunctionHandler: Handler
+class FunctionHandler: public Handler
 {
 private:
 	vector<string> ram;
@@ -38,7 +38,6 @@ public:
 	* ERROR		Error indicator, some errors occured when executing.
 	*/
 	void setStatus();
-	Signal getStatus();
 	
 	/**
 	* The operation is periodically called in main(). It will handle the flow

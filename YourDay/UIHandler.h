@@ -18,7 +18,7 @@
 
 using namespace std;
 
-class UIHandler:Handler
+class UIHandler: public Handler
 {
 private:
 
