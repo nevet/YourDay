@@ -19,6 +19,8 @@ class StorageHandler : Handler
 public :
 	StorageHandler();
 
+	void setStatus();
+
 	void readData(vector<string> * ram);
 	void writeData(vector<string> *ram);
 	bool checkFileExistence(string filePath, string fileName);

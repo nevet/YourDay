@@ -4,14 +4,17 @@ using namespace std;
 
 FunctionHandler::FunctionHandler()
 {
-	ram=new vector<string>(MAXIMUM_SIZE);
-	StorageHandler store=new StorageHandler();
-	store.readData(ram);
+	ram.clear();
 }
 
-void FunctionHandler::excute(string* input,bool quit)
+void FunctionHandler::setStatus()
 {
-	LangHandler lang=new LangHandler();
+	status = CLEAR;
+}
+
+void FunctionHandler::execute(string input, bool quit)
+{
+	LangHandler lang;
 	CommandExecutor command=new CommandExecutor();
 	string formatInput;
 	
@@ -24,5 +27,4 @@ void FunctionHandler::excute(string* input,bool quit)
 	case DELETE:
 		command.del();
 	}
-
 }
