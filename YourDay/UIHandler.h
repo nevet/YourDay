@@ -1,13 +1,6 @@
 /**
-Your Day
-UIHandler.h
-
-* This class is used to handle user interface displaying and input/output processes
-* Control UI class to display user interface
-* Store and pass the user input string passed from IO class
-* Control IO class to display feedback message
-
-* @author: Nhu Thao
+* UIHandler is the main handler in the UI component. UIHandler knows the IO and UI classes
+* UIHandler 
 */
 
 #ifndef UIHANDLER_H
