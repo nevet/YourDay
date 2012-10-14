@@ -34,7 +34,7 @@ void CommandExecutor::updateEntry(vector<string>* entryList, string entry)
 
 CommandExecutor::CommandExecutor()
 {
-	clearStatus();
+	//clearStatus();
 }
 
 //get the command execution process status

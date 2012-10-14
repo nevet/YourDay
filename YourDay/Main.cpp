@@ -31,10 +31,11 @@ int main()
 		 //for debugging using
 		 ui.setStatus();
 		 string userInput = ui.retrieveInput();
-
+		 
 		 function.execute(userInput, quit);
 
 		 Signal signal = function.getStatus();
+		 
 		 ui.displayMessage(signal);
 	 }
 

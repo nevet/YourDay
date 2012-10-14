@@ -19,6 +19,7 @@ class LangHandler : public Handler
 {
 private:
 	string details;	
+	string formattedInput;
 	string userCommand;
 public :
 	

@@ -19,7 +19,7 @@ FunctionHandler::~FunctionHandler()
 
 void FunctionHandler::setStatus()
 {
-	status = CLEAR;
+	status=ADD_S;
 }
 
 void FunctionHandler::execute(string input, bool quit)
@@ -35,10 +35,14 @@ void FunctionHandler::execute(string input, bool quit)
 	//Processing the raw input to formatted input
 	lang.seperate(input);
 	formatInput=lang.retrieve();
+	
 	//Get the commandType by the Singal;
 	langSignal=lang.getStatus();
-	
+	fxStatus=langSignal;
+	setStatus();
+
 	command.executeCommand(passer,langSignal,formatInput);
 	cmdSignal=command.getStatus();
+
 }
 
