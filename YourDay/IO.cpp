@@ -36,6 +36,7 @@ void IO::getRawInput()
 
 string IO::getText()
 {
+	getRawInput();
 	return input;
 }
 
