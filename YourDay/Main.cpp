@@ -1,3 +1,6 @@
+/**
+* @author a00194847U
+*/
 #include <iostream>
 #include <string>
 #include "UIHandler.h"
@@ -7,14 +10,19 @@ using namespace std;
 
 #define EXIT_SUCCESS 0
 
+/**
+* Main() is the over all work flow controller. It knows UIHandler and
+* FunctionHandler. It repeatedly calls UIHandler to handler the user input and
+* then pass the input to FunctionHandler to handle. If any error happens,
+* main() will ask UIHandler to handle the feedback issue.
+*/
+
 int main()
 {
 	 FunctionHandler function;
 	 UIHandler ui;
 	 bool quit;
 
-	 //which api should be main screen display?
-	 //@Nhu Thao plz change this line if this is incorrect.
 	 ui.mainScreenDisplay();
 
 	 while (!quit)

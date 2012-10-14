@@ -1,15 +1,11 @@
 /**
-Your Day
-UIHandler.cpp
-
-* This class is used to handle user interface displaying and input/output processes
-* Control UI class to display user interface
-* Store and pass the user input string passed from IO class
-* Control IO class to display feedback message
-
-* @author: Nhu Thao
+* UIHandler is the main handler in the UI component and will be called in main(). UIHandler knows the IO and UI classes
+* UIHandler controls the screen displaying and input/output process
+* For screen displaying tasks: UIHandler has 2 public APIs startingScreenDisplay():void and mainScreenDisplay():void
+* For input/output tasks: UIHandler has APIs getInput():void, retrieveInput():string and displayMessage():void
+* UIHandler also has APIs setStatus() and clearStatus() to get and clear status signal
+* After each process, UIHandler will set the success/error signal to inform the main()
 */
-
 #include "UIHandler.h"
 
 //Set output strings for successful feedback signals
@@ -23,13 +19,16 @@ const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error";
 const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error";
 const string UIHandler::OPTION_ERROR_MESSAGE = "Option error";
 
-//set the status of UIHandler process
-void UIHandler::setStatus(Signal statusSignal)
+void UIHandler::setUIStatus(Signal statusSignal)
 {
-	status = statusSignal;
+	UIstatus = statusSignal;
 }
 
-//inteprete success/error signal to a string message
+void UIHandler::setStatus()
+{
+	status = UIstatus;
+}
+
 string UIHandler::interpreteSignal(Signal outSignal)
 {
 	string outString;
@@ -86,7 +85,6 @@ UIHandler::UIHandler()
 	input = "";
 }
 
-//get the user input through IO
 void UIHandler::getInput()
 {
 	io.getInput();
@@ -103,7 +101,6 @@ void UIHandler::getInput()
 	}
 }
 
-//display feedback message to user through IO
 void UIHandler::displayMessage(Signal outSignal)
 {
 	string outMessage = "";
@@ -122,7 +119,6 @@ void UIHandler::displayMessage(Signal outSignal)
 
 }
 
-//display starting screen to user at the beginning through UI
 void UIHandler::startingScreenDisplay()
 {
 	ui.startingScreenDisplay();
@@ -131,7 +127,6 @@ void UIHandler::startingScreenDisplay()
 	setStatus(uiStatus);
 }
 
-//display main screen of the program to user through UI
 void UIHandler::mainScreenDisplay()
 {
 	ui.mainScreenDisplay();
@@ -140,22 +135,19 @@ void UIHandler::mainScreenDisplay()
 	setStatus(uiStatus);
 }
 
-//return the user input
 string UIHandler::retrieveInput()
 {
 	return input;
 }
 
-//return the status of UIHandler process
 Signal UIHandler::getStatus()
 {
-	return status;
+	return UIstatus;
 }
 
-//clear status to default CLEAR signal
 void UIHandler::clearStatus()
 {
-	status = CLEAR;
+	UIstatus = CLEAR;
 }
 
 UIHandler::~UIHandler()
