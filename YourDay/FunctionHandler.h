@@ -50,5 +50,7 @@ public:
 	*			is the indicator for terminating the whole program
 	*/
 	void execute(string input, bool quit);
+
+	~FunctionHandler();
 };
 #endif

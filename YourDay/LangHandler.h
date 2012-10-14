@@ -32,6 +32,7 @@ public :
 	*/
 	void setStatus();
 	Signal getStatus();
+
 	/**
 	Seperates user input's string into 2 parts, the input and the string to be processed
 	
