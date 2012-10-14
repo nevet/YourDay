@@ -4,7 +4,11 @@ using namespace std;
 
 FunctionHandler::FunctionHandler()
 {
+	StorageHandler store;
+	vector<string>* passer;
+	passer=&ram;
 	ram.clear();
+	store.readData(passer);
 }
 
 void FunctionHandler::setStatus()
@@ -15,16 +19,19 @@ void FunctionHandler::setStatus()
 void FunctionHandler::execute(string input, bool quit)
 {
 	LangHandler lang;
-	CommandExecutor command=new CommandExecutor();
+	CommandExecutor command;
+	Signal langSignal;
+	Signal cmdSignal;
 	string formatInput;
-	
-	lang.process(input,formatInput,cmd);
+	vector<string> *passer;
+	passer=&ram;
 
-	switch()
-	{
-	case ADD:
-		command.add();   
-	case DELETE:
-		command.del();
-	}
+	lang.seperate(input);
+	formatInput=lang.retrieve();
+	langSignal=lang.getStatus();
+
+	command.executeCommand(passer,langSignal,formatInput);
+	cmdSignal=command.getStatus();
+
+
 }

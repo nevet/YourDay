@@ -21,7 +21,7 @@ public :
 
 	void setStatus();
 
-	void readData(vector<string> * ram);
+	void readData(vector<string>  *ram);
 	void writeData(vector<string> *ram);
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);

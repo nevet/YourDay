@@ -40,7 +40,7 @@ private:
 	@param the success/error signal to be set to
 	@return void
 	*/
-	void setStatus(Signal statusSignal);
+	void setStatus();
 
 	/**
 	inteprete the feedback signal to a string message to show to user
