@@ -89,7 +89,7 @@ void UIHandler::getInput()
 {
 	input = io.getText();
 	Signal ioStatus = io.getStatus();
-
+	
 	if (input == "")
 	{
 		setUIStatus(ERROR);

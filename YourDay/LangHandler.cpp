@@ -50,11 +50,14 @@ void LangHandler::seperate(string userInput)
 	stringstream tempHolder;
 	string rawString;
 	string encodedString;
-	char blankSpaceEater;
+	char blankSpaceEater=' ';
 	tempHolder << userInput;
 	tempHolder >> userCommand;
-	tempHolder >> blankSpaceEater;
+	//ignore the blankSapce
+	tempHolder.get(blankSpaceEater);
 	
+	setStatus();
+
 	getline( tempHolder, rawString );
 	if ( userCommand == "add" )
 	{
@@ -79,7 +82,6 @@ string LangHandler::encoder(string input)
 	string details = "";
 	string location = "";
 	string priority = "";
-	string processed = "";
 
 	if ( input == "" )
 	{
@@ -122,8 +124,9 @@ string LangHandler::encoder(string input)
 			details += " ";
 		}
 	} 
-	processed = date+"#"+time+"#"+details+"#"+location+"#"+priority;
-	
+	formattedInput = date+"#"+time+"#"+details+"#"+location+"#"+priority;
+
+	return formattedInput;
 }
 
 // Retrieves the processed string pointer after seperation method
