@@ -1,5 +1,6 @@
 /**
-* 
+* IO class is in the UI part. It is used to get user input and output feedback message through command line.
+* IO is known by UIHandler
 */
 
 #ifndef IO_H
