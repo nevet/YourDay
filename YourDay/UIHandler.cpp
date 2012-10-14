@@ -87,7 +87,6 @@ UIHandler::UIHandler()
 
 void UIHandler::getInput()
 {
-	io.getInput();
 	input = io.getText();
 	Signal ioStatus = io.getStatus();
 
