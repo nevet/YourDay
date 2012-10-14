@@ -1,6 +1,10 @@
 /**
-* UIHandler is the main handler in the UI component. UIHandler knows the IO and UI classes
-* UIHandler 
+* UIHandler is the main handler in the UI component and will be called in main(). UIHandler knows the IO and UI classes
+* UIHandler controls the screen displaying and input/output process
+* For screen displaying tasks: UIHandler has 2 public APIs startingScreenDisplay():void and mainScreenDisplay():void
+* For input/output tasks: UIHandler has APIs getInput():void, retrieveInput():string and displayMessage():void
+* UIHandler also has APIs setStatus() and clearStatus() to get and clear status signal
+* After each process, UIHandler will set the success/error signal to inform the main()
 */
 
 #ifndef UIHANDLER_H
@@ -18,99 +22,83 @@ class UIHandler:Handler
 {
 private:
 
-	/*These are successful display message*/
+	//These are successful display message and will be used in intepreteSignal operation to get the feedback message string
 	static const string CLEAR_SIGNAL_MESSAGE;
 	static const string ADD_SUCCESSFUL_MESSAGE;
 	static const string UPDATE_SUCCESSFUL_MESSAGE;
 	static const string DELETE_SUCCESSFUL_MESSAGE;
 
-	/*These are error display message*/
+	//These are error display message and will be used in intepreteSignal operation to get the feedback message string
 	static const string DISPLAY_ERROR_MESSAGE;
 	static const string COMMAND_ERROR_MESSAGE;
 	static const string OPTION_ERROR_MESSAGE;
 
+	//These are instance of IO and UI class, which will be called in operations of getting input,
+	// displaying message and displaying screen
 	IO io;
 	UI ui;
+	
+	/**
+	* Status signal of command executing process. Signal will be:
+	* CLEAR		Testing signal;
+	* SUCCESS	Success indicator, all process are successfully handled;
+	* ERROR		Error indicator, some errors occured when executing.
+	*/
 	Signal status;
+
+	//This attribute is used to store the user input passed from IO class
 	string input;
 
-	/**
-	set the status signal of UIHandler process
-
-	@param the success/error signal to be set to
-	@return void
-	*/
 	void setStatus(Signal statusSignal);
 
 	/**
-	inteprete the feedback signal to a string message to show to user
-
-	@param feedback signal
-	@return output string message
+	* This operator is used to inteprete the following feedback signal:
+	* 	DISPLAY_E, COMMAND_E, OPTION_E, LENGTH_X_E, LENGTH_Z_E, EMPTY_ENTRY_E, 
+	*	ADD_S, UPDATE_SDELETE_S
+	* to a string feedback message
+	* It will be called in displayMessage(string):void operation
+	* @param outSignal
+	*				is the feedback message passed by the displayMessage operation
+	* @return: the feedback message string
 	*/
 	string interpreteSignal(Signal outSignal);
 public:
 
 	UIHandler();
 	
-	/*These are methods to get and print messages*/
+	//These are methods to get and print messages
 
 	/**
-	get and store the input message from IO
-	
-	@param void
-	@return void
+	* This operation is used to get input message from the user
+	* It calls IO to get user input through command line and store it in the private string named input
 	*/
 	void getInput();
 
 	/**
-	display feedback message to user through IO
-
-	@param feedback signals from the program after processing user command
-	@return void	
+	* this operation is used to display output message to the user
+	* It takes in the feedback signal passed by main(), call private intepreteSignal(Signal):string
+	* to inteprete to a string and calls IO to output to the user
+	* @param outSignal
+	*				is the feedback signal passed by the main() to indicate the success/error in processing command
 	*/
 	void displayMessage(Signal outSignal);
 
-	/*These are methods to display UI*/
+	//These are methods to display UI
 
 	/**
-	display the starting screen to user through UI at the beginning of the program
-
-	@param void
-	@return void
+	* This operation is used to display the starting screen to the user at the beginning of the program
+	* It will call the UI to display starting screen
 	*/
 	void startingScreenDisplay();
 
 	/**
-	display the main screen through UI to interact with user
-
-	@param void
-	@return void
+	* This operation is used to display the main screen through UI to interact with user
+	* It will call the UI to display the main screen
 	*/
 	void mainScreenDisplay();
 
-	/**
-	retrieve the input string entered by user
-
-	@param void
-	@return user input string
-	*/
 	string retrieveInput();
-
-	/**
-	get the status of UIHandler process
-
-	@param void
-	@return status signal of UIHandler process
-	*/
 	Signal getStatus();
-
-	/**
-	clear the status signal of UIHandler process to default CLEAR status
-
-	@param void
-	@return void
-	*/
 	void clearStatus();
 
 	~UIHandler()

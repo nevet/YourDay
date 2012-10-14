@@ -7,6 +7,7 @@
 *		Delete	: delete an entry from the event list
 *		Edit	: edit an entry in the event list
 *		Search	: search for an entry containing a keyword in the event list
+*		Save	: save the current event list to file
 * It has a public API executeCommand to do the logic tasks to manipulate the entry list
 * and the APIs to get and clear status signal
 */
@@ -17,7 +18,7 @@
 #include <string>
 #include <vector>
 #include "Signal.h"
-#include "LangHandler.h"
+#include "StorageHandler.h"
 
 using namespace std;
 
@@ -47,6 +48,7 @@ private:
 	void deleteEntry(vector <string>* entryList, string entry);
 	void searchEntry(vector <string>* entryList, string keyWord);
 	void updateEntry(vector <string>* entryList, string entry);
+	void saveToFile(vector <string>* entryList, StorageHandler* storage)
 
 public:
 	CommandExecutor();
