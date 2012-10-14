@@ -64,7 +64,7 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-	~StorageHandler();
+	//~StorageHandler();
 
 
 private :
