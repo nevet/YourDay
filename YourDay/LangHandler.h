@@ -15,7 +15,7 @@
 #include "Handler.h"
 using namespace std;
 
-class LangHandler : Handler
+class LangHandler : public Handler
 {
 private:
 	string details;	
@@ -31,7 +31,6 @@ public :
 	@return void
 	*/
 	void setStatus();
-	Signal getStatus();
 
 	/**
 	Seperates user input's string into 2 parts, the input and the string to be processed

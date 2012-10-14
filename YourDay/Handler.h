@@ -8,12 +8,10 @@ class Handler
 protected:
 	Signal status;
 public:
-	Handler(){}
+	Handler(){};
 
 	Signal getStatus() { return status; };
 	virtual void setStatus() = 0;
-
-	//~Handler();
 };
 
 #endif

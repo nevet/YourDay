@@ -11,9 +11,12 @@ string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
 StorageHandler::StorageHandler()
 {}
 
-void setStatus()
+StorageHandler::~StorageHandler()
+{}
+
+void StorageHandler::setStatus()
 {
-	return;
+	status = CLEAR;
 }
 
 void StorageHandler::readData(vector<string> * ram)

@@ -21,7 +21,7 @@ using namespace std;
 * store data into the file or read data from file.
 * Only Storage Handler directly operate the file system.
 */
-class StorageHandler : Handler
+class StorageHandler : public Handler
 {
 public :
 	StorageHandler();
@@ -64,7 +64,7 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-	//~StorageHandler();
+	~StorageHandler();
 
 
 private :
