@@ -10,7 +10,8 @@ string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
 
 StorageHandler::StorageHandler()
 {
-	ofstream writeFile(DataBaseFile);
+	if(!checkFileExistence("",DataBaseFile))
+		ofstream writeFile(DataBaseFile);
 }
 
 StorageHandler::~StorageHandler()
@@ -29,15 +30,15 @@ void StorageHandler::readData(vector<string> * ram)
 	{
 		ram->push_back(textLine);
 	}
-	
 	infile.close();
 	return ;
 }
 
 void StorageHandler::writeData(vector<string> *ram)
 {
+	ofstream clearFile(DataBaseFile);
 	ofstream outfile(DataBaseFile,ofstream::app);
-	outfile.clear();
+	
 	for(int i=0;i<ram->size();i++)
 	{
 		outfile<<(ram->at(i))<<endl;
