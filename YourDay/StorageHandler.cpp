@@ -16,6 +16,11 @@ void StorageHandler::setStatus()
 
 }
 
+void StorageHandler::setStatus()
+{
+	status = CLEAR;
+}
+
 void StorageHandler::readData(vector<string> * ram)
 {
 	ifstream infile(DataBaseFile);

@@ -18,7 +18,7 @@ using namespace std;
 class LangHandler : Handler
 {
 private:
-	string* details;	
+	string details;	
 	string userCommand;
 public :
 	
@@ -31,6 +31,7 @@ public :
 	@return void
 	*/
 	void setStatus();
+	Signal getStatus();
 
 	/**
 	Seperates user input's string into 2 parts, the input and the string to be processed
@@ -38,7 +39,7 @@ public :
 	@param user's input string
 	@return void
 	*/
-	void seperate(string* userInput);
+	void seperate(string userInput);
 
 	/**
 	Encodes the raw string into the correct saving format
@@ -54,7 +55,7 @@ public :
 	@param void
 	@return processed string pointer
 	*/
-	string* retrieve();
+	string retrieve();
 
 	~LangHandler();
 };

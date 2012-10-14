@@ -4,28 +4,43 @@ using namespace std;
 
 FunctionHandler::FunctionHandler()
 {
-	ram=new vector<string>(MAXIMUM_SIZE);
-	StorageHandler store;//=new StorageHandler();
-	store.readData(ram);
+	StorageHandler store;
+	vector<string>* passer;
+	passer=&ram;
+	ram.clear();
+	store.readData(passer);
 }
 
-void FunctionHandler::excute(string* userInput,bool quit)
+FunctionHandler::~FunctionHandler()
 {
-	LangHandler lang=new LangHandler();
-	string* processedInput;
-	Signal signal;
-
-	lang.seperate(userInput);
-
-	processedInput=lang.retrieve();
-
-	signal=lang.getStatus();
-	switch()
-	{
-	case ADD:
-		  
-	case DELETE:
-		
-	}
-
+	StorageHandler store;
+	vector<string>* passer;
+	passer=&ram;
+	store.writeData(passer);
 }
+
+void FunctionHandler::setStatus()
+{
+	status = CLEAR;
+}
+
+void FunctionHandler::execute(string input, bool quit)
+{
+	LangHandler lang;
+	CommandExecutor command;
+	Signal langSignal;
+	Signal cmdSignal;
+	string formatInput;
+	vector<string> *passer;
+
+	passer=&ram;
+	//Processing the raw input to formatted input
+	lang.seperate(input);
+	formatInput=lang.retrieve();
+	//Get the commandType by the Singal;
+	langSignal=lang.getStatus();
+	
+	command.executeCommand(passer,langSignal,formatInput);
+	cmdSignal=command.getStatus();
+}
+
