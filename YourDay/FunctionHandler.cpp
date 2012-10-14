@@ -11,6 +11,14 @@ FunctionHandler::FunctionHandler()
 	store.readData(passer);
 }
 
+FunctionHandler::~FunctionHandler()
+{
+	StorageHandler store;
+	vector<string>* passer;
+	passer=&ram;
+	store.writeData(passer);
+}
+
 void FunctionHandler::setStatus()
 {
 	status = CLEAR;
@@ -24,14 +32,15 @@ void FunctionHandler::execute(string input, bool quit)
 	Signal cmdSignal;
 	string formatInput;
 	vector<string> *passer;
-	passer=&ram;
 
+	passer=&ram;
+	//Processing the raw input to formatted input
 	lang.seperate(input);
 	formatInput=lang.retrieve();
+	//Get the commandType by the Singal;
 	langSignal=lang.getStatus();
-
+	
 	command.executeCommand(passer,langSignal,formatInput);
 	cmdSignal=command.getStatus();
-
-
 }
+
