@@ -9,7 +9,9 @@ string StorageHandler::DataBaseFile = "YourDayEntry.txt";
 string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
 
 StorageHandler::StorageHandler()
-{}
+{
+	ofstream writeFile(DataBaseFile);
+}
 
 StorageHandler::~StorageHandler()
 {}
