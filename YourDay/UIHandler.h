@@ -59,7 +59,7 @@ private:
 public:
 
 	UIHandler();
-
+	
 	/*These are methods to get and print messages*/
 
 	/**

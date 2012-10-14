@@ -9,7 +9,7 @@
 
 #define MAXIMUM_SIZE 1000
 
-class FunctionHandler
+class FunctionHandler:Handler
 {
 public:
 	FunctionHandler();
