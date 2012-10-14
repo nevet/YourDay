@@ -21,7 +21,7 @@ int main()
 {
 	 FunctionHandler function;
 	 UIHandler ui;
-	 bool quit;
+	 bool quit=false;
 
 	 ui.mainScreenDisplay();
 
