@@ -7,6 +7,7 @@
 #include "Handler.h"
 #include "LangHandler.h"
 #include "CommandExecutor.h"
+#include "StatusHandler.h"
 
 #define MAXIMUM_SIZE 1000
 
@@ -20,6 +21,7 @@
 class FunctionHandler: public Handler
 {
 private:
+	StatusHandler sh;
 	vector<string> ram;
 	Signal fxStatus;
 	//will be constructed when FunctionHandler constructed

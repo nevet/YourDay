@@ -63,6 +63,10 @@ void LangHandler::seperate(string userInput)
 	{
 		encodedString = encoder(rawString);
 	}
+	else if( userCommand == "delete")
+	{
+		encodedString= encoder(rawString) ;
+	}
 	else
 	{
 		encodedString = rawString;
