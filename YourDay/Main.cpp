@@ -3,6 +3,8 @@
 #include "UIHandler.h"
 #include "Signal.h"
 #include "FunctionHandler.h"
+
+
 using namespace std;
 
 #define EXIT_SUCCESS 0
@@ -20,11 +22,11 @@ int main()
 	 while (!quit)
 	 {
 		 ui.getInput();
-		 string* userInput = ui.retreiveInput();
+		 string* userInput = ui.retrieveInput();
 
 		 function.excute(userInput, quit);
 
-		 Signal signal = function.status();
+		 Signal signal = function.getStatus();
 		 ui.displayMessage(signal);
 	 }
 

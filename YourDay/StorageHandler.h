@@ -17,8 +17,9 @@ using namespace std;
 class StorageHandler : Handler
 {
 public :
-	StorageHandler();
+	//StorageHandler();
 
+	void setStatus();
 	void readData(vector<string> * ram);
 	void writeData(vector<string> *ram);
 	bool checkFileExistence(string filePath, string fileName);
@@ -29,7 +30,7 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-	~StorageHandler();
+	//~StorageHandler();
 
 
 protected :
