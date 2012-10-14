@@ -28,7 +28,9 @@ public:
 	@param void
 	@return void
 	*/
-	void getText();
+	void getRawInput();
+
+	string getText();
 
 	/**
 	display feedback message string of the system to user
