@@ -50,7 +50,7 @@ private:
 	string input;
 
 	void setUIStatus(Signal statusSignal);
-
+	void setStatus();
 	/**
 	* This operator is used to inteprete the following feedback signal:
 	* 	DISPLAY_E, COMMAND_E, OPTION_E, LENGTH_X_E, LENGTH_Z_E, EMPTY_ENTRY_E, 
@@ -101,7 +101,7 @@ public:
 	Signal getStatus();
 	void clearStatus();
 
-	~UIHandler()
+	~UIHandler();
 };
 
 #endif
