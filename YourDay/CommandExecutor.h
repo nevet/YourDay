@@ -1,3 +1,15 @@
+/**
+* CommandExecutor is to be accessed in the FunctionHandler class
+* CommandExecutor is used to manipulate the entry list passed in by the FunctionHandler class regarding
+* to the type of command specified by FunctionHandler
+* The types of command are:
+*		Add		: add an entry to the event list
+*		Delete	: delete an entry from the event list
+*		Edit	: edit an entry in the event list
+*		Search	: search for an entry containing a keyword in the event list
+* It has a public API executeCommand to do the logic tasks to manipulate the entry list
+* and the APIs to get and clear status signal
+*/
 #ifndef COMMAND_EXECUTOR_H
 #define COMMAND_EXECUTOR_H
 
@@ -50,7 +62,7 @@ public:
 	* This operation is the main logic operation in CommandExecutor class
 	* and will be called in the execute() operator inside FunctionHandler class
 	* It executes user command, manipulating the entry list
-	* It takes in 3 parameters passed by functionHandler class
+	* It takes in 3 parameters passed by FunctionHandler class
 	* @param entryList
 	*				is the string vector pointer points to the list of events
 	* @param type
