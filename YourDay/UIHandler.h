@@ -44,13 +44,21 @@ private:
 	* SUCCESS	Success indicator, all process are successfully handled;
 	* ERROR		Error indicator, some errors occured when executing.
 	*/
+<<<<<<< local
 	Signal UIstatus;
+=======
+	Signal status;
+>>>>>>> other
 
 	//This attribute is used to store the user input passed from IO class
 	string input;
 
+<<<<<<< local
 	void setUIStatus(Signal statusSignal);
-	void setStatus();
+=======
+	void setStatus(Signal statusSignal);
+>>>>>>> other
+
 	/**
 	* This operator is used to inteprete the following feedback signal:
 	* 	DISPLAY_E, COMMAND_E, OPTION_E, LENGTH_X_E, LENGTH_Z_E, EMPTY_ENTRY_E, 
@@ -101,7 +109,7 @@ public:
 	Signal getStatus();
 	void clearStatus();
 
-	~UIHandler();
+	~UIHandler()
 };
 
 #endif

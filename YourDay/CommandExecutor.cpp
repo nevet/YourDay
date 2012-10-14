@@ -1,13 +1,23 @@
+/**
+* CommandExecutor is to be accessed in the FunctionHandler class
+* CommandExecutor is used to manipulate the entry list passed in by the FunctionHandler class regarding
+* to the type of command specified by FunctionHandler
+* The types of command are:
+*		Add		: add an entry to the event list
+*		Delete	: delete an entry from the event list
+*		Edit	: edit an entry in the event list
+*		Search	: search for an entry containing a keyword in the event list
+* It has a public API executeCommand to do the logic tasks to manipulate the entry list
+* and the APIs to get and clear status signal
+*/
 #include <assert.h>
 #include "CommandExecutor.h"
 
-//set the status signal of command execution process
 void CommandExecutor::setStatus(Signal statusSignal)
 {
 	status = statusSignal;
 }
 
-//add an entry as a pure string to the entry list vector
 void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 {
 	if (detail == "")
@@ -37,13 +47,11 @@ CommandExecutor::CommandExecutor()
 	clearStatus();
 }
 
-//get the command execution process status
 Signal CommandExecutor::getStatus()
 {
 	return status;
 }
 
-//clear the command execusion status to default CLEAR signal
 void CommandExecutor::clearStatus()
 {
 	status = CLEAR;

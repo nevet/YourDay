@@ -1,5 +1,10 @@
 /**
-* 
+* IO class is in the UI part. It is used to get user input and output feedback message through command line.
+* IO is known by UIHandler
+* IO has the following main APIs to be called:
+* getText(): string to get in user input througg command line
+* displayMessage(string):void to display feedback string to user
+* retrieveInput():string to return the user input string
 */
 
 #ifndef IO_H
