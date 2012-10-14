@@ -18,7 +18,7 @@ using namespace std;
 class LangHandler : Handler
 {
 private:
-	string* details;	
+	string details;	
 	string userCommand;
 public :
 	
