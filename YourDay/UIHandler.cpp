@@ -92,11 +92,11 @@ void UIHandler::getInput()
 
 	if (input == "")
 	{
-		setStatus(ERROR);
+		setUIStatus(ERROR);
 	}
 	else
 	{
-		setStatus( ioStatus);
+		setUIStatus( ioStatus);
 	}
 }
 
@@ -109,11 +109,11 @@ void UIHandler::displayMessage(Signal outSignal)
 
 	if (outMessage == "")
 	{
-		setStatus(DISPLAY_E);
+		setUIStatus(DISPLAY_E);
 	}
 	else
 	{
-		setStatus(SUCCESS);
+		setUIStatus(SUCCESS);
 	}
 
 }
@@ -123,7 +123,7 @@ void UIHandler::startingScreenDisplay()
 	ui.startingScreenDisplay();
 	Signal uiStatus = ui.getStatus();
 
-	setStatus(uiStatus);
+	setUIStatus(uiStatus);
 }
 
 void UIHandler::mainScreenDisplay()
@@ -131,7 +131,7 @@ void UIHandler::mainScreenDisplay()
 	ui.mainScreenDisplay();
 	Signal uiStatus = ui.getStatus();
 
-	setStatus(uiStatus);
+	setUIStatus(uiStatus);
 }
 
 string UIHandler::retrieveInput()
