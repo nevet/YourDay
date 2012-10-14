@@ -23,7 +23,7 @@ Signal UI::getStatus()
 
 void UI::clearStatus()
 {
-	UIstatus = CLEAR;
+	status = CLEAR;
 }
 
 void UI::startingScreenDisplay()

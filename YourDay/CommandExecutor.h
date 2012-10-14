@@ -48,7 +48,7 @@ private:
 	void deleteEntry(vector <string>* entryList, string entry);
 	void searchEntry(vector <string>* entryList, string keyWord);
 	void updateEntry(vector <string>* entryList, string entry);
-	void saveToFile(vector <string>* entryList, StorageHandler* storage)
+	void saveToFile(vector <string>* entryList, StorageHandler* storage);
 
 public:
 	CommandExecutor();
