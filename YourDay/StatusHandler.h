@@ -8,6 +8,7 @@ class StatusHandler
 {
 public:
 	bool success(Signal signal);
+	
 };
 
 #endif

@@ -19,9 +19,8 @@ FunctionHandler::~FunctionHandler()
 
 void FunctionHandler::setStatus()
 {
-	status=ADD_S;
+	status=fxStatus;
 }
-
 void FunctionHandler::execute(string input, bool quit)
 {
 	LangHandler lang;
