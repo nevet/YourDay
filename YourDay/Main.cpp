@@ -35,7 +35,10 @@ int main()
 		 function.execute(userInput, quit);
 
 		 Signal signal = function.getStatus();
-		 
+
+		 if(signal==EXIT_COMMAND)
+			 quit=true;
+
 		 ui.displayMessage(signal);
 	 }
 
