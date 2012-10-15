@@ -45,7 +45,7 @@ void LangHandler::setStatus()
 }
 
 // Seperates user input's string into 2 parts, the input and the string to be processed
-void LangHandler::seperate(string userInput)
+void LangHandler::separate(string userInput)
 {
 	stringstream tempHolder;
 	string rawString;
