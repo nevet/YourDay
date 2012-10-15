@@ -22,8 +22,12 @@ void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 
 void CommandExecutor::deleteEntry(vector<string>* entryList, string entry)
 {
+	vector< string > tempVector;
 	vector<string>* tempEntryList;
 	string temp;
+
+	tempEntryList=&tempVector;
+
 	if ( entry =="")
 	{
 		setStatus(EMPTY_ENTRY_E);
@@ -50,7 +54,6 @@ void CommandExecutor::deleteEntry(vector<string>* entryList, string entry)
 
 void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord, vector<string>* matchedEntryList)
 {
-	vector<string>* tempEntryList;
 	string temp;
 
 	matchedEntryList->clear();
@@ -63,7 +66,7 @@ void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord, vec
 		for(int i=0;i<entryList->size();i++)
 		{
 			temp=entryList->at(i);
-			if(temp.find(keyWord))
+			if(std::string::npos != temp.find(keyWord))
 				matchedEntryList->push_back(temp);
 		}
 	}
@@ -92,8 +95,11 @@ void CommandExecutor::clearStatus()
 
 void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, string detail)
 {
+	vector <string> tempVector;
 	vector <string> * matchedEntryList;
 	string temp;
+
+	matchedEntryList=&tempVector;
 
 	switch (type)
 	{
