@@ -98,11 +98,11 @@ string LangHandler::encoder(string input)
 
 	while (tempHolder >> temp)
 	{
-		if ((temp[2] == '/') && (temp[5] == '/') && ((temp.size() == 10) || (temp.size() == 8)))
+		if (((temp.size() == 10) || (temp.size() == 8))&&(temp[2] == '/') && (temp[5] == '/') )
 		{
 			date = temp;
 		}
-		else if (( temp[2]==':' ) && ( temp[5] == '-' ) && ( temp[8] == ':') && (temp.size() == 11))
+		else if ((temp.size() == 11)&&( temp[2]==':' ) && ( temp[5] == '-' ) && ( temp[8] == ':') )
 		{
 			time = temp;
 		}
