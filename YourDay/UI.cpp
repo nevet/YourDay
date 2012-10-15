@@ -1,15 +1,12 @@
 /**
-Your Day
-UI.h
-
-* This class is to display user interface
-* Display starting screen to user at the beginning of the program
-* Display main screen to interact with user
-* author: Nhu Thao
+* UI class is a part of UI part and will be called in the UIHandler
+* UI class is used to display User Interface to the screen
+* UI class has 2 main APIs to do this functionality:
+* startingScreenDisplay():void to diisplay starting screen to user at the beginning of the program
+* mainScreenDisplay():void to display main screen to interact with user
 */
 #include "UI.h"
 
-//set the status of UI displaying proceess
 void UI::setStatus(Signal statusSignal)
 {
 	status = statusSignal;
@@ -19,25 +16,21 @@ UI::UI()
 {
 }
 
-//get status of UI displaying process
 Signal UI::getStatus()
 {
 	return status;
 }
 
-//clear status to default CLEAR signal
 void UI::clearStatus()
 {
 	status = CLEAR;
 }
 
-//display the starting screen at the beginning of the program
 void UI::startingScreenDisplay()
 {
 	setStatus(SUCCESS);
 }
 
-//display the main screen to interact with user
 void UI::mainScreenDisplay()
 {
 	setStatus(SUCCESS);
