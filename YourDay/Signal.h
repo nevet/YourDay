@@ -23,7 +23,7 @@ enum Signal
 	EXIT_COMMAND    = 0x00000006,
 
 	ADD_S		= SUCCESS | ADD_COMMAND,
-	DELETE_S	= SUCCESS | DELETE_COMMAND
+	DELETE_S	= SUCCESS | DELETE_COMMAND,
 
 //@author a0088455r
 //for interpreting commands that is sent drom language handler

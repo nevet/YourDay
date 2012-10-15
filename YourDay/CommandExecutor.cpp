@@ -1,7 +1,6 @@
 #include <assert.h>
 #include "CommandExecutor.h"
 
-//set the status signal of command execution process
 void CommandExecutor::setStatus(Signal statusSignal)
 {
 	status = statusSignal;
@@ -81,13 +80,11 @@ CommandExecutor::CommandExecutor()
 	//clearStatus();
 }
 
-//get the command execution process status
 Signal CommandExecutor::getStatus()
 {
 	return status;
 }
 
-//clear the command execusion status to default CLEAR signal
 void CommandExecutor::clearStatus()
 {
 	status = CLEAR;
