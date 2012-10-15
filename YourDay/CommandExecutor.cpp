@@ -22,10 +22,51 @@ void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 
 void CommandExecutor::deleteEntry(vector<string>* entryList, string entry)
 {
+	vector<string>* tempEntryList;
+	string temp;
+	if ( entry =="")
+	{
+		setStatus(EMPTY_ENTRY_E);
+	}
+	else
+	{
+		for(int i=0;i<entryList->size();i++)
+		{
+			temp=entryList->back();
+			entryList->pop_back();
+			if(temp!=entry)
+				tempEntryList->push_back(temp);
+			else
+				break;
+		}
+		for(int i=0;i<tempEntryList->size();i++)
+		{
+			temp=tempEntryList->back();
+			tempEntryList->pop_back();
+			entryList->push_back(entry);
+		}
+	}
 }
 
-void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord)
+void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord, vector<string>* matchedEntryList)
 {
+	vector<string>* tempEntryList;
+	string temp;
+
+	matchedEntryList->clear();
+	if ( keyWord =="")
+	{
+		setStatus(EMPTY_ENTRY_E);
+	}
+	else
+	{
+		for(int i=0;i<entryList->size();i++)
+		{
+			temp=entryList->at(i);
+			if(temp.find(keyWord))
+				matchedEntryList->push_back(temp);
+		}
+	}
 }
 
 void CommandExecutor::updateEntry(vector<string>* entryList, string entry)
@@ -51,6 +92,9 @@ void CommandExecutor::clearStatus()
 
 void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, string detail)
 {
+	vector <string> * matchedEntryList;
+	string temp;
+
 	switch (type)
 	{
 	case ADD_COMMAND:
@@ -65,7 +109,13 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 		}
 	case SEARCH_COMMAND:
 		{
-			searchEntry(entryList, detail);
+			searchEntry(entryList, detail, matchedEntryList);
+			for(int i=0;i<matchedEntryList->size();i++)
+			{
+				temp=matchedEntryList->at(i);
+				cout<<i<<" :"<<temp<<endl;
+			}
+			matchedEntryList->clear();
 			break;
 		}
 	case EDIT_COMMAND:

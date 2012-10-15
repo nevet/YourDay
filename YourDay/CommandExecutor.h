@@ -19,6 +19,8 @@
 #include "Signal.h"
 #include "LangHandler.h"
 
+#define MAXIMUM_LENGTH 255
+
 using namespace std;
 
 class CommandExecutor
@@ -45,7 +47,7 @@ private:
 	*/
 	void addEntry(vector<string> * entryList, string eventDetails);
 	void deleteEntry(vector <string>* entryList, string entry);
-	void searchEntry(vector <string>* entryList, string keyWord);
+	void searchEntry(vector <string>* entryList, string keyWord,vector <string>* matchedEntryList);
 	void updateEntry(vector <string>* entryList, string entry);
 
 public:

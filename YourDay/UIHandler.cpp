@@ -45,11 +45,6 @@ string UIHandler::interpreteSignal(Signal outSignal)
 			outString = ADD_SUCCESSFUL_MESSAGE;
 			break;
 		}
-	case UPDATE_S:
-		{
-			outString = UPDATE_SUCCESSFUL_MESSAGE;
-			break;
-		}
 	case  DELETE_COMMAND:
 		{
 			outString = DELETE_SUCCESSFUL_MESSAGE;
