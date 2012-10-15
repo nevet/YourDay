@@ -38,7 +38,7 @@ void FunctionHandler::execute(string input, bool quit)
 	//Get the commandType by the Singal;
 	langSignal=lang.getStatus();
 	fxStatus=langSignal;
-	
+
 
 	command.executeCommand(passer,langSignal,formatInput);
 	cmdSignal=command.getStatus();

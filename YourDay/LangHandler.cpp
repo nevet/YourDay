@@ -38,6 +38,10 @@ void LangHandler::setStatus()
 	{
 		status = UNDO_COMMAND;
 	}
+	else if (userCommand == "exit" )
+	{
+		status = EXIT_COMMAND;
+	}
 	else
 	{
 		status = COMMAND_E;
