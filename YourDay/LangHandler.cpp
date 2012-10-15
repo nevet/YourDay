@@ -59,7 +59,7 @@ void LangHandler::separate(string userInput)
 	setStatus();
 
 	getline( tempHolder, rawString );
-	if ( userCommand == "add" || userCommand =="delete" || userCommand == "search")
+	if ( userCommand == "add" || userCommand =="delete")
 	{
 		encodedString = encoder(rawString);
 	}

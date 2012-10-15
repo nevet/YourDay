@@ -32,7 +32,7 @@ void FunctionHandler::execute(string input, bool quit)
 
 	passer=&ram;
 	//Processing the raw input to formatted input
-	lang.seperate(input);
+	lang.separate(input);
 	formatInput=lang.retrieve();
 	
 	//Get the commandType by the Singal;
