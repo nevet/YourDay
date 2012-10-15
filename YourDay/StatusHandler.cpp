@@ -1,5 +1,5 @@
 #include "StatusHandler.h"
-//comitt
+
 bool StatusHandler::success(Signal signal)
 {
 	bool flag;
