@@ -33,6 +33,8 @@ private:
 	static const string COMMAND_ERROR_MESSAGE;
 	static const string OPTION_ERROR_MESSAGE;
 
+	static const string DELETE_FAILED_MESSAGE;
+
 	//These are instance of IO and UI class, which will be called in operations of getting input,
 	// displaying message and displaying screen
 	IO io;

@@ -19,6 +19,8 @@ const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error\n";
 const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error\n";
 const string UIHandler::OPTION_ERROR_MESSAGE = "Option error\n";
 
+const string UIHandler::DELETE_FAILED_MESSAGE = "No such entry\n";
+
 void UIHandler::setUIStatus(Signal statusSignal)
 {
 	UIstatus = statusSignal;
@@ -63,6 +65,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 	case  OPTION_E:
 		{
 			outString = OPTION_ERROR_MESSAGE;
+			break;
+		}
+	case DELETE_F:
+		{
+			outString = DELETE_FAILED_MESSAGE;
 			break;
 		}
 	default:
