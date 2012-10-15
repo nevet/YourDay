@@ -39,7 +39,7 @@ public :
 	@param user's input string
 	@return void
 	*/
-	void seperate(string userInput);
+	void separate(string userInput);
 
 	/**
 	Encodes the raw string into the correct saving format
@@ -50,7 +50,7 @@ public :
 	string encoder(string input);
 
 	/**
-	Retrieves the processed string pointer after seperation method
+	Retrieves the processed string pointer after separation method
 	
 	@param void
 	@return processed string pointer
