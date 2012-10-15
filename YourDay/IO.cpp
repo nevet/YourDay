@@ -1,20 +1,18 @@
 /**
-Your Day
-IO.cpp
-
-* This class is used to retrieve user input and display feedback message
-* @author: Nhu Thao
+* IO class is a part of UI part. It is known by UIHandler class
+* IO class is used to get user input through command line and pass it to UIHandler as a pure string,
+* and show feedback message string passed by UIHandler to user
+* IO class has APIs getText():string to be called in the UIHandler to retrieve user input string
+* and displayMessage(string):void to be called in the UIHandler to display feedback message string
 */
 
 #include "IO.h"
 
-//set the private user input string
 void IO::setInput(string inText)
 {
 	input = inText;
 }
 
-//set the status of IO process
 void IO::setStatus(Signal statusSignal)
 {
 	status = statusSignal;
@@ -24,7 +22,6 @@ IO::IO()
 {
 }
 
-//get the user input through command line
 void IO::getRawInput()
 {
 	string inString = "";
@@ -40,7 +37,6 @@ string IO::getText()
 	return input;
 }
 
-//display feedback message
 void IO::displayMessage(string output)
 {
 	cout << output;
@@ -48,22 +44,14 @@ void IO::displayMessage(string output)
 	setStatus(SUCCESS);
 }
 
-//clear the status of IO process to default CLEAR signal
 void IO::clearStatus()
 {
 	status = CLEAR;
 }
 
-//get the status of IO process
 Signal IO::getStatus()
 {
 	return status;
-}
-
-//return the string of user input
-string IO::retrieveInput()
-{
-	return input;
 }
 
 IO::~IO()
