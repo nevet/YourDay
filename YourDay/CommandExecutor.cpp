@@ -113,19 +113,20 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 	case DELETE_COMMAND:
 		{
 			searchEntry(entryList, detail, matchedEntryList);
-
 			for(int i=0;i<matchedEntryList->size();i++)
 			{
 				temp=matchedEntryList->at(i);
 				cout<<"Entry "<<i+1<<" :"<<temp<<endl;
 			}
-			if (matchedEntryList->size() !=0)
+			if(matchedEntryList->size()!=0)
 			{
-				cout<<"what do you want to delete";
+				cout<<"Which one you want to delete?"<<endl;
 				cin>>choice;
-				deleteEntry(entryList, matchedEntryList->at(choice));
+				cin.get(enterEater);
+				deleteEntry(entryList,matchedEntryList->at(choice-1) );
 			}
-
+			else
+				setStatus(DELETE_F);
 			matchedEntryList->clear();
 			break;
 		}
