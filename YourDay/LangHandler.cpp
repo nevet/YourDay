@@ -11,6 +11,46 @@
 
 #include "LangHandler.h"
 
+string LangHandler::decodePart(DetailPart part)
+{
+	string ans = "";
+	switch (part)
+	{
+	case DATE:
+		{
+			ans = "On ";
+			break;
+		}
+	case TIME:
+		{
+			ans = "at";
+			break;
+		}
+	case DETAILS:
+		{
+			ans = ": ";
+			break;
+		}
+	case LOCATION:
+		{
+			ans = "in";
+			break;
+		}
+	case PRIORITY:
+		{
+			ans = "with priority";
+			break;
+		}
+	default:
+		{
+			//use some signal here
+			break;
+		}
+	}
+
+	return ans;
+}
+
 LangHandler::LangHandler()
 {
 }
@@ -81,9 +121,10 @@ string LangHandler::encoder(string input)
 {
 	stringstream tempHolder;
 	string temp;
+
 	string date = "";
 	string time = "";
-	string details = "";
+	string eventDetails = "";
 	string location = "";
 	string priority = "";
 
@@ -93,8 +134,6 @@ string LangHandler::encoder(string input)
 	}
 
 	tempHolder << input;
-	
-
 
 	while (tempHolder >> temp)
 	{
@@ -124,13 +163,39 @@ string LangHandler::encoder(string input)
 		}
 		else 
 		{
-			details += temp;
-			details += " ";
+			eventDetails += temp;
+			eventDetails += " ";
 		}
 	} 
-	formattedInput = date+"#"+time+"#"+details+"#"+location+"#"+priority;
+	formattedInput = date+"#"+time+"#"+eventDetails+"#"+location+"#"+priority;
 
 	return formattedInput;
+}
+
+string LangHandler::decoder(string input)
+{
+	string decodedString = "";
+	int size = input.size();
+	char curChar;			//current character in input string
+	DetailPart part = DATE;
+
+	for (int i = 0; i < input.size(); i++)
+	{
+		curChar = input[i];
+		if (curChar != '#')
+		{
+			decodedString += curChar;
+		}
+		else
+		{
+			if (i != input.size()-1 && input[i+1] != '#' && decodedString != "")
+			{
+				decodedString += ": ";
+			}
+		}
+	}
+
+	return decodedString;
 }
 
 // Retrieves the processed string pointer after seperation method

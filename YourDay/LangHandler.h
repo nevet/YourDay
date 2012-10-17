@@ -18,9 +18,18 @@ using namespace std;
 class LangHandler : public Handler
 {
 private:
+	//These are parts of a detailed event, to be used in decoder operation
+	enum DetailPart
+	{
+		DATE, TIME, DETAILS, LOCATION, PRIORITY
+	};
+
 	string details;	
 	string formattedInput;
 	string userCommand;
+
+	//this operation is to be used in decoder operation
+	string decodePart(DetailPart part);
 public :
 	
 	LangHandler();
@@ -55,6 +64,9 @@ public :
 	@param void
 	@return processed string pointer
 	*/
+
+	string decoder(string input);
+
 	string retrieve();
 
 	~LangHandler();

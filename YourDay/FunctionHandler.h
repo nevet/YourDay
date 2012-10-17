@@ -50,7 +50,7 @@ public:
 	* @param quit
 	*			is the indicator for terminating the whole program
 	*/
-	void execute(string input, bool quit);
+	void execute(string input, bool quit, vector<string>* result);
 
 	~FunctionHandler();
 };
