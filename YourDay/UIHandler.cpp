@@ -6,6 +6,8 @@
 * UIHandler also has APIs setStatus() and clearStatus() to get and clear status signal
 * After each process, UIHandler will set the success/error signal to inform the main()
 */
+#include <sstream>
+#include <iostream>
 #include "UIHandler.h"
 
 //Set output strings for successful feedback signals
@@ -20,6 +22,8 @@ const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error\n";
 const string UIHandler::OPTION_ERROR_MESSAGE = "Option error\n";
 
 const string UIHandler::DELETE_FAILED_MESSAGE = "No such entry\n";
+
+const string UIHandler::DELETE_ASK_MESSAGE = "Which one do you want to delete?\n";
 
 void UIHandler::setUIStatus(Signal statusSignal)
 {
@@ -72,6 +76,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 			outString = DELETE_FAILED_MESSAGE;
 			break;
 		}
+	case DELETE_A:
+		{
+			outString = DELETE_ASK_MESSAGE;
+			break;
+		}
 	default:
 		{
 			outString = "";
@@ -118,6 +127,26 @@ void UIHandler::displayMessage(Signal outSignal)
 		setUIStatus(SUCCESS);
 	}
 
+}
+
+void UIHandler::displayMessage(vector<string>* result)
+{
+	int size = result ->size();
+
+	for (int i=0; i< size; i++)
+	{
+		string row;
+		ostringstream outMessage;
+
+		row = result->at(i) ;
+		outMessage << i+1 << ". " << row <<endl;
+		displayMessage(outMessage.str());
+	}
+}
+
+void UIHandler::displayMessage(string result)
+{
+	io.displayMessage(result);
 }
 
 void UIHandler::startingScreenDisplay()

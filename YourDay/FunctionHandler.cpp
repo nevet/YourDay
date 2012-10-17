@@ -21,7 +21,7 @@ void FunctionHandler::setStatus()
 {
 	status=fxStatus;
 }
-void FunctionHandler::execute(string input, bool quit)
+void FunctionHandler::execute(string input, bool quit, vector<string>* result)
 {
 	LangHandler lang;
 	CommandExecutor command;
@@ -40,7 +40,18 @@ void FunctionHandler::execute(string input, bool quit)
 	fxStatus=langSignal;
 
 
-	command.executeCommand(passer,langSignal,formatInput);
+	command.executeCommand(passer,langSignal,formatInput, result);
+	if (result ->size()!=0)
+	{
+		for (int i =0; i< result ->size(); i++)
+		{
+			string decodedOutput;
+			string temp = result ->at(i);
+			decodedOutput = lang.decoder(temp);
+			result ->at(i) = decodedOutput;
+		}
+	}
+
 	//fxStatus=command.getStatus();
 	store.writeData(passer);
 

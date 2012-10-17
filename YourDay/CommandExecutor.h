@@ -79,7 +79,7 @@ public:
 	*			For delete and update command: it is the string specify the keyword in the entry to be delete/update
 	*			For search command: it is the key word to search in the event list
 	*/
-	void executeCommand(vector <string> * entryList, Signal type, string detail);
+	void executeCommand(vector <string> * entryList, Signal type, string detail, vector<string>* result);
 
 	~CommandExecutor();
 };

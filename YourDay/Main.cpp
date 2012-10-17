@@ -31,14 +31,16 @@ int main()
 		 //for debugging using
 		 ui.setStatus();
 		 string userInput = ui.retrieveInput();
-		 
-		 function.execute(userInput, quit);
+		 vector<string> result;
+
+		 function.execute(userInput, quit, &result);
 
 		 Signal signal = function.getStatus();
 
 		 if(signal==EXIT_COMMAND)
 			 quit=true;
-
+		 
+		 ui.displayMessage(&result);
 		 ui.displayMessage(signal);
 	 }
 

@@ -11,6 +11,7 @@
 #define UIHANDLER_H
 
 #include <string>
+#include <vector>
 #include "Signal.h"
 #include "Handler.h"
 #include "UI.h"
@@ -34,6 +35,8 @@ private:
 	static const string OPTION_ERROR_MESSAGE;
 
 	static const string DELETE_FAILED_MESSAGE;
+
+	static const string DELETE_ASK_MESSAGE;
 
 	//These are instance of IO and UI class, which will be called in operations of getting input,
 	// displaying message and displaying screen
@@ -84,6 +87,8 @@ public:
 	*				is the feedback signal passed by the main() to indicate the success/error in processing command
 	*/
 	void displayMessage(Signal outSignal);
+	void displayMessage(vector<string>* result);
+	void displayMessage(string result);
 
 	//These are methods to display UI
 
