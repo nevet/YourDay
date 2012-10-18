@@ -22,10 +22,13 @@ int main()
 	 FunctionHandler function;
 	 UIHandler ui;
 	 bool quit=false;
+	 vector<string>* Ram=function.getEntryList();
+	 
 	 ui.startingScreenDisplay();
-	 getchar();
 
-	 ui.mainScreenDisplay();
+	 ui.mainScreenDisplay(Ram);
+	 
+	 
 
 	 while (!quit)
 	 {
@@ -41,8 +44,9 @@ int main()
 
 		 if(signal==EXIT_COMMAND)
 			 quit=true;
-		 
-		 //ui.displayMessage(&result);
+
+		 ui.mainScreenDisplay(Ram);
+		 ui.displayMessage(&result);
 		 ui.displayMessage(signal);
 		
 	 }

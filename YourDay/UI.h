@@ -13,7 +13,7 @@
 #include <windows.h>
 #include <cstdlib>
 #include <iomanip>
-
+#include <vector>
 #include "Signal.h"
 
 #define windowsHeight 25
@@ -23,6 +23,8 @@
 #define boardHeight (windowsHeight - boxHeight - bottomBoardHeight)
 #define boardWidth windowsWidth
 #define boxWidth windowsWidth
+#define entryListInitX 0
+#define entryListInitY 2
 
 using namespace std;
 
@@ -34,13 +36,14 @@ private:
 	char displayBoard[boardHeight][boardWidth];
 	void setStatus(Signal statusSignal);
 	void writeWords(string words, int startH, int startW);
-	void drawBox();
-	
+	void displayEntryList( vector<string> *entryList );
+	string decoder(string input);
 public:
 
 	UI();
 	void setNormal();
-	void gobackBox();
+	void drawBox();
+	void didUKnowBox();
 	Signal getStatus();
 	void setScreenSize();
 	void clearStatus();
@@ -55,7 +58,7 @@ public:
 	* This operation is used to display the main screen to interact with the user
 	* and will be called in UIHandler class
 	*/
-	void mainScreenDisplay();
+	void mainScreenDisplay(vector<string>* entryList);
 
 	~UI();
 };

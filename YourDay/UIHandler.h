@@ -89,6 +89,7 @@ public:
 	void displayMessage(Signal outSignal);
 	void displayMessage(vector<string>* result);
 	void displayMessage(string result);
+	
 
 	//These are methods to display UI
 
@@ -102,7 +103,7 @@ public:
 	* This operation is used to display the main screen through UI to interact with user
 	* It will call the UI to display the main screen
 	*/
-	void mainScreenDisplay();
+	void mainScreenDisplay(vector<string>* entryList);
 
 	string retrieveInput();
 	Signal getStatus();

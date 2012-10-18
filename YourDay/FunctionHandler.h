@@ -52,6 +52,8 @@ public:
 	*/
 	void execute(string input, bool quit, vector<string>* result);
 
+	vector<string>* getEntryList();
+
 	~FunctionHandler();
 };
 #endif
