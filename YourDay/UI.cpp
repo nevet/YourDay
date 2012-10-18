@@ -11,11 +11,7 @@
 
 #include "UI.h"
 
-void UI::gobackBox()
-{
-	gotoxy(0,boardHeight);
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-}
+
 void UI::setScreenSize()
 {
 	HANDLE hconsole=GetStdHandle(STD_OUTPUT_HANDLE);
@@ -31,24 +27,17 @@ void UI::setStatus(Signal statusSignal)
 	status = statusSignal;
 }
 
-void UI::writeWords(string words, int startH, int startW)
+void UI::writeWords(string words, int startX, int startY)
 {
-	int len = words.length();
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY |
+		FOREGROUND_RED | FOREGROUND_GREEN);
+	gotoxy(startX,startY);
 
-	for (int i = 0; i < len; i++)
-	{
-		displayBoard[startH][startW + i] = words[i];
-	}
+	cout<<words<<endl;
 }
 
 UI::UI()
 {
-	for (int i = 0; i < boardHeight; i++)
-		for (int j = 0; j < boardWidth; j++)
-			displayBoard[i][j] = ' ';
-
-	writeWords("General", 0, 0);
-	writeWords("Calendar", 10, 0);
 }
 
 Signal UI::getStatus()
@@ -83,15 +72,21 @@ void UI::startingScreenDisplay()
 	gotoxy(30,18);
 	cout<<"Press Enter to continue";
 	setStatus(SUCCESS);
+	getchar();
 }
 
 void UI::drawBox()
 {
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	for(int i=0;i<windowsWidth;i++)
-		cout<<' ';
-	cout<<endl;
 	gotoxy(0,boardHeight);
+	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	cout<<"command:                                                                        ";
+	cout<<endl;
+	gotoxy(8,boardHeight);
+}
+
+void UI::didUKnowBox()
+{
+	gotoxy(0,boardHeight+1);
 }
 
 void UI::setNormal()
@@ -99,22 +94,17 @@ void UI::setNormal()
 	 SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void UI::mainScreenDisplay()
+void UI::mainScreenDisplay(vector<string>* entryList)
 {
+	setNormal();
 	system("CLS");
+	
+	writeWords("General",0,0);
+	writeWords("Calendar",0,10);
 
-	for (int i = 0; i < boardHeight; i++)
-	{
-		for (int j = 0; j < boardWidth; j++)
-		{
-			SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN);
-			cout<<displayBoard[i][j];
-		}
-
-	}
+	displayEntryList( entryList );
 
 	drawBox();
-
 	setStatus(SUCCESS);
 }
 
@@ -124,6 +114,54 @@ void UI :: gotoxy(int x, int y) //goes to x,y console
 	coord.X = x;
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void UI :: displayEntryList(vector<string>* entryList)
+{
+	int size;
+	string formatString;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY |
+		FOREGROUND_RED | FOREGROUND_BLUE);
+
+	gotoxy(entryListInitX,entryListInitY);
+	
+	size=entryList->size();
+
+	for (int i=0; i< size; i++)
+	{
+		string row;
+		row = entryList->at(i) ;
+		formatString = decoder(row);
+		cout<<"     "<<i+1<<"."<<formatString<<endl;
+	}
+
+}
+
+string UI::decoder(string input)
+{
+	string decodedString = "";
+	int size = input.size();
+	char curChar;			//current character in input string
+	
+
+	for (int i = 0; i < input.size(); i++)
+	{
+		curChar = input[i];
+		if (curChar != '#')
+		{
+			decodedString += curChar;
+		}
+		else
+		{
+			if (i != input.size()-1 && input[i+1] != '#' && decodedString != "")
+			{
+				decodedString += ": ";
+			}
+		}
+	}
+
+	return decodedString;
 }
 
 UI::~UI()

@@ -115,9 +115,10 @@ void UIHandler::getInput()
 
 void UIHandler::displayMessage(Signal outSignal)
 {
-	ui.setNormal();
 	string outMessage = "";
 	
+	ui.setNormal();
+	ui.didUKnowBox();
 	outMessage = interpreteSignal(outSignal);
 	io.displayMessage(outMessage);
 
@@ -129,15 +130,16 @@ void UIHandler::displayMessage(Signal outSignal)
 	{
 		setUIStatus(SUCCESS);
 	}
-	ui.gobackBox();
+	ui.drawBox();
 	
 }
 
 void UIHandler::displayMessage(vector<string>* result)
 {
-	ui.setNormal();
 	int size = result ->size();
 
+	ui.setNormal();
+	ui.didUKnowBox();
 	for (int i=0; i< size; i++)
 	{
 		string row;
@@ -148,7 +150,7 @@ void UIHandler::displayMessage(vector<string>* result)
 		displayMessage(outMessage.str());
 	}
 
-	ui.gobackBox();
+	ui.drawBox();
 
 }
 
@@ -166,9 +168,9 @@ void UIHandler::startingScreenDisplay()
 	setUIStatus(uiStatus);
 }
 
-void UIHandler::mainScreenDisplay()
+void UIHandler::mainScreenDisplay(vector<string>* entryList)
 {
-	ui.mainScreenDisplay();
+	ui.mainScreenDisplay(entryList);
 	Signal uiStatus = ui.getStatus();
 
 	setUIStatus(uiStatus);

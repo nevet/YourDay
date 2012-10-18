@@ -19,34 +19,25 @@ void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 	}
 }
 
-void CommandExecutor::deleteEntry(vector<string>* entryList, string entry)
+void CommandExecutor::deleteEntry(vector<string>* entryList, string number)
 {
-	vector< string > tempVector;
-	vector<string>* tempEntryList;
-	string temp;
-
-	tempEntryList=&tempVector;
-	tempEntryList->clear();
-	if ( entry =="")
+	int index;
+	
+	vector<string>::iterator position;
+	
+	if ( number =="")
 	{
 		setStatus(EMPTY_ENTRY_E);
 	}
 	else
 	{
-		for(int i=0;i<entryList->size();i++)
+		index=atoi(number.c_str());
+		if(index>entryList->size())
+			setStatus(DELETE_F);
+		else 
 		{
-			temp=entryList->back();
-			entryList->pop_back();
-			if(temp!=entry)
-				tempEntryList->push_back(temp);
-			else
-				break;
-		}
-		for(int i=0;i<tempEntryList->size();i++)
-		{
-			temp=tempEntryList->back();
-			tempEntryList->pop_back();
-			entryList->push_back(entry);
+			position=entryList->begin()+index-1;
+			entryList->erase(position);
 		}
 	}
 }
@@ -112,22 +103,8 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 		}
 	case DELETE_COMMAND:
 		{
-			searchEntry(entryList, detail, matchedEntryList);
-			for(int i=0;i<matchedEntryList->size();i++)
-			{
-				temp=matchedEntryList->at(i);
-				cout<<"Entry "<<i+1<<" :"<<temp<<endl;
-			}
-			if(matchedEntryList->size()!=0)
-			{
-				cout<<"Which one you want to delete?"<<endl;
-				cin>>choice;
-				cin.get(enterEater);
-				deleteEntry(entryList,matchedEntryList->at(choice-1) );
-			}
-			else
-				setStatus(DELETE_F);
-			matchedEntryList->clear();
+			deleteEntry(entryList,detail);
+			setStatus(DELETE_S);
 			break;
 		}
 	case SEARCH_COMMAND:

@@ -21,6 +21,14 @@ void FunctionHandler::setStatus()
 {
 	status=fxStatus;
 }
+
+vector<string>* FunctionHandler::getEntryList()
+{
+	vector<string>* passer;
+	passer=&ram;
+	return passer;
+}
+
 void FunctionHandler::execute(string input, bool quit, vector<string>* result)
 {
 	LangHandler lang;
