@@ -8,21 +8,30 @@
 #ifndef UI_H
 #define UI_H
 
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <cstdlib>
+#include <iomanip>
+
 #include "Signal.h"
+
+using namespace std;
 
 class UI
 {
 private:
 	Signal status;
-
+	HANDLE hConsole;
 	void setStatus(Signal statusSignal);
 public:
 
 	UI();
 
 	Signal getStatus();
+	void setScreenSize();
 	void clearStatus();
-
+	void gotoxy(int x,int y);
 	/**
 	* This operation is used to display starting screen to the user at the beginning of the program
 	* and will be called in UIHandler class

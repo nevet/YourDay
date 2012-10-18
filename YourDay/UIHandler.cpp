@@ -103,7 +103,7 @@ void UIHandler::getInput()
 	
 	if (input == "")
 	{
-		setUIStatus(ERROR);
+		setUIStatus(ERR);
 	}
 	else
 	{
@@ -151,6 +151,7 @@ void UIHandler::displayMessage(string result)
 
 void UIHandler::startingScreenDisplay()
 {
+	ui.setScreenSize();
 	ui.startingScreenDisplay();
 	Signal uiStatus = ui.getStatus();
 

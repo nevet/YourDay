@@ -12,7 +12,7 @@
 
 enum OPEN_TYPE
 {
-	APP, IN, OUT
+	APP, IN_TYPE, OUT_TYPE
 };
 using namespace std;
 /**

@@ -51,7 +51,7 @@ bool StorageHandler::checkFileExistence(string filePath, string fileName)
 {
 	fstream testFile;
 	bool isExist;
-	associateFile(filePath, fileName, testFile, OPEN_TYPE::IN);
+	associateFile(filePath, fileName, testFile, OPEN_TYPE::IN_TYPE);
 	isExist=testFile.is_open();
 	disassociateFile(testFile);
 	return isExist;
@@ -71,10 +71,10 @@ void StorageHandler::associateFile(string filePath, string fileName,
 	case APP:
 		file.open(fileFullPath.c_str(), fstream::app);
 		break;
-	case IN:
+	case IN_TYPE:
 		file.open(fileFullPath.c_str(), fstream::in);
 		break;
-	case OUT:
+	case OUT_TYPE:
 		file.open(fileFullPath.c_str(), fstream::out);
 		break;
 	default:

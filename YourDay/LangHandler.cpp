@@ -3,7 +3,7 @@
     LangHandler.cpp
     Purpose: Calculates the total of 6 checks
 
-    @author a0088455
+    @author a0088455r
     @version 0.1 10/13/2012
 */
 #include <sstream>
@@ -23,7 +23,7 @@ string LangHandler::decodePart(DetailPart part)
 		}
 	case TIME:
 		{
-			ans = "at";
+			ans = "at ";
 			break;
 		}
 	case DETAILS:
@@ -33,7 +33,7 @@ string LangHandler::decodePart(DetailPart part)
 		}
 	case LOCATION:
 		{
-			ans = "in";
+			ans = "at ";
 			break;
 		}
 	case PRIORITY:

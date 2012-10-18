@@ -22,7 +22,8 @@ int main()
 	 FunctionHandler function;
 	 UIHandler ui;
 	 bool quit=false;
-
+	 ui.startingScreenDisplay();
+	 getchar();
 	 ui.mainScreenDisplay();
 
 	 while (!quit)
