@@ -24,6 +24,7 @@ int main()
 	 bool quit=false;
 	 ui.startingScreenDisplay();
 	 getchar();
+
 	 ui.mainScreenDisplay();
 
 	 while (!quit)
@@ -41,8 +42,9 @@ int main()
 		 if(signal==EXIT_COMMAND)
 			 quit=true;
 		 
-		 ui.displayMessage(&result);
+		 //ui.displayMessage(&result);
 		 ui.displayMessage(signal);
+		
 	 }
 
 	 return EXIT_SUCCESS;

@@ -16,6 +16,14 @@
 
 #include "Signal.h"
 
+#define windowsHeight 25
+#define windowsWidth 80
+#define bottomBoardHeight 3
+#define boxHeight 1
+#define boardHeight (windowsHeight - boxHeight - bottomBoardHeight)
+#define boardWidth windowsWidth
+#define boxWidth windowsWidth
+
 using namespace std;
 
 class UI
@@ -23,11 +31,16 @@ class UI
 private:
 	Signal status;
 	HANDLE hConsole;
+	char displayBoard[boardHeight][boardWidth];
 	void setStatus(Signal statusSignal);
+	void writeWords(string words, int startH, int startW);
+	void drawBox();
+	
 public:
 
 	UI();
-
+	void setNormal();
+	void gobackBox();
 	Signal getStatus();
 	void setScreenSize();
 	void clearStatus();

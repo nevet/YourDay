@@ -25,6 +25,8 @@ const string UIHandler::DELETE_FAILED_MESSAGE = "No such entry\n";
 
 const string UIHandler::DELETE_ASK_MESSAGE = "Which one do you want to delete?\n";
 
+
+
 void UIHandler::setUIStatus(Signal statusSignal)
 {
 	UIstatus = statusSignal;
@@ -113,6 +115,7 @@ void UIHandler::getInput()
 
 void UIHandler::displayMessage(Signal outSignal)
 {
+	ui.setNormal();
 	string outMessage = "";
 	
 	outMessage = interpreteSignal(outSignal);
@@ -126,11 +129,13 @@ void UIHandler::displayMessage(Signal outSignal)
 	{
 		setUIStatus(SUCCESS);
 	}
-
+	ui.gobackBox();
+	
 }
 
 void UIHandler::displayMessage(vector<string>* result)
 {
+	ui.setNormal();
 	int size = result ->size();
 
 	for (int i=0; i< size; i++)
@@ -142,6 +147,9 @@ void UIHandler::displayMessage(vector<string>* result)
 		outMessage << i+1 << ". " << row <<endl;
 		displayMessage(outMessage.str());
 	}
+
+	ui.gobackBox();
+
 }
 
 void UIHandler::displayMessage(string result)
