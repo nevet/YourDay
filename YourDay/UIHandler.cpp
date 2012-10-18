@@ -48,12 +48,12 @@ string UIHandler::interpreteSignal(Signal outSignal)
 			outString = CLEAR_SIGNAL_MESSAGE;
 			break;
 		}
-	case ADD_COMMAND:
+	case ADD_S:
 		{
 			outString = ADD_SUCCESSFUL_MESSAGE;
 			break;
 		}
-	case  DELETE_COMMAND:
+	case  DELETE_S:
 		{
 			outString = DELETE_SUCCESSFUL_MESSAGE;
 			break;

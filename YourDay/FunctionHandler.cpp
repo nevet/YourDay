@@ -60,7 +60,7 @@ void FunctionHandler::execute(string input, bool quit, vector<string>* result)
 		}
 	}
 
-	//fxStatus=command.getStatus();
+	fxStatus=command.getStatus();
 	store.writeData(passer);
 
 	setStatus();
