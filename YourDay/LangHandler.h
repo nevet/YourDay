@@ -28,6 +28,9 @@ private:
 	string formattedInput;
 	string userCommand;
 
+	bool isMonth(string month, int* decodedMonth);
+	bool isTime(string text);
+
 	//this operation is to be used in decoder operation
 	string decodePart(DetailPart part);
 public :
