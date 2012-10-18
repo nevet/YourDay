@@ -8,8 +8,41 @@
 */
 #include <sstream>
 #include <string>
+#include <map>
+#include <ctime>
 
 #include "LangHandler.h"
+
+bool LangHandler::isMonth(string month, int* decodedMonth)
+{
+	bool ans;
+	map<string, int> mapper;
+
+	mapper ["JAN"] = 1;
+	mapper ["FEB"] = 2;
+	mapper ["MAR"] = 3;
+	mapper ["APR"] = 4;
+	mapper ["MAY"] = 5;
+	mapper ["JUN"] = 6;
+	mapper ["JUL"] = 7;
+	mapper ["AUG"] = 8;
+	mapper ["SEP"] = 9;
+	mapper ["OCT"] = 10;
+	mapper ["NOV"] = 11;
+	mapper ["DEC"] = 12;
+	
+	if (mapper.find(month) == mapper.end())
+	{
+		ans = false;
+	}
+	else
+	{
+		ans = true;
+		*decodedMonth = mapper[month];
+	}
+
+	return ans;
+}
 
 string LangHandler::decodePart(DetailPart part)
 {
@@ -121,9 +154,11 @@ string LangHandler::encoder(string input)
 {
 	stringstream tempHolder;
 	string temp;
+	bool isDatePart = false;
+	int decodedMonth;
 
-	string date = "";
-	string time = "";
+	ostringstream date ( "");
+	string hour = "";
 	string eventDetails = "";
 	string location = "";
 	string priority = "";
@@ -137,13 +172,26 @@ string LangHandler::encoder(string input)
 
 	while (tempHolder >> temp)
 	{
-		if (((temp.size() == 10) || (temp.size() == 8))&&(temp[2] == '/') && (temp[5] == '/') )
+		if ((temp.size() <= 10) && (temp.size() >= 8) && (temp[2] == '/') && (temp[5] == '/'))
 		{
-			date = temp;
+			date << temp;
+		}
+		else if (isDatePart)
+		{
+			time_t t= time(NULL);
+			tm* now=localtime(&t);
+			int year = now->tm_year + 1900;
+
+			date << temp << "/" << decodedMonth << "/" << year;
+			isDatePart = false;
+		}
+		else if (isMonth(temp, &decodedMonth))
+		{
+			isDatePart = true;
 		}
 		else if ((temp.size() == 11)&&( temp[2]==':' ) && ( temp[5] == '-' ) && ( temp[8] == ':') )
 		{
-			time = temp;
+			hour = temp;
 		}
 		else if ( temp == "at" )
 		{
@@ -167,7 +215,7 @@ string LangHandler::encoder(string input)
 			eventDetails += " ";
 		}
 	} 
-	formattedInput = date+"#"+time+"#"+eventDetails+"#"+location+"#"+priority;
+	formattedInput = date.str()+"#"+hour+"#"+eventDetails+"#"+location+"#"+priority;
 
 	return formattedInput;
 }
