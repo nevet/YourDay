@@ -16,6 +16,7 @@ void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 	else
 	{
 		entryList -> push_back(detail);
+		setStatus(ADD_S);
 	}
 }
 
@@ -38,6 +39,7 @@ void CommandExecutor::deleteEntry(vector<string>* entryList, string number)
 		{
 			position=entryList->begin()+index-1;
 			entryList->erase(position);
+			setStatus(DELETE_S);
 		}
 	}
 }
@@ -98,13 +100,11 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 	case ADD_COMMAND:
 		{
 			addEntry(entryList, detail);
-			setStatus(ADD_S);
 			break;
 		}
 	case DELETE_COMMAND:
 		{
 			deleteEntry(entryList,detail);
-			setStatus(DELETE_S);
 			break;
 		}
 	case SEARCH_COMMAND:
@@ -115,6 +115,11 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 	case EDIT_COMMAND:
 		{
 			updateEntry(entryList, detail);
+			break;
+		}
+	case EXIT_COMMAND:
+		{
+			setStatus(EXIT_COMMAND);
 			break;
 		}
 	default:
