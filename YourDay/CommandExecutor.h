@@ -35,7 +35,9 @@ private:
 	Signal status;
 	
 	void setStatus(Signal statusSignal);
-	
+
+	void updateRaw(string* raw, string* updateDetails);
+
 	/**
 	* This private method is to be called in executeCommand operation
 	* It will add an entry as a pure string to the entry list vector
@@ -46,9 +48,9 @@ private:
 					is the string contains the entry to be added
 	*/
 	void addEntry(vector<string> * entryList, string eventDetails);
-	void deleteEntry(vector <string>* entryList, string entry);
+	void deleteEntry(vector <string>* entryList, string number);
 	void searchEntry(vector <string>* entryList, string keyWord,vector <string>* matchedEntryList);
-	void updateEntry(vector <string>* entryList, string entry);
+	void updateEntry(vector <string>* entryList, string updateDetails);
 
 public:
 	CommandExecutor();

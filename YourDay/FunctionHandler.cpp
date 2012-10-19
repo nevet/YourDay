@@ -47,7 +47,6 @@ void FunctionHandler::execute(string input, bool quit, vector<string>* result)
 	langSignal=lang.getStatus();
 	fxStatus=langSignal;
 
-
 	command.executeCommand(passer,langSignal,formatInput, result);
 	if (result ->size()!=0)
 	{
