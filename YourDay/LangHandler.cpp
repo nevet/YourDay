@@ -1,7 +1,7 @@
 /**
     YourDay
     LangHandler.cpp
-    Purpose: Calculates the total of 6 checks
+    Purpose: Encodes user's input and decodes stored entry
 
     @author a0088455r
     @version 0.1 10/13/2012
@@ -12,6 +12,8 @@
 #include <ctime>
 
 #include "LangHandler.h"
+
+const string LangHandler :: COMMAND_ERROR =  "Wrong command. Please try again.\n";
 
 bool LangHandler::isMonth(string month, int* decodedMonth)
 {
@@ -39,46 +41,6 @@ bool LangHandler::isMonth(string month, int* decodedMonth)
 	{
 		ans = true;
 		*decodedMonth = mapper[month];
-	}
-
-	return ans;
-}
-
-string LangHandler::decodePart(DetailPart part)
-{
-	string ans = "";
-	switch (part)
-	{
-	case DATE:
-		{
-			ans = "On ";
-			break;
-		}
-	case TIME:
-		{
-			ans = "at ";
-			break;
-		}
-	case DETAILS:
-		{
-			ans = ": ";
-			break;
-		}
-	case LOCATION:
-		{
-			ans = "at ";
-			break;
-		}
-	case PRIORITY:
-		{
-			ans = "with priority";
-			break;
-		}
-	default:
-		{
-			//use some signal here
-			break;
-		}
 	}
 
 	return ans;
@@ -117,7 +79,8 @@ void LangHandler::setStatus()
 	}
 	else
 	{
-		status = COMMAND_E;
+		
+		throw (  COMMAND_ERROR );
 	}
 }
 
@@ -127,7 +90,7 @@ void LangHandler::separate(string userInput)
 	stringstream tempHolder;
 	string rawString;
 	string encodedString;
-	char blankSpaceEater=' ';
+	char blankSpaceEater;
 	tempHolder << userInput;
 	tempHolder >> userCommand;
 	//ignore the blankSapce
@@ -250,6 +213,12 @@ string LangHandler::decoder(string input)
 string LangHandler::retrieve()
 {
 	return details;
+}
+
+//Breaks the encoded string to different fields format
+void LangHandler::breakString(string* date, string* time, string* details, string* location, string* priority)
+{
+
 }
 
 LangHandler::~LangHandler()
