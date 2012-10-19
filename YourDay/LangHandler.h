@@ -13,6 +13,7 @@
 
 #include "Signal.h"
 #include "Handler.h"
+
 using namespace std;
 
 class LangHandler : public Handler
@@ -23,7 +24,7 @@ private:
 	{
 		DATE, TIME, DETAILS, LOCATION, PRIORITY
 	};
-
+	static const string COMMAND_ERROR;
 	string details;	
 	string formattedInput;
 	string userCommand;
@@ -31,8 +32,6 @@ private:
 	bool isMonth(string month, int* decodedMonth);
 	bool isTime(string text);
 
-	//this operation is to be used in decoder operation
-	string decodePart(DetailPart part);
 public :
 	
 	LangHandler();
@@ -68,9 +67,23 @@ public :
 	@return processed string pointer
 	*/
 
+	string retrieve();
+
+	/**
+	Decodes the processed string to output format
+	
+	@param void
+	@return processed string pointer
+	*/
 	string decoder(string input);
 
-	string retrieve();
+	/**
+	Breaks the encoded string to different fields format
+	
+	@param void
+	@return void
+	*/
+	void breakString(string* date, string* time, string* details, string* location, string* priority);
 
 	~LangHandler();
 };
