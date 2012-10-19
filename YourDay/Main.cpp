@@ -19,35 +19,49 @@ using namespace std;
 
 int main()
 {
-	 FunctionHandler function;
-	 UIHandler ui;
-	 bool quit=false;
-	 vector<string>* Ram=function.getEntryList();
-	 vector<string> result;	 
-	 ui.startingScreenDisplay();
+	//recording general entries
+	vector<string> generalEntryList;
+	//recording calendar entries
+	vector<string> calendarEntryList;
+	//recording did-u-know box entries
+	vector<string> diduknowBoxList;
+	
+	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
+	UIHandler ui;
 
-	 ui.mainScreenDisplay(Ram);
-	 
-	 
+	//terminating indicator, should be false at the beginning
+	bool quit=false;
 
-	 while (!quit)
-	 {
-		 ui.getInput();
-		 //for debugging using
-		 ui.setStatus();
-		 string userInput = ui.retrieveInput();
+	ui.startingScreenDisplay();
 
-		 function.execute(userInput, quit, &result);
+	//saved entries should be displayed on the screen at the beginning
+	ui.mainScreenDisplay(&generalEntryList);
 
-		 Signal signal = function.getStatus();
+	while (!quit)
+	{
+		ui.getInput();
+		//for debugging using
+		ui.setStatus();
+		string userInput = ui.retrieveInput();
 
-		 if(signal==EXIT_COMMAND)
-			 quit=true;
+		function.execute(userInput, &generalEntryList, &calendarEntryList, &diduknowBoxList);
 
-		 ui.mainScreenDisplay(Ram);
-		 ui.displayMessage(&result);
-		 ui.displayMessage(signal);
-	 }
+		Signal signal = function.getStatus();
 
-	 return EXIT_SUCCESS;
+		if(signal==EXIT_COMMAND)
+		{
+			quit=true;
+		}
+
+		//display updated entries
+		ui.mainScreenDisplay(&generalEntryList);
+		//display updated did-u-know box list, e.g search resut
+		ui.displayMessage(&diduknowBoxList);
+		//display caught signals
+		ui.displayMessage(signal);
+	}
+
+	function.saveData(&generalEntryList, &calendarEntryList, &diduknowBoxList);
+
+	return EXIT_SUCCESS;
 }

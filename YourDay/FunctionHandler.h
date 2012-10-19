@@ -28,10 +28,15 @@ private:
 	StorageHandler store;
 public:
 	/**
+	* The constructor will initialize three lists and flush stored information
+	* into corresponding list.
+	*
 	* The instance of FunctionHandler should be created once and only once in
 	* main().
 	*/
-	FunctionHandler();
+	FunctionHandler(vector<string>* generalEntryList,
+					vector<string>* calendarEntryList,
+					vector<string>* diduknowBoxList);
 	
 	/**
 	* Implement virtual setStatus(). Signal will be:
@@ -50,10 +55,16 @@ public:
 	* @param quit
 	*			is the indicator for terminating the whole program
 	*/
-	void execute(string input, bool quit, vector<string>* result);
+	void execute(string input,
+				 vector<string>* generalEntryList,
+				 vector<string>* calendarEntryList,
+				 vector<string>* diduknowBoxList);
 
-	vector<string>* getEntryList();
-
-	~FunctionHandler();
+	/**
+	* This operation will flush data stored in the three lists into a file.
+	*/
+	void saveData(vector<string>* generalEntryList,
+				  vector<string>* calendarEntryList,
+				  vector<string>* diduknowBoxList);
 };
 #endif
