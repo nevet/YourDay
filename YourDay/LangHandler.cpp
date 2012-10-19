@@ -91,6 +91,8 @@ void LangHandler::separate(string userInput)
 	string rawString;
 	string encodedString;
 	char blankSpaceEater;
+	string updateNum;
+
 	tempHolder << userInput;
 	tempHolder >> userCommand;
 	//ignore the blankSapce
@@ -98,8 +100,11 @@ void LangHandler::separate(string userInput)
 	
 	setStatus();
 
+	if (userCommand == "edit")
+		tempHolder >> updateNum;
+
 	getline( tempHolder, rawString );
-	if ( userCommand == "add" )
+	if ( userCommand == "add" || userCommand == "edit")
 	{
 		encodedString = encoder(rawString);
 	}
@@ -108,7 +113,14 @@ void LangHandler::separate(string userInput)
 		encodedString = rawString;
 	}
 	
-	details= encodedString;
+	if (userCommand == "edit")
+	{
+		details = updateNum + " "+ encodedString;
+	}
+	else
+	{
+		details= encodedString;
+	}
 }
 
 
@@ -171,6 +183,10 @@ string LangHandler::encoder(string input)
 					location += " ";
 				}
 			}
+		}
+		else if (temp == "priority")
+		{
+			tempHolder >> priority;		//in case the user doesn't specify the location
 		}
 		else 
 		{

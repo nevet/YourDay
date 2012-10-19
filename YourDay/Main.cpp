@@ -23,7 +23,7 @@ int main()
 	 UIHandler ui;
 	 bool quit=false;
 	 vector<string>* Ram=function.getEntryList();
-	 
+	 vector<string> result;	 
 	 ui.startingScreenDisplay();
 
 	 ui.mainScreenDisplay(Ram);
@@ -36,7 +36,6 @@ int main()
 		 //for debugging using
 		 ui.setStatus();
 		 string userInput = ui.retrieveInput();
-		 vector<string> result;
 
 		 function.execute(userInput, quit, &result);
 
@@ -48,7 +47,6 @@ int main()
 		 ui.mainScreenDisplay(Ram);
 		 ui.displayMessage(&result);
 		 ui.displayMessage(signal);
-		
 	 }
 
 	 return EXIT_SUCCESS;

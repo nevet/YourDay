@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <algorithm>
+#include <sstream>
 #include "CommandExecutor.h"
 
 void CommandExecutor::setStatus(Signal statusSignal)
@@ -6,7 +8,52 @@ void CommandExecutor::setStatus(Signal statusSignal)
 	status = statusSignal;
 }
 
-//add an entry as a pure string to the entry list vector
+void CommandExecutor::updateRaw(string* raw, string* updateDetails)
+{
+	string updatedRaw = "";
+	string oldDetail;
+	string newDetail;
+	string tempRaw = *raw + "#";
+	string tempUpdateRaw = *updateDetails + "#";
+	int tempRawLength = tempRaw.length();
+	int tempUpdateLength = tempUpdateRaw.length();
+	int i = 0;					//This iteration is used to trace tempRaw
+	int j = 0;					//This iteration is used to trace tempUpdateRaw	
+
+	while (i < tempRawLength && j<tempUpdateLength)
+	{
+		oldDetail = "";
+		newDetail = "";
+		while (tempRaw[i] != '#' && i < tempRawLength)
+		{
+			oldDetail += tempRaw[i];
+			i++;
+		}
+		while (tempUpdateRaw[j]!= '#' && j<tempUpdateLength)
+		{
+			newDetail += tempUpdateRaw[j];
+			j++;
+		}
+
+		if (newDetail == "")
+		{
+			updatedRaw += oldDetail;
+		}
+		else
+		{
+			updatedRaw += newDetail;
+		}
+
+		updatedRaw += "#";
+
+		i++;
+		j++;
+	}
+	
+	updatedRaw = updatedRaw.substr(0, updatedRaw.size()-1);
+	*raw = updatedRaw;
+}
+
 void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 {
 	if (detail == "")
@@ -46,28 +93,50 @@ void CommandExecutor::deleteEntry(vector<string>* entryList, string number)
 
 void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord, vector<string>* matchedEntryList)
 {
-	string temp;
-
 	matchedEntryList->clear();
+
 	if ( keyWord =="")
 	{
 		setStatus(EMPTY_ENTRY_E);
 	}
 	else
 	{
+		string curRaw;
+		string lowerCaseKeyWord = keyWord;
+		transform(keyWord.begin(), keyWord.end(), lowerCaseKeyWord.begin(), tolower);
+
 		for(int i=0;i<entryList->size();i++)
 		{
-			temp=entryList->at(i);
-			if(std::string::npos != temp.find(keyWord))
+			curRaw=entryList->at(i);
+			if(std::string::npos != curRaw.find(lowerCaseKeyWord))
 			{
-				matchedEntryList->push_back(temp);
+				matchedEntryList->push_back(curRaw);
 			}
 		}
 	}
 }
 
-void CommandExecutor::updateEntry(vector<string>* entryList, string entry)
+void CommandExecutor::updateEntry(vector<string>* entryList, string updateDetails)
 {
+	istringstream input(updateDetails);
+	int index;
+	string number;
+	char space;
+	string updateString;
+
+	input >> number;
+	input.get(space);
+	getline(input, updateString);
+
+	if ( number =="" || updateString == "")
+	{
+		setStatus(EMPTY_ENTRY_E);
+	}
+	else
+	{
+		index=atoi(number.c_str());
+		updateRaw(&entryList->at(index-1), &updateString);
+	}	
 }
 
 CommandExecutor::CommandExecutor()
@@ -87,14 +156,6 @@ void CommandExecutor::clearStatus()
 
 void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, string detail, vector<string>* result)
 {
-	vector <string> tempVector;
-	vector <string> * matchedEntryList;
-	string temp;
-	int choice;
-	char enterEater;
-
-	matchedEntryList=&tempVector;
-
 	switch (type)
 	{
 	case ADD_COMMAND:
