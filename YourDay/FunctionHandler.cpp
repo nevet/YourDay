@@ -2,19 +2,15 @@
 
 using namespace std;
 
-FunctionHandler::FunctionHandler()
+FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
+								 vector<string>* calendarEntryList,
+								 vector<string>* diduknowBoxList)
 {
-	vector<string>* passer;
-	passer=&ram;
-	ram.clear();
-	store.readData(passer);
-}
-
-FunctionHandler::~FunctionHandler()
-{
-	vector<string>* passer;
-	passer=&ram;
-	store.writeData(passer);
+	generalEntryList->clear();
+	calendarEntryList->clear();
+	diduknowBoxList->clear();
+	
+	store.readData(generalEntryList);
 }
 
 void FunctionHandler::setStatus()
@@ -22,46 +18,49 @@ void FunctionHandler::setStatus()
 	status=fxStatus;
 }
 
-vector<string>* FunctionHandler::getEntryList()
-{
-	vector<string>* passer;
-	passer=&ram;
-	return passer;
-}
-
-void FunctionHandler::execute(string input, bool quit, vector<string>* result)
+void FunctionHandler::execute(string input,
+							  vector<string>* generalEntryList,
+							  vector<string>* calendarEntryList,
+							  vector<string>* diduknowBoxList)
 {
 	LangHandler lang;
 	CommandExecutor command;
+
 	Signal langSignal;
 	Signal cmdSignal;
-	string formatInput;
-	vector<string> *passer;
 
-	passer=&ram;
+	string formatInput;
+
 	//Processing the raw input to formatted input
 	lang.separate(input);
-	formatInput=lang.retrieve();
+	formatInput = lang.retrieve();
 	
 	//Get the commandType by the Singal;
-	langSignal=lang.getStatus();
-	fxStatus=langSignal;
+	langSignal = lang.getStatus();
+	fxStatus = langSignal;
 
-	command.executeCommand(passer,langSignal,formatInput, result);
-	if (result ->size()!=0)
+	command.executeCommand(generalEntryList, langSignal, formatInput, diduknowBoxList);
+
+	if (diduknowBoxList->size() != 0)
 	{
-		for (int i =0; i< result ->size(); i++)
+		for (int i = 0; i < diduknowBoxList->size(); i++)
 		{
 			string decodedOutput;
-			string temp = result ->at(i);
+			string temp = diduknowBoxList->at(i);
 			decodedOutput = lang.decoder(temp);
-			result ->at(i) = decodedOutput;
+			diduknowBoxList->at(i) = decodedOutput;
 		}
 	}
 
-	fxStatus=command.getStatus();
-	store.writeData(passer);
+	fxStatus = command.getStatus();
+	store.writeData(generalEntryList);
 
 	setStatus();
 }
 
+void FunctionHandler::saveData(vector<string>* generalEntryList,
+							   vector<string>* calendarEntryList,
+							   vector<string>* diduknowBoxList)
+{
+	store.writeData(generalEntryList);
+}
