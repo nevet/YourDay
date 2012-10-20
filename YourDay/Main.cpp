@@ -1,6 +1,30 @@
 /**
+* User is allowed to do adding, deleting, searching and updating in our
+* program. Input format for each function is listed below:
+* 
+* To add:
+*		add [date] [time] description [at location]
+* To delete:
+*		delete index
+* To search:
+*		search description
+* To update:
+*		edit index description
+*
+* date:
+*		DD/MM/YYYY  
+* time:
+*		HH:MM-HH:MM
+* description:
+*		no strict format, pure string
+* location:
+*		no strict format, pure string
+* index:
+*		positive integer
+*
 * @author a00194847U
 */
+
 #include <iostream>
 #include <string>
 #include "UIHandler.h"

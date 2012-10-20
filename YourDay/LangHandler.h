@@ -13,21 +13,20 @@
 
 #include "Signal.h"
 #include "Handler.h"
+#include "StatusHandler.h"
 
 using namespace std;
 
 class LangHandler : public Handler
 {
 private:
-	//These are parts of a detailed event, to be used in decoder operation
-	enum DetailPart
-	{
-		DATE, TIME, DETAILS, LOCATION, PRIORITY
-	};
-	static const string COMMAND_ERROR;
+	StatusHandler sh;
+
+	Signal command;
+	Signal langStatus;
+
 	string details;	
 	string formattedInput;
-	string userCommand;
 
 	bool isMonth(string month, int* decodedMonth);
 	bool isTime(string text);
@@ -37,13 +36,58 @@ private:
 	*
 	* @param input
 	*			is a raw string that needs to be encoded
-	* @return encoded string
+	* @param command
+	*			is the command type
+	* @return encoded string, format of the string is:
+	* 
+	* #index#description#location#time#date#priority#
+	*
+	* index:
+	*		this field contains index information required by delete and update
+	*		functions.
+	* description:
+	*		this field contains description of the task required by add, search
+	*		and update functions.
+	* location:
+	*		this field contains location information required by add and search
+	*		functions.
+	* time:
+	*		this field contains time information required by add and search
+	*		functions.
+	* date:
+	*		this field contains date information required by add and search
+	*		functions.
+	* priority:
+	*		this field contains priority information required by add and search
+	*		functions.
+	*		
+	* Note that some fields are not necessarily required. However, if one field
+	* if not required for a certain function, that field should not be OMITTED.
 	*
 	* e.g
 	*
-	* samples of I/O should be written here 
+	* userInput = "add CS2103 TUT at COM on Friday"
+	* encoded	= "##CS2103 TUT#COM##Friday##"
+	*
+	* explaination:
+	*
+	* since index field, time field and priority field are missing,
+	* corresponding fields should be left as "blank".
+	*
+	* userInput = "delete 1"
+	* encoded	= "#1######"
+	*
+	* explaination:
+	*
+	* only index field is specified, so other fields should be "blank".
 	*/
-	string encoder(string input);
+	string encoder(string input, Signal command);
+
+	/**
+	* This operation will set command type using userCommand. If userCommand
+	* took from the user is invalid, COMMAND_E Signal will be set.
+	*/
+	void setCommand(string userCommand);
 
 public :
 	
@@ -86,24 +130,6 @@ public :
 	* Retrieve the encoded user input information
 	*/
 	string retrieveEncodedInfo();
-
-	/**
-	* Decodes the processed string to output format
-	*
-	* @param input
-	*			is an encoded string
-	* @return decoded string
-	*
-	* e.g
-	*
-	* samples of I/O should be written here
-	*/
-	string decoder(string input);
-
-	/**
-	* Breaks the encoded string to different fields format
-	*/
-	void breakString(string* date, string* time, string* details, string* location, string* priority);
 
 	~LangHandler();
 };
