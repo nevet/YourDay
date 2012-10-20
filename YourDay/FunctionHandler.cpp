@@ -6,6 +6,9 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 								 vector<string>* calendarEntryList,
 								 vector<string>* diduknowBoxList)
 {
+	//set default value for function handler status
+	fxStatus = CLEAR;
+	
 	generalEntryList->clear();
 	calendarEntryList->clear();
 	diduknowBoxList->clear();
@@ -15,7 +18,7 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 
 void FunctionHandler::setStatus()
 {
-	status=fxStatus;
+	status = fxStatus;
 }
 
 void FunctionHandler::execute(string input, bool* quit,
@@ -26,50 +29,45 @@ void FunctionHandler::execute(string input, bool* quit,
 	LangHandler lang;
 	CommandExecutor command;
 
-	Signal langSignal;
+	Signal langStatus;
 	Signal cmdSignal;
 	Signal userCommand;
 
-	string formattedInput;
+	string encodedInput;
 
 	//Processing the raw input to formatted input
 	lang.separate(input);
 	//Get status from LanguageHandler
-	langSignal = lang.getStatus();
+	langStatus = lang.getStatus();
 
 	//Check if raw input has been proceeded successfully
-	if (!sh.success(langSignal))
+	if (sh.error(langStatus))
 	{
 		//if not, FunctionHandler status should be set to langSignal
-		fxStatus = langSignal;
+		fxStatus = langStatus;
 	} else
 	{	
+		//no error occured, we should retrieve the proceeded results
 		userCommand = lang.retrieveUserCommand();
-		formattedInput = lang.retrieveEncodedInfo();
+		encodedInput = lang.retrieveEncodedInfo();
 
+		//if user typed EXIT indicator, no more operations should be entertained
 		if (userCommand = EXIT_COMMAND)
 		{
 			*quit = true;
+			//safe exit
+			fxStatus = SUCCESS;
 		} else
 		{
-			command.executeCommand(generalEntryList, userCommand, formattedInput, diduknowBoxList);
+			command.executeCommand(generalEntryList, userCommand, encodedInput, diduknowBoxList);
 
-			if (diduknowBoxList->size() != 0)
+			//keep track of Signals threw by CommandHandler
+			fxStatus = command.getStatus();
+
+			if (sh.success(fxStatus))
 			{
-				for (int i = 0; i < diduknowBoxList->size(); i++)
-				{
-					string decodedOutput;
-					string temp = diduknowBoxList->at(i);
-					decodedOutput = lang.decoder(temp);
-					diduknowBoxList->at(i) = decodedOutput;
-				}
+				store.writeData(generalEntryList);
 			}
-		}
-
-		fxStatus = command.getStatus();
-		if (sh.success(fxStatus))
-		{
-			store.writeData(generalEntryList);
 		}
 	}
 

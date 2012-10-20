@@ -158,34 +158,27 @@ void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, s
 {
 	switch (type)
 	{
-	case ADD_COMMAND:
+		case ADD_COMMAND:
 		{
 			addEntry(entryList, detail);
 			break;
 		}
-	case DELETE_COMMAND:
+
+		case DELETE_COMMAND:
 		{
-			deleteEntry(entryList,detail);
+			deleteEntry(entryList, detail);
 			break;
 		}
-	case SEARCH_COMMAND:
+
+		case SEARCH_COMMAND:
 		{
 			searchEntry(entryList, detail, result);
 			break;
 		}
-	case EDIT_COMMAND:
+
+		case EDIT_COMMAND:
 		{
 			updateEntry(entryList, detail);
-			break;
-		}
-	case EXIT_COMMAND:
-		{
-			setStatus(EXIT_COMMAND);
-			break;
-		}
-	default:
-		{
-			setStatus(COMMAND_E);
 			break;
 		}
 	}

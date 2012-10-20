@@ -13,8 +13,6 @@
 
 #include "LangHandler.h"
 
-const string LangHandler :: COMMAND_ERROR =  "Wrong command. Please try again.\n";
-
 bool LangHandler::isMonth(string month, int* decodedMonth)
 {
 	bool ans;
@@ -48,189 +46,135 @@ bool LangHandler::isMonth(string month, int* decodedMonth)
 
 LangHandler::LangHandler()
 {
+	//set default value for language handler status
+	langStatus = CLEAR;
 }
 
 void LangHandler::setStatus()
 {
+	status = langStatus;
+}
+
+void LangHandler::setCommand(string userCommand)
+{	
+	//if user command is valid, set corresponding command type
 	if ( userCommand == "add" )
 	{
-		status = ADD_COMMAND;
+		command = ADD_COMMAND;
 	}
-	else if ( userCommand == "delete" )
+	else
+	if ( userCommand == "delete" )
 	{
-		status = DELETE_COMMAND;
+		command = DELETE_COMMAND;
 	}
-	else if ( userCommand == "edit" )
+	else
+	if ( userCommand == "edit" )
 	{
-		status = EDIT_COMMAND;
+		command = EDIT_COMMAND;
 	}
-	else if ( userCommand == "search" )
+	else
+	if ( userCommand == "search" )
 	{
-		status = SEARCH_COMMAND;
+		command = SEARCH_COMMAND;
 	}
-	else if (userCommand == "undo" )
+	else
+	if (userCommand == "undo" )
 	{
-		status = UNDO_COMMAND;
+		command = UNDO_COMMAND;
 	}
-	else if (userCommand == "exit" )
+	else
+	if (userCommand == "exit" )
 	{
-		status = EXIT_COMMAND;
+		command = EXIT_COMMAND;
 	}
 	else
 	{
-		
-		throw (  COMMAND_ERROR );
+		//if user command is invalid, command error signal should be set
+		langStatus = COMMAND_E;
 	}
 }
 
-// Seperates user input's string into 2 parts, the input and the string to be processed
 void LangHandler::separate(string userInput)
 {
-	stringstream tempHolder;
+	stringstream tempHolder(userInput);
+
+	string userCommand;
 	string rawString;
 	string encodedString;
-	char blankSpaceEater;
-	string updateNum;
 
-	tempHolder << userInput;
+	char dummySpace;
+
+	//first we extract user command
 	tempHolder >> userCommand;
-	//ignore the blankSapce
-	tempHolder.get(blankSpaceEater);
-	
+	setCommand(userCommand);
+
+	//if set command fails, no other operation should be entertained
+	if (!sh.error(langStatus))
+	{
+		//to get rid of leading space
+		tempHolder.get(dummySpace);
+		getline(tempHolder, rawString);
+
+		encodedString = encoder(rawString, command);
+
+		//if no error threw by encoder, langStatus should be set to SUCCESS
+		if (!sh.error(langStatus))
+		{
+			langStatus = SUCCESS;
+		}
+	}
+
 	setStatus();
-
-	if (userCommand == "edit")
-		tempHolder >> updateNum;
-
-	getline( tempHolder, rawString );
-	if ( userCommand == "add" || userCommand == "edit")
-	{
-		encodedString = encoder(rawString);
-	}
-	else
-	{
-		encodedString = rawString;
-	}
-	
-	if (userCommand == "edit")
-	{
-		details = updateNum + " "+ encodedString;
-	}
-	else
-	{
-		details= encodedString;
-	}
 }
 
-string LangHandler::encoder(string input)
+string LangHandler::encoder(string input, Signal command)
 {
-	stringstream tempHolder;
-	string temp;
-	bool isDatePart = false;
-	int decodedMonth;
-
-	ostringstream date ( "");
-	string hour = "";
-	string eventDetails = "";
+	stringstream tempHolder(input);
+	
+	string date = "";
+	string time = "";
+	string index = "";
+	string description = "";
 	string location = "";
 	string priority = "";
 
-	if ( input == "" )
+	string temp;
+
+	//if empty string is entered by user, LENGTH_Z_E will be set and no more
+	//operation should be entertained
+	if (input == "")
 	{
-		return "";
+		langStatus = LENGTH_Z_E;
+	} else
+	{
+		//input format is different for different command
+		switch (command)
+		{
+			case ADD_COMMAND:
+				break;
+
+			case DELETE_COMMAND:
+				break;
+
+			case EDIT_COMMAND:
+				break;
+
+			case SEARCH_COMMAND:
+				break;
+
+			default:
+				break;
+		}
+
+		formattedInput = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
 	}
-
-	tempHolder << input;
-
-	while (tempHolder >> temp)
-	{
-		if ((temp.size() <= 10) && (temp.size() >= 8) && (temp[2] == '/') && (temp[5] == '/'))
-		{
-			date << temp;
-		}
-		else if (isDatePart)
-		{
-			time_t t= time(NULL);
-			tm* now=localtime(&t);
-			int year = now->tm_year + 1900;
-
-			date << temp << "/" << decodedMonth << "/" << year;
-			isDatePart = false;
-		}
-		else if (isMonth(temp, &decodedMonth))
-		{
-			isDatePart = true;
-		}
-		else if ((temp.size() == 11)&&( temp[2]==':' ) && ( temp[5] == '-' ) && ( temp[8] == ':') )
-		{
-			hour = temp;
-		}
-		else if ( temp == "at" )
-		{
-			while ( tempHolder >> temp )
-			{
-				if ( temp == "priority" )
-				{
-					tempHolder >> priority;					
-					break;
-				}
-				else
-				{
-					location += temp;
-					location += " ";
-				}
-			}
-		}
-		else if (temp == "priority")
-		{
-			tempHolder >> priority;		//in case the user doesn't specify the location
-		}
-		else 
-		{
-			eventDetails += temp;
-			eventDetails += " ";
-		}
-	} 
-	formattedInput = date.str()+"#"+hour+"#"+eventDetails+"#"+location+"#"+priority;
 
 	return formattedInput;
-}
-
-string LangHandler::decoder(string input)
-{
-	string decodedString = "";
-	int size = input.size();
-	char curChar;			//current character in input string
-	DetailPart part = DATE;
-
-	for (int i = 0; i < input.size(); i++)
-	{
-		curChar = input[i];
-		if (curChar != '#')
-		{
-			decodedString += curChar;
-		}
-		else
-		{
-			if (i != input.size()-1 && input[i+1] != '#' && decodedString != "")
-			{
-				decodedString += ": ";
-			}
-		}
-	}
-
-	return decodedString;
 }
 
 string LangHandler::retrieveEncodedInfo()
 {
 	return details;
-}
-
-//Breaks the encoded string to different fields format
-void LangHandler::breakString(string* date, string* time, string* details, string* location, string* priority)
-{
-
 }
 
 LangHandler::~LangHandler()
