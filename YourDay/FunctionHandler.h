@@ -42,7 +42,7 @@ public:
 	* Implement virtual setStatus(). Signal will be:
 	* CLEAR		Testing signal;
 	* SUCCESS	Success indicator, all process are successfully handled;
-	* ERROR		Error indicator, some errors occured when executing.
+	* Signals threw by LangHandler and CommandHandler
 	*/
 	void setStatus();
 	
@@ -55,7 +55,7 @@ public:
 	* @param quit
 	*			is the indicator for terminating the whole program
 	*/
-	void execute(string input,
+	void execute(string input, bool* quit,
 				 vector<string>* generalEntryList,
 				 vector<string>* calendarEntryList,
 				 vector<string>* diduknowBoxList);

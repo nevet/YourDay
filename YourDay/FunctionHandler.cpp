@@ -18,7 +18,7 @@ void FunctionHandler::setStatus()
 	status=fxStatus;
 }
 
-void FunctionHandler::execute(string input,
+void FunctionHandler::execute(string input, bool* quit,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
 							  vector<string>* diduknowBoxList)
@@ -28,32 +28,50 @@ void FunctionHandler::execute(string input,
 
 	Signal langSignal;
 	Signal cmdSignal;
+	Signal userCommand;
 
-	string formatInput;
+	string formattedInput;
 
 	//Processing the raw input to formatted input
 	lang.separate(input);
-	formatInput = lang.retrieve();
-	
-	//Get the commandType by the Singal;
+	//Get status from LanguageHandler
 	langSignal = lang.getStatus();
-	fxStatus = langSignal;
 
-	command.executeCommand(generalEntryList, langSignal, formatInput, diduknowBoxList);
-
-	if (diduknowBoxList->size() != 0)
+	//Check if raw input has been proceeded successfully
+	if (!sh.success(langSignal))
 	{
-		for (int i = 0; i < diduknowBoxList->size(); i++)
+		//if not, FunctionHandler status should be set to langSignal
+		fxStatus = langSignal;
+	} else
+	{	
+		userCommand = lang.retrieveUserCommand();
+		formattedInput = lang.retrieveEncodedInfo();
+
+		if (userCommand = EXIT_COMMAND)
 		{
-			string decodedOutput;
-			string temp = diduknowBoxList->at(i);
-			decodedOutput = lang.decoder(temp);
-			diduknowBoxList->at(i) = decodedOutput;
+			*quit = true;
+		} else
+		{
+			command.executeCommand(generalEntryList, userCommand, formattedInput, diduknowBoxList);
+
+			if (diduknowBoxList->size() != 0)
+			{
+				for (int i = 0; i < diduknowBoxList->size(); i++)
+				{
+					string decodedOutput;
+					string temp = diduknowBoxList->at(i);
+					decodedOutput = lang.decoder(temp);
+					diduknowBoxList->at(i) = decodedOutput;
+				}
+			}
+		}
+
+		fxStatus = command.getStatus();
+		if (sh.success(fxStatus))
+		{
+			store.writeData(generalEntryList);
 		}
 	}
-
-	fxStatus = command.getStatus();
-	store.writeData(generalEntryList);
 
 	setStatus();
 }

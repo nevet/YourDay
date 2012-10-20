@@ -32,56 +32,76 @@ private:
 	bool isMonth(string month, int* decodedMonth);
 	bool isTime(string text);
 
+	/**
+	* Encodes the raw string into the correct saving format
+	*
+	* @param input
+	*			is a raw string that needs to be encoded
+	* @return encoded string
+	*
+	* e.g
+	*
+	* samples of I/O should be written here 
+	*/
+	string encoder(string input);
+
 public :
 	
 	LangHandler();
 
 	/**
-	Sets the status of the language handler after input processing
-	
-	@param void
-	@return void
+	* Sets the status of the language handler after input processing.
+	*
+	* Signals will be:
+	* SUCCESS		User input has been successfully proceeded;
+	* Other signals should be caught later
 	*/
 	void setStatus();
 
 	/**
-	Seperates user input's string into 2 parts, the input and the string to be processed
-	
-	@param user's input string
-	@return void
+	* Retrieve user command.
+	*/
+	Signal retrieveUserCommand();
+
+	/**
+	* Seperates user input's string into 2 parts, the command and the
+	* encoded string.
+	*
+	* User command will be stored in private string userCommand;
+	* Details info will be stored in private string details
+	* 
+	* e.g
+	*
+	* userInput = "add CS2103 tutorial at COM1 on Friday";
+	* return = {userCommand = "add", detials = "#CS2103 tutorial#COM1#Friday#"}
+	* 
+	* userInput = "delete 1";
+	* return = {userCommand = "delete", details = "#1###"}
+	*
+	* details about format of encoded string can be found in encoded().
 	*/
 	void separate(string userInput);
 
 	/**
-	Encodes the raw string into the correct saving format
-	
-	@param input string that needs to be encoded
-	@return encoded string
+	* Retrieve the encoded user input information
 	*/
-	string encoder(string input);
+	string retrieveEncodedInfo();
 
 	/**
-	Retrieves the processed string pointer after separation method
-	
-	@param void
-	@return processed string pointer
-	*/
-
-	string retrieve();
-
-	/**
-	Decodes the processed string to output format
-	
-	@param void
-	@return processed string pointer
+	* Decodes the processed string to output format
+	*
+	* @param input
+	*			is an encoded string
+	* @return decoded string
+	*
+	* e.g
+	*
+	* samples of I/O should be written here
 	*/
 	string decoder(string input);
 
 	/**
-	Breaks the encoded string to different fields format
-	
-	@param void
-	@return void
+	* Breaks the encoded string to different fields format
 	*/
 	void breakString(string* date, string* time, string* details, string* location, string* priority);
 
