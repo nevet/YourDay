@@ -50,7 +50,6 @@ LangHandler::LangHandler()
 {
 }
 
-// Sets the status of the language handler after input processing
 void LangHandler::setStatus()
 {
 	if ( userCommand == "add" )
@@ -123,8 +122,6 @@ void LangHandler::separate(string userInput)
 	}
 }
 
-
-// Encodes the raw string into the correct saving format
 string LangHandler::encoder(string input)
 {
 	stringstream tempHolder;
@@ -225,8 +222,7 @@ string LangHandler::decoder(string input)
 	return decodedString;
 }
 
-// Retrieves the processed string pointer after seperation method
-string LangHandler::retrieve()
+string LangHandler::retrieveEncodedInfo()
 {
 	return details;
 }

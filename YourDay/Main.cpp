@@ -44,14 +44,9 @@ int main()
 		ui.setStatus();
 		string userInput = ui.retrieveInput();
 
-		function.execute(userInput, &generalEntryList, &calendarEntryList, &diduknowBoxList);
+		function.execute(userInput, &quit, &generalEntryList, &calendarEntryList, &diduknowBoxList);
 
 		Signal signal = function.getStatus();
-
-		if(signal==EXIT_COMMAND)
-		{
-			quit=true;
-		}
 
 		//display updated entries
 		ui.mainScreenDisplay(&generalEntryList);
