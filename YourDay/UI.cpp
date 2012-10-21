@@ -22,6 +22,20 @@ void UI::setScreenSize()
 //	SetConsoleWindowInfo(hconsole, TRUE, &windowSize);
 }
 
+void UI::drawBanner()
+{
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE);
+	cout<<"                ____  ____                _____                                 ";
+	cout<<"                \\  \\\\/  //                |   \\\\                                ";
+	cout<<"                 \\  \\\" //                 |    \\\\                               ";
+	cout<<"                  \\   // ____  __ __  ____| |\\ || ____ __  ___                  ";
+	cout<<"                   | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                  ";
+	cout<<"                   | || | O ||| |/ ||| || |    //| o || \\  //                   ";
+	cout<<"                   |_|| \\___// \\__// |_|| |___// \\___|| /_//                    ";
+	cout<<"                                                                                "
+}
+
 void UI::setStatus(Signal statusSignal)
 {
 	status = statusSignal;
@@ -54,16 +68,7 @@ void UI::startingScreenDisplay()
 {
 	system("CLS");
 	
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE);
-	cout<<"                ____  ____                _____                                 ";
-	cout<<"                \\  \\\\/  //                |   \\\\                                ";
-	cout<<"                 \\  \\\" //                 |    \\\\                               ";
-	cout<<"                  \\   // ____  __ __  ____| |\\ || ____ __  ___                  ";
-	cout<<"                   | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                  ";
-	cout<<"                   | || | O ||| |/ ||| || |    //| o || \\  //                   ";
-	cout<<"                   |_|| \\___// \\__// |_|| |___// \\___|| /_//                    ";
-	cout<<"                                                                                ";
+
 	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
 	cout<<"--------------------------------------------------------------------------------";
 	cout<<"|                    YourDay - always making your day :)                       |";

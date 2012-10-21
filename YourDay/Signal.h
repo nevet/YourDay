@@ -10,6 +10,8 @@ enum Signal
 	ASK		= 0x00010000,
 	CLEAR	= 0x00000000,
 
+//@author a0088455r
+//for interpreting commands that is sent drom language handler
 	ADD_COMMAND		= 0x00000001,
 	DELETE_COMMAND	= 0x00000002,
 	EDIT_COMMAND	= 0x00000003,
@@ -34,8 +36,7 @@ enum Signal
 
 	DELETE_A	= ASK | DELETE_COMMAND,
 
-//@author a0088455r
-//for interpreting commands that is sent drom language handler
+
 	
 };
 
