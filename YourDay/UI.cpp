@@ -33,7 +33,7 @@ void UI::drawBanner()
 	cout<<"                   | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                  ";
 	cout<<"                   | || | O ||| |/ ||| || |    //| o || \\  //                   ";
 	cout<<"                   |_|| \\___// \\__// |_|| |___// \\___|| /_//                    ";
-	cout<<"                                                                                "
+	cout<<"                                                                                ";
 }
 
 void UI::setStatus(Signal statusSignal)
