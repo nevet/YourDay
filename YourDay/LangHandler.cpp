@@ -172,6 +172,11 @@ string LangHandler::encoder(string input, Signal command)
 	return formattedInput;
 }
 
+Signal LangHandler::retrieveUserCommand()
+{
+	return command;
+}
+
 string LangHandler::retrieveEncodedInfo()
 {
 	return details;
