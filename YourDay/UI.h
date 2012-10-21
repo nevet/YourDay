@@ -35,6 +35,7 @@ private:
 	HANDLE hConsole;
 	char displayBoard[boardHeight][boardWidth];
 	void setStatus(Signal statusSignal);
+	void drawBanner();
 	void writeWords(string words, int startH, int startW);
 	void displayEntryList( vector<string> *entryList );
 	string decoder(string input);
