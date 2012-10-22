@@ -68,7 +68,7 @@ void UI::startingScreenDisplay()
 {
 	system("CLS");
 	
-
+	drawBanner();
 	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
 	cout<<"--------------------------------------------------------------------------------";
 	cout<<"|                    YourDay - always making your day :)                       |";

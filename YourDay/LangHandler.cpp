@@ -8,40 +8,25 @@
 */
 #include <sstream>
 #include <string>
+#include <cstring>
+#include <cstdio>
 #include <map>
 #include <ctime>
 
 #include "LangHandler.h"
 
-bool LangHandler::isMonth(string month, int* decodedMonth)
+bool LangHandler::isDate(string date)
 {
-	bool ans;
-	map<string, int> mapper;
+	int year, month, day;
 
-	mapper ["JAN"] = 1;
-	mapper ["FEB"] = 2;
-	mapper ["MAR"] = 3;
-	mapper ["APR"] = 4;
-	mapper ["MAY"] = 5;
-	mapper ["JUN"] = 6;
-	mapper ["JUL"] = 7;
-	mapper ["AUG"] = 8;
-	mapper ["SEP"] = 9;
-	mapper ["OCT"] = 10;
-	mapper ["NOV"] = 11;
-	mapper ["DEC"] = 12;
-	
-	if (mapper.find(month) == mapper.end())
-	{
-		ans = false;
-	}
-	else
-	{
-		ans = true;
-		*decodedMonth = mapper[month];
-	}
+	return sscanf(date.c_str(), "%d/%d/%d", &year, &month, &day) == 3;
+}
 
-	return ans;
+bool LangHandler::isTime(string time)
+{
+	int h1, h2, m1, m2;
+
+	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &h2, &m1, &m2) == 4;
 }
 
 LangHandler::LangHandler()
@@ -140,6 +125,8 @@ string LangHandler::encoder(string input, Signal command)
 
 	string temp;
 
+	size_t pos;
+
 	//if empty string is entered by user, LENGTH_Z_E will be set and no more
 	//operation should be entertained
 	if (input == "")
@@ -150,15 +137,64 @@ string LangHandler::encoder(string input, Signal command)
 		//input format is different for different command
 		switch (command)
 		{
+			//format will be "[date] [time] description [at location]"
 			case ADD_COMMAND:
+				//check whether we have location
+				pos = input.rfind(" at ");
+				//contains location info
+				if (pos != string::npos)
+				{
+					location = input.substr(pos + 4);
+					//get rid of location info
+					input = input.substr(0, pos);
+				}
+
+				//extract potential date information and exmaine it
+				pos = input.find(" ");
+				date = input.substr(0, pos);
+				
+				if (isDate(date))
+				{
+					input = input.substr(pos + 1);
+					
+					pos = input.find(" ");
+					time = input.substr(0, pos);
+
+					if (isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = "";
+					}
+				} else
+				{
+					//it might be a time, so we need to exmaine it
+					time = date;
+					date = "";					
+
+					if (isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = "";
+					}
+				}
+
+				description = input;
+
 				break;
 
+			//format will be "index"
 			case DELETE_COMMAND:
 				break;
 
+			//format will be "description"
 			case EDIT_COMMAND:
 				break;
 
+			//format will be "index description"
 			case SEARCH_COMMAND:
 				break;
 

@@ -28,8 +28,8 @@ private:
 	string details;	
 	string formattedInput;
 
-	bool isMonth(string month, int* decodedMonth);
-	bool isTime(string text);
+	bool isDate(string date);
+	bool isTime(string time);
 
 	/**
 	* Encodes the raw string into the correct saving format
