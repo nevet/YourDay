@@ -29,6 +29,23 @@ bool LangHandler::isTime(string time)
 	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &h2, &m1, &m2) == 4;
 }
 
+bool LangHandler::isInt(string inx)
+{
+	int x;
+
+	return sscanf(inx.c_str(), "%d", x) == 1;
+}
+
+bool LangHandler::isLogicDate(string date)
+{
+	return true;
+}
+
+bool LangHandler::isLogicTime(string time)
+{
+	return true;
+}
+
 LangHandler::LangHandler()
 {
 	//set default value for language handler status
@@ -184,10 +201,30 @@ string LangHandler::encoder(string input, Signal command)
 
 				description = input;
 
+				//after have done separating, we need to exmaine date and time
+				//to make sure they are logic, if applicable
+				if (date != "" && !isLogicDate(date))
+				{
+					langStatus = DATE_E;
+				} else
+				if (time != "" && !isLogicTime(time))
+				{
+					langStatus = TIME_E;
+				}
+
 				break;
 
 			//format will be "index"
 			case DELETE_COMMAND:
+				pos = input.find(" ");
+				index = input.substr(0, pos - 1);
+				
+				if (!isInt(index))
+				{
+					index = "";
+					langStatus = INDEX_E;
+				}
+
 				break;
 
 			//format will be "description"
@@ -202,7 +239,10 @@ string LangHandler::encoder(string input, Signal command)
 				break;
 		}
 
-		formattedInput = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
+		if (!sh.error(langStatus))
+		{
+			formattedInput = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
+		}
 	}
 
 	return formattedInput;

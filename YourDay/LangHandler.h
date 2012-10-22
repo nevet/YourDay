@@ -30,6 +30,9 @@ private:
 
 	bool isDate(string date);
 	bool isTime(string time);
+	bool isInt(string inx);
+	bool isLogicDate(string date);
+	bool isLogicTime(string time);
 
 	/**
 	* Encodes the raw string into the correct saving format
