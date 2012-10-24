@@ -10,10 +10,16 @@
 #define LANGHANDLER_H
 
 #include <iostream>
+#include <vector>
 
 #include "Signal.h"
 #include "Handler.h"
 #include "StatusHandler.h"
+#include "Executor.h"
+#include "AddExecutor.h"
+#include "DeleteExecutor.h"
+#include "SearchExecutor.h"
+#include "UpdateExecutor.h"
 
 using namespace std;
 
@@ -26,7 +32,6 @@ private:
 	Signal langStatus;
 
 	string details;	
-	string formattedInput;
 
 	bool isDate(string date);
 	bool isTime(string time);
@@ -84,7 +89,7 @@ private:
 	*
 	* only index field is specified, so other fields should be "blank".
 	*/
-	string encoder(string input, Signal command);
+	void encoder(string input, Signal command);
 
 	/**
 	* This operation will set command type using userCommand. If userCommand
@@ -102,11 +107,6 @@ public :
 	* Exception signals threw by separate
 	*/
 	Signal getStatus();
-
-	/**
-	* Retrieve user command.
-	*/
-	Signal retrieveUserCommand();
 
 	/**
 	* Seperates user input's string into 2 parts, the command and the
@@ -128,9 +128,10 @@ public :
 	void separate(string userInput);
 
 	/**
-	* Retrieve the encoded user input information
+	* This operation will pack up an specific executor w.r.t user's command
 	*/
-	string retrieveEncodedInfo();
+	Executor* pack(bool* quit, vector<string>* generalEntryList,
+							   vector<string>* diduknowBoxList);
 
 	~LangHandler();
 };
