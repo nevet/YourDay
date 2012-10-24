@@ -52,9 +52,9 @@ LangHandler::LangHandler()
 	langStatus = CLEAR;
 }
 
-void LangHandler::setStatus()
+Signal LangHandler::getStatus()
 {
-	status = langStatus;
+	return langStatus;
 }
 
 void LangHandler::setCommand(string userCommand)
@@ -125,8 +125,6 @@ void LangHandler::separate(string userInput)
 			langStatus = SUCCESS;
 		}
 	}
-
-	setStatus();
 }
 
 string LangHandler::encoder(string input, Signal command)

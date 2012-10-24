@@ -18,7 +18,7 @@
 * copy of the file, which is a private vector of strings, and an instance of
 * StorageHandler.
 */
-class FunctionHandler: public Handler
+class FunctionHandler
 {
 private:
 	StatusHandler sh;
@@ -39,12 +39,12 @@ public:
 					vector<string>* diduknowBoxList);
 	
 	/**
-	* Implement virtual setStatus(). Signal will be:
+	* Signal will be:
 	* CLEAR		Testing signal;
 	* SUCCESS	Success indicator, all process are successfully handled;
 	* Signals threw by LangHandler and CommandHandler
 	*/
-	void setStatus();
+	Signal getStatus();
 	
 	/**
 	* The operation is periodically called in main(). It will handle the flow
