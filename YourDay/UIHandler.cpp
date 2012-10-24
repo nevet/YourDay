@@ -93,9 +93,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 	return outString;
 }
 
-UIHandler::UIHandler()
+UIHandler::UIHandler(vector<string>* entryList)
 {
 	input = "";
+	startingScreenDisplay();
+	mainScreenDisplay(entryList);
 }
 
 void UIHandler::getInput()
