@@ -32,25 +32,29 @@ private:
 	* SUCCESS	Success indicator, all process are successfully handled;
 	* ERROR		Error indicator, some errors occured when executing.
 	*/
-	Signal status;
-	
-	void setStatus(Signal statusSignal);
+	Signal CEStatus;
 
 	void updateRaw(string* raw, string* updateDetails);
 
 	/**
-	* This private method is to be called in executeCommand operation
-	* It will add an entry as a pure string to the entry list vector
-	* It takes in 2 parameters passed by executeCommand operation:
-	* @param entry list
-					is the pointer to the entry list vector
-	* @param eventDetails
-					is the string contains the entry to be added
+	* These private methods are to be called in executeCommand operation to
+	* handle the corresponding tasks.
+	*
+	* 3 parameters may be passed:
+	*
+	* @param entryList
+	*			is the pointer to the entry list vector
+	* @param details
+	*			is the encoded string contains the details to be added
+	* @param matchedEntryList
+	*			is the vector contains all matching results
+	*
+	* format for encoded string can be found in comments of LangHandler::encoded()
 	*/
-	void addEntry(vector<string> * entryList, string eventDetails);
-	void deleteEntry(vector <string>* entryList, string number);
-	void searchEntry(vector <string>* entryList, string keyWord,vector <string>* matchedEntryList);
-	void updateEntry(vector <string>* entryList, string updateDetails);
+	void addEntry(vector<string> * entryList, string details);
+	void deleteEntry(vector <string>* entryList, string details);
+	void searchEntry(vector <string>* entryList, string details, vector <string>* matchedEntryList);
+	void updateEntry(vector <string>* entryList, string details);
 
 public:
 	CommandExecutor();
@@ -71,15 +75,16 @@ public:
 	*				is the string vector pointer points to the list of events
 	* @param type
 	*				is the type of command, including:
-	*			ADD_COMMAND		: add an entry to the event list
-	*			DELETE_COMMAND	: delete an entry from the event list
-	*			EDIT_COMMAND	: edit an entry in the event list
-	*			SEARCH_COMMAND	: search for an entry containing a keyword in the event list
+	*					ADD_COMMAND		: add an entry to the event list
+	*					DELETE_COMMAND	: delete an entry from the event list
+	*					EDIT_COMMAND	: edit an entry in the event list
+	*					SEARCH_COMMAND	: search for an entry containing a keyword in the event list
 	* @param detail
 	*				is the string to pass the command detail
-	*			For add command: it is the entry string to add to the event list
-	*			For delete and update command: it is the string specify the keyword in the entry to be delete/update
-	*			For search command: it is the key word to search in the event list
+	*
+	*				For add command: it is the entry string to add to the event list
+	*				For delete and update command: it is the string specify the keyword in the entry to be delete/update
+	*				For search command: it is the key word to search in the event list
 	*/
 	void executeCommand(vector <string> * entryList, Signal type, string detail, vector<string>* result);
 

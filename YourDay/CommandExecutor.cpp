@@ -3,11 +3,6 @@
 #include <sstream>
 #include "CommandExecutor.h"
 
-void CommandExecutor::setStatus(Signal statusSignal)
-{
-	status = statusSignal;
-}
-
 void CommandExecutor::updateRaw(string* raw, string* updateDetails)
 {
 	string updatedRaw = "";
@@ -56,38 +51,27 @@ void CommandExecutor::updateRaw(string* raw, string* updateDetails)
 
 void CommandExecutor::addEntry(vector<string> * entryList, string detail)
 {
-	if (detail == "")
-	{
-		setStatus(EMPTY_ENTRY_E);
-	}
-	else
-	{
-		entryList -> push_back(detail);
-		setStatus(ADD_S);
-	}
+	entryList -> push_back(detail);
+	CEStatus = ADD_S;
 }
 
-void CommandExecutor::deleteEntry(vector<string>* entryList, string number)
+void CommandExecutor::deleteEntry(vector<string>* entryList, string details)
 {
 	int index;
 	
 	vector<string>::iterator position;
 	
-	if ( number =="")
+	index=atoi(number.c_str());
+	if(index>entryList->size())
 	{
-		setStatus(EMPTY_ENTRY_E);
+		CEStatus = DELETE_F;
 	}
-	else
+	else 
 	{
-		index=atoi(number.c_str());
-		if(index>entryList->size())
-			setStatus(DELETE_F);
-		else 
-		{
-			position=entryList->begin()+index-1;
-			entryList->erase(position);
-			setStatus(DELETE_S);
-		}
+		position=entryList->begin()+index-1;
+		entryList->erase(position);
+		
+		CEStatus = DELETE_S;
 	}
 }
 
@@ -95,23 +79,16 @@ void CommandExecutor::searchEntry(vector<string>* entryList, string keyWord, vec
 {
 	matchedEntryList->clear();
 
-	if ( keyWord =="")
-	{
-		setStatus(EMPTY_ENTRY_E);
-	}
-	else
-	{
-		string curRaw;
-		string lowerCaseKeyWord = keyWord;
-		transform(keyWord.begin(), keyWord.end(), lowerCaseKeyWord.begin(), tolower);
+	string curRaw;
+	string lowerCaseKeyWord = keyWord;
+	transform(keyWord.begin(), keyWord.end(), lowerCaseKeyWord.begin(), tolower);
 
-		for(int i=0;i<entryList->size();i++)
+	for(int i=0;i<entryList->size();i++)
+	{
+		curRaw=entryList->at(i);
+		if(std::string::npos != curRaw.find(lowerCaseKeyWord))
 		{
-			curRaw=entryList->at(i);
-			if(std::string::npos != curRaw.find(lowerCaseKeyWord))
-			{
-				matchedEntryList->push_back(curRaw);
-			}
+			matchedEntryList->push_back(curRaw);
 		}
 	}
 }
@@ -151,7 +128,7 @@ Signal CommandExecutor::getStatus()
 
 void CommandExecutor::clearStatus()
 {
-	status = CLEAR;
+	CEstatus = CLEAR;
 }
 
 void CommandExecutor::executeCommand(vector <string> * entryList, Signal type, string detail, vector<string>* result)
