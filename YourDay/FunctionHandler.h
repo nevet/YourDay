@@ -4,9 +4,8 @@
 #include <iostream>
 #include <vector>
 #include "StorageHandler.h"
-#include "Handler.h"
+#include "Executor.h"
 #include "LangHandler.h"
-#include "CommandExecutor.h"
 #include "StatusHandler.h"
 
 #define MAXIMUM_SIZE 1000

@@ -33,7 +33,7 @@ bool LangHandler::isInt(string inx)
 {
 	int x;
 
-	return sscanf(inx.c_str(), "%d", x) == 1;
+	return sscanf(inx.c_str(), "%d", &x) == 1;
 }
 
 bool LangHandler::isLogicDate(string date)
@@ -102,7 +102,6 @@ void LangHandler::separate(string userInput)
 
 	string userCommand;
 	string rawString;
-	string encodedString;
 
 	char dummySpace;
 
@@ -117,7 +116,7 @@ void LangHandler::separate(string userInput)
 		tempHolder.get(dummySpace);
 		getline(tempHolder, rawString);
 
-		encodedString = encoder(rawString, command);
+		encoder(rawString, command);
 
 		//if no error threw by encoder, langStatus should be set to SUCCESS
 		if (!sh.error(langStatus))
@@ -127,7 +126,7 @@ void LangHandler::separate(string userInput)
 	}
 }
 
-string LangHandler::encoder(string input, Signal command)
+void LangHandler::encoder(string input, Signal command)
 {
 	stringstream tempHolder(input);
 	
@@ -239,21 +238,40 @@ string LangHandler::encoder(string input, Signal command)
 
 		if (!sh.error(langStatus))
 		{
-			formattedInput = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
+			details = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
 		}
 	}
-
-	return formattedInput;
 }
 
-Signal LangHandler::retrieveUserCommand()
+Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+										vector<string>* diduknowBoxList)
 {
-	return command;
-}
+	Executor* exe;
+	
+	switch (command)
+	{
+		case ADD_COMMAND:
+			exe = new AddExecutor(generalEntryList, details);
+			break;
 
-string LangHandler::retrieveEncodedInfo()
-{
-	return details;
+		case DELETE_COMMAND:
+			exe = new DeleteExecutor(generalEntryList, details);
+			break;
+
+		case SEARCH_COMMAND:
+			exe = new SearchExecutor(generalEntryList, diduknowBoxList, details);
+			break;
+
+		case EDIT_COMMAND:
+			exe = new UpdateExecutor(generalEntryList, details);
+			break;
+
+		case EXIT_COMMAND:
+			*quit = true;
+			break;
+	}
+
+	return exe;
 }
 
 LangHandler::~LangHandler()

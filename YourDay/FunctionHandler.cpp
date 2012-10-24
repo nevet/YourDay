@@ -32,9 +32,7 @@ void FunctionHandler::execute(string input, bool* quit,
 							  vector<string>* diduknowBoxList)
 {
 	LangHandler lang;
-	CommandExecutor command;
-
-	Signal userCommand;
+	Executor* exe;
 
 	string encodedInput;
 
@@ -46,25 +44,12 @@ void FunctionHandler::execute(string input, bool* quit,
 	//Check if raw input has been proceeded successfully
 	if (!sh.error(fxStatus))
 	{
-		//no error occured, we should retrieve the proceeded results
-		userCommand = lang.retrieveUserCommand();
-		encodedInput = lang.retrieveEncodedInfo();
+		//no error occured, we should retrieve the packed executor
+		exe = lang.pack(quit, generalEntryList, diduknowBoxList);
 
-		//if user typed EXIT indicator, no more operations should be entertained
-		if (userCommand = EXIT_COMMAND)
-		{
-			*quit = true;
-			//safe exit
-			fxStatus = SUCCESS;
-		} else
-		{
-			command.executeCommand(generalEntryList, userCommand, encodedInput, diduknowBoxList);
-
-			//keep track of Signals threw by CommandHandler
-			fxStatus = command.getStatus();
-			//after one iteration, command status should be cleared
-			command.clearStatus();
-		}
+		//then we execute the executor and caught the exception threw by it
+		exe->execute();
+		fxStatus = exe->getStatus();
 	}
 }
 
