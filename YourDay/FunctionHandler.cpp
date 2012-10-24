@@ -62,6 +62,8 @@ void FunctionHandler::execute(string input, bool* quit,
 
 			//keep track of Signals threw by CommandHandler
 			fxStatus = command.getStatus();
+			//after one iteration, command status should be cleared
+			command.clearStatus();
 		}
 	}
 }
