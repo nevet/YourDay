@@ -45,6 +45,14 @@ public:
 	* Signals threw by LangHandler and CommandHandler
 	*/
 	Signal getStatus();
+
+	/**
+	* This operation will set status of function handler to default value,
+	* i.e. CLEAR.
+	*
+	* This operation will be called in main when one iteration is finished.
+	*/
+	void clearStatus();
 	
 	/**
 	* The operation is periodically called in main(). It will handle the flow

@@ -63,7 +63,10 @@ int main()
 		ui.setStatus();
 		string userInput = ui.retrieveInput();
 
-		function.execute(userInput, &quit, &generalEntryList, &calendarEntryList, &diduknowBoxList);
+		function.execute(userInput, &quit,
+						 &generalEntryList,
+						 &calendarEntryList, 
+						 &diduknowBoxList);
 
 		Signal signal = function.getStatus();
 
@@ -73,6 +76,9 @@ int main()
 		ui.displayMessage(&diduknowBoxList);
 		//display caught signals
 		ui.displayMessage(signal);
+
+		//after one iteration, status of function handler should be cleared
+		function.clearStatus();
 	}
 
 	function.saveData(&generalEntryList, &calendarEntryList, &diduknowBoxList);
