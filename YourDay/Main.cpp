@@ -51,15 +51,10 @@ int main()
 	vector<string> diduknowBoxList;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
-	UIHandler ui;
+	UIHandler ui(&generalEntryList);
 
 	//terminating indicator, should be false at the beginning
 	bool quit=false;
-
-	ui.startingScreenDisplay();
-
-	//saved entries should be displayed on the screen at the beginning
-	ui.mainScreenDisplay(&generalEntryList);
 
 	while (!quit)
 	{

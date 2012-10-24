@@ -55,6 +55,7 @@ private:
 	string input;
 
 	void setUIStatus(Signal statusSignal);
+
 	/**
 	* This operator is used to inteprete the following feedback signal:
 	* 	DISPLAY_E, COMMAND_E, OPTION_E, LENGTH_X_E, LENGTH_Z_E, EMPTY_ENTRY_E, 
@@ -66,9 +67,19 @@ private:
 	* @return: the feedback message string
 	*/
 	string interpreteSignal(Signal outSignal);
+
+	/**
+	* This operation is used to display the starting screen to the user at the beginning of the program
+	* It will call the UI to display starting screen
+	*/
+	void startingScreenDisplay();
 public:
 
-	UIHandler();
+	/**
+	* When constructing instance of UIHandler, starting screen should be
+	* displayed and saved entries should be displayed on the screen as well
+	*/
+	UIHandler(vector<string>* entryList);
 	void setStatus();
 	
 	//These are methods to get and print messages
@@ -92,12 +103,6 @@ public:
 	
 
 	//These are methods to display UI
-
-	/**
-	* This operation is used to display the starting screen to the user at the beginning of the program
-	* It will call the UI to display starting screen
-	*/
-	void startingScreenDisplay();
 
 	/**
 	* This operation is used to display the main screen through UI to interact with user
