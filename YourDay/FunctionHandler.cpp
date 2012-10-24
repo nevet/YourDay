@@ -32,6 +32,7 @@ void FunctionHandler::execute(string input, bool* quit,
 							  vector<string>* diduknowBoxList)
 {
 	LangHandler lang;
+	//Executor pointer to handle dynamic binding
 	Executor* exe;
 
 	string encodedInput;
@@ -50,6 +51,9 @@ void FunctionHandler::execute(string input, bool* quit,
 		//then we execute the executor and caught the exception threw by it
 		exe->execute();
 		fxStatus = exe->getStatus();
+
+		//after the execusion, the executor should be destroyed to save memory
+		delete exe;
 	}
 }
 
