@@ -17,7 +17,7 @@
 
 using namespace std;
 
-class LangHandler : public Handler
+class LangHandler
 {
 private:
 	StatusHandler sh;
@@ -97,13 +97,11 @@ public :
 	LangHandler();
 
 	/**
-	* Sets the status of the language handler after input processing.
-	*
 	* Signals will be:
 	* SUCCESS		User input has been successfully proceeded;
-	* Other signals should be caught later
+	* Exception signals threw by separate
 	*/
-	void setStatus();
+	Signal getStatus();
 
 	/**
 	* Retrieve user command.
@@ -119,8 +117,8 @@ public :
 	* 
 	* e.g
 	*
-	* userInput = "add CS2103 tutorial at COM1 on Friday";
-	* return = {userCommand = "add", detials = "#CS2103 tutorial#COM1#Friday#"}
+	* userInput = "add CS2103 tutorial at COM1";
+	* return = {userCommand = "add", detials = "#CS2103 tutorial#COM1##"}
 	* 
 	* userInput = "delete 1";
 	* return = {userCommand = "delete", details = "#1###"}

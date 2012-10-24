@@ -16,9 +16,9 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 	store.readData(generalEntryList);
 }
 
-void FunctionHandler::setStatus()
+Signal FunctionHandler::getStatus()
 {
-	status = fxStatus;
+	return fxStatus;
 }
 
 void FunctionHandler::execute(string input, bool* quit,
@@ -29,8 +29,6 @@ void FunctionHandler::execute(string input, bool* quit,
 	LangHandler lang;
 	CommandExecutor command;
 
-	Signal langStatus;
-	Signal cmdSignal;
 	Signal userCommand;
 
 	string encodedInput;
@@ -38,15 +36,11 @@ void FunctionHandler::execute(string input, bool* quit,
 	//Processing the raw input to formatted input
 	lang.separate(input);
 	//Get status from LanguageHandler
-	langStatus = lang.getStatus();
+	fxStatus = lang.getStatus();
 
 	//Check if raw input has been proceeded successfully
-	if (sh.error(langStatus))
+	if (!sh.error(fxStatus))
 	{
-		//if not, FunctionHandler status should be set to langSignal
-		fxStatus = langStatus;
-	} else
-	{	
 		//no error occured, we should retrieve the proceeded results
 		userCommand = lang.retrieveUserCommand();
 		encodedInput = lang.retrieveEncodedInfo();
@@ -63,15 +57,8 @@ void FunctionHandler::execute(string input, bool* quit,
 
 			//keep track of Signals threw by CommandHandler
 			fxStatus = command.getStatus();
-
-			if (sh.success(fxStatus))
-			{
-				store.writeData(generalEntryList);
-			}
 		}
 	}
-
-	setStatus();
 }
 
 void FunctionHandler::saveData(vector<string>* generalEntryList,
