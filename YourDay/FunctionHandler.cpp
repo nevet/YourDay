@@ -21,6 +21,11 @@ Signal FunctionHandler::getStatus()
 	return fxStatus;
 }
 
+void FunctionHandler::clearStatus()
+{
+	fxStatus = CLEAR;
+}
+
 void FunctionHandler::execute(string input, bool* quit,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
