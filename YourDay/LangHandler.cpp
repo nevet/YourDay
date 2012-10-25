@@ -310,7 +310,7 @@ Signal LangHandler::getStatus()
 	return langStatus;
 }
 
-void LangHandler::separate(string userInput)
+void LangHandler::separate(string userInput) throw (string)
 {
 	stringstream tempHolder(userInput);
 
@@ -322,6 +322,11 @@ void LangHandler::separate(string userInput)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
+
+	if (sh.error(langStatus))
+	{
+		throw string ("storage error\n");
+	}
 
 	//if set command fails, no other operation should be entertained
 	if (!sh.error(langStatus))

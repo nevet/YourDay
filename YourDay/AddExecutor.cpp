@@ -11,9 +11,15 @@ AddExecutor::AddExecutor(vector<string>* calendarEntryList, vector<string>* gene
 	_undoGeneralEntryList = *generalEntryList;
 }
 
-void AddExecutor::execute()
+void AddExecutor::execute() throw (string)
 {
 	bool isCalendarEntry = false;
+
+	if (_details == "")
+	{
+		throw string ("Cannot add an empty entry\n");
+	}
+
 	if (extractDate(_details) == "")
 	{
 		_generalEntryList -> push_back(_details);
