@@ -80,11 +80,14 @@ bool LangHandler::isLogicDate(string date)
 		flag = false;
 	} else
 	{
-		if (month != 2 && day > mon[month - 1])
+		if (!leap(year))
 		{
-			flag = false;
+			if (day > mon[month - 1])
+			{
+				flag = false;
+			}
 		} else
-		if (month == 2 && leap(year) && day > 29)
+		if (month == 2 && day > 29)
 		{
 			flag = false;
 		}
