@@ -35,8 +35,6 @@ void FunctionHandler::execute(string input, bool* quit,
 	//Executor pointer to handle dynamic binding
 	Executor* exe;
 
-	string encodedInput;
-
 	//Processing the raw input to formatted input
 	lang.separate(input);
 	//Get status from LanguageHandler

@@ -46,86 +46,6 @@ bool LangHandler::isLogicTime(string time)
 	return true;
 }
 
-LangHandler::LangHandler()
-{
-	//set default value for language handler status
-	langStatus = CLEAR;
-}
-
-Signal LangHandler::getStatus()
-{
-	return langStatus;
-}
-
-void LangHandler::setCommand(string userCommand)
-{	
-	//if user command is valid, set corresponding command type
-	if ( userCommand == "add" )
-	{
-		command = ADD_COMMAND;
-	}
-	else
-	if ( userCommand == "delete" )
-	{
-		command = DELETE_COMMAND;
-	}
-	else
-	if ( userCommand == "edit" )
-	{
-		command = EDIT_COMMAND;
-	}
-	else
-	if ( userCommand == "search" )
-	{
-		command = SEARCH_COMMAND;
-	}
-	else
-	if (userCommand == "undo" )
-	{
-		command = UNDO_COMMAND;
-	}
-	else
-	if (userCommand == "exit" )
-	{
-		command = EXIT_COMMAND;
-	}
-	else
-	{
-		//if user command is invalid, command error signal should be set
-		langStatus = COMMAND_E;
-	}
-}
-
-void LangHandler::separate(string userInput)
-{
-	stringstream tempHolder(userInput);
-
-	string userCommand;
-	string rawString;
-
-	char dummySpace;
-
-	//first we extract user command
-	tempHolder >> userCommand;
-	setCommand(userCommand);
-
-	//if set command fails, no other operation should be entertained
-	if (!sh.error(langStatus))
-	{
-		//to get rid of leading space
-		tempHolder.get(dummySpace);
-		getline(tempHolder, rawString);
-
-		encoder(rawString, command);
-
-		//if no error threw by encoder, langStatus should be set to SUCCESS
-		if (!sh.error(langStatus))
-		{
-			langStatus = SUCCESS;
-		}
-	}
-}
-
 void LangHandler::encoder(string input, Signal command)
 {
 	stringstream tempHolder(input);
@@ -239,6 +159,86 @@ void LangHandler::encoder(string input, Signal command)
 		if (!sh.error(langStatus))
 		{
 			details = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
+		}
+	}
+}
+
+void LangHandler::setCommand(string userCommand)
+{	
+	//if user command is valid, set corresponding command type
+	if ( userCommand == "add" )
+	{
+		command = ADD_COMMAND;
+	}
+	else
+	if ( userCommand == "delete" )
+	{
+		command = DELETE_COMMAND;
+	}
+	else
+	if ( userCommand == "edit" )
+	{
+		command = EDIT_COMMAND;
+	}
+	else
+	if ( userCommand == "search" )
+	{
+		command = SEARCH_COMMAND;
+	}
+	else
+	if (userCommand == "undo" )
+	{
+		command = UNDO_COMMAND;
+	}
+	else
+	if (userCommand == "exit" )
+	{
+		command = EXIT_COMMAND;
+	}
+	else
+	{
+		//if user command is invalid, command error signal should be set
+		langStatus = COMMAND_E;
+	}
+}
+
+LangHandler::LangHandler()
+{
+	//set default value for language handler status
+	langStatus = CLEAR;
+}
+
+Signal LangHandler::getStatus()
+{
+	return langStatus;
+}
+
+void LangHandler::separate(string userInput)
+{
+	stringstream tempHolder(userInput);
+
+	string userCommand;
+	string rawString;
+
+	char dummySpace;
+
+	//first we extract user command
+	tempHolder >> userCommand;
+	setCommand(userCommand);
+
+	//if set command fails, no other operation should be entertained
+	if (!sh.error(langStatus))
+	{
+		//to get rid of leading space
+		tempHolder.get(dummySpace);
+		getline(tempHolder, rawString);
+
+		encoder(rawString, command);
+
+		//if no error threw by encoder, langStatus should be set to SUCCESS
+		if (!sh.error(langStatus))
+		{
+			langStatus = SUCCESS;
 		}
 	}
 }
