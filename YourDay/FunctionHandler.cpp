@@ -73,7 +73,6 @@ void FunctionHandler::execute(string input, bool* quit,
 				undoStk.pop();
 				delete exe;
 			}
-			
 		}
 	}
 	catch (string excpt)

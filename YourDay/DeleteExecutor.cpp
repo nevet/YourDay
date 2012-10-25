@@ -17,7 +17,7 @@ void DeleteExecutor::execute()
 	index=extractIndex(_details);
 	if(index>_entryList->size())
 	{
-		status = DELETE_F;
+		throw string ("index is larger than list size\n");
 	}
 	else 
 	{
