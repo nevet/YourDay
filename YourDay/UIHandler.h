@@ -81,9 +81,9 @@ private:
 	* This operation is used to display the starting screen to the user at the beginning of the program
 	* It will call the UI to display starting screen
 	*/
+	void startingScreenDisplay();
 
 public:
-	void startingScreenDisplay();
 	/**
 	* When constructing instance of UIHandler, starting screen should be
 	* displayed and saved entries should be displayed on the screen as well
