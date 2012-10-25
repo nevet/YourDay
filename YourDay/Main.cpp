@@ -21,6 +21,8 @@
 *		no strict format, pure string
 * index:
 *		positive integer
+* priority:
+*		can only be one of {high, mid, low}
 *
 * @author a00194847U
 */
