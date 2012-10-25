@@ -63,7 +63,7 @@ void LangHandler::encoder(string input, Signal command)
 
 	//if empty string is entered by user, LENGTH_Z_E will be set and no more
 	//operation should be entertained
-	if (input == "")
+	if (input == "" && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
 		langStatus = LENGTH_Z_E;
 	} else
@@ -272,9 +272,12 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 			exe = new ExitExecutor(generalEntryList, store, quit);
 			break;
 
-		default:
-			exe=NULL;
+		case UNDO_COMMAND:
+			exe = NULL;
+			break;
 
+		default:
+			break;
 	}
 
 	return exe;

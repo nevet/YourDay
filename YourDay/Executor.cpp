@@ -33,7 +33,7 @@ string Executor :: extractField(string details, int startLocation)
 	// 2 '#'s
 	while (details[++index] != '#')
 	{
-		extracted+=details[index];
+		extracted += details[index];
 	}
 	return extracted;
 }
@@ -51,7 +51,7 @@ int Executor :: extractIndex(string details)
 
 string Executor :: extractDescription(string details)
 {
-	string tempDescription="";
+	string tempDescription = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, DESCRIPTION_BLOCK_LOCATION);
 	tempDescription = extractField(details, indexLocation);
@@ -60,7 +60,7 @@ string Executor :: extractDescription(string details)
 
 string Executor :: extractLocation(string details)
 {
-	string tempLocation="";
+	string tempLocation = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, LOCATION_BLOCK_LOCATION);
 	tempLocation = extractField(details, indexLocation);
@@ -69,7 +69,7 @@ string Executor :: extractLocation(string details)
 
 string Executor :: extractTime(string details)
 {
-	string tempTime="";
+	string tempTime = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, TIME_BLOCK_LOCATION);
 	tempTime = extractField(details, indexLocation);
@@ -78,7 +78,7 @@ string Executor :: extractTime(string details)
 
 string Executor :: extractDate(string details)
 {
-	string tempDate="";
+	string tempDate = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, DATE_BLOCK_LOCATION);
 	tempDate = extractField(details, indexLocation);
@@ -87,7 +87,7 @@ string Executor :: extractDate(string details)
 
 int Executor :: extractPriority(string details)
 {
-	string tempPriority="";
+	string tempPriority = "";
 	int priority;
 	int indexLocation;
 	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
