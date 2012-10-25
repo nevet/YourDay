@@ -97,7 +97,6 @@
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="LangHandler.h" />
-    <ClInclude Include="Handler.h" />
     <ClInclude Include="SearchExecutor.h" />
     <ClInclude Include="Signal.h" />
     <ClInclude Include="StatusHandler.h" />

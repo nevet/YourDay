@@ -39,11 +39,6 @@ void UIHandler::setUIStatus(Signal statusSignal)
 	UIstatus = statusSignal;
 }
 
-void UIHandler::setStatus()
-{
-	status = UIstatus;
-}
-
 string UIHandler::interpreteSignal(Signal outSignal)
 {
 	string outString;
