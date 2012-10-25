@@ -39,11 +39,18 @@ void FunctionHandler::execute(string input, bool* quit,
 	LangHandler lang;
 	//Executor pointer to handle dynamic binding
 	Executor* exe;
-
-	//Processing the raw input to formatted input
-	lang.separate(input);
+	try
+	{
+		//Processing the raw input to formatted input
+	
+		lang.separate(input);
+		fxStatus = lang.getStatus();
+	}
+	catch (Signal errorStatus)
+	{
 	//Get status from LanguageHandler
-	fxStatus = lang.getStatus();
+		fxStatus = errorStatus;
+	}
 
 	//Check if raw input has been proceeded successfully
 	if (!sh.error(fxStatus))
