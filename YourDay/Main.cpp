@@ -29,6 +29,7 @@
 #include <string>
 #include "UIHandler.h"
 #include "Signal.h"
+#include "StatusHandler.h"
 #include "FunctionHandler.h"
 using namespace std;
 
@@ -63,18 +64,20 @@ int main()
 
 		function.execute(userInput, &quit,
 						 &generalEntryList,
-						 &calendarEntryList, 
+						 &calendarEntryList,
 						 &diduknowBoxList);
 
 		Signal signal = function.getStatus();
 
 		//display updated entries
 		ui.mainScreenDisplay(&generalEntryList);
-		//display updated did-u-know box list, e.g search resut
-		ui.displayMessage(&diduknowBoxList);
-		//display caught signals
-		if(diduknowBoxList.size()==0)
+		if(diduknowBoxList.size() == 0)
+		{
 			ui.displayMessage(signal);
+		} else
+		{
+			ui.displayMessage(&diduknowBoxList);
+		}
 
 		//after one iteration, status of function handler should be cleared
 		function.clearStatus();
