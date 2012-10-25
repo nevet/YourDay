@@ -11,21 +11,21 @@ SearchExecutor::SearchExecutor(vector<string>* entryList, vector<string>* matche
 }
 
 void SearchExecutor::execute()
-{/*
-	matchedEntryList->clear();
+{
+	_matchedEntryList->clear();
 
 	string curRaw;
-	string lowerCaseKeyWord = keyWord;
-	transform(keyWord.begin(), keyWord.end(), lowerCaseKeyWord.begin(), tolower);
+	string lowerCaseKeyWord = _details;
+	transform(_details.begin(), _details.end(), lowerCaseKeyWord.begin(), tolower);
 
-	for(int i=0;i<entryList->size();i++)
+	for(int i=0;i<_entryList->size();i++)
 	{
-		curRaw=entryList->at(i);
+		curRaw=_entryList->at(i);
 		if(std::string::npos != curRaw.find(lowerCaseKeyWord))
 		{
-			matchedEntryList->push_back(curRaw);
+			_matchedEntryList->push_back(curRaw);
 		}
-	}*/
+	}
 }
 
 void SearchExecutor::undo()
