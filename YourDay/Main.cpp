@@ -53,6 +53,7 @@ int main()
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	UIHandler ui(&calendarEntryList, &generalEntryList);
+	ui.startingScreenDisplay();
 	ui.mainScreenDisplay(&calendarEntryList,&generalEntryList);
 
 	//terminating indicator, should be false at the beginning
