@@ -244,7 +244,8 @@ void LangHandler::separate(string userInput)
 }
 
 Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
-										vector<string>* diduknowBoxList)
+										vector<string>* diduknowBoxList,
+										StorageHandler* store)
 {
 	Executor* exe;
 	
@@ -267,8 +268,7 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 			break;
 
 		case EXIT_COMMAND:
-			*quit = true;
-			exe = NULL;
+			exe = new ExitExecutor(generalEntryList, store, quit);
 			break;
 	}
 

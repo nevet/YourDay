@@ -44,7 +44,7 @@ void FunctionHandler::execute(string input, bool* quit,
 	if (!sh.error(fxStatus))
 	{
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, generalEntryList, diduknowBoxList);
+		exe = lang.pack(quit, generalEntryList, diduknowBoxList, &store);
 
 		//exe is NULL pointer indicates EXIT command received
 		if (exe != NULL)
@@ -57,11 +57,4 @@ void FunctionHandler::execute(string input, bool* quit,
 			delete exe;
 		}
 	}
-}
-
-void FunctionHandler::saveData(vector<string>* generalEntryList,
-							   vector<string>* calendarEntryList,
-							   vector<string>* diduknowBoxList)
-{
-	store.writeData(generalEntryList);
 }
