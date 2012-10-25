@@ -40,7 +40,7 @@ public:
 	*/
 	FunctionHandler(vector<string>* generalEntryList,
 					vector<string>* calendarEntryList,
-					vector<string>* diduknowBoxList);
+					vector<string>* diduknowBoxList) throw (string);
 	
 	/**
 	* Signal will be:
