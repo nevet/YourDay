@@ -4,7 +4,7 @@ using namespace std;
 
 FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 								 vector<string>* calendarEntryList,
-								 vector<string>* diduknowBoxList)
+								 vector<string>* diduknowBoxList) 
 {
 	//set default value for function handler status
 	fxStatus = CLEAR;
@@ -34,7 +34,7 @@ void FunctionHandler::clearStatus()
 void FunctionHandler::execute(string input, bool* quit,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
-							  vector<string>* diduknowBoxList)
+							  vector<string>* diduknowBoxList) throw (string)
 {
 	LangHandler lang;
 	//Executor pointer to handle dynamic binding
@@ -43,14 +43,11 @@ void FunctionHandler::execute(string input, bool* quit,
 	//clear diduknow box list to keep information updated
 	diduknowBoxList->clear();
 
-	//Processing the raw input to formatted input
-	lang.separate(input);
-	//Get status from LanguageHandler
-	fxStatus = lang.getStatus();
-
-	//Check if raw input has been proceeded successfully
-	if (!sh.error(fxStatus))
+	try
 	{
+		//Processing the raw input to formatted input
+		lang.separate(input);
+
 		//no error occured, we should retrieve the packed executor
 		exe = lang.pack(quit, calendarEntryList, generalEntryList, diduknowBoxList, &store);
 
@@ -59,15 +56,13 @@ void FunctionHandler::execute(string input, bool* quit,
 		{
 			//then we execute the executor and caught the exception threw by it
 			exe->execute();
-			fxStatus = exe->getStatus();
-			
 			undoStk.push(exe);
 		} else
 		{
 			//if undo stack is empty, undo should be prevented
 			if (undoStk.empty())
 			{
-				fxStatus = UNDO_E;
+				throw string ("Undo error\n");
 			}
 			else
 			{
@@ -78,6 +73,11 @@ void FunctionHandler::execute(string input, bool* quit,
 				undoStk.pop();
 				delete exe;
 			}
+			
 		}
+	}
+	catch (string excpt)
+	{
+		throw string (excpt);
 	}
 }

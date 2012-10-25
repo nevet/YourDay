@@ -131,7 +131,7 @@ public :
 	*
 	* details about format of encoded string can be found in encoded().
 	*/
-	void separate(string userInput);
+	void separate(string userInput) throw (string);
 
 	/**
 	* This operation will pack up an specific executor w.r.t user's command

@@ -49,7 +49,7 @@ bool LangHandler::isTime(string time)
 {
 	int h1, h2, m1, m2;
 
-	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &h2, &m1, &m2) == 4;
+	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4;
 }
 
 bool LangHandler::isInt(string inx)
@@ -63,30 +63,30 @@ bool LangHandler::isLogicDate(string date)
 {
 	int year, month, day;
 
-	bool flag = false;
+	bool flag = true;
 
 	//extract year, month and day from the string
 	sscanf(date.c_str(), "%d/%d/%d", &year, &month, &day);
 	if (year > 9999 || year < 1000)
 	{
-		flag = true;
+		flag = false;
 	} else
 	if (month > 12 || month < 1)
 	{
-		flag = true;
+		flag = false;
 	} else
 	if (day < 1)
 	{
-		flag = true;
+		flag = false;
 	} else
 	{
 		if (month != 2 && day > mon[month - 1])
 		{
-			flag = true;
+			flag = false;
 		} else
 		if (month == 2 && leap(year) && day > 29)
 		{
-			flag = true;
+			flag = false;
 		}
 	}
 
@@ -95,7 +95,32 @@ bool LangHandler::isLogicDate(string date)
 
 bool LangHandler::isLogicTime(string time)
 {
-	return true;
+	int h1, h2, m1, m2;
+
+	bool flag = true;
+
+	sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
+
+	if (h1 > 24 || h1 < 1 || h2 > 24 || h2 < 1)
+	{
+		flag = false;
+	} else
+	if (m1 > 59 || m1 < 1 || m2 > 59 || m1 < 1)
+	{
+		flag = false;
+	} else
+	{
+		if (h1 > h2)
+		{
+			flag = false;
+		} else
+		if (h1 == h2 && m1 > m2)
+		{
+			flag = false;
+		}
+	}
+
+	return flag;
 }
 
 bool LangHandler::isLogicPriority(string priority)
@@ -189,15 +214,15 @@ void LangHandler::encoder(string input, Signal command)
 				//to make sure they are logic, if applicable
 				if (priority != "" && !isLogicPriority(priority))
 				{
-					langStatus = PRIORITY_E;
+					throw string ("priority error\n");
 				} else
 				if (date != "" && !isLogicDate(date))
 				{
-					langStatus = DATE_E;
+					throw string ("date error\n");					
 				} else
 				if (time != "" && !isLogicTime(time))
 				{
-					langStatus = TIME_E;
+					throw string ("time error\n");
 				}
 
 				break;
@@ -210,7 +235,7 @@ void LangHandler::encoder(string input, Signal command)
 				if (!isInt(index))
 				{
 					index = "";
-					langStatus = INDEX_E;
+					throw string ("Index error\n");
 				}
 				
 				break;
@@ -270,7 +295,7 @@ void LangHandler::setCommand(string userCommand)
 	else
 	{
 		//if user command is invalid, command error signal should be set
-		langStatus = COMMAND_E;
+		throw string ("Command error\n");
 	}
 }
 
@@ -285,7 +310,7 @@ Signal LangHandler::getStatus()
 	return langStatus;
 }
 
-void LangHandler::separate(string userInput)
+void LangHandler::separate(string userInput) throw (string)
 {
 	stringstream tempHolder(userInput);
 
@@ -297,6 +322,11 @@ void LangHandler::separate(string userInput)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
+
+	if (sh.error(langStatus))
+	{
+		throw string ("storage error\n");
+	}
 
 	//if set command fails, no other operation should be entertained
 	if (!sh.error(langStatus))
