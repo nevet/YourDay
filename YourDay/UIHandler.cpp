@@ -196,9 +196,8 @@ void UIHandler::displayMessage(vector<string>* result)
 		ostringstream outMessage;
 
 		row = result->at(i) ;
-		decodedRow=ui.decoder(row);
-		outMessage << i+1 << ". " << decodedRow <<endl;
-		displayMessage(outMessage.str());
+		ui.coloredDisplayFormattedString(i+1,row);
+		
 	}
 
 	ui.drawBox();

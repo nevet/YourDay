@@ -134,17 +134,19 @@ void UI :: displayEntryList(vector<string>* entryList)
 	{
 		string row;
 		row = entryList->at(i) ;
-		coloredDisplayFormattedString(row);
+		coloredDisplayFormattedString(i+1, row);
 	}
 
 }
 
-void UI::coloredDisplayFormattedString(string row)
+void UI::coloredDisplayFormattedString(int index, string row)
 {
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int countColor = 0;
-
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
+	cout<<" "<<index<<" -";
+	
 	for (int i = 1; i<row.size(); i++)
 	{
 		if (row[i] != '#' )
@@ -155,7 +157,7 @@ void UI::coloredDisplayFormattedString(string row)
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
 			countColor++;
-			cout << part << "\t" ;
+			cout <<  part << "\t" ;
 			part = "";
 		}
 	}
