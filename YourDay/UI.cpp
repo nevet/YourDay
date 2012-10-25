@@ -153,7 +153,7 @@ void UI::coloredDisplayFormattedString(int index, string row)
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int countColor = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
-	cout<<" "<<index<<" -";
+	cout<<" "<<index<<". ";
 	
 	for (int i = 1; i<row.size(); i++)
 	{
@@ -165,9 +165,14 @@ void UI::coloredDisplayFormattedString(int index, string row)
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
 			countColor++;
-			cout <<  part << "\t" ;
+			cout <<  part;
 			part = "";
+			if ((i !=row.size()-1)&&(i != 1))
+			{
+				cout << "\t";
+			}
 		}
+		
 	}
 	cout<<endl;
 }
