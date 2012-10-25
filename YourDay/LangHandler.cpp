@@ -15,6 +15,29 @@
 
 #include "LangHandler.h"
 
+const int LangHandler::mon[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+bool LangHandler::leap(int year)
+{
+	bool flag = false;
+	
+	if (year % 100 == 0)
+	{
+		if (year % 400 == 0)
+		{
+			flag = true;
+		}
+	} else
+	{
+		if (year % 4 == 0)
+		{
+			flag = true;
+		}
+	}
+
+	return flag;
+}
+
 bool LangHandler::isDate(string date)
 {
 	int year, month, day;
@@ -38,7 +61,36 @@ bool LangHandler::isInt(string inx)
 
 bool LangHandler::isLogicDate(string date)
 {
-	return true;
+	int year, month, day;
+
+	bool flag = false;
+
+	//extract year, month and day from the string
+	sscanf(date.c_str(), "%d/%d/%d", &year, &month, &day);
+	if (year > 9999 || year < 1000)
+	{
+		flag = true;
+	} else
+	if (month > 12 || month < 1)
+	{
+		flag = true;
+	} else
+	if (day < 1)
+	{
+		flag = true;
+	} else
+	{
+		if (month != 2 && day > mon[month - 1])
+		{
+			flag = true;
+		} else
+		if (month == 2 && leap(year) && day > 29)
+		{
+			flag = true;
+		}
+	}
+
+	return flag;
 }
 
 bool LangHandler::isLogicTime(string time)

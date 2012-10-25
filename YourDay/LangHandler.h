@@ -32,7 +32,11 @@ private:
 	Signal command;
 	Signal langStatus;
 
-	string details;	
+	string details;
+
+	const static int mon[12];
+
+	bool leap(int year);
 
 	bool isDate(string date);
 	bool isTime(string time);
