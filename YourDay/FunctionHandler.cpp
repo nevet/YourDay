@@ -62,7 +62,7 @@ void FunctionHandler::execute(string input, bool* quit,
 			//if undo stack is empty, undo should be prevented
 			if (undoStk.empty())
 			{
-				fxStatus = UNDO_E;
+				throw string ("Undo error\n");
 			}
 			else
 			{
