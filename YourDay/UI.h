@@ -38,10 +38,11 @@ private:
 	void drawBanner();
 	void writeWords(string words, int startH, int startW);
 	void displayEntryList( vector<string> *entryList );
-	string decoder(string input);
+	
 public:
 
 	UI();
+	string decoder(string input);
 	void setNormal();
 	void drawBox();
 	void didUKnowBox();
