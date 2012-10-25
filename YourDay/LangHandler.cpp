@@ -189,15 +189,15 @@ void LangHandler::encoder(string input, Signal command)
 				//to make sure they are logic, if applicable
 				if (priority != "" && !isLogicPriority(priority))
 				{
-					langStatus = PRIORITY_E;
+					throw string ("priority error\n");
 				} else
 				if (date != "" && !isLogicDate(date))
 				{
-					langStatus = DATE_E;
+					throw string ("date error\n");					
 				} else
 				if (time != "" && !isLogicTime(time))
 				{
-					langStatus = TIME_E;
+					throw string ("time error\n");
 				}
 
 				break;
@@ -210,7 +210,7 @@ void LangHandler::encoder(string input, Signal command)
 				if (!isInt(index))
 				{
 					index = "";
-					langStatus = INDEX_E;
+					throw string ("Index error\n");
 				}
 				
 				break;
@@ -270,7 +270,7 @@ void LangHandler::setCommand(string userCommand)
 	else
 	{
 		//if user command is invalid, command error signal should be set
-		langStatus = COMMAND_E;
+		throw string ("Command error\n");
 	}
 }
 
