@@ -49,6 +49,7 @@ private:
 public:
 
 	UI();
+	string decoder(string input);
 	void setNormal();
 	void drawBox();
 	void didUKnowBox();

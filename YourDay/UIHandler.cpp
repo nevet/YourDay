@@ -187,7 +187,7 @@ void UIHandler::displayMessage(Signal outSignal)
 void UIHandler::displayMessage(vector<string>* result)
 {
 	int size = result ->size();
-
+	string decodedRow;
 	ui.setNormal();
 	ui.didUKnowBox();
 	for (int i=0; i< size; i++)
@@ -196,7 +196,8 @@ void UIHandler::displayMessage(vector<string>* result)
 		ostringstream outMessage;
 
 		row = result->at(i) ;
-		outMessage << i+1 << ". " << row <<endl;
+		decodedRow=ui.decoder(row);
+		outMessage << i+1 << ". " << decodedRow <<endl;
 		displayMessage(outMessage.str());
 	}
 

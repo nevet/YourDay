@@ -14,7 +14,7 @@ void DeleteExecutor::execute()
 	
 	vector<string>::iterator position;
 	
-	index=atoi(_details.c_str());
+	index=extractIndex(_details);
 	if(index>_entryList->size())
 	{
 		status = DELETE_F;
