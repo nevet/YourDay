@@ -62,25 +62,32 @@ int main()
 		ui.getInput();
 		string userInput = ui.retrieveInput();
 
-		function.execute(userInput, &quit,
-						 &generalEntryList,
-						 &calendarEntryList,
-						 &diduknowBoxList);
-
-		Signal signal = function.getStatus();
-
-		//display updated entries
-		ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
-		if(diduknowBoxList.size() == 0)
+		try
 		{
-			ui.displayMessage(signal);
-		} else
-		{
-			ui.displayMessage(&diduknowBoxList);
+			function.execute(userInput, &quit,
+							 &generalEntryList,
+							 &calendarEntryList,
+							 &diduknowBoxList);
+
+			Signal signal = function.getStatus();
+
+			//display updated entries
+			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
+			if(diduknowBoxList.size() == 0)
+			{
+				ui.displayMessage(signal);
+			} else
+			{
+				ui.displayMessage(&diduknowBoxList);
+			}
+
+			//after one iteration, status of function handler should be cleared
+			function.clearStatus();
 		}
-
-		//after one iteration, status of function handler should be cleared
-		function.clearStatus();
+		catch (string excpt)
+		{
+			ui.displayMessage(excpt);
+		}
 	}
 
 	return EXIT_SUCCESS;
