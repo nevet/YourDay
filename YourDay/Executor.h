@@ -48,6 +48,7 @@ public:
 	* corresponding subclass.
 	*/
 	virtual void execute();
+	virtual void undo();
 	Signal getStatus();
 };
 

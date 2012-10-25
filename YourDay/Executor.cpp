@@ -98,6 +98,7 @@ string Executor::extractTime(string details)
 	}
 	return tempTime;
 }
+
 string Executor::extractDate(string details)
 {
 	int blockCounter = 0;
@@ -147,6 +148,10 @@ int Executor::extractPriority(string details)
 }
 
 void Executor::execute()
+{
+}
+
+void Executor::undo()
 {
 }
 
