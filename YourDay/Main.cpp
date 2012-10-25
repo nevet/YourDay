@@ -81,7 +81,5 @@ int main()
 		function.clearStatus();
 	}
 
-	function.saveData(&generalEntryList, &calendarEntryList, &diduknowBoxList);
-
 	return EXIT_SUCCESS;
 }

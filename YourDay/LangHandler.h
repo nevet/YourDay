@@ -13,13 +13,14 @@
 #include <vector>
 
 #include "Signal.h"
-#include "Handler.h"
 #include "StatusHandler.h"
+#include "StorageHandler.h"
 #include "Executor.h"
 #include "AddExecutor.h"
 #include "DeleteExecutor.h"
 #include "SearchExecutor.h"
 #include "UpdateExecutor.h"
+#include "ExitExecutor.h"
 
 using namespace std;
 
@@ -131,7 +132,8 @@ public :
 	* This operation will pack up an specific executor w.r.t user's command
 	*/
 	Executor* pack(bool* quit, vector<string>* generalEntryList,
-							   vector<string>* diduknowBoxList);
+							   vector<string>* diduknowBoxList,
+							   StorageHandler* store);
 
 	~LangHandler();
 };

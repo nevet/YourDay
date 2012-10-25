@@ -66,12 +66,5 @@ public:
 				 vector<string>* generalEntryList,
 				 vector<string>* calendarEntryList,
 				 vector<string>* diduknowBoxList);
-
-	/**
-	* This operation will flush data stored in the three lists into a file.
-	*/
-	void saveData(vector<string>* generalEntryList,
-				  vector<string>* calendarEntryList,
-				  vector<string>* diduknowBoxList);
 };
 #endif
