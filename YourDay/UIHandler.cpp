@@ -16,16 +16,23 @@ const string UIHandler::ADD_SUCCESSFUL_MESSAGE = "Added successfully\n";
 const string UIHandler::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
 const string UIHandler::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
 
-//set output strings for error feedback signals
+//set output strings for error feedback signals on user input
+const string UIHandler::COMMAND_ERROR_MESSAGE = "Wrong command\n";
+const string UIHandler::LENGTH_EXCEED_ERROR_MESSAGE = "Command length exceeded the valid range\n";
+const string UIHandler::LENGTH_ZERO_ERROR_MESSAGE = "Cannot enter command with empty detail\n";
+const string UIHandler::INDEX_ERROR_MESSAGE = "Please enter an index\n";
+const string UIHandler::INVALID_DATE_ERROR_MESSAGE = "Invalid date\n";
+const string UIHandler::INVALID_TIME_ERROR_MESSAGE = "Invalid time\n";
+
+//set output strings for error feedback signals on displaying UI
 const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error\n";
-const string UIHandler::COMMAND_ERROR_MESSAGE = "Command error\n";
-const string UIHandler::OPTION_ERROR_MESSAGE = "Option error\n";
 
-const string UIHandler::DELETE_FAILED_MESSAGE = "No such entry\n";
-
-const string UIHandler::DELETE_ASK_MESSAGE = "Which one do you want to delete?\n";
-
-
+//set output strings for error feedback signals on executing commands
+const string UIHandler::NULL_EXECUTOR_ERROR_MESSAGE = "Executor pointer is NULL\n";
+const string UIHandler::ADD_FAILED_MESSAGE = "Add failed\n";
+const string UIHandler::DELETE_FAILED_MESSAGE = "Delete failed\n";
+const string UIHandler::SEARCH_FAILED_MESSAGE = "Search failed\n";
+const string UIHandler::UPDATE_FAILED_MESSAGE = "Update failed\n";
 
 void UIHandler::setUIStatus(Signal statusSignal)
 {
@@ -58,9 +65,9 @@ string UIHandler::interpreteSignal(Signal outSignal)
 			outString = DELETE_SUCCESSFUL_MESSAGE;
 			break;
 		}
-	case DISPLAY_E:
+	case  UPDATE_S:
 		{
-			outString = DISPLAY_ERROR_MESSAGE;
+			outString = UPDATE_SUCCESSFUL_MESSAGE;
 			break;
 		}
 	case  COMMAND_E:
@@ -68,21 +75,62 @@ string UIHandler::interpreteSignal(Signal outSignal)
 			outString = COMMAND_ERROR_MESSAGE;
 			break;
 		}
-	case  OPTION_E:
+	case  LENGTH_X_E:
 		{
-			outString = OPTION_ERROR_MESSAGE;
+			outString = LENGTH_EXCEED_ERROR_MESSAGE;
 			break;
 		}
-	case DELETE_F:
+	case  LENGTH_Z_E:
+		{
+			outString = LENGTH_ZERO_ERROR_MESSAGE;
+			break;
+		}
+	case  INDEX_E:
+		{
+			outString = INDEX_ERROR_MESSAGE;
+			break;
+		}
+	case  DATE_E:
+		{
+			outString = INVALID_DATE_ERROR_MESSAGE;
+			break;
+		}
+	case  TIME_E:
+		{
+			outString = INVALID_TIME_ERROR_MESSAGE;
+			break;
+		}
+	case  DISPLAY_E:
+		{
+			outString = DISPLAY_ERROR_MESSAGE;
+			break;
+		}
+	case  EXENULL_E:
+		{
+			outString = NULL_EXECUTOR_ERROR_MESSAGE;
+			break;
+		}
+	case  ADD_F:
+		{
+			outString = ADD_FAILED_MESSAGE;
+			break;
+		}
+	case  DELETE_F:
 		{
 			outString = DELETE_FAILED_MESSAGE;
 			break;
 		}
-	case DELETE_A:
+	case  SEARCH_F:
 		{
-			outString = DELETE_ASK_MESSAGE;
+			outString = SEARCH_FAILED_MESSAGE;
 			break;
 		}
+	case  UPDATE_F:
+		{
+			outString = UPDATE_FAILED_MESSAGE;
+			break;
+		}
+
 	default:
 		{
 			outString = "";
