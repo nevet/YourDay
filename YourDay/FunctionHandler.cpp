@@ -61,13 +61,20 @@ void FunctionHandler::execute(string input, bool* quit,
 			undoStk.push(exe);
 		} else
 		{
-			//retrieve the last execution and undo it
-			exe = undoStk.top();
-			exe->undo();
+			//if undo stack is empty, undo should be prevented
+			if (undoStk.empty())
+			{
+				fxStatus = UNDO_E;
+			}
+			else
+			{
+				exe = undoStk.top();
+				exe->undo();
 
-			//and then delete the pointer to free the memory
-			undoStk.pop();
-			delete exe;
+				//and then delete the pointer to free the memory
+				undoStk.pop();
+				delete exe;
+			}
 		}
 	}
 }

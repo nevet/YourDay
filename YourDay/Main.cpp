@@ -3,7 +3,7 @@
 * program. Input format for each function is listed below:
 * 
 * To add:
-*		add [date] [time] description [at location]
+*		add [date] [time] description [at location] [priority ]
 * To delete:
 *		delete index
 * To search:

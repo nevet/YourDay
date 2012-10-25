@@ -19,8 +19,9 @@ bool StatusHandler::success(Signal signal)
 bool StatusHandler::error(Signal signal)
 {
 	bool flag;
+	int x;
 
-	if (signal & MASK == ERR)
+	if ((signal & MASK) == ERR)
 	{
 		flag = true;
 	} else
