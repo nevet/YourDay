@@ -150,6 +150,7 @@ void LangHandler::encoder(string input, Signal command)
 
 			//format will be "index description"
 			case SEARCH_COMMAND:
+				description = input;
 				break;
 
 			default:

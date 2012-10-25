@@ -75,7 +75,8 @@ int main()
 		//display updated did-u-know box list, e.g search resut
 		ui.displayMessage(&diduknowBoxList);
 		//display caught signals
-		ui.displayMessage(signal);
+		if(diduknowBoxList.size()==0)
+			ui.displayMessage(signal);
 
 		//after one iteration, status of function handler should be cleared
 		function.clearStatus();

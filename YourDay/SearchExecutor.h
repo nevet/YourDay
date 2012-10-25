@@ -2,6 +2,7 @@
 #define SEARCHEXECUTOR_H
 
 #include <vector>
+#include <algorithm>
 #include "Executor.h"
 
 using namespace std;
