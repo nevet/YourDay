@@ -31,17 +31,12 @@ const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error\n";
 const string UIHandler::NULL_EXECUTOR_ERROR_MESSAGE = "Executor pointer is NULL\n";
 const string UIHandler::ADD_FAILED_MESSAGE = "Add failed\n";
 const string UIHandler::DELETE_FAILED_MESSAGE = "Delete failed\n";
-const string UIHandler::SEARCH_FAILED_MESSAGE = "Search failed\n";
+const string UIHandler::SEARCH_FAILED_MESSAGE = "Cannot find the key word\n";
 const string UIHandler::UPDATE_FAILED_MESSAGE = "Update failed\n";
 
 void UIHandler::setUIStatus(Signal statusSignal)
 {
 	UIstatus = statusSignal;
-}
-
-void UIHandler::setStatus()
-{
-	status = UIstatus;
 }
 
 string UIHandler::interpreteSignal(Signal outSignal)
