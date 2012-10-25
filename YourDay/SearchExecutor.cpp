@@ -31,6 +31,8 @@ void SearchExecutor::execute()
 			_matchedEntryList->push_back(curRaw);
 		}
 	}
+	if(_matchedEntryList->size()==0)
+		status = SEARCH_F ;
 }
 
 void SearchExecutor::undo()

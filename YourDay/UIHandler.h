@@ -13,13 +13,12 @@
 #include <string>
 #include <vector>
 #include "Signal.h"
-#include "Handler.h"
 #include "UI.h"
 #include "IO.h"
 
 using namespace std;
 
-class UIHandler: public Handler
+class UIHandler
 {
 private:
 
@@ -89,8 +88,7 @@ public:
 	* displayed and saved entries should be displayed on the screen as well
 	*/
 	UIHandler(vector<string>* entryList);
-	void setStatus();
-	
+
 	//These are methods to get and print messages
 
 	/**
