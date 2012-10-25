@@ -141,7 +141,7 @@ void LangHandler::encoder(string input, Signal command)
 					index = "";
 					langStatus = INDEX_E;
 				}
-
+				
 				break;
 
 			//format will be "description"
@@ -270,6 +270,10 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 		case EXIT_COMMAND:
 			exe = new ExitExecutor(generalEntryList, store, quit);
 			break;
+
+		default:
+			exe=NULL;
+
 	}
 
 	return exe;

@@ -11,10 +11,10 @@ class DeleteExecutor : public Executor
 private:
 	vector<string>* _entryList;
 
-	string _details;
+	string _number;
 
 public:
-	DeleteExecutor(vector<string>* entryList, string details);
+	DeleteExecutor(vector<string>* entryList, string number);
 
 	void execute();
 };
