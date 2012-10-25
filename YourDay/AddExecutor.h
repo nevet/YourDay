@@ -9,13 +9,15 @@ using namespace std;
 class AddExecutor : public Executor
 {
 private:
-	vector<string>* _entryList;
-	vector<string> _undoEntryList;
+	vector<string>* _calendarEntryList;
+	vector<string>* _generalEntryList;
+	vector<string> _undoGeneralEntryList;
+	vector<string> _undoCalendarEntryList;
 
 	string _details;
 
 public:
-	AddExecutor(vector<string>* entryList, string details);
+	AddExecutor(vector<string>* calendarEntryList, vector<string>* generalEntryList, string details);
 
 	void execute();
 	void undo();

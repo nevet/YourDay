@@ -1,22 +1,33 @@
 #include "AddExecutor.h"
 
-AddExecutor::AddExecutor(vector<string>* entryList, string details)
+AddExecutor::AddExecutor(vector<string>* calendarEntryList, vector<string>* generalEntryList, string details)
 {
-	_entryList = entryList;
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
 	_details = details;
 
 	//a local copy of entry list for undo using
-	_undoEntryList = *entryList;
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 }
 
 void AddExecutor::execute()
 {
-	_entryList -> push_back(_details);
+	bool isCalendarEntry = false;
+	if (extractDate(_details) == "")
+	{
+		_generalEntryList -> push_back(_details);
+	}
+	else
+	{
+		_calendarEntryList -> push_back(_details);
+	}
 
 	status = ADD_S;
 }
 
 void AddExecutor::undo()
 {
-	*_entryList = _undoEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }
