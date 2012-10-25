@@ -207,9 +207,14 @@ void UIHandler::displayMessage(vector<string>* result)
 
 void UIHandler::displayMessage(string result)
 {
-	io.displayMessage(result);
-}
 
+	ui.setNormal();
+	ui.didUKnowBox();
+	io.displayMessage(result);
+
+	ui.drawBox();
+
+}
 void UIHandler::startingScreenDisplay()
 {
 	ui.setScreenSize();

@@ -86,9 +86,7 @@ int main()
 		}
 		catch (string excpt)
 		{
-			diduknowBoxList.clear();
-			diduknowBoxList.push_back(excpt);
-			ui.displayMessage(&diduknowBoxList);
+			ui.displayMessage(excpt);
 		}
 	}
 
