@@ -23,6 +23,7 @@ const string UIHandler::LENGTH_ZERO_ERROR_MESSAGE = "Cannot enter command with e
 const string UIHandler::INDEX_ERROR_MESSAGE = "Please enter an index\n";
 const string UIHandler::INVALID_DATE_ERROR_MESSAGE = "Invalid date\n";
 const string UIHandler::INVALID_TIME_ERROR_MESSAGE = "Invalid time\n";
+const string UIHandler::UNDO_ERROR_MESSAGE = "Nothing to undo\n";
 
 //set output strings for error feedback signals on displaying UI
 const string UIHandler::DISPLAY_ERROR_MESSAGE = "Display error\n";
@@ -98,6 +99,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 	case  DISPLAY_E:
 		{
 			outString = DISPLAY_ERROR_MESSAGE;
+			break;
+		}
+	case  UNDO_E:
+		{
+			outString = UNDO_ERROR_MESSAGE;
 			break;
 		}
 	case  EXENULL_E:
