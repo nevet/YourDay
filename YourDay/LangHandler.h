@@ -39,7 +39,6 @@ private:
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
-	bool isDateAvailable();
 	bool isLogicPriority(string priority);
 
 	/**
