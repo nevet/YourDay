@@ -26,6 +26,13 @@
 #define entryListInitX 0
 #define entryListInitY 2
 
+#define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
+#define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
+#define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
+#define TIME_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
+#define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
+#define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
+
 using namespace std;
 
 class UI
@@ -38,7 +45,7 @@ private:
 	void drawBanner();
 	void writeWords(string words, int startH, int startW);
 	void displayEntryList( vector<string> *entryList );
-	string decoder(string input);
+	void coloredDisplayFormattedString(string);
 public:
 
 	UI();

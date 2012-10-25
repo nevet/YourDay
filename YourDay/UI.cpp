@@ -126,47 +126,40 @@ void UI :: displayEntryList(vector<string>* entryList)
 	int size;
 	string formatString;
 
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY |
-		FOREGROUND_RED | FOREGROUND_BLUE);
-
 	gotoxy(entryListInitX,entryListInitY);
-	
+
 	size=entryList->size();
 
 	for (int i=0; i< size; i++)
 	{
 		string row;
 		row = entryList->at(i) ;
-		formatString = decoder(row);
-		cout<<"     "<<i+1<<"."<<formatString<<endl;
+		coloredDisplayFormattedString(row);
 	}
 
 }
 
-string UI::decoder(string input)
+void UI::coloredDisplayFormattedString(string row)
 {
-	string decodedString = "";
-	int size = input.size();
-	char curChar;			//current character in input string
-	
+	string part = "";
+	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
+	int countColor = 0;
 
-	for (int i = 0; i < input.size(); i++)
+	for (int i = 1; i<row.size(); i++)
 	{
-		curChar = input[i];
-		if (curChar != '#')
+		if (row[i] != '#' )
 		{
-			decodedString += curChar;
+			part += row[i];
 		}
 		else
 		{
-			if (i != input.size()-1 && input[i+1] != '#' && decodedString != "")
-			{
-				decodedString += ": ";
-			}
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
+			countColor++;
+			cout << part << "\t" ;
+			part = "";
 		}
 	}
-
-	return decodedString;
+	cout<<endl;
 }
 
 UI::~UI()
