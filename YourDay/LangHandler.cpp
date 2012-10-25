@@ -242,10 +242,6 @@ void LangHandler::separate(string userInput)
 			langStatus = SUCCESS;
 		}
 	}
-	else
-	{
-		throw Signal(COMMAND_E);
-	}
 }
 
 Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,

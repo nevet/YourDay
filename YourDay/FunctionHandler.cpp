@@ -39,18 +39,11 @@ void FunctionHandler::execute(string input, bool* quit,
 	LangHandler lang;
 	//Executor pointer to handle dynamic binding
 	Executor* exe;
-	try
-	{
-		//Processing the raw input to formatted input
-	
-		lang.separate(input);
-		fxStatus = lang.getStatus();
-	}
-	catch (Signal errorStatus)
-	{
+
+	//Processing the raw input to formatted input
+	lang.separate(input);
 	//Get status from LanguageHandler
-		fxStatus = errorStatus;
-	}
+	fxStatus = lang.getStatus();
 
 	//Check if raw input has been proceeded successfully
 	if (!sh.error(fxStatus))
@@ -68,13 +61,20 @@ void FunctionHandler::execute(string input, bool* quit,
 			undoStk.push(exe);
 		} else
 		{
-			//retrieve the last execution and undo it
-			exe = undoStk.top();
-			exe->undo();
+			//if undo stack is empty, undo should be prevented
+			if (undoStk.empty())
+			{
+				fxStatus = UNDO_E;
+			}
+			else
+			{
+				exe = undoStk.top();
+				exe->undo();
 
-			//and then delete the pointer to free the memory
-			undoStk.pop();
-			delete exe;
+				//and then delete the pointer to free the memory
+				undoStk.pop();
+				delete exe;
+			}
 		}
 	}
 }

@@ -25,6 +25,7 @@ int Executor :: findBlockIndex(string details, int blockLocation)
 	}
 	return index;
 }
+
 string Executor :: extractField(string details, int startLocation)
 {
 	int index = startLocation;
@@ -95,7 +96,6 @@ int Executor :: extractPriority(string details)
 	priority= atoi(tempPriority.c_str());
 	return priority;
 }
-
 
 void Executor::execute()
 {
