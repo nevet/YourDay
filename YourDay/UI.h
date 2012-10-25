@@ -45,11 +45,11 @@ private:
 	void drawBanner();
 	void writeWords(string words, int startH, int startW);
 	void displayEntryList( vector<string> *entryList );
-	void coloredDisplayFormattedString(string);
+	
 public:
 
 	UI();
-	string decoder(string input);
+	void coloredDisplayFormattedString(int,string);
 	void setNormal();
 	void drawBox();
 	void didUKnowBox();
