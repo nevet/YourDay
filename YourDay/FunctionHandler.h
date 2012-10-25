@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
+
 #include "StorageHandler.h"
 #include "Executor.h"
 #include "LangHandler.h"
@@ -25,6 +27,9 @@ private:
 	Signal fxStatus;
 	//will be constructed when FunctionHandler constructed
 	StorageHandler store;
+	//stack for undo purpose
+	stack<Executor*> undoStk;
+
 public:
 	/**
 	* The constructor will initialize three lists and flush stored information

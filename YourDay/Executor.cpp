@@ -75,6 +75,7 @@ string Executor :: extractTime(string details)
 	tempTime = extractField(details, indexLocation);
 	return tempTime;
 }
+
 string Executor :: extractDate(string details)
 {
 	string tempDate="";
@@ -97,6 +98,10 @@ int Executor :: extractPriority(string details)
 
 
 void Executor::execute()
+{
+}
+
+void Executor::undo()
 {
 }
 

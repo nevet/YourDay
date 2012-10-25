@@ -12,6 +12,11 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 	generalEntryList->clear();
 	calendarEntryList->clear();
 	diduknowBoxList->clear();
+
+	while (!undoStk.empty())
+	{
+		undoStk.pop();
+	}
 	
 	store.readData(generalEntryList);
 }
@@ -46,18 +51,23 @@ void FunctionHandler::execute(string input, bool* quit,
 		//no error occured, we should retrieve the packed executor
 		exe = lang.pack(quit, generalEntryList, diduknowBoxList, &store);
 
-		//to preserve unexpected error
+		//exe is NULL means undo command encountered
 		if (exe != NULL)
 		{
 			//then we execute the executor and caught the exception threw by it
 			exe->execute();
 			fxStatus = exe->getStatus();
-
-			//after the execusion, the executor should be destroyed to save memory
-			delete exe;
+			
+			undoStk.push(exe);
 		} else
 		{
-			fxStatus = EXENULL_E;
+			//retrieve the last execution and undo it
+			exe = undoStk.top();
+			exe->undo();
+
+			//and then delete the pointer to free the memory
+			undoStk.pop();
+			delete exe;
 		}
 	}
 }

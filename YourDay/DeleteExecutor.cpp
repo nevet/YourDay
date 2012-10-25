@@ -1,9 +1,11 @@
 #include "DeleteExecutor.h"
 
-DeleteExecutor::DeleteExecutor(vector<string>* entryList, string number)
+DeleteExecutor::DeleteExecutor(vector<string>* entryList, string details)
 {
 	_entryList = entryList;
-	_number = number;
+	_details = details;
+
+	_undoEntryList = *entryList;
 }
 
 void DeleteExecutor::execute()
@@ -12,7 +14,7 @@ void DeleteExecutor::execute()
 	
 	vector<string>::iterator position;
 	
-	index=atoi(_number.c_str());
+	index=atoi(_details.c_str());
 	if(index>_entryList->size())
 	{
 		status = DELETE_F;
@@ -24,4 +26,9 @@ void DeleteExecutor::execute()
 		
 		status = DELETE_S;
 	}
+}
+
+void DeleteExecutor::undo()
+{
+	*_entryList = _undoEntryList;
 }
