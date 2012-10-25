@@ -32,7 +32,7 @@ void SearchExecutor::execute()
 		}
 	}
 	if(_matchedEntryList->size()==0)
-		status = SEARCH_F ;
+		throw string ("No result matched\n");
 }
 
 void SearchExecutor::undo()
