@@ -11,6 +11,7 @@ class ExitExecutor : public Executor
 {
 private:
 	vector<string>* _generalEntryList;
+
 	StorageHandler* _store;
 
 	bool* _quit;
