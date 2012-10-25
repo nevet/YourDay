@@ -42,7 +42,7 @@ bool LangHandler::isDate(string date)
 {
 	int year, month, day;
 
-	return sscanf(date.c_str(), "%d/%d/%d", &year, &month, &day) == 3;
+	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
 }
 
 bool LangHandler::isTime(string time)
@@ -66,7 +66,7 @@ bool LangHandler::isLogicDate(string date)
 	bool flag = true;
 
 	//extract year, month and day from the string
-	sscanf(date.c_str(), "%d/%d/%d", &year, &month, &day);
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
 	if (year > 9999 || year < 1000)
 	{
 		flag = false;
