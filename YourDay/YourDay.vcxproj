@@ -77,6 +77,7 @@
     <ClCompile Include="AddExecutor.cpp" />
     <ClCompile Include="DeleteExecutor.cpp" />
     <ClCompile Include="Executor.cpp" />
+    <ClCompile Include="ExitExecutor.cpp" />
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="LangHandler.cpp" />
@@ -92,6 +93,7 @@
     <ClInclude Include="AddExecutor.h" />
     <ClInclude Include="DeleteExecutor.h" />
     <ClInclude Include="Executor.h" />
+    <ClInclude Include="ExitExecutor.h" />
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="LangHandler.h" />
