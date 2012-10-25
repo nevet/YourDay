@@ -23,8 +23,10 @@
 #define boardHeight (windowsHeight - boxHeight - bottomBoardHeight)
 #define boardWidth windowsWidth
 #define boxWidth windowsWidth
-#define entryListInitX 0
-#define entryListInitY 2
+#define generalEntryListInitX 0
+#define generalEntryListInitY 2
+#define calendarEntryListInitX 0
+#define calendarEntryListInitY 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
 #define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
@@ -44,7 +46,7 @@ private:
 	void setStatus(Signal statusSignal);
 	void drawBanner();
 	void writeWords(string words, int startH, int startW);
-	void displayEntryList( vector<string> *entryList );
+	void displayEntryList( vector<string>* calendarEntryList, vector<string> *generalEntryList );
 	
 public:
 
@@ -67,7 +69,7 @@ public:
 	* This operation is used to display the main screen to interact with the user
 	* and will be called in UIHandler class
 	*/
-	void mainScreenDisplay(vector<string>* entryList);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList);
 
 	~UI();
 };

@@ -99,7 +99,7 @@ void UI::setNormal()
 	 SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void UI::mainScreenDisplay(vector<string>* entryList)
+void UI::mainScreenDisplay(vector<string>* calendarEntryList,vector<string>* generalEntryList)
 {
 	setNormal();
 	system("CLS");
@@ -107,7 +107,7 @@ void UI::mainScreenDisplay(vector<string>* entryList)
 	writeWords("General",0,0);
 	writeWords("Calendar",0,10);
 
-	displayEntryList( entryList );
+	displayEntryList( calendarEntryList, generalEntryList );
 
 	drawBox();
 	setStatus(SUCCESS);
@@ -121,22 +121,30 @@ void UI :: gotoxy(int x, int y) //goes to x,y console
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void UI :: displayEntryList(vector<string>* entryList)
+void UI :: displayEntryList(vector<string>* calendarEntryList, vector<string>* generalEntryList)
 {
-	int size;
+	int sizeOfCalendar;
+	int sizeOfGeneral;
 	string formatString;
 
-	gotoxy(entryListInitX,entryListInitY);
+	gotoxy(generalEntryListInitX, generalEntryListInitY);
 
-	size=entryList->size();
+	sizeOfGeneral=generalEntryList->size();
 
-	for (int i=0; i< size; i++)
+	for (int i=0; i< sizeOfGeneral; i++)
 	{
 		string row;
-		row = entryList->at(i) ;
+		row = generalEntryList->at(i) ;
 		coloredDisplayFormattedString(i+1, row);
 	}
-
+	gotoxy(calendarEntryListInitX, calendarEntryListInitY);
+	sizeOfCalendar=calendarEntryList->size();
+	for (int i=0; i< sizeOfCalendar; i++)
+	{
+		string row;
+		row = calendarEntryList->at(i) ;
+		coloredDisplayFormattedString(i+1, row);
+	}
 }
 
 void UI::coloredDisplayFormattedString(int index, string row)

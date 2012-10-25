@@ -88,7 +88,7 @@ public:
 	* When constructing instance of UIHandler, starting screen should be
 	* displayed and saved entries should be displayed on the screen as well
 	*/
-	UIHandler(vector<string>* entryList);
+	UIHandler(vector<string>* calendarEntryList, vector<string>* generalEntryList);
 
 	//These are methods to get and print messages
 
@@ -130,7 +130,7 @@ public:
 	* This operation is used to display the main screen through UI to interact with user
 	* It will call the UI to display the main screen
 	*/
-	void mainScreenDisplay(vector<string>* entryList);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList);
 
 	string retrieveInput();
 	Signal getStatus();

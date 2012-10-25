@@ -142,11 +142,11 @@ string UIHandler::interpreteSignal(Signal outSignal)
 	return outString;
 }
 
-UIHandler::UIHandler(vector<string>* entryList)
+UIHandler::UIHandler(vector<string>* calendarEntryList, vector<string>* generalEntryList)
 {
 	input = "";
 	startingScreenDisplay();
-	mainScreenDisplay(entryList);
+	mainScreenDisplay(calendarEntryList,generalEntryList);
 }
 
 void UIHandler::getInput()
@@ -219,9 +219,9 @@ void UIHandler::startingScreenDisplay()
 	setUIStatus(uiStatus);
 }
 
-void UIHandler::mainScreenDisplay(vector<string>* entryList)
+void UIHandler::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList)
 {
-	ui.mainScreenDisplay(entryList);
+	ui.mainScreenDisplay(calendarEntryList,generalEntryList);
 	Signal uiStatus = ui.getStatus();
 
 	setUIStatus(uiStatus);
