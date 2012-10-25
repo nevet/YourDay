@@ -268,6 +268,7 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 
 		case EXIT_COMMAND:
 			*quit = true;
+			exe = NULL;
 			break;
 	}
 
