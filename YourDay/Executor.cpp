@@ -5,147 +5,97 @@ Executor::Executor()
 	status = CLEAR;
 }
 
-int Executor::extractIndex(string details)
+int Executor :: findBlockIndex(string details, int blockLocation)
 {
+	//block counter will be used to count the number of # occurences
 	int blockCounter = 0;
-	int i;
-	string tempIndex="";
 	int index;
-	for (i=0;i<details.size();i++)
+	//this loop will iterate through the string and stops when the block
+	//location is found
+	for (index = 0; index<details.size(); index++)
 	{
-		if (details[i]=='#')
+		if (details[index] == '#')
 		{
 			blockCounter++;
 		}
-		if (blockCounter==INDEX_BLOCK_LOCATION)
+		if (blockCounter == blockLocation)
 		{
 			break;
 		}
 	}
-	while (details[++i]!='#')
+	return index;
+}
+string Executor :: extractField(string details, int startLocation)
+{
+	int index = startLocation;
+	string extracted = "";
+	// this loop will extract characters by characters of the field between
+	// 2 '#'s
+	while (details[++index] != '#')
 	{
-		tempIndex+=details[i];
+		extracted+=details[index];
 	}
+	return extracted;
+}
+
+int Executor :: extractIndex(string details)
+{
+	string tempIndex = "";
+	int index;
+	int indexLocation;
+	indexLocation = findBlockIndex(details, INDEX_BLOCK_LOCATION);
+	tempIndex = extractField(details, indexLocation);
 	index = atoi(tempIndex.c_str());
 	return index;
 }
 
-string Executor::extractDescription(string details)
+string Executor :: extractDescription(string details)
 {
-	int blockCounter = 0;
-	int i;
 	string tempDescription="";
-	for (i=0;i<details.size();i++)
-	{
-		if (details[i]=='#')
-		{
-			blockCounter++;
-		}
-		if (blockCounter==DESCRIPTION_BLOCK_LOCATION)
-		{
-			break;
-		}
-	}
-	while (details[++i]!='#')
-	{
-		tempDescription+=details[i];
-	}
+	int indexLocation;
+	indexLocation = findBlockIndex(details, DESCRIPTION_BLOCK_LOCATION);
+	tempDescription = extractField(details, indexLocation);
 	return tempDescription;
 }
 
-string Executor::extractLocation(string details)
+string Executor :: extractLocation(string details)
 {
-	int blockCounter = 0;
-	int i;
 	string tempLocation="";
-	for (i=0;i<details.size();i++)
-	{
-		if (details[i]=='#')
-		{
-			blockCounter++;
-		}
-		if (blockCounter==LOCATION_BLOCK_LOCATION)
-		{
-			break;
-		}
-	}
-	while (details[++i]!='#')
-	{
-		tempLocation+=details[i];
-	}
+	int indexLocation;
+	indexLocation = findBlockIndex(details, LOCATION_BLOCK_LOCATION);
+	tempLocation = extractField(details, indexLocation);
 	return tempLocation;
 }
 
-string Executor::extractTime(string details)
+string Executor :: extractTime(string details)
 {
-	int blockCounter = 0;
-	int i;
 	string tempTime="";
-	for (i=0;i<details.size();i++)
-	{
-		if (details[i]=='#')
-		{
-			blockCounter++;
-		}
-		if (blockCounter==TIME_BLOCK_LOCATION)
-		{
-			break;
-		}
-	}
-	while (details[++i]!='#')
-	{
-		tempTime+=details[i];
-	}
+	int indexLocation;
+	indexLocation = findBlockIndex(details, TIME_BLOCK_LOCATION);
+	tempTime = extractField(details, indexLocation);
 	return tempTime;
 }
 
-string Executor::extractDate(string details)
+string Executor :: extractDate(string details)
 {
-	int blockCounter = 0;
-	int i;
 	string tempDate="";
-	for (i=0;i<details.size();i++)
-	{
-		if (details[i]=='#')
-		{
-			blockCounter++;
-		}
-		if (blockCounter==DATE_BLOCK_LOCATION)
-		{
-			break;
-		}
-	}
-	while (details[++i]!='#')
-	{
-		tempDate+=details[i];
-	}
+	int indexLocation;
+	indexLocation = findBlockIndex(details, DATE_BLOCK_LOCATION);
+	tempDate = extractField(details, indexLocation);
 	return tempDate;
 }
 
-int Executor::extractPriority(string details)
+int Executor :: extractPriority(string details)
 {
-	int blockCounter = 0;
-	int i;
 	string tempPriority="";
 	int priority;
-	for (i=0;i<details.size();i++)
-	{
-		if (details[i]=='#')
-		{
-			blockCounter++;
-		}
-		if (blockCounter==PRIORITY_BLOCK_LOCATION)
-		{
-			break;
-		}
-	}
-	while (details[++i]!='#')
-	{
-		tempPriority+=details[i];
-	}
+	int indexLocation;
+	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
+	tempPriority = extractField(details, indexLocation);
 	priority= atoi(tempPriority.c_str());
 	return priority;
 }
+
 
 void Executor::execute()
 {
