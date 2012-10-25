@@ -263,7 +263,8 @@ void LangHandler::separate(string userInput)
 	}
 }
 
-Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+Executor* LangHandler::pack(bool* quit, vector<string>* calendarEntryList,
+										vector<string>* generalEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
 {
@@ -272,7 +273,7 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 	switch (command)
 	{
 		case ADD_COMMAND:
-			exe = new AddExecutor(generalEntryList, details);
+			exe = new AddExecutor(calendarEntryList,generalEntryList, details);
 			break;
 
 		case DELETE_COMMAND:

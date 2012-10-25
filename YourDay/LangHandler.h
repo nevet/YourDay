@@ -39,7 +39,7 @@ private:
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
-
+	bool isDateAvailable();
 	bool isLogicPriority(string priority);
 
 	/**
@@ -133,7 +133,8 @@ public :
 	/**
 	* This operation will pack up an specific executor w.r.t user's command
 	*/
-	Executor* pack(bool* quit, vector<string>* generalEntryList,
+	Executor* pack(bool* quit, vector<string>* calendarEntryList,
+							   vector<string>* generalEntryList,
 							   vector<string>* diduknowBoxList,
 							   StorageHandler* store);
 

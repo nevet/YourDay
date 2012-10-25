@@ -52,7 +52,7 @@ void FunctionHandler::execute(string input, bool* quit,
 	if (!sh.error(fxStatus))
 	{
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, generalEntryList, diduknowBoxList, &store);
+		exe = lang.pack(quit, calendarEntryList, generalEntryList, diduknowBoxList, &store);
 
 		//exe is NULL means undo command encountered
 		if (exe != NULL)
