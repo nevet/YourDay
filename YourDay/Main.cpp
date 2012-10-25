@@ -52,7 +52,7 @@ int main()
 	vector<string> diduknowBoxList;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
-	UIHandler ui(&generalEntryList);
+	UIHandler ui(&calendarEntryList, &generalEntryList);
 
 	//terminating indicator, should be false at the beginning
 	bool quit=false;
@@ -70,7 +70,7 @@ int main()
 		Signal signal = function.getStatus();
 
 		//display updated entries
-		ui.mainScreenDisplay(&generalEntryList);
+		ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
 		if(diduknowBoxList.size() == 0)
 		{
 			ui.displayMessage(signal);
