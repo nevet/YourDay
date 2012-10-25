@@ -5,6 +5,9 @@ SearchExecutor::SearchExecutor(vector<string>* entryList, vector<string>* matche
 	_entryList = entryList;
 	_matchedEntryList = matchedEntryList;
 	_details = details;
+
+	_undoEntryList = *entryList;
+	_undoMatchedEntryList = *matchedEntryList;
 }
 
 void SearchExecutor::execute()
@@ -23,4 +26,10 @@ void SearchExecutor::execute()
 			matchedEntryList->push_back(curRaw);
 		}
 	}*/
+}
+
+void SearchExecutor::undo()
+{
+	*_entryList = _undoEntryList;
+	*_matchedEntryList = _undoMatchedEntryList;
 }

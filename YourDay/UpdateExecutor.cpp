@@ -4,6 +4,8 @@ UpdateExecutor::UpdateExecutor(vector<string>* entryList, string details)
 {
 	_entryList = entryList;
 	_details = details;
+
+	_undoEntryList = *entryList;
 }
 
 void UpdateExecutor::execute()
@@ -27,4 +29,9 @@ void UpdateExecutor::execute()
 		index=atoi(number.c_str());
 		updateRaw(&entryList->at(index-1), &updateString);
 	}	*/
+}
+
+void UpdateExecutor::undo()
+{
+	*_entryList = _undoEntryList;
 }
