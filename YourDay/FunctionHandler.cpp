@@ -46,7 +46,7 @@ void FunctionHandler::execute(string input, bool* quit,
 		//no error occured, we should retrieve the packed executor
 		exe = lang.pack(quit, generalEntryList, diduknowBoxList, &store);
 
-		//exe is NULL pointer indicates EXIT command received
+		//to preserve unexpected error
 		if (exe != NULL)
 		{
 			//then we execute the executor and caught the exception threw by it
@@ -55,6 +55,9 @@ void FunctionHandler::execute(string input, bool* quit,
 
 			//after the execusion, the executor should be destroyed to save memory
 			delete exe;
+		} else
+		{
+			fxStatus = EXENULL_E;
 		}
 	}
 }
