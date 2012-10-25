@@ -29,14 +29,23 @@ private:
 	static const string UPDATE_SUCCESSFUL_MESSAGE;
 	static const string DELETE_SUCCESSFUL_MESSAGE;
 
-	//These are error display message and will be used in intepreteSignal operation to get the feedback message string
-	static const string DISPLAY_ERROR_MESSAGE;
+	//These are error feedback messages on user input and will be used in intepreteSignal operation to get the feedback message string
 	static const string COMMAND_ERROR_MESSAGE;
-	static const string OPTION_ERROR_MESSAGE;
+	static const string LENGTH_EXCEED_ERROR_MESSAGE;
+	static const string LENGTH_ZERO_ERROR_MESSAGE;
+	static const string INDEX_ERROR_MESSAGE;
+	static const string INVALID_DATE_ERROR_MESSAGE;
+	static const string INVALID_TIME_ERROR_MESSAGE;
 
+	//These are error messages on displaying UI and will be used in intepreteSignal operation to get the feedback message string
+	static const string DISPLAY_ERROR_MESSAGE;
+
+	//These are error messages on executing commands and will be used in intepreteSignal operation to get the feedback message string
+	static const string NULL_EXECUTOR_ERROR_MESSAGE;
+	static const string ADD_FAILED_MESSAGE;
 	static const string DELETE_FAILED_MESSAGE;
-
-	static const string DELETE_ASK_MESSAGE;
+	static const string SEARCH_FAILED_MESSAGE;
+	static const string UPDATE_FAILED_MESSAGE;
 
 	//These are instance of IO and UI class, which will be called in operations of getting input,
 	// displaying message and displaying screen
@@ -98,10 +107,24 @@ public:
 	*				is the feedback signal passed by the main() to indicate the success/error in processing command
 	*/
 	void displayMessage(Signal outSignal);
+
+	/**
+	* This operation is used to display output messages to the user
+	* It takes in the result string vector passed in by main() and calls IO to display
+	* @param result
+				  is the result string vector to be displayed
+				  It can be the result of search command
+	*/
 	void displayMessage(vector<string>* result);
+
+	/**
+	* This operation is used to display output messages to the user
+	* It takes in the result string passed in by main() and calls IO to display
+	* @param result
+				  is the result string to be displayed
+	*/
 	void displayMessage(string result);
 	
-
 	//These are methods to display UI
 
 	/**
