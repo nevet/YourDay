@@ -10,13 +10,15 @@ class DeleteExecutor : public Executor
 {
 private:
 	vector<string>* _entryList;
+	vector<string> _undoEntryList;
 
-	string _number;
+	string _details;
 
 public:
-	DeleteExecutor(vector<string>* entryList, string number);
+	DeleteExecutor(vector<string>* entryList, string details);
 
 	void execute();
+	void undo();
 };
 
 #endif
