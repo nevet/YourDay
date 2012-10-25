@@ -35,6 +35,7 @@ private:
 	static const string INDEX_ERROR_MESSAGE;
 	static const string INVALID_DATE_ERROR_MESSAGE;
 	static const string INVALID_TIME_ERROR_MESSAGE;
+	static const string UNDO_ERROR_MESSAGE;
 
 	//These are error messages on displaying UI and will be used in intepreteSignal operation to get the feedback message string
 	static const string DISPLAY_ERROR_MESSAGE;
