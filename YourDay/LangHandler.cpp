@@ -46,6 +46,11 @@ bool LangHandler::isLogicTime(string time)
 	return true;
 }
 
+bool LangHandler::isLogicPriority(string priority)
+{
+	return (priority == "high") || (priority == "mid") || (priority == "low");
+}
+
 void LangHandler::encoder(string input, Signal command)
 {
 	stringstream tempHolder(input);
@@ -71,8 +76,18 @@ void LangHandler::encoder(string input, Signal command)
 		//input format is different for different command
 		switch (command)
 		{
-			//format will be "[date] [time] description [at location]"
+			//format will be "[date] [time] description [at location] [priority [high, mid, low]]"
 			case ADD_COMMAND:
+				//check whether we have priority
+				pos = input.rfind(" priority ");
+				//contains priority info
+				if (pos != string::npos)
+				{
+					priority = input.substr(pos + 10);
+					//get rid of priority info
+					input = input.substr(0, pos);
+				}
+
 				//check whether we have location
 				pos = input.rfind(" at ");
 				//contains location info
@@ -118,8 +133,12 @@ void LangHandler::encoder(string input, Signal command)
 
 				description = input;
 
-				//after have done separating, we need to exmaine date and time
+				//after have done separating, we need to exmaine each field
 				//to make sure they are logic, if applicable
+				if (priority != "" && !isLogicPriority(priority))
+				{
+					langStatus = PRIORITY_E;
+				} else
 				if (date != "" && !isLogicDate(date))
 				{
 					langStatus = DATE_E;

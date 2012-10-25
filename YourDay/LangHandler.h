@@ -40,6 +40,8 @@ private:
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
 
+	bool isLogicPriority(string priority);
+
 	/**
 	* Encodes the raw string into the correct saving format
 	*
