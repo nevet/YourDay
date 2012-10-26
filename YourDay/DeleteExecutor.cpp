@@ -13,6 +13,7 @@ DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>*
 void DeleteExecutor::execute()
 {
 	int index;
+	int CalendarIndex;
 	
 	vector<string>::iterator position;
 	
@@ -35,7 +36,8 @@ void DeleteExecutor::execute()
 		}
 		else 
 		{
-			position = _calendarEntryList->begin() + index - _generalEntryList->size() -1;
+			CalendarIndex = index - _generalEntryList->size() -1 ;
+			position = _calendarEntryList->begin() + CalendarIndex;
 			_calendarEntryList->erase(position);
 		}
 		status = DELETE_S;
