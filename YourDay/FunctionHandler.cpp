@@ -9,16 +9,16 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 	//set default value for function handler status
 	fxStatus = CLEAR;
 	
-	generalEntryList->clear();
-	calendarEntryList->clear();
-	diduknowBoxList->clear();
+	//generalEntryList->clear();
+	//calendarEntryList->clear();
+	//diduknowBoxList->clear();
 
 	while (!undoStk.empty())
 	{
 		undoStk.pop();
 	}
-	
-	store.readData(generalEntryList);
+
+	store.readData(generalEntryList, calendarEntryList);
 }
 
 Signal FunctionHandler::getStatus()
@@ -49,7 +49,7 @@ void FunctionHandler::execute(string input, bool* quit,
 		lang.separate(input);
 
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, calendarEntryList, generalEntryList, diduknowBoxList, &store);
+		exe = lang.pack(quit, generalEntryList, calendarEntryList, diduknowBoxList, &store);
 
 		//exe is NULL means undo command encountered
 		if (exe != NULL)
