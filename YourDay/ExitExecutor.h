@@ -11,13 +11,15 @@ class ExitExecutor : public Executor
 {
 private:
 	vector<string>* _generalEntryList;
+	vector<string>* _calendarEntryList;
 
 	StorageHandler* _store;
 
 	bool* _quit;
 
 public:
-	ExitExecutor(vector<string>* generalEntryList,
+	ExitExecutor(vector<string>* generalEntryList, 
+				 vector<string>* calendarEntryList,
 				 StorageHandler* store, bool* quit);
 
 	void execute();
