@@ -21,18 +21,21 @@ void SearchExecutor::execute()
 	string lowerCaseKeyWord = kewWord;
 	transform(kewWord.begin(), kewWord.end(), lowerCaseKeyWord.begin(), tolower);
 
-	for(int i=0;i<_entryList->size();i++)
+	for(int i = 0; i < _entryList->size(); i++)
 	{
-		curRaw=_entryList->at(i);
+		curRaw = _entryList->at(i);
 		lowerCasecurRaw = curRaw;
-		transform(curRaw.begin(),curRaw.end(), lowerCasecurRaw.begin(),tolower);
+		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
 		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
 		{
 			_matchedEntryList->push_back(curRaw);
 		}
 	}
-	if(_matchedEntryList->size()==0)
+
+	if(_matchedEntryList->size() ==  0)
+	{
 		throw string ("No result matched\n");
+	}
 }
 
 void SearchExecutor::undo()
