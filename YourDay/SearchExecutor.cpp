@@ -1,5 +1,13 @@
 #include "SearchExecutor.h"
 
+void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
+{
+	ostringstream ostring;
+	ostring << "#" << index << result.substr(1,result.size()-1);
+
+	*formattedResult = ostring.str();
+}
+
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
 {
 	_generalEntryList = generalEntryList;
@@ -22,6 +30,7 @@ void SearchExecutor::execute()
 	string kewWord = extractDescription(_details);
 	string lowerCaseKeyWord = kewWord;
 	transform(kewWord.begin(), kewWord.end(), lowerCaseKeyWord.begin(), tolower);
+	string formattedSearchResult;
 
 	for(int i = 0; i < _generalEntryList->size(); i++)
 	{
@@ -30,7 +39,8 @@ void SearchExecutor::execute()
 		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
 		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
 		{
-			_matchedEntryList->push_back(curRaw);
+			formatSearchResult(i + 1, curRaw, &formattedSearchResult);
+			_matchedEntryList->push_back(formattedSearchResult);
 		}
 	}
 
@@ -41,7 +51,8 @@ void SearchExecutor::execute()
 		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
 		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
 		{
-			_matchedEntryList->push_back(curRaw);
+			formatSearchResult(i + _generalEntryList->size() +1, curRaw, &formattedSearchResult);
+			_matchedEntryList->push_back(formattedSearchResult);
 		}
 	}
 

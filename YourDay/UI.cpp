@@ -157,8 +157,12 @@ void UI::coloredDisplayFormattedString(int index, string row)
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int countColor = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
-	cout<<" "<<index<<". ";
-	
+
+	if (row[0] == '#' && row[1] == '#')		//for search result, the index of result in the entry list is added to result string,
+	{										//so don't need to display index in the diduknowBoxList
+		cout<<" "<<index<<". ";
+	}
+
 	for (int i = 1; i<row.size(); i++)
 	{
 		if (row[i] != '#' )
