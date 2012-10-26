@@ -17,7 +17,7 @@ private:
 	string _details;
 
 public:
-	AddExecutor(vector<string>* calendarEntryList, vector<string>* generalEntryList, string details) throw (string);
+	AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details) throw (string);
 
 	void execute();
 	void undo();

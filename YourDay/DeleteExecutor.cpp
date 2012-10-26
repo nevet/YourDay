@@ -1,11 +1,13 @@
 #include "DeleteExecutor.h"
 
-DeleteExecutor::DeleteExecutor(vector<string>* entryList, string details)
+DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
 {
-	_entryList = entryList;
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
 	_details = details;
 
-	_undoEntryList = *entryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }
 
 void DeleteExecutor::execute()
@@ -15,20 +17,33 @@ void DeleteExecutor::execute()
 	vector<string>::iterator position;
 	
 	index=extractIndex(_details);
-	if(index > _entryList->size())
+
+	if(index < 1)
+	{
+		throw string ("index is not existing\n");
+	}
+	else if(index > (_generalEntryList->size() + _calendarEntryList->size()))
 	{
 		throw string ("index is larger than list size\n");
 	}
 	else 
 	{
-		position = _entryList->begin() + index - 1;
-		_entryList->erase(position);
-		
+		if(index <= _generalEntryList->size())
+		{
+			position = _generalEntryList->begin() + index - 1;
+			_generalEntryList->erase(position);
+		}
+		else 
+		{
+			position = _calendarEntryList->begin() + index - _generalEntryList->size() -1;
+			_calendarEntryList->erase(position);
+		}
 		status = DELETE_S;
 	}
 }
 
 void DeleteExecutor::undo()
 {
-	*_entryList = _undoEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }
