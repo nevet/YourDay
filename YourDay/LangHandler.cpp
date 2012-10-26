@@ -110,11 +110,11 @@ bool LangHandler::isLogicTime(string time)
 
 	sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
 
-	if (h1 > 24 || h1 < 1 || h2 > 24 || h2 < 1)
+	if (h1 > 23 || h1 < 0 || h2 > 23 || h2 < 0)
 	{
 		flag = false;
 	} else
-	if (m1 > 59 || m1 < 1 || m2 > 59 || m1 < 1)
+	if (m1 > 59 || m1 < 0 || m2 > 59 || m1 < 0)
 	{
 		flag = false;
 	} else
@@ -353,8 +353,8 @@ void LangHandler::separate(string userInput) throw (string)
 	}
 }
 
-Executor* LangHandler::pack(bool* quit, vector<string>* calendarEntryList,
-										vector<string>* generalEntryList,
+Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+										vector<string>* calendarEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
 {
@@ -363,23 +363,23 @@ Executor* LangHandler::pack(bool* quit, vector<string>* calendarEntryList,
 	switch (command)
 	{
 		case ADD_COMMAND:
-			exe = new AddExecutor(calendarEntryList,generalEntryList, details);
+			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case DELETE_COMMAND:
-			exe = new DeleteExecutor(generalEntryList, details);
+			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case SEARCH_COMMAND:
-			exe = new SearchExecutor(generalEntryList, diduknowBoxList, details);
+			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, details);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case EXIT_COMMAND:
-			exe = new ExitExecutor(generalEntryList, store, quit);
+			exe = new ExitExecutor(generalEntryList, calendarEntryList, store, quit);
 			break;
 
 		case UNDO_COMMAND:

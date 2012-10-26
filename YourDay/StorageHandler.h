@@ -40,7 +40,7 @@ public :
 	@param the pointer of vector<string> which is used to store the data in the file
 	@return void
 	*/
-	void readData(vector<string>  *ram);
+	void readData(vector<string>  *ramForGeneralList, vector<string>  *ramForCalendarList);
 
 	/**
 	Write the data stored to the file, the data is stored in a vector of string.
@@ -48,7 +48,7 @@ public :
 	@param the pointer of vector<string> which stores the data 
 	@return void
 	*/
-	void writeData(vector<string> *ram);
+	void writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList);
 
 	/**
 	A series file operations 
@@ -69,8 +69,8 @@ public :
 
 private :
 	char buffer[MAXMIUM_WORDS];
-	static string DataBaseFile;
-	static string DataBaseTempFile; 
+	static string DataBaseGeneralFile;
+	static string DataBaseCalendarFile; 
 
 	static const string ENTRY_STORE_FORMAT;
 };

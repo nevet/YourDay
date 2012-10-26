@@ -9,13 +9,15 @@ using namespace std;
 class DeleteExecutor : public Executor
 {
 private:
-	vector<string>* _entryList;
-	vector<string> _undoEntryList;
+	vector<string>* _calendarEntryList;
+	vector<string>* _generalEntryList;
+	vector<string> _undoGeneralEntryList;
+	vector<string> _undoCalendarEntryList;
 
 	string _details;
 
 public:
-	DeleteExecutor(vector<string>* entryList, string details);
+	DeleteExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details);
 
 	void execute();
 	void undo();

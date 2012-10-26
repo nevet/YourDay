@@ -1,12 +1,22 @@
 #include "SearchExecutor.h"
 
-SearchExecutor::SearchExecutor(vector<string>* entryList, vector<string>* matchedEntryList, string details)
+void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
 {
-	_entryList = entryList;
-	_matchedEntryList = matchedEntryList;
-	_details = details;
+	ostringstream ostring;
+	ostring << "#" << index << result.substr(1,result.size()-1);
 
-	_undoEntryList = *entryList;
+	*formattedResult = ostring.str();
+}
+
+SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
+{
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
+	_details = details;
+	_matchedEntryList = matchedEntryList;
+
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 	_undoMatchedEntryList = *matchedEntryList;
 }
 
@@ -20,15 +30,29 @@ void SearchExecutor::execute()
 	string kewWord = extractDescription(_details);
 	string lowerCaseKeyWord = kewWord;
 	transform(kewWord.begin(), kewWord.end(), lowerCaseKeyWord.begin(), tolower);
+	string formattedSearchResult;
 
-	for(int i = 0; i < _entryList->size(); i++)
+	for(int i = 0; i < _generalEntryList->size(); i++)
 	{
-		curRaw = _entryList->at(i);
+		curRaw =_generalEntryList->at(i);
 		lowerCasecurRaw = curRaw;
 		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
 		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
 		{
-			_matchedEntryList->push_back(curRaw);
+			formatSearchResult(i + 1, curRaw, &formattedSearchResult);
+			_matchedEntryList->push_back(formattedSearchResult);
+		}
+	}
+
+	for(int i = 0; i < _calendarEntryList->size(); i++)
+	{
+		curRaw =_calendarEntryList->at(i);
+		lowerCasecurRaw = curRaw;
+		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
+		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
+		{
+			formatSearchResult(i + _generalEntryList->size() +1, curRaw, &formattedSearchResult);
+			_matchedEntryList->push_back(formattedSearchResult);
 		}
 	}
 
@@ -40,6 +64,7 @@ void SearchExecutor::execute()
 
 void SearchExecutor::undo()
 {
-	*_entryList = _undoEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 	*_matchedEntryList = _undoMatchedEntryList;
 }
