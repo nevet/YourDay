@@ -49,7 +49,6 @@ private:
 
 	//These are instance of IO and UI class, which will be called in operations of getting input,
 	// displaying message and displaying screen
-	IO io;
 	UI ui;
 	
 	/**

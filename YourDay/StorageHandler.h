@@ -1,12 +1,12 @@
 #ifndef STORAGEHANDLER_H
 #define STORAGEHANDLER_H
 
-#include "Handler.h"
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <cstdio>
 #include <vector>
+#include "Signal.h"
 
 #define MAXMIUM_WORDS 255 
 
@@ -21,7 +21,7 @@ using namespace std;
 * store data into the file or read data from file.
 * Only Storage Handler directly operate the file system.
 */
-class StorageHandler : public Handler
+class StorageHandler
 {
 public :
 	StorageHandler();
@@ -73,6 +73,7 @@ private :
 	static string DataBaseCalendarFile; 
 
 	static const string ENTRY_STORE_FORMAT;
+	Signal status;
 };
 
 

@@ -50,8 +50,10 @@ void UI::writeWords(string words, int startX, int startY)
 	cout<<words<<endl;
 }
 
-UI::UI()
+UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList)
 {
+	startingScreenDisplay();
+	mainScreenDisplay(calendarEntryList,generalEntryList);
 }
 
 Signal UI::getStatus()
@@ -185,6 +187,41 @@ void UI::coloredDisplayFormattedString(int index, string row)
 	cout<<endl;
 	
 }
+
+string UI::getInput()
+{
+	string input;
+	getline(cin, input);
+	return input;
+}
+
+void UI::diduknowBoxListDisplay(vector<string> *diduknowBoxList)
+{
+	int size = diduknowBoxList ->size();
+	setNormal();
+	didUKnowBox();
+
+	for (int i=0; i< size; i++)
+	{
+		string row;
+
+		row = diduknowBoxList->at(i) ;
+		coloredDisplayFormattedString(i+1,row);
+	}
+
+	drawBox();
+}
+
+void UI::diduknowBoxListDisplay(string diduknowString)
+{
+	setNormal();
+	didUKnowBox();
+
+	cout << diduknowString;
+
+	drawBox();
+}
+
 
 UI::~UI()
 {
