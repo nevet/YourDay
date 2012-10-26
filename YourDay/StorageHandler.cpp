@@ -5,13 +5,16 @@ using namespace std;
 
 const string StorageHandler::ENTRY_STORE_FORMAT = "%s %s %s\n";
 
-string StorageHandler::DataBaseFile = "YourDayEntry.txt";
-string StorageHandler::DataBaseTempFile = "YourDayEntryTemp.txt";
+string StorageHandler::DataBaseGeneralFile = "YourDayGEntry.txt";
+string StorageHandler::DataBaseCalendarFile = "YourDayCEntry.txt";
 
 StorageHandler::StorageHandler()
 {
-	if(!checkFileExistence("",DataBaseFile))
-		ofstream writeFile(DataBaseFile);
+	if(!checkFileExistence("",DataBaseGeneralFile))
+		ofstream writeFile(DataBaseGeneralFile);
+
+	if(!checkFileExistence("",DataBaseCalendarFile))
+		ofstream writeFile(DataBaseCalendarFile);
 }
 
 StorageHandler::~StorageHandler()
@@ -22,28 +25,46 @@ void StorageHandler::setStatus()
 	status = CLEAR;
 }
 
-void StorageHandler::readData(vector<string> * ram)
+void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
-	ifstream infile(DataBaseFile);
+	ifstream infileG(DataBaseGeneralFile);
 	string textLine;
-	while(getline(infile,textLine))
+	while(getline(infileG,textLine))
 	{
-		ram->push_back(textLine);
+		ramForGeneralList->push_back(textLine);
 	}
-	infile.close();
+	infileG.close();
+
+	ifstream infileC(DataBaseCalendarFile);
+	while(getline(infileC,textLine))
+	{
+		ramForCalendarList->push_back(textLine);
+	}
+	infileC.close();
+
 	return ;
 }
 
-void StorageHandler::writeData(vector<string> *ram)
+void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
-	ofstream clearFile(DataBaseFile);
-	ofstream outfile(DataBaseFile,ofstream::app);
+	ofstream clearFileG(DataBaseGeneralFile);
+	ofstream outfileG(DataBaseGeneralFile,ofstream::app);
 	
-	for(int i=0;i<ram->size();i++)
+	for(int i=0;i<ramForGeneralList->size();i++)
 	{
-		outfile<<(ram->at(i))<<endl;
+		outfileG<<(ramForGeneralList->at(i))<<endl;
 	}
-	outfile.close();
+	outfileG.close();
+
+	ofstream clearFileC(DataBaseCalendarFile);
+	ofstream outfileC(DataBaseCalendarFile,ofstream::app);
+
+	for(int i=0;i<ramForCalendarList->size();i++)
+	{
+		outfileC<<(ramForCalendarList->at(i))<<endl;
+	}
+	outfileC.close();
+
 	return ;
 }
 

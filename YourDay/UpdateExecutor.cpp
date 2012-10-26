@@ -1,11 +1,13 @@
 #include "UpdateExecutor.h"
 
-UpdateExecutor::UpdateExecutor(vector<string>* entryList, string details)
+UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
 {
-	_entryList = entryList;
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
 	_details = details;
 
-	_undoEntryList = *entryList;
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 }
 
 void UpdateExecutor::execute()
@@ -14,5 +16,6 @@ void UpdateExecutor::execute()
 
 void UpdateExecutor::undo()
 {
-	*_entryList = _undoEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }

@@ -23,7 +23,7 @@ class FunctionHandler
 {
 private:
 	StatusHandler sh;
-	vector<string> ram;
+
 	Signal fxStatus;
 	//will be constructed when FunctionHandler constructed
 	StorageHandler store;
