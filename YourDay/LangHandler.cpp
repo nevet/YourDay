@@ -110,11 +110,11 @@ bool LangHandler::isLogicTime(string time)
 
 	sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
 
-	if (h1 > 24 || h1 < 1 || h2 > 24 || h2 < 1)
+	if (h1 > 24 || h1 < 0 || h2 > 24 || h2 < 0)
 	{
 		flag = false;
 	} else
-	if (m1 > 59 || m1 < 1 || m2 > 59 || m1 < 1)
+	if (m1 > 59 || m1 < 0 || m2 > 59 || m1 < 0)
 	{
 		flag = false;
 	} else
