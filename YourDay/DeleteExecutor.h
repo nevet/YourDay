@@ -11,8 +11,8 @@ class DeleteExecutor : public Executor
 private:
 	vector<string>* _calendarEntryList;
 	vector<string>* _generalEntryList;
-	_undoCalendarEntryList = *calendarEntryList;
-	_undoGeneralEntryList = *generalEntryList;
+	vector<string> _undoGeneralEntryList;
+	vector<string> _undoCalendarEntryList;
 
 	string _details;
 

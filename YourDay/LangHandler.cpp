@@ -353,8 +353,8 @@ void LangHandler::separate(string userInput) throw (string)
 	}
 }
 
-Executor* LangHandler::pack(bool* quit, vector<string>* calendarEntryList,
-										vector<string>* generalEntryList,
+Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+										vector<string>* calendarEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
 {
@@ -363,23 +363,23 @@ Executor* LangHandler::pack(bool* quit, vector<string>* calendarEntryList,
 	switch (command)
 	{
 		case ADD_COMMAND:
-			exe = new AddExecutor(calendarEntryList,generalEntryList, details);
+			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case DELETE_COMMAND:
-			exe = new DeleteExecutor(generalEntryList, details);
+			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case SEARCH_COMMAND:
-			exe = new SearchExecutor(generalEntryList, diduknowBoxList, details);
+			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, details);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
 			break;
 
 		case EXIT_COMMAND:
-			exe = new ExitExecutor(generalEntryList, store, quit);
+			exe = new ExitExecutor(generalEntryList, calendarEntryList, store, quit);
 			break;
 
 		case UNDO_COMMAND:

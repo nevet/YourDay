@@ -6,8 +6,8 @@ DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>*
 	_calendarEntryList = calendarEntryList;
 	_details = details;
 
-	*_generalEntryList = _undoGeneralEntryList;
-	*_calendarEntryList = _undoCalendarEntryList;
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 }
 
 void DeleteExecutor::execute()
