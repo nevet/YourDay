@@ -7,8 +7,8 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_details = details;
 
 	//a local copy of entry list for undo using
-	*_generalEntryList = _undoGeneralEntryList;
-	*_calendarEntryList = _undoCalendarEntryList;
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 }
 
 void AddExecutor::execute() throw (string)
