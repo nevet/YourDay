@@ -1,14 +1,14 @@
 #include "AddExecutor.h"
 
-AddExecutor::AddExecutor(vector<string>* calendarEntryList, vector<string>* generalEntryList, string details)
+AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
 {
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_details = details;
 
 	//a local copy of entry list for undo using
-	_undoCalendarEntryList = *calendarEntryList;
-	_undoGeneralEntryList = *generalEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }
 
 void AddExecutor::execute() throw (string)
