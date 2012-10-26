@@ -10,16 +10,18 @@ using namespace std;
 class SearchExecutor : public Executor
 {
 private:
-	vector<string>* _entryList;
+	vector<string>* _calendarEntryList;
+	vector<string>* _generalEntryList;
 	vector<string>* _matchedEntryList;
 	
-	vector<string> _undoEntryList;
+	vector<string> _undoGeneralEntryList;
+	vector<string> _undoCalendarEntryList;
 	vector<string> _undoMatchedEntryList;
 
 	string _details;
 
 public:
-	SearchExecutor(vector<string>* entryList, vector<string>* matchedEntryList, string details);
+	SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details);
 
 	void execute();
 	void undo();

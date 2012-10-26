@@ -1,12 +1,14 @@
 #include "SearchExecutor.h"
 
-SearchExecutor::SearchExecutor(vector<string>* entryList, vector<string>* matchedEntryList, string details)
+SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
 {
-	_entryList = entryList;
-	_matchedEntryList = matchedEntryList;
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
 	_details = details;
+	_matchedEntryList = matchedEntryList;
 
-	_undoEntryList = *entryList;
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 	_undoMatchedEntryList = *matchedEntryList;
 }
 
@@ -21,9 +23,20 @@ void SearchExecutor::execute()
 	string lowerCaseKeyWord = kewWord;
 	transform(kewWord.begin(), kewWord.end(), lowerCaseKeyWord.begin(), tolower);
 
-	for(int i = 0; i < _entryList->size(); i++)
+	for(int i = 0; i < _generalEntryList->size(); i++)
 	{
-		curRaw = _entryList->at(i);
+		curRaw =_generalEntryList->at(i);
+		lowerCasecurRaw = curRaw;
+		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
+		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
+		{
+			_matchedEntryList->push_back(curRaw);
+		}
+	}
+
+	for(int i = 0; i < _calendarEntryList->size(); i++)
+	{
+		curRaw =_calendarEntryList->at(i);
 		lowerCasecurRaw = curRaw;
 		transform(curRaw.begin(), curRaw.end(), lowerCasecurRaw.begin(), tolower);
 		if(std::string::npos != lowerCasecurRaw.find(lowerCaseKeyWord))
@@ -40,6 +53,7 @@ void SearchExecutor::execute()
 
 void SearchExecutor::undo()
 {
-	*_entryList = _undoEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 	*_matchedEntryList = _undoMatchedEntryList;
 }
