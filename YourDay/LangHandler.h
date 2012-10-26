@@ -34,7 +34,13 @@ private:
 
 	string details;
 
-	const static int mon[12];
+	const static int MONTH[12];
+	
+	const static string NULL_STRING;
+	const static string PRIORITY_INDICATOR;
+	const static string LOCATION_INDICATOR;
+	const static string SPACE_BAR;
+	const static string DELIMINATOR;
 
 	bool leap(int year);
 

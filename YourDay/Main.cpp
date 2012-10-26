@@ -21,6 +21,8 @@
 *		no strict format, pure string
 * index:
 *		positive integer
+* priority:
+*		can only be one of {high, mid, low}
 *
 * @author a00194847U
 */
@@ -53,8 +55,6 @@ int main()
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	UIHandler ui(&calendarEntryList, &generalEntryList);
-	ui.startingScreenDisplay();
-	ui.mainScreenDisplay(&calendarEntryList,&generalEntryList);
 
 	//terminating indicator, should be false at the beginning
 	bool quit=false;

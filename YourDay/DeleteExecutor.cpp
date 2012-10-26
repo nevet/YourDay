@@ -15,13 +15,13 @@ void DeleteExecutor::execute()
 	vector<string>::iterator position;
 	
 	index=extractIndex(_details);
-	if(index>_entryList->size())
+	if(index > _entryList->size())
 	{
 		throw string ("index is larger than list size\n");
 	}
 	else 
 	{
-		position=_entryList->begin()+index-1;
+		position = _entryList->begin() + index - 1;
 		_entryList->erase(position);
 		
 		status = DELETE_S;

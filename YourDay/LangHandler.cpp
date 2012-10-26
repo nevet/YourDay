@@ -15,7 +15,13 @@
 
 #include "LangHandler.h"
 
-const int LangHandler::mon[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int LangHandler::MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+const string LangHandler::NULL_STRING = "";
+const string LangHandler::PRIORITY_INDICATOR = " priority ";
+const string LangHandler::LOCATION_INDICATOR = " at ";
+const string LangHandler::SPACE_BAR = " ";
+const string LangHandler::DELIMINATOR = "#";
 
 bool LangHandler::leap(int year)
 {
@@ -82,7 +88,7 @@ bool LangHandler::isLogicDate(string date)
 	{
 		if (!leap(year))
 		{
-			if (day > mon[month - 1])
+			if (day > MONTH[month - 1])
 			{
 				flag = false;
 			}
@@ -135,12 +141,12 @@ void LangHandler::encoder(string input, Signal command)
 {
 	stringstream tempHolder(input);
 	
-	string date = "";
-	string time = "";
-	string index = "";
-	string description = "";
-	string location = "";
-	string priority = "";
+	string date = NULL_STRING;
+	string time = NULL_STRING;
+	string index = NULL_STRING;
+	string description = NULL_STRING;
+	string location = NULL_STRING;
+	string priority = NULL_STRING;
 
 	string temp;
 
@@ -148,7 +154,7 @@ void LangHandler::encoder(string input, Signal command)
 
 	//if empty string is entered by user, LENGTH_Z_E will be set and no more
 	//operation should be entertained
-	if (input == "" && command != EXIT_COMMAND && command != UNDO_COMMAND)
+	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
 		langStatus = LENGTH_Z_E;
 	} else
@@ -159,34 +165,34 @@ void LangHandler::encoder(string input, Signal command)
 			//format will be "[date] [time] description [at location] [priority [high, mid, low]]"
 			case ADD_COMMAND:
 				//check whether we have priority
-				pos = input.rfind(" priority ");
+				pos = input.rfind(PRIORITY_INDICATOR);
 				//contains priority info
 				if (pos != string::npos)
 				{
-					priority = input.substr(pos + 10);
+					priority = input.substr(pos + PRIORITY_INDICATOR.length());
 					//get rid of priority info
 					input = input.substr(0, pos);
 				}
 
 				//check whether we have location
-				pos = input.rfind(" at ");
+				pos = input.rfind(LOCATION_INDICATOR);
 				//contains location info
 				if (pos != string::npos)
 				{
-					location = input.substr(pos + 4);
+					location = input.substr(pos + LOCATION_INDICATOR.length());
 					//get rid of location info
 					input = input.substr(0, pos);
 				}
 
 				//extract potential date information and exmaine it
-				pos = input.find(" ");
+				pos = input.find(SPACE_BAR);
 				date = input.substr(0, pos);
 				
 				if (isDate(date))
 				{
 					input = input.substr(pos + 1);
 					
-					pos = input.find(" ");
+					pos = input.find(SPACE_BAR);
 					time = input.substr(0, pos);
 
 					if (isTime(time))
@@ -194,20 +200,20 @@ void LangHandler::encoder(string input, Signal command)
 						input = input.substr(pos + 1);
 					} else
 					{
-						time = "";
+						time = NULL_STRING;
 					}
 				} else
 				{
 					//it might be a time, so we need to exmaine it
 					time = date;
-					date = "";					
+					date = NULL_STRING;
 
 					if (isTime(time))
 					{
 						input = input.substr(pos + 1);
 					} else
 					{
-						time = "";
+						time = NULL_STRING;
 					}
 				}
 
@@ -215,15 +221,15 @@ void LangHandler::encoder(string input, Signal command)
 
 				//after have done separating, we need to exmaine each field
 				//to make sure they are logic, if applicable
-				if (priority != "" && !isLogicPriority(priority))
+				if (priority != NULL_STRING && !isLogicPriority(priority))
 				{
 					throw string ("priority error\n");
 				} else
-				if (date != "" && !isLogicDate(date))
+				if (date != NULL_STRING && !isLogicDate(date))
 				{
 					throw string ("date error\n");					
 				} else
-				if (time != "" && !isLogicTime(time))
+				if (time != NULL_STRING && !isLogicTime(time))
 				{
 					throw string ("time error\n");
 				}
@@ -232,12 +238,12 @@ void LangHandler::encoder(string input, Signal command)
 
 			//format will be "index"
 			case DELETE_COMMAND:
-				pos = input.find(" ");
+				pos = input.find(SPACE_BAR);
 				index = input.substr(0, pos - 1);
 				
 				if (!isInt(index))
 				{
-					index = "";
+					index = NULL_STRING;
 					throw string ("Index error\n");
 				}
 				
@@ -258,7 +264,8 @@ void LangHandler::encoder(string input, Signal command)
 
 		if (!sh.error(langStatus))
 		{
-			details = "#" + index + "#" + description + "#" + location + "#" + time + "#" + date + "#" + priority + "#";
+			details = DELIMINATOR + index + DELIMINATOR + description + DELIMINATOR + 
+					  location + DELIMINATOR + time + DELIMINATOR + date + DELIMINATOR + priority + DELIMINATOR;
 		}
 	}
 }
@@ -325,14 +332,12 @@ void LangHandler::separate(string userInput) throw (string)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
-
+	
+	//if set command fails, no other operation should be entertained
 	if (sh.error(langStatus))
 	{
-		throw string ("storage error\n");
-	}
-
-	//if set command fails, no other operation should be entertained
-	if (!sh.error(langStatus))
+		throw string ("No such command!\n");
+	} else
 	{
 		//to get rid of leading space
 		tempHolder.get(dummySpace);
