@@ -92,6 +92,10 @@ void UI::drawBox()
 void UI::didUKnowBox()
 {
 	gotoxy(0,boardHeight+1);
+	cout<<"                                                                                ";
+	cout<<"                                                                                ";
+	cout<<"                                                                               ";
+	gotoxy(0,boardHeight+1);
 }
 
 void UI::setNormal()
@@ -143,7 +147,7 @@ void UI :: displayEntryList(vector<string>* calendarEntryList, vector<string>* g
 	{
 		string row;
 		row = calendarEntryList->at(i) ;
-		coloredDisplayFormattedString(i+1, row);
+		coloredDisplayFormattedString(i+sizeOfGeneral+1, row);
 	}
 }
 
@@ -175,6 +179,7 @@ void UI::coloredDisplayFormattedString(int index, string row)
 		
 	}
 	cout<<endl;
+	
 }
 
 UI::~UI()
