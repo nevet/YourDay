@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <sstream>
 #include "Executor.h"
 
 using namespace std;
@@ -20,6 +21,10 @@ private:
 
 	string _details;
 
+	/**
+	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
+	*/
+	void formatSearchResult(int index, string result, string* formattedResult);
 public:
 	SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details);
 
