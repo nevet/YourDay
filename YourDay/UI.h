@@ -43,33 +43,32 @@ private:
 	Signal status;
 	HANDLE hConsole;
 	char displayBoard[boardHeight][boardWidth];
+
 	void setStatus(Signal statusSignal);
+
 	void drawBanner();
 	void writeWords(string words, int startH, int startW);
-	void displayEntryList( vector<string>* calendarEntryList, vector<string> *generalEntryList );
-	
-public:
-
-	UI();
-	void coloredDisplayFormattedString(int,string);
 	void setNormal();
 	void drawBox();
 	void didUKnowBox();
-	Signal getStatus();
 	void setScreenSize();
-	void clearStatus();
-	void gotoxy(int x,int y);
-	/**
-	* This operation is used to display starting screen to the user at the beginning of the program
-	* and will be called in UIHandler class
-	*/
-	void startingScreenDisplay();
+	void gotoxy(int x, int y);
 
-	/**
-	* This operation is used to display the main screen to interact with the user
-	* and will be called in UIHandler class
-	*/
+	void coloredDisplayFormattedString(int,string);
+	void displayEntryList( vector<string>* calendarEntryList, vector<string> *generalEntryList );
+	void startingScreenDisplay();	
+
+public:
+	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList);
+
+	Signal getStatus();
+	void clearStatus();
+	
+	string getInput();
+
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList);
+	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
+	void diduknowBoxListDisplay(string diduknowString);
 
 	~UI();
 };
