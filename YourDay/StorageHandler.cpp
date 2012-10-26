@@ -27,42 +27,43 @@ void StorageHandler::setStatus()
 
 void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
-	ifstream infile(DataBaseGeneralFile);
+	ifstream infileG(DataBaseGeneralFile);
 	string textLine;
-	while(getline(infile,textLine))
+	while(getline(infileG,textLine))
 	{
 		ramForGeneralList->push_back(textLine);
 	}
-	infile.close();
+	infileG.close();
 
-	ifstream infile(DataBaseCalendarFile);
-	while(getline(infile,textLine))
+	ifstream infileC(DataBaseCalendarFile);
+	while(getline(infileC,textLine))
 	{
 		ramForCalendarList->push_back(textLine);
 	}
-	infile.close();
+	infileC.close();
+
 	return ;
 }
 
 void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
-	ofstream clearFile(DataBaseGeneralFile);
-	ofstream outfile(DataBaseGeneralFile,ofstream::app);
+	ofstream clearFileG(DataBaseGeneralFile);
+	ofstream outfileG(DataBaseGeneralFile,ofstream::app);
 	
 	for(int i=0;i<ramForGeneralList->size();i++)
 	{
-		outfile<<(ramForGeneralList->at(i))<<endl;
+		outfileG<<(ramForGeneralList->at(i))<<endl;
 	}
-	outfile.close();
+	outfileG.close();
 
-	ofstream clearFile(DataBaseCalendarFile);
-	ofstream outfile(DataBaseCalendarFile,ofstream::app);
+	ofstream clearFileC(DataBaseCalendarFile);
+	ofstream outfileC(DataBaseCalendarFile,ofstream::app);
 
 	for(int i=0;i<ramForCalendarList->size();i++)
 	{
-		outfile<<(ramForCalendarList->at(i))<<endl;
+		outfileC<<(ramForCalendarList->at(i))<<endl;
 	}
-	outfile.close();
+	outfileC.close();
 
 	return ;
 }
