@@ -29,7 +29,7 @@
 
 #include <iostream>
 #include <string>
-#include "UIHandler.h"
+#include "UI.h"
 #include "Signal.h"
 #include "StatusHandler.h"
 #include "FunctionHandler.h"
@@ -76,7 +76,7 @@ int main()
 			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
 			if(diduknowBoxList.size() == 0)
 			{
-//				ui.diduknowBoxListDisplay(outSignal);
+				ui.diduknowBoxListDisplay(signal);
 			}
 			else
 			{
