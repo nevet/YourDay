@@ -1,10 +1,3 @@
-/**
-* UI class is a part of UI part and will be called in the UIHandler
-* UI class is used to display User Interface to the screen
-* UI class has 2 main APIs to do this functionality:
-* startingScreenDisplay():void to diisplay starting screen to user at the beginning of the program
-* mainScreenDisplay():void to display main screen to interact with user
-*/
 #ifndef UI_H
 #define UI_H
 
@@ -47,25 +40,6 @@ private:
 	static const string UPDATE_SUCCESSFUL_MESSAGE;
 	static const string DELETE_SUCCESSFUL_MESSAGE;
 
-	//These are error feedback messages on user input and will be used in intepreteSignal operation to get the feedback message string
-	static const string COMMAND_ERROR_MESSAGE;
-	static const string LENGTH_EXCEED_ERROR_MESSAGE;
-	static const string LENGTH_ZERO_ERROR_MESSAGE;
-	static const string INDEX_ERROR_MESSAGE;
-	static const string INVALID_DATE_ERROR_MESSAGE;
-	static const string INVALID_TIME_ERROR_MESSAGE;
-	static const string UNDO_ERROR_MESSAGE;
-
-	//These are error messages on displaying UI and will be used in intepreteSignal operation to get the feedback message string
-	static const string DISPLAY_ERROR_MESSAGE;
-
-	//These are error messages on executing commands and will be used in intepreteSignal operation to get the feedback message string
-	static const string NULL_EXECUTOR_ERROR_MESSAGE;
-	static const string ADD_FAILED_MESSAGE;
-	static const string DELETE_FAILED_MESSAGE;
-	static const string SEARCH_FAILED_MESSAGE;
-	static const string UPDATE_FAILED_MESSAGE;
-
 	HANDLE hConsole;
 	char displayBoard[boardHeight][boardWidth];
 
@@ -79,7 +53,7 @@ private:
 
 	string interpreteSignal(Signal outSignal);
 	void coloredDisplayFormattedString(int,string);
-	void displayEntryList( vector<string>* calendarEntryList, vector<string> *generalEntryList );
+	void displayEntryList( vector<string>* entryList, int entryListInitX, int entryListInitY);
 	void startingScreenDisplay();	
 
 public:
@@ -90,6 +64,7 @@ public:
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList);
 	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
 	void diduknowBoxListDisplay(string diduknowString);
+	void diduknowBoxListDisplay(Signal diduknowSignal);
 
 	~UI();
 };
