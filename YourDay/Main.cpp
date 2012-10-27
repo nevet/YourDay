@@ -76,9 +76,7 @@ int main()
 			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
 			if(diduknowBoxList.size() == 0)
 			{
-				StatusHandler sh;
-				string outSignal = sh.interpreteSignal(signal);
-				ui.diduknowBoxListDisplay(outSignal);
+//				ui.diduknowBoxListDisplay(outSignal);
 			}
 			else
 			{
