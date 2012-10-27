@@ -27,14 +27,10 @@ using namespace std;
 class LangHandler
 {
 private:
-	enum CommandType
-	{
-		ADD_COMMAND, DELETE_COMMAND, EDIT_COMMAND, SEARCH_COMMAND, UNDO_COMMAND, EXIT_COMMAND
-	};
 
 	StatusHandler sh;
 
-	CommandType command;
+	Signal command;
 	Signal langStatus;
 
 	string details;
@@ -106,7 +102,7 @@ private:
 	*
 	* only index field is specified, so other fields should be "blank".
 	*/
-	void encoder(string input, CommandType command);
+	void encoder(string input, Signal command);
 
 	/**
 	* This operation will set command type using userCommand. If userCommand

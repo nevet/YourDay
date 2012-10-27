@@ -137,7 +137,7 @@ bool LangHandler::isLogicPriority(string priority)
 	return (priority == "high") || (priority == "mid") || (priority == "low");
 }
 
-void LangHandler::encoder(string input, CommandType command)
+void LangHandler::encoder(string input, Signal command)
 {
 	stringstream tempHolder(input);
 	
@@ -156,7 +156,7 @@ void LangHandler::encoder(string input, CommandType command)
 	//operation should be entertained
 	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
-		langStatus = LENGTH_Z_E;
+		throw string ("The length entered exceeds the available range\n");
 	} else
 	{
 		//input format is different for different command
