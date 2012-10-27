@@ -61,10 +61,9 @@ int main()
 
 	while (!quit)
 	{
-		string userInput = ui.getInput();
-
 		try
 		{
+			string userInput = ui.getInput();
 			function.execute(userInput, &quit,
 							 &generalEntryList,
 							 &calendarEntryList,

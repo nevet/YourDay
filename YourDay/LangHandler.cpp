@@ -137,7 +137,7 @@ bool LangHandler::isLogicPriority(string priority)
 	return (priority == "high") || (priority == "mid") || (priority == "low");
 }
 
-void LangHandler::encoder(string input, Signal command)
+void LangHandler::encoder(string input, CommandType command)
 {
 	stringstream tempHolder(input);
 	
