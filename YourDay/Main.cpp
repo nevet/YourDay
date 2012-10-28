@@ -54,7 +54,7 @@ int main()
 	vector<string> diduknowBoxList;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
-	UI ui(&calendarEntryList, &generalEntryList);
+	UI ui;
 
 	//terminating indicator, should be false at the beginning
 	bool quit=false;
@@ -63,7 +63,8 @@ int main()
 	{
 		try
 		{
-			string userInput = ui.getInput();
+			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			string userInput = ui.retrieveInput();
 			function.execute(userInput, &quit,
 							 &generalEntryList,
 							 &calendarEntryList,
@@ -72,7 +73,7 @@ int main()
 			Signal signal = function.getStatus();
 
 			//display updated entries
-			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
+/*			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
 			if(diduknowBoxList.size() == 0)
 			{
 				ui.diduknowBoxListDisplay(signal);
@@ -84,10 +85,10 @@ int main()
 
 			//after one iteration, status of function handler should be cleared
 			function.clearStatus();
-			}
+*/			}
 		catch (string excpt)
 		{
-			ui.diduknowBoxListDisplay(excpt);
+//			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
 
