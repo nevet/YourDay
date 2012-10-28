@@ -7,19 +7,28 @@
 #include <cstdlib>
 #include <iomanip>
 #include <vector>
+#include <conio.h>
 #include "Signal.h"
 
 #define windowsHeight 25
 #define windowsWidth 80
-#define bottomBoardHeight 3
-#define boxHeight 1
-#define boardHeight (windowsHeight - boxHeight - bottomBoardHeight)
-#define boardWidth windowsWidth
-#define boxWidth windowsWidth
-#define generalEntryListInitX 0
-#define generalEntryListInitY 2
-#define calendarEntryListInitX 0
-#define calendarEntryListInitY 12
+#define generalTitleHeight 2
+#define generalBoxHeight 5
+#define calendarTitleHeight 2
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight)
+#define commandBoxHeight 1
+#define bottomBoxHeight 3
+
+#define generalInitY (generalTitleHeight)
+#define generalInitX 0
+#define calendarInitY (generalInitY + generalBoxHeight + calendarTitleHeight)
+#define calendarInitX 0
+#define commandInitY (calendarInitY + calendarBoxHeight)
+#define commandInitX 0
+#define diduknowInitY (calendarInitY + calendarBoxHeight + commandBoxHeight)
+#define diduknowInitX 0
+
+#define maxCharDetail 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
 #define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
@@ -28,45 +37,58 @@
 #define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
 #define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
 
+#define UP_ARROW 60
+#define DOWN_ARROW 62
+#define LEFT_ARROW 75
+#define RIGHT_ARROW 77
+#define TAB 9
+#define ENTER 13
+#define BACKSPACE 8
+
 using namespace std;
 
 class UI
 {
 private:
 
-	//These are successful display message and will be used in intepreteSignal operation to get the feedback message string
-	static const string CLEAR_SIGNAL_MESSAGE;
-	static const string ADD_SUCCESSFUL_MESSAGE;
-	static const string UPDATE_SUCCESSFUL_MESSAGE;
-	static const string DELETE_SUCCESSFUL_MESSAGE;
+	enum MainFields
+	{
+		GENERAL, CALENDAR, DIDUKNOW
+	};
 
 	HANDLE hConsole;
-	char displayBoard[boardHeight][boardWidth];
+	string input;
+	MainFields focusedField;
+	int generalInitRowIndex;
+	int calendarInitRowIndex;
+	int diduknowInitRowIndex;
 
-	void drawBanner();
-	void writeWords(string words, int startH, int startW);
-	void setNormal();
-	void drawBox();
-	void didUKnowBox();
 	void setScreenSize();
+	void setBackground();
+	void drawBanner();
+	void drawCommandBox();
+	void clearBox(int startH, int height);
 	void gotoxy(int x, int y);
+	void writeTitle(string words, int startH, int startW);
 
-	string interpreteSignal(Signal outSignal);
+	void changeFocusedField();
+	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+
 	void coloredDisplayFormattedString(int,string);
-	void displayEntryList( vector<string>* entryList, int entryListInitX, int entryListInitY);
-	void startingScreenDisplay();	
-
-public:
-	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList);
-
-	string getInput();
-
-	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList);
+	void generalEntryListDisplay(vector<string>* generalEntryList);
+	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
-	void diduknowBoxListDisplay(string diduknowString);
-	void diduknowBoxListDisplay(Signal diduknowSignal);
+	void startingScreenDisplay();
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+public:
+	UI();
+
+	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	string retrieveInput();
 
 	~UI();
 };
 
-#endif
+#endif;
