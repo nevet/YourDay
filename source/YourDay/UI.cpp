@@ -146,7 +146,7 @@ void UI::changeFocusedField(vector<string>* diduknowBoxList)
 		focusedField = GENERAL;
 		break;
 	default:
-		assert(true, false);
+		assert(false);
 	}
 }
 
@@ -159,18 +159,33 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalInitRowIndex > 0)
+		if (generalInitRowIndex > generalBoxHeight)
 		{
-			generalInitRowIndex --;
-			clearBox(generalInitY, generalBoxHeight);
+			generalInitRowIndex -= generalBoxHeight;
+			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
 			drawCommandBox();
 		}
+		else if (generalInitRowIndex > 0)
+		{
+			generalInitRowIndex = 0;
+			clearBox(generalInitY, generalBoxHeight +1);
+			generalEntryListDisplay(generalEntryList);
+			drawCommandBox();
+		}
+
 		break;
 	case CALENDAR:
-		if (calendarInitRowIndex > 0)
+		if (calendarInitRowIndex > calendarBoxHeight)
 		{
-			calendarInitRowIndex --;
+			calendarInitRowIndex -= calendarBoxHeight;
+			clearBox(calendarInitY, calendarBoxHeight);
+			calendarEntryListDisplay(calendarEntryList);
+			drawCommandBox();
+		}
+		else if (calendarInitRowIndex > 0)
+		{
+			calendarInitRowIndex = 0;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
@@ -203,18 +218,18 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalInitRowIndex < generalSize -1)
+		if (generalInitRowIndex < generalSize -1 - generalBoxHeight)
 		{
-			generalInitRowIndex ++;
-			clearBox(generalInitY, generalBoxHeight);
+			generalInitRowIndex += generalBoxHeight;
+			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
 			drawCommandBox();
 		}
 		break;
 	case CALENDAR:
-		if (calendarInitRowIndex < calendarSize -1)
+		if (calendarInitRowIndex < calendarSize -1 - calendarBoxHeight)
 		{
-			calendarInitRowIndex ++;
+			calendarInitRowIndex += calendarBoxHeight;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
