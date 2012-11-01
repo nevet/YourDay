@@ -51,8 +51,8 @@ using namespace std;
 int main(int arg, char** test)
 {
 	 
-	runTest(arg,test);
-	/*
+//	runTest(arg,test);
+
 	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
@@ -92,12 +92,11 @@ int main(int arg, char** test)
 
 			//after one iteration, status of function handler should be cleared
 			function.clearStatus();
-*/			//}
-/* <-delete		catch (string excpt)
+*/		}
+		catch (string excpt)
 		{
 //			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
-	*/
 	return 0;//EXIT_SUCCESS;
 }
