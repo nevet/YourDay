@@ -3,8 +3,6 @@
 
 #include "Signal.h"
 
-using namespace std;
-
 class StatusHandler
 {
 public:
