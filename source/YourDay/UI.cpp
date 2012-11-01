@@ -4,33 +4,49 @@
 
 void UI::setScreenSize()
 {
-	hConsole=GetStdHandle(STD_OUTPUT_HANDLE);
-	SMALL_RECT windowSize = {5, 5,windowsHeight, windowsWidth};
+    _COORD coord; 
+    coord.X = windowsWidth; 
+    coord.Y = windowsHeight; 
 
-	COORD buffer={0,0};
-	SetConsoleScreenBufferSize(hConsole,buffer);
-	SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
+    _SMALL_RECT Rect; 
+    Rect.Top = 0; 
+    Rect.Left = 0; 
+    Rect.Bottom = windowsHeight - 1; 
+    Rect.Right = windowsWidth - 1; 
+
+    // Get handle of the standard output 
+    HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE); 
+    assert (Handle, NULL);
+     
+    // Set screen buffer size to that specified in coord 
+    assert(SetConsoleScreenBufferSize(Handle, coord), false);
+ 
+    // Set the window size to that specified in Rect 
+    assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
 
 void UI::drawBanner()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE);
-	cout<<"                ____  ____                _____                                 ";
-	cout<<"                \\  \\\\/  //                |   \\\\                                ";
-	cout<<"                 \\  \\\" //                 |    \\\\                               ";
-	cout<<"                  \\   // ____  __ __  ____| |\\ || ____ __  ___                  ";
-	cout<<"                   | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                  ";
-	cout<<"                   | || | O ||| |/ ||| || |    //| o || \\  //                   ";
-	cout<<"                   |_|| \\___// \\__// |_|| |___// \\___|| /_//                    ";
-	cout<<"                                                                                ";
+	cout<<"                                                                                                    ";
+	cout<<"                          ____  ____                _____                                           ";
+	cout<<"                          \\  \\\\/  //                |   \\\\                                          ";
+	cout<<"                           \\  \\\" //                 |    \\\\                                         ";
+	cout<<"                            \\   // ____  __ __  ____| |\\ || ____ __  ___                            ";
+	cout<<"                             | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                            ";
+	cout<<"                             | || | O ||| |/ ||| || |    //| o || \\  //                             ";
+	cout<<"                             |_|| \\___// \\__// |_|| |___// \\___|| /_//                              ";
+	cout<<"                                                                                                    ";
+	cout<<"                                                                                                    ";
+
 }
 
 void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
 	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	cout<<"command:                                                                        ";
+	cout<<"command:                                                                                            ";
 	cout<<endl;
 	gotoxy(8,commandInitY);
 }
@@ -73,6 +89,18 @@ void UI::clearCalendarBox()
 	gotoxy(0, calendarInitY);
 	cout << "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                " << endl;
 	gotoxy(0,calendarInitY);
+}
+
+void UI::changeDisplayMode()
+{
+	if (displayMode == DISPLAY_ALL)
+	{
+		displayMode = DISPLAY_PART;
+	}
+	else
+	{
+		displayMode = DISPLAY_ALL;
+	}
 }
 
 void UI::changeFocusedField()
@@ -215,7 +243,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			}
 			break;
 		default:
-			if (keyIn != ENTER)
+			if (keyIn != ENTER && input.size() < maxInputSize)
 			{
 				cout << keyIn;
 				input += keyIn;
@@ -418,13 +446,15 @@ void UI::startingScreenDisplay()
 
 	drawBanner();
 	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
-	cout<<"--------------------------------------------------------------------------------";
-	cout<<"|                    YourDay - always making your day :)                       |";
-	cout<<"--------------------------------------------------------------------------------";
+	cout<<"----------------------------------------------------------------------------------------------------";
+	cout<<"|                              YourDay - always making your day :)                                 |";
+	cout<<"----------------------------------------------------------------------------------------------------";
 	SetConsoleTextAttribute(hConsole, 15);
-	gotoxy(30,18);
+	gotoxy(40,18);
 	cout<<"Press Enter to continue";
-	getchar();
+
+	char c;
+	while ((c = getch()) != ENTER);
 }
 
 void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
@@ -435,8 +465,8 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	setBackground();
 	system("CLS");
 
-	writeTitle("General: ", 0,0);
-	writeTitle("Calendar: ", 0, calendarInitY -2);
+	writeTitle("General: ", 1,0);
+	writeTitle("Calendar: ", 1, calendarInitY -2);
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
@@ -458,12 +488,14 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 	assert(diduknowBoxList!=NULL);
+
 	int generalTemp = generalEntryList->size() - generalBoxHeight;
 	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
 	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
 	generalInitRowIndex = max(0, generalTemp);
 	calendarInitRowIndex = max(0, calendarTemp);
 	diduknowInitRowIndex = max(0, diduknowTemp);
+	displayMode = DISPLAY_PART;
 
 	mainScreenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
 	traceInput(calendarEntryList, generalEntryList, diduknowBoxList);
