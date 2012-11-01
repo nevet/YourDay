@@ -480,7 +480,7 @@ void LangHandler::setCommand(string userCommand)
 		command = DELETE_COMMAND;
 	}
 	else
-	if ( userCommand == "edit" )
+	if ( userCommand == "update" )
 	{
 		command = EDIT_COMMAND;
 	}
@@ -589,7 +589,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			log.writeCreated("UpdateExecutor");
 			
 			break;
