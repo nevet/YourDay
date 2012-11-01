@@ -252,11 +252,9 @@ void LangHandler::encoder(string input, Signal command)
 			//format will be "index"
 			case DELETE_COMMAND:
 				pos = input.find(SPACE_BAR);
-				
+				index = input.substr(0, pos - 1);
 				if (pos == string::npos)
 				{
-					index = input.substr(0, pos - 1);
-					
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
@@ -270,96 +268,55 @@ void LangHandler::encoder(string input, Signal command)
 				
 				break;
 
-			//format will be "index [date] [time] description [at location] [priority [high, mid, low]]"
+			//format will be "[date] [time] description"
 			case EDIT_COMMAND:
 				pos = input.find(SPACE_BAR);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
 				
-				if (pos == string::npos)
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
 				{
-					throw string ("update format error\n");
-				} else
-				{
-					index = input.substr(0, pos - 1);
+					input = input.substr(pos + 1);
 					
-					if (!isInt(index))
+					pos = input.find(SPACE_BAR);
+					time = input.substr(0, pos);
+
+					if (isTime(time))
 					{
-						index = NULL_STRING;
-						throw string ("Index error\n");
+						input = input.substr(pos + 1);
 					} else
 					{
-						//get rid of index info
-						input = input.substr(pos + 1);
-						
-						//check whether we have priority
-						pos = input.rfind(PRIORITY_INDICATOR);
-						//contains priority info
-						if (pos != string::npos)
-						{
-							priority = input.substr(pos + PRIORITY_INDICATOR.length());
-							//get rid of priority info
-							input = input.substr(0, pos);
-						}
-
-						//check whether we have location
-						pos = input.rfind(LOCATION_INDICATOR);
-						//contains location info
-						if (pos != string::npos)
-						{
-							location = input.substr(pos + LOCATION_INDICATOR.length());
-							//get rid of location info
-							input = input.substr(0, pos);
-						}
-						
-						pos = input.find(SPACE_BAR);
-						
-						if (pos != string::npos)
-						{
-							date = input.substr(0, pos);
-						}
-						
-						//only if date field is not empty
-						if (date != NULL_STRING && isDate(date))
-						{
-							input = input.substr(pos + 1);
-							
-							pos = input.find(SPACE_BAR);
-							time = input.substr(0, pos);
-
-							if (isTime(time))
-							{
-								input = input.substr(pos + 1);
-							} else
-							{
-								time = NULL_STRING;
-							}
-						} else
-						{
-							//it might be a time, so we need to exmaine it
-							time = date;
-							date = NULL_STRING;
-
-							if (time != NULL_STRING && isTime(time))
-							{
-								input = input.substr(pos + 1);
-							} else
-							{
-								time = NULL_STRING;
-							}
-						}
-						
-						description = input;
-						
-						//after have done separating, we need to exmaine each field
-						//to make sure they are logic, if applicable
-						if (date != NULL_STRING && !isLogicDate(date))
-						{
-							throw string ("date error\n");					
-						} else
-						if (time != NULL_STRING && !isLogicTime(time))
-						{
-							throw string ("time error\n");
-						}
+						time = NULL_STRING;
 					}
+				} else
+				{
+					//it might be a time, so we need to exmaine it
+					time = date;
+					date = NULL_STRING;
+
+					if (time != NULL_STRING && isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				}
+				
+				description = input;
+				
+				//after have done separating, we need to exmaine each field
+				//to make sure they are logic, if applicable
+				if (date != NULL_STRING && !isLogicDate(date))
+				{
+					throw string ("date error\n");					
+				} else
+				if (time != NULL_STRING && !isLogicTime(time))
+				{
+					throw string ("time error\n");
 				}
 			
 				break;
@@ -493,8 +450,6 @@ void LangHandler::separate(string userInput) throw (string)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
-	log.writeExecuted("LangHandler::setCommand()");
-	log.writeData("userCommand", userCommand);
 	
 	//if set command fails, no other operation should be entertained
 	if (sh.error(langStatus))
@@ -507,8 +462,6 @@ void LangHandler::separate(string userInput) throw (string)
 		getline(tempHolder, rawString);
 
 		encoder(rawString, command);
-		log.writeExecuted("LangHandler::setCommand()");
-		log.writeData("details", details);
 
 		//if no error threw by encoder, langStatus should be set to SUCCESS
 		if (!sh.error(langStatus))
@@ -535,38 +488,26 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 	{
 		case ADD_COMMAND:
 			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
-			log.writeCreated("AddExecutor");
-			
 			break;
 
 		case DELETE_COMMAND:
 			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details, focusingField);
-			log.writeCreated("DeleteExecutor");
-			
 			break;
 
 		case SEARCH_COMMAND:
 			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
-			log.writeCreated("SearchExecutor");
-			
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
-			log.writeCreated("UpdateExecutor");
-			
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			break;
 
 		case EXIT_COMMAND:
 			exe = new ExitExecutor(generalEntryList, calendarEntryList, store, quit);
-			log.writeCreated("ExitExecutor");
-			
 			break;
 
 		case UNDO_COMMAND:
 			exe = NULL;
-			log.writeCreated("NULL for undo command");
-			
 			break;
 
 		default:
