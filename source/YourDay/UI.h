@@ -10,14 +10,14 @@
 #include <conio.h>
 #include "Signal.h"
 
-#define windowsHeight 25
-#define windowsWidth 80
+#define windowsHeight 50
+#define windowsWidth 100
 #define generalTitleHeight 2
-#define generalBoxHeight 5
-#define calendarTitleHeight 2
+#define generalBoxHeight 10
+#define calendarTitleHeight 3
 #define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) //12
 #define commandBoxHeight 1
-#define bottomBoxHeight 3
+#define bottomBoxHeight 7
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
@@ -51,6 +51,9 @@
 #define ENTER 13
 #define BACKSPACE 8
 
+
+#define maxInputSize 150
+
 using namespace std;
 
 class UI
@@ -60,6 +63,7 @@ private:
 	HANDLE hConsole;
 	string input;
 	Signal focusedField;
+	Signal displayMode;
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
@@ -74,6 +78,7 @@ private:
 
 	void clearCalendarBox();
 
+	void changeDisplayMode();
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
