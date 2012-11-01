@@ -29,6 +29,8 @@ class LangHandler
 private:
 
 	StatusHandler sh;
+	
+	Log log;
 
 	Signal command;
 	Signal langStatus;

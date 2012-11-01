@@ -270,7 +270,7 @@ void LangHandler::encoder(string input, Signal command)
 				
 				break;
 
-			//format will be "index [date] [time] description"
+			//format will be "index [date] [time] description [at location] [priority [high, mid, low]]"
 			case EDIT_COMMAND:
 				pos = input.find(SPACE_BAR);
 				
@@ -287,7 +287,29 @@ void LangHandler::encoder(string input, Signal command)
 						throw string ("Index error\n");
 					} else
 					{
+						//get rid of index info
 						input = input.substr(pos + 1);
+						
+						//check whether we have priority
+						pos = input.rfind(PRIORITY_INDICATOR);
+						//contains priority info
+						if (pos != string::npos)
+						{
+							priority = input.substr(pos + PRIORITY_INDICATOR.length());
+							//get rid of priority info
+							input = input.substr(0, pos);
+						}
+
+						//check whether we have location
+						pos = input.rfind(LOCATION_INDICATOR);
+						//contains location info
+						if (pos != string::npos)
+						{
+							location = input.substr(pos + LOCATION_INDICATOR.length());
+							//get rid of location info
+							input = input.substr(0, pos);
+						}
+						
 						pos = input.find(SPACE_BAR);
 						
 						if (pos != string::npos)
@@ -471,6 +493,8 @@ void LangHandler::separate(string userInput) throw (string)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
+	log.writeExecuted("LangHandler::setCommand()");
+	log.writeData("userCommand", userCommand);
 	
 	//if set command fails, no other operation should be entertained
 	if (sh.error(langStatus))
@@ -483,6 +507,8 @@ void LangHandler::separate(string userInput) throw (string)
 		getline(tempHolder, rawString);
 
 		encoder(rawString, command);
+		log.writeExecuted("LangHandler::setCommand()");
+		log.writeData("details", details);
 
 		//if no error threw by encoder, langStatus should be set to SUCCESS
 		if (!sh.error(langStatus))
@@ -509,26 +535,38 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 	{
 		case ADD_COMMAND:
 			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
+			log.writeCreated("AddExecutor");
+			
 			break;
 
 		case DELETE_COMMAND:
 			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details, focusingField);
+			log.writeCreated("DeleteExecutor");
+			
 			break;
 
 		case SEARCH_COMMAND:
 			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
+			log.writeCreated("SearchExecutor");
+			
 			break;
 
 		case EDIT_COMMAND:
 			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
+			log.writeCreated("UpdateExecutor");
+			
 			break;
 
 		case EXIT_COMMAND:
 			exe = new ExitExecutor(generalEntryList, calendarEntryList, store, quit);
+			log.writeCreated("ExitExecutor");
+			
 			break;
 
 		case UNDO_COMMAND:
 			exe = NULL;
+			log.writeCreated("NULL for undo command");
+			
 			break;
 
 		default:

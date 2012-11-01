@@ -68,7 +68,7 @@ int main(int arg, char** test)
 	log.writeCreated("UI instance created.");
 
 	//terminating indicator, should be false at the beginning
-	bool quit=false;
+	bool quit = false;
 
 	while (!quit)
 	{
