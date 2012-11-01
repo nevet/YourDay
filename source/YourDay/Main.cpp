@@ -98,5 +98,5 @@ int main(int arg, char** test)
 //			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
-	return 0;//EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

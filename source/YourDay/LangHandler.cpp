@@ -6,12 +6,14 @@
     @author a0088455r
     @version 0.1 10/13/2012
 */
+
 #include <sstream>
 #include <string>
 #include <cstring>
 #include <cstdio>
 #include <map>
 #include <ctime>
+#include <cassert>
 
 #include "LangHandler.h"
 
@@ -46,6 +48,7 @@ bool LangHandler::leap(int year)
 
 bool LangHandler::isDate(string date)
 {
+	assert(date!="");
 	int year, month, day;
 
 	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
@@ -53,6 +56,7 @@ bool LangHandler::isDate(string date)
 
 bool LangHandler::isTime(string time)
 {
+	assert(time!="");
 	int h1, h2, m1, m2;
 
 	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4;
@@ -60,6 +64,8 @@ bool LangHandler::isTime(string time)
 
 bool LangHandler::isInt(string inx)
 {
+	assert(inx!="");
+
 	int x;
 
 	return sscanf(inx.c_str(), "%d", &x) == 1;
@@ -67,6 +73,7 @@ bool LangHandler::isInt(string inx)
 
 bool LangHandler::isLogicDate(string date)
 {
+	assert(date!="");
 	int year, month, day;
 
 	bool flag = true;
@@ -104,6 +111,7 @@ bool LangHandler::isLogicDate(string date)
 
 bool LangHandler::isLogicTime(string time)
 {
+	assert(time!="");
 	int h1, h2, m1, m2;
 
 	bool flag = true;
@@ -134,11 +142,13 @@ bool LangHandler::isLogicTime(string time)
 
 bool LangHandler::isLogicPriority(string priority)
 {
+	assert(priority!="");
 	return (priority == "high") || (priority == "mid") || (priority == "low");
 }
 
 void LangHandler::encoder(string input, Signal command)
 {
+	assert(input!="");
 	stringstream tempHolder(input);
 	
 	string date = NULL_STRING;
@@ -272,6 +282,7 @@ void LangHandler::encoder(string input, Signal command)
 
 void LangHandler::setCommand(string userCommand)
 {	
+	assert(userCommand!="");
 	//if user command is valid, set corresponding command type
 	if ( userCommand == "add" )
 	{
@@ -322,6 +333,8 @@ Signal LangHandler::getStatus()
 
 void LangHandler::separate(string userInput) throw (string)
 {
+	assert(userInput!="");
+
 	stringstream tempHolder(userInput);
 
 	string userCommand;
@@ -358,6 +371,11 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
 {
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(store!=NULL);
+
 	Executor* exe;
 	
 	switch (command)

@@ -1,3 +1,5 @@
+#include<cassert>
+
 #include "Executor.h"
 
 Executor::Executor()
@@ -7,6 +9,8 @@ Executor::Executor()
 
 int Executor :: findBlockIndex(string details, int blockLocation)
 {
+	assert(details!="");
+
 	//block counter will be used to count the number of # occurences
 	int blockCounter = 0;
 	int index;
@@ -28,6 +32,8 @@ int Executor :: findBlockIndex(string details, int blockLocation)
 
 string Executor :: extractField(string details, int startLocation)
 {
+	assert(details!="");
+
 	int index = startLocation;
 	string extracted = "";
 	// this loop will extract characters by characters of the field between
@@ -41,6 +47,8 @@ string Executor :: extractField(string details, int startLocation)
 
 int Executor :: extractIndex(string details)
 {
+	assert(details!="");
+
 	string tempIndex = "";
 	int index;
 	int indexLocation;
@@ -52,6 +60,7 @@ int Executor :: extractIndex(string details)
 
 string Executor :: extractDescription(string details)
 {
+	assert(details!="");
 	string tempDescription = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, DESCRIPTION_BLOCK_LOCATION);
@@ -61,6 +70,7 @@ string Executor :: extractDescription(string details)
 
 string Executor :: extractLocation(string details)
 {
+	assert(details!="");
 	string tempLocation = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, LOCATION_BLOCK_LOCATION);
@@ -70,6 +80,7 @@ string Executor :: extractLocation(string details)
 
 string Executor :: extractTime(string details)
 {
+	assert(details!="");
 	string tempTime = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, TIME_BLOCK_LOCATION);
@@ -79,6 +90,7 @@ string Executor :: extractTime(string details)
 
 string Executor :: extractDate(string details)
 {
+	assert(details!="");
 	string tempDate = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, DATE_BLOCK_LOCATION);
@@ -88,6 +100,7 @@ string Executor :: extractDate(string details)
 
 int Executor :: extractPriority(string details)
 {
+	assert(details!="");
 	string tempPriority = "";
 	int priority;
 	int indexLocation;
