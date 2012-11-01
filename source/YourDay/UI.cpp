@@ -103,6 +103,34 @@ void UI::changeDisplayMode()
 	}
 }
 
+void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+{
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
+	switch (focusedField)
+	{
+	case GENERAL:
+		clearBox(generalInitY, generalBoxHeight);
+		generalEntryListDisplay(generalEntryList);
+		drawCommandBox();
+		break;
+	case CALENDAR:
+		clearBox(calendarInitY, calendarBoxHeight);
+		calendarEntryListDisplay(calendarEntryList);
+		drawCommandBox();
+		break;
+	case DIDUKNOW:
+		clearBox(diduknowInitY, bottomBoxHeight);
+		diduknowBoxListDisplay(diduknowBoxList);
+		drawCommandBox();
+		break;
+	default:
+		assert (false);
+	}
+}
+
 void UI::changeFocusedField()
 {
 	switch (focusedField)
@@ -117,7 +145,7 @@ void UI::changeFocusedField()
 		focusedField = GENERAL;
 		break;
 	default:
-		break;
+		assert(true, false);
 	}
 }
 
@@ -158,7 +186,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		}
 		break;
 	default:
-		break;
+		assert (false);
 	}
 }
 
@@ -203,7 +231,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		}
 		break;
 	default:
-		break;
+		assert (false);
 	}
 }
 
@@ -230,6 +258,10 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			case 80:
 				scrollDown(calendarEntryList, generalEntryList, diduknowBoxList);
 				break;
+			case 73:
+				changeDisplayMode();
+				displayNewMode(calendarEntryList, generalEntryList, diduknowBoxList);
+				break;
 			}
 			break;
 		case TAB:
@@ -253,15 +285,19 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
-void UI::displayCalendarString(int index, string row, int rowPosition)
+void UI::displayCalendarString(int index, string row, int& rowPosition)
 {
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
 							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
 	int countPart = 0;
+	bool isOverflow = false;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+
+	gotoxy(locationArray[countPart], rowPosition);
+	cout<<index<<". ";
 
 	for (int i = 1; i<row.size(); i++)
 	{
@@ -273,20 +309,55 @@ void UI::displayCalendarString(int index, string row, int rowPosition)
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
 			gotoxy(locationArray[countPart], rowPosition);
-			countPart++;
 
-			if ((countPart == 1 && maxCharDetailCalendar) || (countPart == 2 && maxCharLocation))
+			switch (displayMode)
 			{
-				cout <<part.substr(0, maxCharDetail) << "...";
+			case DISPLAY_ALL:
+				if (countPart == 1 && part.size() > maxCharDetailCalendar)
+				{
+					cout <<part.substr(0, maxCharDetailCalendar);
+					gotoxy(locationArray[countPart], rowPosition + 1);
+					cout <<part.substr(maxCharDetailCalendar + 1, part.size()-1);
+					isOverflow = true;
+				}
+				else if (countPart == 2 && part.size() > maxCharLocationCalendar)
+				{
+					cout <<part.substr(0, maxCharLocationCalendar);
+					gotoxy(locationArray[countPart], rowPosition + 1);
+					cout <<part.substr(maxCharLocationCalendar + 1, part.size()-1);
+					isOverflow = true;
+				}
+				else
+				{
+					cout << part;
+				}
+
+				break;
+			case DISPLAY_PART:
+				if (countPart == 1 && part.size() > maxCharDetailCalendar -3)
+				{
+					cout <<part.substr(0, maxCharDetailCalendar -3) << "...";
+				}
+				else if (countPart == 2 && part.size() > maxCharLocationCalendar - 3)
+				{
+					cout <<part.substr(0, maxCharLocationCalendar -3) << "...";
+				}
+				else
+				{
+					cout << part;
+				}
+				break;
 			}
-			else
-			{
-				cout << part;
-			}
+			countPart ++;
 			part = "";
 		}
 		
 	}
+	if (isOverflow)
+	{
+		rowPosition ++;
+	}
+
 	cout<<endl;
 }
 
@@ -343,7 +414,8 @@ void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 
 	if (row[0] == '#' && row[1] == '#')		//for search result, the index of result in the entry list is added to result string,
 	{										//so don't need to display index in the diduknowBoxList
-		cout<<" "<<index<<". ";
+		gotoxy(locationArray[countPart], rowIndex);
+		cout<<index<<". ";
 	}
 
 	for (int i = 1; i<row.size(); i++)
@@ -358,13 +430,13 @@ void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 			gotoxy(locationArray[countPart], rowIndex);
 			countPart++;
 
-			if (countPart != 2 || part.size() <= maxCharDetail)
+			if (countPart != 2 || part.size() <= maxCharDetailCalendar - 3)
 			{
 				cout <<  part;
 			}
 			else
 			{
-				cout <<part.substr(0, maxCharDetail) << "...";
+				cout <<part.substr(0, maxCharDetailCalendar - 3) << "...";
 			}
 			part = "";
 		}
@@ -401,19 +473,21 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	assert(calendarEntryList!=NULL);
 
 	int sizeOfCalendar;
-	int terminateIndex;
-	int countRow = 0;
+	int entryIndex;
+	int rowPosition;
 	string row;
 
 	gotoxy(calendarInitX, calendarInitY);
 	sizeOfCalendar=calendarEntryList->size();
-	terminateIndex = min (sizeOfCalendar, calendarInitRowIndex + calendarBoxHeight);
+	entryIndex = calendarInitRowIndex;
+	rowPosition = calendarInitY;
 
-	for (int i = calendarInitRowIndex; i< terminateIndex; i++)
+	while (rowPosition < commandInitY && entryIndex <sizeOfCalendar)
 	{
-		row = calendarEntryList ->at(i);
-		coloredDisplayFormattedString(i+1, row, calendarInitY + countRow);
-		countRow++;
+		row = calendarEntryList ->at(entryIndex);
+		displayCalendarString(entryIndex + 1, row, rowPosition);
+		entryIndex ++;
+		rowPosition ++;
 	}
 }
 
@@ -495,7 +569,7 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 	generalInitRowIndex = max(0, generalTemp);
 	calendarInitRowIndex = max(0, calendarTemp);
 	diduknowInitRowIndex = max(0, diduknowTemp);
-	displayMode = DISPLAY_PART;
+	displayMode = DISPLAY_ALL;
 
 	mainScreenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
 	traceInput(calendarEntryList, generalEntryList, diduknowBoxList);

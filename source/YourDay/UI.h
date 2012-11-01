@@ -29,15 +29,15 @@
 #define diduknowInitX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
-#define calendarIndexInitX 1
-#define calendarDescriptionInitX 4
+#define calendarIndexInitX 2
+#define calendarDescriptionInitX 5
 #define calendarLocationInitX (windowsWidth - 40 - 10)
-#define calendarTimeInitX 40
-#define calendarDateInitX 55
-#define calendarPriorityInitX 70
+#define calendarTimeInitX 65
+#define calendarDateInitX 80
+#define calendarPriorityInitX 95
 
-#define maxCharLocation 10
-#define maxCharDetailCalendar 12
+#define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX)
+#define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX)
 #define maxCharDetail 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
@@ -50,7 +50,6 @@
 #define TAB 9
 #define ENTER 13
 #define BACKSPACE 8
-
 
 #define maxInputSize 150
 
@@ -79,14 +78,16 @@ private:
 	void clearCalendarBox();
 
 	void changeDisplayMode();
+	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 
-	void displayCalendarString(int index, string row, int rowPosition);
-	void displayGeneralString();
+	void displayCalendarString(int index, string row, int &rowPosition);
+	void displayGeneralString(int index, string row, int &rowPosition);
 	void coloredDisplayFormattedString(int,string, int);
+
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
