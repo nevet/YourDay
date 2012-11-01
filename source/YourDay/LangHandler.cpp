@@ -499,7 +499,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			break;
 
 		case EXIT_COMMAND:
