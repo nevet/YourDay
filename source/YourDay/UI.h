@@ -29,13 +29,15 @@
 #define diduknowInitX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
-#define indexInitX 1
-#define descriptionInitX 4
-#define locationInitX (windowsWidth - 40 - 10)
-#define timeInitX 40
-#define dateInitX 55
-#define priorityInitX 70
+#define calendarIndexInitX 1
+#define calendarDescriptionInitX 4
+#define calendarLocationInitX (windowsWidth - 40 - 10)
+#define calendarTimeInitX 40
+#define calendarDateInitX 55
+#define calendarPriorityInitX 70
 
+#define maxCharLocation 10
+#define maxCharDetailCalendar 12
 #define maxCharDetail 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
@@ -77,6 +79,8 @@ private:
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 
+	void displayCalendarString(int index, string row, int rowPosition);
+	void displayGeneralString();
 	void coloredDisplayFormattedString(int,string, int);
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);

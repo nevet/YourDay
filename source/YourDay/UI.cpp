@@ -225,6 +225,80 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
+void UI::displayCalendarString(int index, string row, int rowPosition)
+{
+	string part = "";
+	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
+	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
+							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
+	int countPart = 0;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+
+	for (int i = 1; i<row.size(); i++)
+	{
+		if (row[i] != '#' )
+		{
+			part += row[i];
+		}
+		else
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+			gotoxy(locationArray[countPart], rowPosition);
+			countPart++;
+
+			if ((countPart == 1 && maxCharDetailCalendar) || (countPart == 2 && maxCharLocation))
+			{
+				cout <<part.substr(0, maxCharDetail) << "...";
+			}
+			else
+			{
+				cout << part;
+			}
+			part = "";
+		}
+		
+	}
+	cout<<endl;
+}
+
+void UI::displayGeneralString(/*int index, string row, int rowPosition*/)
+{/*
+	string part = "";
+	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
+	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
+							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
+	int countPart = 0;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+
+	for (int i = 1; i<row.size(); i++)
+	{
+		if (row[i] != '#' )
+		{
+			part += row[i];
+		}
+		else
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+			gotoxy(locationArray[countPart], rowPosition);
+			countPart++;
+
+			if ((countPart == 1 && maxCharDetailCalendar) || (countPart == 2 && maxCharLocation))
+			{
+				cout <<part.substr(0, maxCharDetail) << "...";
+			}
+			else
+			{
+				cout << part;
+			}
+			part = "";
+		}
+		
+	}
+	cout<<endl;*/
+}
+
 void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 {	
 	assert(index!=NULL);
@@ -233,7 +307,8 @@ void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {indexInitX, descriptionInitX, locationInitX, timeInitX, dateInitX, priorityInitX};
+	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
+							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
 	int countPart = 0;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
