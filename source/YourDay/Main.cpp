@@ -23,8 +23,6 @@
 *		positive integer
 * priority:
 *		can only be one of {high, mid, low}
-*
-* @author a00194847U
 */
 
 #include <iostream>
@@ -60,8 +58,14 @@ int main(int arg, char** test)
 	//recording did-u-know box entries
 	vector<string> diduknowBoxList;
 	
+	//create a logger
+	Log log;
+	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
+	log.writeCreated("FunctionHandler instance");
+	
 	UI ui;
+	log.writeCreated("UI instance created.");
 
 	//terminating indicator, should be false at the beginning
 	bool quit=false;
@@ -71,35 +75,28 @@ int main(int arg, char** test)
 		try
 		{
 			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
+			log.writeRetrieved("User Input");
+			log.writeData("User Input", userInput);
+			
 			Signal focusingField = ui.retrieveFocusedField();
+			log.writeRetrieved("Focus Field");
+			log.writeData("Focus Field", focusingField);
 			
 			function.execute(userInput, &quit, focusingField,
 							 &generalEntryList,
 							 &calendarEntryList,
 							 &diduknowBoxList);
+			log.writeExecuted("FunctionHandler::execute()");
 
 			Signal signal = function.getStatus();
-
-			//display updated entries
-/*			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList);
-			if(diduknowBoxList.size() == 0)
-			{
-				ui.diduknowBoxListDisplay(signal);
-			}
-			else
-			{
-				ui.diduknowBoxListDisplay(&diduknowBoxList);
-			}
-
-			//after one iteration, status of function handler should be cleared
-			function.clearStatus();
-*/		}
+		}
 		catch (string excpt)
 		{
-//			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
+	
 	return EXIT_SUCCESS;
 }
