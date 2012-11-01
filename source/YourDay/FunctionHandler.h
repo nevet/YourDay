@@ -22,10 +22,7 @@
 class FunctionHandler
 {
 private:
-
 	StatusHandler sh;
-	
-	Log log;
 
 	Signal fxStatus;
 	//will be constructed when FunctionHandler constructed
