@@ -1,0 +1,5 @@
+##We need adjust the UI for each field#####
+##Also need to consider the situation when there are 10 more General Entry List situation #####
+##and the situation when the input line is too long#####
+##What if I add one more line then#####
+##WE really need to sort it by#####
