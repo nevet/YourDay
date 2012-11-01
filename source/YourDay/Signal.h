@@ -7,8 +7,12 @@ enum Signal
 	SUCCESS = 0x10000000,
 	ERR		= 0x01000000,
 	FAIL    = 0x00100000,
-	ASK		= 0x00010000,
+	DISPLAY		= 0x00010000,
 	CLEAR	= 0x00000000,
+
+	GENERAL = DISPLAY | 0x00000001,
+	CALENDAR = DISPLAY | 0x00000002,
+	DIDUKNOW = DISPLAY | 0x00000003,
 
 //@author a0088455r
 //for interpreting commands that is sent drom language handler
