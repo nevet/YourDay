@@ -252,11 +252,9 @@ void LangHandler::encoder(string input, Signal command)
 			//format will be "index"
 			case DELETE_COMMAND:
 				pos = input.find(SPACE_BAR);
-				
+				index = input.substr(0, pos - 1);
 				if (pos == string::npos)
 				{
-					index = input.substr(0, pos - 1);
-					
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
@@ -270,74 +268,55 @@ void LangHandler::encoder(string input, Signal command)
 				
 				break;
 
-			//format will be "index [date] [time] description"
+			//format will be "[date] [time] description"
 			case EDIT_COMMAND:
 				pos = input.find(SPACE_BAR);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
 				
-				if (pos == string::npos)
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
 				{
-					throw string ("update format error\n");
-				} else
-				{
-					index = input.substr(0, pos - 1);
+					input = input.substr(pos + 1);
 					
-					if (!isInt(index))
-					{
-						index = NULL_STRING;
-						throw string ("Index error\n");
-					} else
+					pos = input.find(SPACE_BAR);
+					time = input.substr(0, pos);
+
+					if (isTime(time))
 					{
 						input = input.substr(pos + 1);
-						pos = input.find(SPACE_BAR);
-						
-						if (pos != string::npos)
-						{
-							date = input.substr(0, pos);
-						}
-						
-						//only if date field is not empty
-						if (date != NULL_STRING && isDate(date))
-						{
-							input = input.substr(pos + 1);
-							
-							pos = input.find(SPACE_BAR);
-							time = input.substr(0, pos);
-
-							if (isTime(time))
-							{
-								input = input.substr(pos + 1);
-							} else
-							{
-								time = NULL_STRING;
-							}
-						} else
-						{
-							//it might be a time, so we need to exmaine it
-							time = date;
-							date = NULL_STRING;
-
-							if (time != NULL_STRING && isTime(time))
-							{
-								input = input.substr(pos + 1);
-							} else
-							{
-								time = NULL_STRING;
-							}
-						}
-						
-						description = input;
-						
-						//after have done separating, we need to exmaine each field
-						//to make sure they are logic, if applicable
-						if (date != NULL_STRING && !isLogicDate(date))
-						{
-							throw string ("date error\n");					
-						} else
-						if (time != NULL_STRING && !isLogicTime(time))
-						{
-							throw string ("time error\n");
-						}
+					} else
+					{
+						time = NULL_STRING;
 					}
+				} else
+				{
+					//it might be a time, so we need to exmaine it
+					time = date;
+					date = NULL_STRING;
+
+					if (time != NULL_STRING && isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				}
+				
+				description = input;
+				
+				//after have done separating, we need to exmaine each field
+				//to make sure they are logic, if applicable
+				if (date != NULL_STRING && !isLogicDate(date))
+				{
+					throw string ("date error\n");					
+				} else
+				if (time != NULL_STRING && !isLogicTime(time))
+				{
+					throw string ("time error\n");
 				}
 			
 				break;
@@ -520,7 +499,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			break;
 
 		case EXIT_COMMAND:
