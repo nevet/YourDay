@@ -317,14 +317,14 @@ void UI::displayCalendarString(int index, string row, int& rowPosition)
 				{
 					cout <<part.substr(0, maxCharDetailCalendar);
 					gotoxy(locationArray[countPart], rowPosition + 1);
-					cout <<part.substr(maxCharDetailCalendar + 1, part.size()-1);
+					cout <<part.substr(maxCharDetailCalendar, part.size());
 					isOverflow = true;
 				}
 				else if (countPart == 2 && part.size() > maxCharLocationCalendar)
 				{
 					cout <<part.substr(0, maxCharLocationCalendar);
 					gotoxy(locationArray[countPart], rowPosition + 1);
-					cout <<part.substr(maxCharLocationCalendar + 1, part.size()-1);
+					cout <<part.substr(maxCharLocationCalendar, part.size());
 					isOverflow = true;
 				}
 				else
@@ -361,15 +361,18 @@ void UI::displayCalendarString(int index, string row, int& rowPosition)
 	cout<<endl;
 }
 
-void UI::displayGeneralString(/*int index, string row, int rowPosition*/)
-{/*
-	string part = "";
+void UI::displayGeneralString(int index, string row, int &rowPosition)
+{	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
-							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
+	int locationArray[6] = {generalIndexInitX, generalDescriptionInitX, generalLocationInitX,
+							generalTimeInitX, generalDateInitX, generalPriorityInitX};
 	int countPart = 0;
+	bool isOverflow = false;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+
+	gotoxy(locationArray[countPart], rowPosition);
+	cout<<index<<". ";
 
 	for (int i = 1; i<row.size(); i++)
 	{
@@ -381,21 +384,56 @@ void UI::displayGeneralString(/*int index, string row, int rowPosition*/)
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
 			gotoxy(locationArray[countPart], rowPosition);
-			countPart++;
 
-			if ((countPart == 1 && maxCharDetailCalendar) || (countPart == 2 && maxCharLocation))
+			switch (displayMode)
 			{
-				cout <<part.substr(0, maxCharDetail) << "...";
+			case DISPLAY_ALL:
+				if (countPart == 1 && part.size() > maxCharDetailGeneral)
+				{
+					cout <<part.substr(0, maxCharDetailGeneral);
+					gotoxy(locationArray[countPart], rowPosition + 1);
+					cout <<part.substr(maxCharDetailGeneral, part.size());
+					isOverflow = true;
+				}
+				else if (countPart == 2 && part.size() > maxCharLocationGeneral)
+				{
+					cout <<part.substr(0, maxCharLocationGeneral);
+					gotoxy(locationArray[countPart], rowPosition + 1);
+					cout <<part.substr(maxCharLocationGeneral, part.size());
+					isOverflow = true;
+				}
+				else
+				{
+					cout << part;
+				}
+
+				break;
+			case DISPLAY_PART:
+				if (countPart == 1 && part.size() > maxCharDetailGeneral -3)
+				{
+					cout <<part.substr(0, maxCharDetailGeneral -3) << "...";
+				}
+				else if (countPart == 2 && part.size() > maxCharLocationGeneral - 3)
+				{
+					cout <<part.substr(0, maxCharLocationGeneral -3) << "...";
+				}
+				else
+				{
+					cout << part;
+				}
+				break;
 			}
-			else
-			{
-				cout << part;
-			}
+			countPart ++;
 			part = "";
 		}
 		
 	}
-	cout<<endl;*/
+	if (isOverflow)
+	{
+		rowPosition ++;
+	}
+
+	cout<<endl;
 }
 
 void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
@@ -451,20 +489,21 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	assert(generalEntryList!=NULL);
 
 	int sizeOfGeneral;
-	int terminateIndex;
-	int countRow = 0;
+	int entryIndex;
+	int rowPosition;
 	string row;
 
 	gotoxy(generalInitX, generalInitY);
 	sizeOfGeneral=generalEntryList->size();
-	
-	terminateIndex = min (sizeOfGeneral, generalInitRowIndex + generalBoxHeight);
-	
-	for (int i = generalInitRowIndex; i< terminateIndex; i++)
+	entryIndex = generalInitRowIndex;
+	rowPosition = generalInitY;
+
+	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral)
 	{
-		row = generalEntryList ->at(i);
-		coloredDisplayFormattedString(i+1, row, generalInitY + countRow);
-		countRow ++;
+		row = generalEntryList ->at(entryIndex);
+		displayGeneralString(entryIndex + 1, row, rowPosition);
+		entryIndex ++;
+		rowPosition ++;
 	}
 }
 

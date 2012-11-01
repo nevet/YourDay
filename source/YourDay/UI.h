@@ -13,9 +13,9 @@
 #define windowsHeight 50
 #define windowsWidth 100
 #define generalTitleHeight 2
-#define generalBoxHeight 10
+#define generalBoxHeight 15
 #define calendarTitleHeight 3
-#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) //12
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) 
 #define commandBoxHeight 1
 #define bottomBoxHeight 7
 
@@ -31,13 +31,23 @@
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define calendarIndexInitX 2
 #define calendarDescriptionInitX 5
-#define calendarLocationInitX (windowsWidth - 40 - 10)
+#define calendarLocationInitX (calendarTimeInitX - 10)
 #define calendarTimeInitX 65
 #define calendarDateInitX 80
 #define calendarPriorityInitX 95
 
-#define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX)
-#define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX)
+#define generalIndexInitX 2
+#define generalDescriptionInitX 5
+#define generalLocationInitX (generalTimeInitX- 10)
+#define generalTimeInitX 95
+#define generalDateInitX 95
+#define generalPriorityInitX 95
+
+#define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
+#define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)
+#define maxCharLocationGeneral (generalTimeInitX - generalLocationInitX -1)
+#define maxCharDetailGeneral (generalLocationInitX - generalDescriptionInitX -1)
+
 #define maxCharDetail 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
