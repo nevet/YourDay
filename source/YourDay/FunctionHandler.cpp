@@ -37,7 +37,7 @@ void FunctionHandler::clearStatus()
 	fxStatus = CLEAR;
 }
 
-void FunctionHandler::execute(string input, bool* quit,
+void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
 							  vector<string>* diduknowBoxList) throw (string)
@@ -59,7 +59,7 @@ void FunctionHandler::execute(string input, bool* quit,
 		lang.separate(input);
 
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, generalEntryList, calendarEntryList, diduknowBoxList, &store);
+		exe = lang.pack(quit, focusingField, generalEntryList, calendarEntryList, diduknowBoxList, &store);
 
 		//exe is NULL means undo command encountered
 		if (exe != NULL)

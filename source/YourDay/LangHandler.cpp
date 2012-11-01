@@ -422,7 +422,8 @@ void LangHandler::separate(string userInput) throw (string)
 	}
 }
 
-Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+Executor* LangHandler::pack(bool* quit, Signal focusingField,
+										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
@@ -441,7 +442,7 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 			break;
 
 		case DELETE_COMMAND:
-			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details);
+			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			break;
 
 		case SEARCH_COMMAND:

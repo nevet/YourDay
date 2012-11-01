@@ -71,8 +71,11 @@ int main(int arg, char** test)
 		try
 		{
 			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			
 			string userInput = ui.retrieveInput();
-			function.execute(userInput, &quit,
+			Signal focusingField = ui.retrieveFocusedField();
+			
+			function.execute(userInput, &quit, focusingField,
 							 &generalEntryList,
 							 &calendarEntryList,
 							 &diduknowBoxList);
