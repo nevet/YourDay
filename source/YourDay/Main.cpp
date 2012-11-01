@@ -58,14 +58,14 @@ int main(int arg, char** test)
 	//recording did-u-know box entries
 	vector<string> diduknowBoxList;
 	
-	//create a logger
-	Log log;
+	//create a //logger
+	//Log //log;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
-	log.writeCreated("FunctionHandler instance");
+	//log.writeCreated("FunctionHandler instance");
 	
 	UI ui;
-	log.writeCreated("UI instance created.");
+	//log.writeCreated("UI instance created.");
 
 	//terminating indicator, should be false at the beginning
 	bool quit = false;
@@ -75,21 +75,21 @@ int main(int arg, char** test)
 		try
 		{
 			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
-			log.writeCreated("UI interface");
+			//log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
-			log.writeRetrieved("User Input");
-			log.writeData("User Input", userInput);
+			//log.writeRetrieved("User Input");
+			//log.writeData("User Input", userInput);
 			
 			Signal focusingField = ui.retrieveFocusedField();
-			log.writeRetrieved("Focus Field");
-			log.writeData("Focus Field", focusingField);
+			//log.writeRetrieved("Focus Field");
+			//log.writeData("Focus Field", focusingField);
 			
 			function.execute(userInput, &quit, focusingField,
 							 &generalEntryList,
 							 &calendarEntryList,
 							 &diduknowBoxList);
-			log.writeExecuted("FunctionHandler::execute()");
+			//log.writeExecuted("FunctionHandler::execute()");
 
 			Signal signal = function.getStatus();
 		}
