@@ -15,7 +15,7 @@
 #define generalTitleHeight 2
 #define generalBoxHeight 5
 #define calendarTitleHeight 2
-#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight)
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) //12
 #define commandBoxHeight 1
 #define bottomBoxHeight 3
 
@@ -27,6 +27,14 @@
 #define commandInitX 0
 #define diduknowInitY (calendarInitY + calendarBoxHeight + commandBoxHeight)
 #define diduknowInitX 0
+
+//INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
+#define indexInitX 1
+#define descriptionInitX 4
+#define locationInitX (windowsWidth - 40 - 10)
+#define timeInitX 40
+#define dateInitX 55
+#define priorityInitX 70
 
 #define maxCharDetail 12
 
@@ -47,14 +55,9 @@ class UI
 {
 private:
 
-	enum MainFields
-	{
-		GENERAL, CALENDAR, DIDUKNOW
-	};
-
 	HANDLE hConsole;
 	string input;
-	MainFields focusedField;
+	Signal focusedField;
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
@@ -67,12 +70,14 @@ private:
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 
+	void clearCalendarBox();
+
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 
-	void coloredDisplayFormattedString(int,string);
+	void coloredDisplayFormattedString(int,string, int);
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
@@ -83,6 +88,7 @@ public:
 
 	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	string retrieveInput();
+	Signal retrieveFocusedField();
 
 	~UI();
 };

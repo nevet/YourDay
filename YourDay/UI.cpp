@@ -3,11 +3,11 @@
 void UI::setScreenSize()
 {
 	hConsole=GetStdHandle(STD_OUTPUT_HANDLE);
-	//SMALL_RECT windowSize = {5, 5,windowsHeight, windowsWidth};
+	SMALL_RECT windowSize = {5, 5,windowsHeight, windowsWidth};
 
 	COORD buffer={0,0};
 	SetConsoleScreenBufferSize(hConsole,buffer);
-//	SetConsoleWindowInfo(hconsole, TRUE, &windowSize);
+	SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
 }
 
 void UI::drawBanner()
@@ -65,6 +65,13 @@ void UI::writeTitle(string words, int startX, int startY)
 	cout<<words<<endl;
 }
 
+void UI::clearCalendarBox()
+{
+	setBackground();
+	gotoxy(0, calendarInitY);
+	cout << "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                " << endl;
+	gotoxy(0,calendarInitY);
+}
 
 void UI::changeFocusedField()
 {
@@ -101,7 +108,8 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex --;
-			clearBox(calendarInitY, calendarBoxHeight);
+//			clearBox(calendarInitY, calendarBoxHeight);
+			clearCalendarBox();
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
 		}
@@ -141,7 +149,8 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (calendarInitRowIndex < calendarSize -1)
 		{
 			calendarInitRowIndex ++;
-			clearBox(calendarInitY, calendarBoxHeight);
+//			clearBox(calendarInitY, calendarBoxHeight);
+			clearCalendarBox();
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
 		}
@@ -202,12 +211,14 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
-void UI::coloredDisplayFormattedString(int index, string row)
+void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 {
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int countColor = 0;
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
+	int locationArray[6] = {indexInitX, descriptionInitX, locationInitX, timeInitX, dateInitX, priorityInitX};
+	int countPart = 0;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
 
 	if (row[0] == '#' && row[1] == '#')		//for search result, the index of result in the entry list is added to result string,
 	{										//so don't need to display index in the diduknowBoxList
@@ -222,21 +233,19 @@ void UI::coloredDisplayFormattedString(int index, string row)
 		}
 		else
 		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countColor]);
-			countColor++;
-			if (countColor != 2 || part.size() <= maxCharDetail)
-				{
-					cout <<  part;
-				}
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
+			gotoxy(locationArray[countPart], rowIndex);
+			countPart++;
+
+			if (countPart != 2 || part.size() <= maxCharDetail)
+			{
+				cout <<  part;
+			}
 			else
 			{
 				cout <<part.substr(0, maxCharDetail) << "...";
 			}
 			part = "";
-			if ((i !=row.size()-1)&&(i != 1))
-			{
-				cout << "\t";
-			}
 		}
 		
 	}
@@ -248,6 +257,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {
 	int sizeOfGeneral;
 	int terminateIndex;
+	int countRow = 0;
 	string row;
 
 	gotoxy(generalInitX, generalInitY);
@@ -258,7 +268,8 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	for (int i = generalInitRowIndex; i< terminateIndex; i++)
 	{
 		row = generalEntryList ->at(i);
-		coloredDisplayFormattedString(i+1, row);
+		coloredDisplayFormattedString(i+1, row, generalInitY + countRow);
+		countRow ++;
 	}
 }
 
@@ -266,6 +277,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 {
 	int sizeOfCalendar;
 	int terminateIndex;
+	int countRow = 0;
 	string row;
 
 	gotoxy(calendarInitX, calendarInitY);
@@ -275,7 +287,8 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	for (int i = calendarInitRowIndex; i< terminateIndex; i++)
 	{
 		row = calendarEntryList ->at(i);
-		coloredDisplayFormattedString(i+1, row);
+		coloredDisplayFormattedString(i+1, row, calendarInitY + countRow);
+		countRow++;
 	}
 }
 
@@ -283,6 +296,7 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList)
 {
 	int sizeOfDiduknow;
 	int terminateIndex;
+	int countRow = 0;
 	string row;
 
 	gotoxy(diduknowInitX, diduknowInitY);
@@ -292,7 +306,8 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList)
 	for (int i = diduknowInitRowIndex; i< terminateIndex; i++)
 	{
 		row = diduknowBoxList ->at(i);
-		coloredDisplayFormattedString(i+1, row);
+		coloredDisplayFormattedString(i+1, row, diduknowInitY + countRow);
+		countRow++;
 	}
 }
 
@@ -300,6 +315,8 @@ void UI::startingScreenDisplay()
 {
 	system("CLS");
 	
+	setScreenSize();
+
 	drawBanner();
 	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
 	cout<<"--------------------------------------------------------------------------------";
@@ -350,6 +367,11 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 string UI::retrieveInput()
 {
 	return input;
+}
+
+Signal UI::retrieveFocusedField()
+{
+	return focusedField;
 }
 
 UI::~UI()
