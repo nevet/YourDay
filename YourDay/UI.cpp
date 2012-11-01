@@ -71,24 +71,16 @@ void UI::changeFocusedField()
 	switch (focusedField)
 	{
 	case GENERAL:
-		{
-			focusedField = CALENDAR;
-			break;
-		}
+		focusedField = CALENDAR;
+		break;
 	case CALENDAR:
-		{
-			focusedField = DIDUKNOW;
-			break;
-		}
+		focusedField = DIDUKNOW;
+		break;
 	case DIDUKNOW:
-		{
-			focusedField = GENERAL;
-			break;
-		}
+		focusedField = GENERAL;
+		break;
 	default:
-		{
-			break;
-		}
+		break;
 	}
 }
 
@@ -97,42 +89,34 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	switch (focusedField)
 	{
 	case GENERAL:
+		if (generalInitRowIndex > 0)
 		{
-			if (generalInitRowIndex > 0)
-			{
-				generalInitRowIndex --;
-				clearBox(generalInitY, generalBoxHeight);
-				generalEntryListDisplay(generalEntryList);
-				drawCommandBox();
-			}
-			break;
+			generalInitRowIndex --;
+			clearBox(generalInitY, generalBoxHeight);
+			generalEntryListDisplay(generalEntryList);
+			drawCommandBox();
 		}
+		break;
 	case CALENDAR:
+		if (calendarInitRowIndex > 0)
 		{
-			if (calendarInitRowIndex > 0)
-			{
-				calendarInitRowIndex --;
-				clearBox(calendarInitY, calendarBoxHeight);
-				calendarEntryListDisplay(calendarEntryList);
-				drawCommandBox();
-			}
-			break;
+			calendarInitRowIndex --;
+			clearBox(calendarInitY, calendarBoxHeight);
+			calendarEntryListDisplay(calendarEntryList);
+			drawCommandBox();
 		}
+		break;
 	case DIDUKNOW:
+		if (diduknowInitRowIndex > 0)
 		{
-			if (diduknowInitRowIndex > 0)
-			{
-				diduknowInitRowIndex --;
-				clearBox(diduknowInitY, bottomBoxHeight);
-				diduknowBoxListDisplay(diduknowBoxList);
-				drawCommandBox();
-			}
-			break;
+			diduknowInitRowIndex --;
+			clearBox(diduknowInitY, bottomBoxHeight);
+			diduknowBoxListDisplay(diduknowBoxList);
+			drawCommandBox();
 		}
+		break;
 	default:
-		{
-			break;
-		}
+		break;
 	}
 }
 
@@ -145,89 +129,75 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 	switch (focusedField)
 	{
 	case GENERAL:
+		if (generalInitRowIndex < generalSize -1)
 		{
-			if (generalInitRowIndex < generalSize -1)
-			{
-				generalInitRowIndex ++;
-				clearBox(generalInitY, generalBoxHeight);
-				generalEntryListDisplay(generalEntryList);
-				drawCommandBox();
-			}
-			break;
+			generalInitRowIndex ++;
+			clearBox(generalInitY, generalBoxHeight);
+			generalEntryListDisplay(generalEntryList);
+			drawCommandBox();
 		}
+		break;
 	case CALENDAR:
+		if (calendarInitRowIndex < calendarSize -1)
 		{
-			if (calendarInitRowIndex < calendarSize -1)
-			{
-				calendarInitRowIndex ++;
-				clearBox(calendarInitY, calendarBoxHeight);
-				calendarEntryListDisplay(calendarEntryList);
-				drawCommandBox();
-			}
-			break;
+			calendarInitRowIndex ++;
+			clearBox(calendarInitY, calendarBoxHeight);
+			calendarEntryListDisplay(calendarEntryList);
+			drawCommandBox();
 		}
+		break;
 	case DIDUKNOW:
+		if (diduknowInitRowIndex < diduknowSize -1)
 		{
-			if (diduknowInitRowIndex < diduknowSize -1)
-			{
-				diduknowInitRowIndex ++;
-				clearBox(diduknowInitY, bottomBoxHeight);
-				diduknowBoxListDisplay(diduknowBoxList);
-				drawCommandBox();
-			}
-			break;
+			diduknowInitRowIndex ++;
+			clearBox(diduknowInitY, bottomBoxHeight);
+			diduknowBoxListDisplay(diduknowBoxList);
+			drawCommandBox();
 		}
+		break;
 	default:
-		{
-			break;
-		}
+		break;
 	}
 }
 
 void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
 {
-	char keyIn = 0;
+	char keyIn;
 	input = "";
 
-	while (keyIn != ENTER)
+	while ((keyIn = getch()) != ENTER)
 	{
-		keyIn = getch();
-
 		switch (keyIn)
 		{
-		case UP_ARROW:
+		case -32:
+			keyIn = getch();
+			switch (keyIn)
 			{
+			case 72:
 				scrollUp(calendarEntryList, generalEntryList, diduknowBoxList);
 				break;
-			}
-		case DOWN_ARROW:
-			{
+			case 80:
 				scrollDown(calendarEntryList, generalEntryList, diduknowBoxList);
 				break;
 			}
+			break;
 		case TAB:
-			{
-				changeFocusedField();
-				break;
-			}
+			changeFocusedField();
+			break;
 		case BACKSPACE:
+			if (input.size()>0)
 			{
-				if (input.size()>0)
-				{
-					input = input.substr(0, input.size()-1);
-					cout << "\b \b";
-				}
-				break;
+				input = input.substr(0, input.size()-1);
+				cout << "\b \b";
 			}
+			break;
 		default:
+			if (keyIn != ENTER)
 			{
-				if (keyIn != ENTER)
-				{
-					cout << keyIn;
-					input += keyIn;
-				}
-				break;
+				cout << keyIn;
+				input += keyIn;
 			}
+			break;
 		}
 	}
 }
