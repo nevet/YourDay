@@ -10,14 +10,14 @@
 #include <conio.h>
 #include "Signal.h"
 
-#define windowsHeight 25
-#define windowsWidth 80
+#define windowsHeight 50
+#define windowsWidth 100
 #define generalTitleHeight 2
-#define generalBoxHeight 5
-#define calendarTitleHeight 2
-#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) //12
+#define generalBoxHeight 15
+#define calendarTitleHeight 3
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) 
 #define commandBoxHeight 1
-#define bottomBoxHeight 3
+#define bottomBoxHeight 7
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
@@ -29,12 +29,24 @@
 #define diduknowInitX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
-#define indexInitX 1
-#define descriptionInitX 4
-#define locationInitX (windowsWidth - 40 - 10)
-#define timeInitX 40
-#define dateInitX 55
-#define priorityInitX 70
+#define calendarIndexInitX 2
+#define calendarDescriptionInitX 5
+#define calendarLocationInitX (calendarTimeInitX - 10)
+#define calendarTimeInitX 65
+#define calendarDateInitX 80
+#define calendarPriorityInitX 95
+
+#define generalIndexInitX 2
+#define generalDescriptionInitX 5
+#define generalLocationInitX (generalTimeInitX- 10)
+#define generalTimeInitX 95
+#define generalDateInitX 95
+#define generalPriorityInitX 95
+
+#define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
+#define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)
+#define maxCharLocationGeneral (generalTimeInitX - generalLocationInitX -1)
+#define maxCharDetailGeneral (generalLocationInitX - generalDescriptionInitX -1)
 
 #define maxCharDetail 12
 
@@ -49,6 +61,8 @@
 #define ENTER 13
 #define BACKSPACE 8
 
+#define maxInputSize 150
+
 using namespace std;
 
 class UI
@@ -58,6 +72,7 @@ private:
 	HANDLE hConsole;
 	string input;
 	Signal focusedField;
+	Signal displayMode;
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
@@ -72,12 +87,17 @@ private:
 
 	void clearCalendarBox();
 
+	void changeDisplayMode();
+	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 
+	void displayCalendarString(int index, string row, int &rowPosition);
+	void displayGeneralString(int index, string row, int &rowPosition);
 	void coloredDisplayFormattedString(int,string, int);
+
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);

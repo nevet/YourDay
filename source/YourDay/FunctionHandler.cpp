@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "FunctionHandler.h"
 
 using namespace std;
@@ -5,7 +7,11 @@ using namespace std;
 FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 								 vector<string>* calendarEntryList,
 								 vector<string>* diduknowBoxList) 
-{
+{	
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(diduknowBoxList!=NULL);
+
 	//set default value for function handler status
 	fxStatus = CLEAR;
 	
@@ -31,11 +37,15 @@ void FunctionHandler::clearStatus()
 	fxStatus = CLEAR;
 }
 
-void FunctionHandler::execute(string input, bool* quit,
+void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
 							  vector<string>* diduknowBoxList) throw (string)
 {
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(diduknowBoxList!=NULL);
+
 	LangHandler lang;
 	//Executor pointer to handle dynamic binding
 	Executor* exe;
@@ -49,7 +59,7 @@ void FunctionHandler::execute(string input, bool* quit,
 		lang.separate(input);
 
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, generalEntryList, calendarEntryList, diduknowBoxList, &store);
+		exe = lang.pack(quit, focusingField, generalEntryList, calendarEntryList, diduknowBoxList, &store);
 
 		//exe is NULL means undo command encountered
 		if (exe != NULL)

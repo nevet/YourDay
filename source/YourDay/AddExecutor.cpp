@@ -1,7 +1,12 @@
 #include "AddExecutor.h"
+#include <cassert>
 
 AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
 {
+	assert(details!="");
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_details = details;

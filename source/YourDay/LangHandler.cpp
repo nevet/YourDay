@@ -6,12 +6,14 @@
     @author a0088455r
     @version 0.1 10/13/2012
 */
+
 #include <sstream>
 #include <string>
 #include <cstring>
 #include <cstdio>
 #include <map>
 #include <ctime>
+#include <cassert>
 
 #include "LangHandler.h"
 
@@ -46,6 +48,7 @@ bool LangHandler::leap(int year)
 
 bool LangHandler::isDate(string date)
 {
+	assert(date!="");
 	int year, month, day;
 
 	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
@@ -53,6 +56,7 @@ bool LangHandler::isDate(string date)
 
 bool LangHandler::isTime(string time)
 {
+	assert(time!="");
 	int h1, h2, m1, m2;
 
 	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4;
@@ -60,6 +64,8 @@ bool LangHandler::isTime(string time)
 
 bool LangHandler::isInt(string inx)
 {
+	assert(inx!="");
+
 	int x;
 
 	return sscanf(inx.c_str(), "%d", &x) == 1;
@@ -67,6 +73,7 @@ bool LangHandler::isInt(string inx)
 
 bool LangHandler::isLogicDate(string date)
 {
+	assert(date!="");
 	int year, month, day;
 
 	bool flag = true;
@@ -104,6 +111,7 @@ bool LangHandler::isLogicDate(string date)
 
 bool LangHandler::isLogicTime(string time)
 {
+	assert(time!="");
 	int h1, h2, m1, m2;
 
 	bool flag = true;
@@ -134,6 +142,7 @@ bool LangHandler::isLogicTime(string time)
 
 bool LangHandler::isLogicPriority(string priority)
 {
+	assert(priority!="");
 	return (priority == "high") || (priority == "mid") || (priority == "low");
 }
 
@@ -186,9 +195,13 @@ void LangHandler::encoder(string input, Signal command)
 
 				//extract potential date information and exmaine it
 				pos = input.find(SPACE_BAR);
-				date = input.substr(0, pos);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
 				
-				if (isDate(date))
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
 				{
 					input = input.substr(pos + 1);
 					
@@ -208,7 +221,7 @@ void LangHandler::encoder(string input, Signal command)
 					time = date;
 					date = NULL_STRING;
 
-					if (isTime(time))
+					if (time != NULL_STRING && isTime(time))
 					{
 						input = input.substr(pos + 1);
 					} else
@@ -240,11 +253,17 @@ void LangHandler::encoder(string input, Signal command)
 			case DELETE_COMMAND:
 				pos = input.find(SPACE_BAR);
 				index = input.substr(0, pos - 1);
-				
-				if (!isInt(index))
+				if (pos == string::npos)
 				{
-					index = NULL_STRING;
-					throw string ("Index error\n");
+					if (!isInt(index))
+					{
+						index = NULL_STRING;
+						throw string ("Index error\n");
+					}	
+				}
+				else
+				{
+					throw string("Input error\n");
 				}
 				
 				break;
@@ -253,9 +272,58 @@ void LangHandler::encoder(string input, Signal command)
 			case EDIT_COMMAND:
 				break;
 
-			//format will be "index description"
+			//format will be "[date] [time] description"
 			case SEARCH_COMMAND:
+				//extract potential date information and exmaine it
+				pos = input.find(SPACE_BAR);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
+				
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
+				{
+					input = input.substr(pos + 1);
+					
+					pos = input.find(SPACE_BAR);
+					time = input.substr(0, pos);
+
+					if (isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				} else
+				{
+					//it might be a time, so we need to exmaine it
+					time = date;
+					date = NULL_STRING;
+
+					if (time != NULL_STRING && isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				}
+				
 				description = input;
+				
+				//after have done separating, we need to exmaine each field
+				//to make sure they are logic, if applicable
+				if (date != NULL_STRING && !isLogicDate(date))
+				{
+					throw string ("date error\n");					
+				} else
+				if (time != NULL_STRING && !isLogicTime(time))
+				{
+					throw string ("time error\n");
+				}
+				
 				break;
 
 			default:
@@ -272,6 +340,7 @@ void LangHandler::encoder(string input, Signal command)
 
 void LangHandler::setCommand(string userCommand)
 {	
+	assert(userCommand!="");
 	//if user command is valid, set corresponding command type
 	if ( userCommand == "add" )
 	{
@@ -353,11 +422,17 @@ void LangHandler::separate(string userInput) throw (string)
 	}
 }
 
-Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
+Executor* LangHandler::pack(bool* quit, Signal focusingField,
+										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,
 										vector<string>* diduknowBoxList,
 										StorageHandler* store)
 {
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(store!=NULL);
+
 	Executor* exe;
 	
 	switch (command)
@@ -367,7 +442,7 @@ Executor* LangHandler::pack(bool* quit, vector<string>* generalEntryList,
 			break;
 
 		case DELETE_COMMAND:
-			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details);
+			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details, focusingField);
 			break;
 
 		case SEARCH_COMMAND:

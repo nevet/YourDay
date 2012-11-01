@@ -51,8 +51,8 @@ using namespace std;
 int main(int arg, char** test)
 {
 	 
-	runTest(arg,test);
-/*
+//	runTest(arg,test);
+
 	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
@@ -71,8 +71,11 @@ int main(int arg, char** test)
 		try
 		{
 			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			
 			string userInput = ui.retrieveInput();
-			function.execute(userInput, &quit,
+			Signal focusingField = ui.retrieveFocusedField();
+			
+			function.execute(userInput, &quit, focusingField,
 							 &generalEntryList,
 							 &calendarEntryList,
 							 &diduknowBoxList);
@@ -92,12 +95,11 @@ int main(int arg, char** test)
 
 			//after one iteration, status of function handler should be cleared
 			function.clearStatus();
-*/		//}
-/*		catch (string excpt)
+*/		}
+		catch (string excpt)
 		{
 //			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
-	return 0;//EXIT_SUCCESS;
-	*/
+	return EXIT_SUCCESS;
 }

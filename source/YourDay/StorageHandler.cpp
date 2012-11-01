@@ -1,4 +1,7 @@
+#include <cassert>
+
 #include "StorageHandler.h"
+
 
 using namespace std; 
 
@@ -26,7 +29,10 @@ void StorageHandler::setStatus()
 }
 
 void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
-{
+{	
+	assert(ramForGeneralList!=NULL);
+	assert(ramForCalendarList!=NULL);
+
 	ifstream infileG(DataBaseGeneralFile);
 	string textLine;
 	while(getline(infileG,textLine))
@@ -47,6 +53,9 @@ void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string> 
 
 void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
+	assert(ramForGeneralList!=NULL);
+	assert(ramForCalendarList!=NULL);
+
 	ofstream clearFileG(DataBaseGeneralFile);
 	ofstream outfileG(DataBaseGeneralFile,ofstream::app);
 	
