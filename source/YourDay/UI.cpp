@@ -83,14 +83,6 @@ void UI::writeTitle(string words, int startX, int startY)
 	cout<<words<<endl;
 }
 
-void UI::clearCalendarBox()
-{
-	setBackground();
-	gotoxy(0, calendarInitY);
-	cout << "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                " << endl;
-	gotoxy(0,calendarInitY);
-}
-
 void UI::changeDisplayMode()
 {
 	if (displayMode == DISPLAY_ALL)
@@ -123,7 +115,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		break;
 	case DIDUKNOW:
 		clearBox(diduknowInitY, bottomBoxHeight);
-		diduknowBoxListDisplay(diduknowBoxList);
+		diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 		drawCommandBox();
 		break;
 	default:
@@ -131,15 +123,24 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 	}
 }
 
-void UI::changeFocusedField()
+void UI::changeFocusedField(vector<string>* diduknowBoxList)
 {
+	int sizeOfDiduknow = diduknowBoxList->size();
+
 	switch (focusedField)
 	{
 	case GENERAL:
 		focusedField = CALENDAR;
 		break;
 	case CALENDAR:
-		focusedField = DIDUKNOW;
+		if (sizeOfDiduknow !=0)
+		{
+			focusedField = DIDUKNOW;
+		}
+		else
+		{
+			focusedField = GENERAL;
+		}
 		break;
 	case DIDUKNOW:
 		focusedField = GENERAL;
@@ -170,8 +171,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex --;
-//			clearBox(calendarInitY, calendarBoxHeight);
-			clearCalendarBox();
+			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
 		}
@@ -181,7 +181,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		{
 			diduknowInitRowIndex --;
 			clearBox(diduknowInitY, bottomBoxHeight);
-			diduknowBoxListDisplay(diduknowBoxList);
+			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 			drawCommandBox();
 		}
 		break;
@@ -215,8 +215,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (calendarInitRowIndex < calendarSize -1)
 		{
 			calendarInitRowIndex ++;
-//			clearBox(calendarInitY, calendarBoxHeight);
-			clearCalendarBox();
+			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
 		}
@@ -226,7 +225,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		{
 			diduknowInitRowIndex ++;
 			clearBox(diduknowInitY, bottomBoxHeight);
-			diduknowBoxListDisplay(diduknowBoxList);
+			diduknowBoxListDisplay(diduknowBoxList, generalSize);
 			drawCommandBox();
 		}
 		break;
@@ -265,7 +264,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			}
 			break;
 		case TAB:
-			changeFocusedField();
+			changeFocusedField(diduknowBoxList);
 			break;
 		case BACKSPACE:
 			if (input.size()>0)
@@ -436,6 +435,45 @@ void UI::displayGeneralString(int index, string row, int &rowPosition)
 	cout<<endl;
 }
 
+void UI::displayDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral)
+{
+	if (isGeneral(row))
+	{
+		displayGeneralString(index, row, rowPosition);
+	}
+	else
+	{
+		displayCalendarString(index + sizeOfGeneral, row, rowPosition);
+	}
+}
+
+bool UI::isGeneral(string row)
+{
+	//##CS2103 TUT#COM##Friday##
+	bool ans;
+	int countPart = 0;
+	char c;
+	int i = 0;
+	while (countPart!= 4)
+	{
+		while ((c = row[i]) != '#')
+		{
+			i++;
+		}
+		countPart++;
+	}
+
+	if (row[i+1] == '#')
+	{
+		ans = true;
+	}
+	else
+	{
+		ans = false;
+	}
+	return ans;
+}
+
 void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 {	
 	assert(index!=NULL);
@@ -530,24 +568,26 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	}
 }
 
-void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList)
+void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGeneral)
 {	
 	assert(diduknowBoxList!=NULL);
 
 	int sizeOfDiduknow;
-	int terminateIndex;
-	int countRow = 0;
+	int entryIndex;
+	int rowPosition;
 	string row;
 
-	gotoxy(diduknowInitX, diduknowInitY);
+	gotoxy(calendarInitX, calendarInitY);
 	sizeOfDiduknow=diduknowBoxList->size();
-	terminateIndex = min(sizeOfDiduknow, diduknowInitRowIndex + bottomBoxHeight);
-	
-	for (int i = diduknowInitRowIndex; i< terminateIndex; i++)
+	entryIndex = diduknowInitRowIndex;
+	rowPosition = diduknowInitY;
+
+	while (rowPosition < commandInitY && entryIndex <sizeOfDiduknow)
 	{
-		row = diduknowBoxList ->at(i);
-		coloredDisplayFormattedString(i+1, row, diduknowInitY + countRow);
-		countRow++;
+		row = diduknowBoxList ->at(entryIndex);
+		displayDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
+		entryIndex ++;
+		rowPosition ++;
 	}
 }
 
@@ -583,7 +623,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
-	diduknowBoxListDisplay(diduknowBoxList);
+	diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 	
 	drawCommandBox();
 }
