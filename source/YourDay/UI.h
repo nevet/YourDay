@@ -10,8 +10,8 @@
 #include <conio.h>
 #include "Signal.h"
 
-#define windowsHeight 50
-#define windowsWidth 100
+#define windowsHeight 40
+#define windowsWidth 120
 #define generalTitleHeight 2
 #define generalBoxHeight 15
 #define calendarTitleHeight 3
@@ -30,18 +30,18 @@
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define calendarIndexInitX 2
-#define calendarDescriptionInitX 5
-#define calendarLocationInitX (calendarTimeInitX - 10)
-#define calendarTimeInitX 65
-#define calendarDateInitX 80
-#define calendarPriorityInitX 95
+#define calendarDescriptionInitX 6
+#define calendarLocationInitX (calendarTimeInitX - 20)
+#define calendarTimeInitX 85
+#define calendarDateInitX 100
+#define calendarPriorityInitX 115
 
 #define generalIndexInitX 2
-#define generalDescriptionInitX 5
+#define generalDescriptionInitX 6
 #define generalLocationInitX (generalTimeInitX- 10)
-#define generalTimeInitX 95
-#define generalDateInitX 95
-#define generalPriorityInitX 95
+#define generalTimeInitX 115
+#define generalDateInitX 115
+#define generalPriorityInitX 115
 
 #define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
 #define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)
@@ -85,22 +85,22 @@ private:
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 
-	void clearCalendarBox();
-
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
-	void changeFocusedField();
+	void changeFocusedField(vector<string>* diduknowBoxList);
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 
 	void displayCalendarString(int index, string row, int &rowPosition);
 	void displayGeneralString(int index, string row, int &rowPosition);
+	void displayDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral);
+	bool isGeneral(string row);
 	void coloredDisplayFormattedString(int,string, int);
 
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
-	void diduknowBoxListDisplay(vector<string>* diduknowBoxList);
+	void diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGeneral);
 	void startingScreenDisplay();
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 public:
