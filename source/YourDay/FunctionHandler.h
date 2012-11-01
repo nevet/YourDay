@@ -67,7 +67,7 @@ public:
 	* @param quit
 	*			is the indicator for terminating the whole program
 	*/
-	void execute(string input, bool* quit,
+	void execute(string input, bool* quit, Signal focusingField,
 				 vector<string>* generalEntryList,
 				 vector<string>* calendarEntryList,
 				 vector<string>* diduknowBoxList);
