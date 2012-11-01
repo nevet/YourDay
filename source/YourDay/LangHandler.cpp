@@ -196,9 +196,13 @@ void LangHandler::encoder(string input, Signal command)
 
 				//extract potential date information and exmaine it
 				pos = input.find(SPACE_BAR);
-				date = input.substr(0, pos);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
 				
-				if (isDate(date))
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
 				{
 					input = input.substr(pos + 1);
 					
@@ -218,7 +222,7 @@ void LangHandler::encoder(string input, Signal command)
 					time = date;
 					date = NULL_STRING;
 
-					if (isTime(time))
+					if (time != NULL_STRING && isTime(time))
 					{
 						input = input.substr(pos + 1);
 					} else
@@ -263,9 +267,58 @@ void LangHandler::encoder(string input, Signal command)
 			case EDIT_COMMAND:
 				break;
 
-			//format will be "index description"
+			//format will be "[date] [time] description"
 			case SEARCH_COMMAND:
+				//extract potential date information and exmaine it
+				pos = input.find(SPACE_BAR);
+				if (pos != string::npos)
+				{
+					date = input.substr(0, pos);
+				}
+				
+				//only if date field is not empty
+				if (date != NULL_STRING && isDate(date))
+				{
+					input = input.substr(pos + 1);
+					
+					pos = input.find(SPACE_BAR);
+					time = input.substr(0, pos);
+
+					if (isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				} else
+				{
+					//it might be a time, so we need to exmaine it
+					time = date;
+					date = NULL_STRING;
+
+					if (time != NULL_STRING && isTime(time))
+					{
+						input = input.substr(pos + 1);
+					} else
+					{
+						time = NULL_STRING;
+					}
+				}
+				
 				description = input;
+				
+				//after have done separating, we need to exmaine each field
+				//to make sure they are logic, if applicable
+				if (date != NULL_STRING && !isLogicDate(date))
+				{
+					throw string ("date error\n");					
+				} else
+				if (time != NULL_STRING && !isLogicTime(time))
+				{
+					throw string ("time error\n");
+				}
+				
 				break;
 
 			default:
