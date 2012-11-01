@@ -1,18 +1,32 @@
 #include "DeleteExecutor.h"
 #include <cassert>
 
-DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
+DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details, Signal focusingField)
 {
 	assert(details!="");
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
+	assert(focusingField!=GENERAL || focusingField!=CALENDAR);
 
-	_generalEntryList = generalEntryList;
-	_calendarEntryList = calendarEntryList;
+	switch (focusingField)
+	{
+		case GENERAL:
+			_focusingEntryList = generalEntryList;
+			_undoFocusingEntryList = *generalEntryList;
+			
+			break;
+		
+		case CALENDAR:
+			_focusingEntryList = calendarEntryList;
+			_undoFocusingEntryList = *calendarEntryList;
+			
+			break;
+			
+		default:
+			break;
+	}
+
 	_details = details;
-
-	_undoCalendarEntryList = *calendarEntryList;
-	_undoGeneralEntryList = *generalEntryList;
 }
 
 void DeleteExecutor::execute()
@@ -28,29 +42,20 @@ void DeleteExecutor::execute()
 	{
 		throw string ("index is not existing\n");
 	}
-	else if(index > (_generalEntryList->size() + _calendarEntryList->size()))
+	else if(index > (_focusingEntryList->size()))
 	{
 		throw string ("index is larger than list size\n");
 	}
 	else 
 	{
-		if(index <= _generalEntryList->size())
-		{
-			position = _generalEntryList->begin() + index - 1;
-			_generalEntryList->erase(position);
-		}
-		else 
-		{
-			CalendarIndex = index - _generalEntryList->size() -1 ;
-			position = _calendarEntryList->begin() + CalendarIndex;
-			_calendarEntryList->erase(position);
-		}
+		position = _focusingEntryList->begin() + index - 1;
+		_focusingEntryList->erase(position);
+		
 		status = DELETE_S;
 	}
 }
 
 void DeleteExecutor::undo()
 {
-	*_generalEntryList = _undoGeneralEntryList;
-	*_calendarEntryList = _undoCalendarEntryList;
+	*_focusingEntryList = _undoFocusingEntryList;
 }

@@ -143,7 +143,8 @@ public :
 	/**
 	* This operation will pack up an specific executor w.r.t user's command
 	*/
-	Executor* pack(bool* quit, vector<string>* generalEntryList, 
+	Executor* pack(bool* quit, Signal focusingField,
+							   vector<string>* generalEntryList, 
 							   vector<string>* calendarEntryList,
 							   vector<string>* diduknowBoxList,
 							   StorageHandler* store);
