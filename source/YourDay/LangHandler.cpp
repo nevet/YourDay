@@ -166,6 +166,7 @@ void LangHandler::encoder(string input, Signal command)
 	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
 		throw string ("The length entered exceeds the available range\n");
+		log.writeException("The length entered exceeds the available range");
 	} else
 	{
 		//input format is different for different command
@@ -173,6 +174,8 @@ void LangHandler::encoder(string input, Signal command)
 		{
 			//format will be "[date] [time] description [at location] [priority [high, mid, low]]"
 			case ADD_COMMAND:
+				log.writeConditionEntered("add command separation", true);
+				
 				//check whether we have priority
 				pos = input.rfind(PRIORITY_INDICATOR);
 				//contains priority info
@@ -182,6 +185,8 @@ void LangHandler::encoder(string input, Signal command)
 					//get rid of priority info
 					input = input.substr(0, pos);
 				}
+				
+				log.writeExecuted("add command separation/priority separation");
 
 				//check whether we have location
 				pos = input.rfind(LOCATION_INDICATOR);
@@ -192,6 +197,8 @@ void LangHandler::encoder(string input, Signal command)
 					//get rid of location info
 					input = input.substr(0, pos);
 				}
+				
+				log.writeExecuted("add command separation/locatoin separation");
 
 				//extract potential date information and exmaine it
 				pos = input.find(SPACE_BAR);
@@ -229,6 +236,8 @@ void LangHandler::encoder(string input, Signal command)
 						time = NULL_STRING;
 					}
 				}
+				
+				log.writeExecuted("add command separation/date and time separtation");
 
 				description = input;
 
@@ -237,54 +246,67 @@ void LangHandler::encoder(string input, Signal command)
 				if (priority != NULL_STRING && !isLogicPriority(priority))
 				{
 					throw string ("priority error\n");
+					log.writeException("priority error");
 				} else
 				if (date != NULL_STRING && !isLogicDate(date))
 				{
-					throw string ("date error\n");					
+					throw string ("date error\n");
+					log.writeException("date error");
 				} else
 				if (time != NULL_STRING && !isLogicTime(time))
 				{
 					throw string ("time error\n");
+					log.writeException("time error");
 				}
 
 				break;
 
 			//format will be "index"
 			case DELETE_COMMAND:
+				log.writeConditionEntered("delete command separation", true);
+				
 				pos = input.find(SPACE_BAR);
 				
 				if (pos == string::npos)
 				{
 					index = input.substr(0, pos - 1);
+					log.writeExecuted("delete command separation/index separation");
 					
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
 						throw string ("Index error\n");
+						log.writeException("Index error");
 					}	
 				}
 				else
 				{
 					throw string("Input error\n");
+					log.writeException("Input error");
 				}
 				
 				break;
 
 			//format will be "index [date] [time] description [at location] [priority [high, mid, low]]"
 			case EDIT_COMMAND:
+				log.writeConditionEntered("edit command separation", true);
+				
 				pos = input.find(SPACE_BAR);
 				
 				if (pos == string::npos)
 				{
-					throw string ("update format error\n");
+					throw string ("edit format error\n");
+					log.writeException("edit format error");
 				} else
 				{
 					index = input.substr(0, pos - 1);
+					log.writeExecuted("edit command separation/index separation");
 					
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
 						throw string ("Index error\n");
+						log.writeException("Index error");
 					} else
 					{
 						//get rid of index info
@@ -299,6 +321,8 @@ void LangHandler::encoder(string input, Signal command)
 							//get rid of priority info
 							input = input.substr(0, pos);
 						}
+						
+						log.writeExecuted("edit command separation/priority separation");
 
 						//check whether we have location
 						pos = input.rfind(LOCATION_INDICATOR);
@@ -309,6 +333,8 @@ void LangHandler::encoder(string input, Signal command)
 							//get rid of location info
 							input = input.substr(0, pos);
 						}
+						
+						log.writeExecuted("edit command separation/location separation");
 						
 						pos = input.find(SPACE_BAR);
 						
@@ -347,17 +373,21 @@ void LangHandler::encoder(string input, Signal command)
 							}
 						}
 						
+						log.writeExecuted("delete command separation/date and time separation");
+						
 						description = input;
 						
 						//after have done separating, we need to exmaine each field
 						//to make sure they are logic, if applicable
 						if (date != NULL_STRING && !isLogicDate(date))
 						{
-							throw string ("date error\n");					
+							throw string ("date error\n");
+							log.writeException("date error");
 						} else
 						if (time != NULL_STRING && !isLogicTime(time))
 						{
 							throw string ("time error\n");
+							log.writeException("time error");
 						}
 					}
 				}
@@ -366,6 +396,8 @@ void LangHandler::encoder(string input, Signal command)
 
 			//format will be "[date] [time] description"
 			case SEARCH_COMMAND:
+				log.writeConditionEntered("search command separation", true);
+			
 				//extract potential date information and exmaine it
 				pos = input.find(SPACE_BAR);
 				if (pos != string::npos)
@@ -403,17 +435,21 @@ void LangHandler::encoder(string input, Signal command)
 					}
 				}
 				
+				log.writeExecuted("delete command separation/date and time separation");
+				
 				description = input;
 				
 				//after have done separating, we need to exmaine each field
 				//to make sure they are logic, if applicable
 				if (date != NULL_STRING && !isLogicDate(date))
 				{
-					throw string ("date error\n");					
+					throw string ("date error\n");
+					log.writeException("date error");
 				} else
 				if (time != NULL_STRING && !isLogicTime(time))
 				{
 					throw string ("time error\n");
+					log.writeException("time error");
 				}
 				
 				break;
@@ -493,13 +529,14 @@ void LangHandler::separate(string userInput) throw (string)
 	//first we extract user command
 	tempHolder >> userCommand;
 	setCommand(userCommand);
-	//log.writeExecuted("LangHandler::setCommand()");
-	//log.writeData("userCommand", userCommand);
+	log.writeExecuted("LangHandler::setCommand()");
+	log.writeData("userCommand", userCommand);
 	
 	//if set command fails, no other operation should be entertained
 	if (sh.error(langStatus))
 	{
 		throw string ("No such command!\n");
+		log.writeException("No such command!");
 	} else
 	{
 		//to get rid of leading space
@@ -507,8 +544,8 @@ void LangHandler::separate(string userInput) throw (string)
 		getline(tempHolder, rawString);
 
 		encoder(rawString, command);
-		//log.writeExecuted("LangHandler::setCommand()");
-		//log.writeData("details", details);
+		log.writeExecuted("LangHandler::encoder()");
+		log.writeData("details", details);
 
 		//if no error threw by encoder, langStatus should be set to SUCCESS
 		if (!sh.error(langStatus))
@@ -535,37 +572,37 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 	{
 		case ADD_COMMAND:
 			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
-			//log.writeCreated("AddExecutor");
+			log.writeCreated("AddExecutor");
 			
 			break;
 
 		case DELETE_COMMAND:
 			exe = new DeleteExecutor(generalEntryList, calendarEntryList, details, focusingField);
-			//log.writeCreated("DeleteExecutor");
+			log.writeCreated("DeleteExecutor");
 			
 			break;
 
 		case SEARCH_COMMAND:
 			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
-			//log.writeCreated("SearchExecutor");
+			log.writeCreated("SearchExecutor");
 			
 			break;
 
 		case EDIT_COMMAND:
 			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details);
-			//log.writeCreated("UpdateExecutor");
+			log.writeCreated("UpdateExecutor");
 			
 			break;
 
 		case EXIT_COMMAND:
 			exe = new ExitExecutor(generalEntryList, calendarEntryList, store, quit);
-			//log.writeCreated("ExitExecutor");
+			log.writeCreated("ExitExecutor");
 			
 			break;
 
 		case UNDO_COMMAND:
 			exe = NULL;
-			//log.writeCreated("NULL for undo command");
+			log.writeCreated("NULL for undo command");
 			
 			break;
 
