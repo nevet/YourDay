@@ -148,7 +148,6 @@ bool LangHandler::isLogicPriority(string priority)
 
 void LangHandler::encoder(string input, Signal command)
 {
-	assert(input!="");
 	stringstream tempHolder(input);
 	
 	string date = NULL_STRING;
@@ -250,11 +249,17 @@ void LangHandler::encoder(string input, Signal command)
 			case DELETE_COMMAND:
 				pos = input.find(SPACE_BAR);
 				index = input.substr(0, pos - 1);
-				
-				if (!isInt(index))
+				if (pos == string::npos)
 				{
-					index = NULL_STRING;
-					throw string ("Index error\n");
+					if (!isInt(index))
+					{
+						index = NULL_STRING;
+						throw string ("Index error\n");
+					}	
+				}
+				else
+				{
+					throw string("Input error\n");
 				}
 				
 				break;
@@ -333,8 +338,6 @@ Signal LangHandler::getStatus()
 
 void LangHandler::separate(string userInput) throw (string)
 {
-	assert(userInput!="");
-
 	stringstream tempHolder(userInput);
 
 	string userCommand;
