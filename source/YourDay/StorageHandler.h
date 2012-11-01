@@ -56,6 +56,8 @@ public :
 	@param the name of the file and the the path of file	
 	@return void
 	*/
+
+
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,
@@ -66,7 +68,6 @@ public :
 
 	~StorageHandler();
 
-
 private :
 	char buffer[MAXMIUM_WORDS];
 	static string DataBaseGeneralFile;
@@ -74,6 +75,8 @@ private :
 
 	static const string ENTRY_STORE_FORMAT;
 	Signal status;
+
+
 };
 
 
