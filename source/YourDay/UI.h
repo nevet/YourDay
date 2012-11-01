@@ -10,8 +10,8 @@
 #include <conio.h>
 #include "Signal.h"
 
-#define windowsHeight 50
-#define windowsWidth 100
+#define windowsHeight 40
+#define windowsWidth 120
 #define generalTitleHeight 2
 #define generalBoxHeight 15
 #define calendarTitleHeight 3
@@ -31,17 +31,17 @@
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define calendarIndexInitX 2
 #define calendarDescriptionInitX 6
-#define calendarLocationInitX (calendarTimeInitX - 10)
-#define calendarTimeInitX 65
-#define calendarDateInitX 80
-#define calendarPriorityInitX 95
+#define calendarLocationInitX (calendarTimeInitX - 20)
+#define calendarTimeInitX 85
+#define calendarDateInitX 100
+#define calendarPriorityInitX 115
 
 #define generalIndexInitX 2
 #define generalDescriptionInitX 6
 #define generalLocationInitX (generalTimeInitX- 10)
-#define generalTimeInitX 95
-#define generalDateInitX 95
-#define generalPriorityInitX 95
+#define generalTimeInitX 115
+#define generalDateInitX 115
+#define generalPriorityInitX 115
 
 #define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
 #define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)

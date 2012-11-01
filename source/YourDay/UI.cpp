@@ -29,16 +29,16 @@ void UI::drawBanner()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE);
-	cout<<"                                                                                                    ";
-	cout<<"                          ____  ____                _____                                           ";
-	cout<<"                          \\  \\\\/  //                |   \\\\                                          ";
-	cout<<"                           \\  \\\" //                 |    \\\\                                         ";
-	cout<<"                            \\   // ____  __ __  ____| |\\ || ____ __  ___                            ";
-	cout<<"                             | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                            ";
-	cout<<"                             | || | O ||| |/ ||| || |    //| o || \\  //                             ";
-	cout<<"                             |_|| \\___// \\__// |_|| |___// \\___|| /_//                              ";
-	cout<<"                                                                                                    ";
-	cout<<"                                                                                                    ";
+	cout<<"                                                                                                                        ";
+	cout<<"                                    ____  ____                _____                                                     ";
+	cout<<"                                    \\  \\\\/  //                |   \\\\                                                    ";
+	cout<<"                                     \\  \\\" //                 |    \\\\                                                   ";
+	cout<<"                                      \\   // ____  __ __  ____| |\\ || ____ __  ___                                      ";
+	cout<<"                                       | || /   \\\\| || ||| _//| |/ ||/   ||\\ \\/ //                                      ";
+	cout<<"                                       | || | O ||| |/ ||| || |    //| o || \\  //                                       ";
+	cout<<"                                       |_|| \\___// \\__// |_|| |___// \\___|| /_//                                        ";
+	cout<<"                                                                                                                        ";
+	cout<<"                                                                                                                        ";
 
 }
 
@@ -46,7 +46,7 @@ void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
 	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	cout<<"command:                                                                                            ";
+	cout<<"command:                                                                                                                ";
 	cout<<endl;
 	gotoxy(8,commandInitY);
 }
@@ -600,11 +600,11 @@ void UI::startingScreenDisplay()
 
 	drawBanner();
 	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
-	cout<<"----------------------------------------------------------------------------------------------------";
-	cout<<"|                              YourDay - always making your day :)                                 |";
-	cout<<"----------------------------------------------------------------------------------------------------";
+	cout<<"------------------------------------------------------------------------------------------------------------------------";
+	cout<<"|                                        YourDay - always making your day :)                                           |";
+	cout<<"------------------------------------------------------------------------------------------------------------------------";
 	SetConsoleTextAttribute(hConsole, 15);
-	gotoxy(40,18);
+	gotoxy(50,18);
 	cout<<"Press Enter to continue";
 
 	char c;
