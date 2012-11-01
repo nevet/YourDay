@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string>
 #include "UI.h"
+#include "Log.h"
 #include "Signal.h"
 #include "StatusHandler.h"
 #include "FunctionHandler.h"

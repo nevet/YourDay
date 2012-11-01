@@ -7,6 +7,7 @@
 
 #include "StorageHandler.h"
 #include "Executor.h"
+#include "Log.h"
 #include "LangHandler.h"
 #include "StatusHandler.h"
 
@@ -22,7 +23,10 @@
 class FunctionHandler
 {
 private:
+
 	StatusHandler sh;
+	
+	Log log;
 
 	Signal fxStatus;
 	//will be constructed when FunctionHandler constructed
