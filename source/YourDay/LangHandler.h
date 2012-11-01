@@ -16,6 +16,7 @@
 #include "StatusHandler.h"
 #include "StorageHandler.h"
 #include "Executor.h"
+#include "Log.h"
 #include "AddExecutor.h"
 #include "DeleteExecutor.h"
 #include "SearchExecutor.h"
@@ -29,6 +30,8 @@ class LangHandler
 private:
 
 	StatusHandler sh;
+	
+	Log log;
 
 	Signal command;
 	Signal langStatus;
