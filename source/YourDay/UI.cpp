@@ -2,6 +2,32 @@
 
 #include "UI.h"
 
+const string UI::CLEAR_SIGNAL_MESSAGE = "Command done\n";
+const string UI::ADD_SUCCESSFUL_MESSAGE = "Added successfully\n";
+const string UI::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
+const string UI::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
+
+string UI::interpreteSignal(Signal outSignal)
+{
+	string outString;
+
+	switch (outSignal)
+	{
+	case CLEAR:
+		outString = CLEAR_SIGNAL_MESSAGE;
+		break;
+	case ADD_S:
+		outString = ADD_SUCCESSFUL_MESSAGE;
+		break;
+	case  DELETE_S:
+		outString = DELETE_SUCCESSFUL_MESSAGE;
+		break;
+	case  UPDATE_S:
+		outString = UPDATE_SUCCESSFUL_MESSAGE;
+		break;
+	}
+	return outString;
+}
 void UI::setScreenSize()
 {
     _COORD coord; 
@@ -643,6 +669,15 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	setBackground();
 	system("CLS");
 
+	int generalTemp = generalEntryList->size() - generalBoxHeight;
+	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
+	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
+	generalInitRowIndex = max(0, generalTemp);
+	calendarInitRowIndex = max(0, calendarTemp);
+	diduknowInitRowIndex = max(0, diduknowTemp);
+	displayMode = DISPLAY_ALL;
+
+
 	writeTitle("General: ", 1,0);
 	writeTitle("Calendar: ", 1, calendarInitY -2);
 
@@ -653,30 +688,13 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	drawCommandBox();
 }
 
-UI::UI()
+UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
 {
 	input = "";
 	focusedField = GENERAL;
 
 	startingScreenDisplay();
-}
-
-void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
-{	
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-	assert(diduknowBoxList!=NULL);
-
-	int generalTemp = generalEntryList->size() - generalBoxHeight;
-	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
-	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
-	generalInitRowIndex = max(0, generalTemp);
-	calendarInitRowIndex = max(0, calendarTemp);
-	diduknowInitRowIndex = max(0, diduknowTemp);
-	displayMode = DISPLAY_ALL;
-
-	mainScreenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
-	traceInput(calendarEntryList, generalEntryList, diduknowBoxList);
+	mainSceenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
 }
 
 string UI::retrieveInput()
@@ -696,6 +714,13 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	getchar();
+	drawCommandBox();
+}
+
+void UI::displayStatus(Signal status)
+{
+	string message = interpreteSignal(status);
+	displayMessage(message);
 }
 
 UI::~UI()
