@@ -669,15 +669,6 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	setBackground();
 	system("CLS");
 
-	int generalTemp = generalEntryList->size() - generalBoxHeight;
-	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
-	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
-	generalInitRowIndex = max(0, generalTemp);
-	calendarInitRowIndex = max(0, calendarTemp);
-	diduknowInitRowIndex = max(0, diduknowTemp);
-	displayMode = DISPLAY_ALL;
-
-
 	writeTitle("General: ", 1,0);
 	writeTitle("Calendar: ", 1, calendarInitY -2);
 
@@ -688,13 +679,30 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	drawCommandBox();
 }
 
-UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+UI::UI()
 {
 	input = "";
 	focusedField = GENERAL;
 
 	startingScreenDisplay();
-	mainSceenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
+}
+
+void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+{	
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(diduknowBoxList!=NULL);
+
+	int generalTemp = generalEntryList->size() - generalBoxHeight;
+	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
+	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
+	generalInitRowIndex = max(0, generalTemp);
+	calendarInitRowIndex = max(0, calendarTemp);
+	diduknowInitRowIndex = max(0, diduknowTemp);
+	displayMode = DISPLAY_ALL;
+
+	mainScreenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
+	traceInput(calendarEntryList, generalEntryList, diduknowBoxList);
 }
 
 string UI::retrieveInput()
