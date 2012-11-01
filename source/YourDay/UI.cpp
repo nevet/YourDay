@@ -361,7 +361,8 @@ void UI::displayCalendarString(int index, string row, int& rowPosition)
 }
 
 void UI::displayGeneralString(int index, string row, int &rowPosition)
-{	string part = "";
+{	
+	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {generalIndexInitX, generalDescriptionInitX, generalLocationInitX,
 							generalTimeInitX, generalDateInitX, generalPriorityInitX};
@@ -582,7 +583,7 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGener
 	entryIndex = diduknowInitRowIndex;
 	rowPosition = diduknowInitY;
 
-	while (rowPosition < commandInitY && entryIndex <sizeOfDiduknow)
+	while (rowPosition < windowsHeight -1 && entryIndex <sizeOfDiduknow)
 	{
 		row = diduknowBoxList ->at(entryIndex);
 		displayDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
