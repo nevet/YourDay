@@ -74,7 +74,7 @@ TEST(add_executor,calendar_entry)
 	 vector<string>* testCalendarVectorPointer;
 	 vector<string> testGeneralVector;
 	 vector<string> testCalendarVector;
-
+	 
 	 testGeneralVectorPointer=&testGeneralVector;
 	 testCalendarVectorPointer=&testCalendarVector;
 
@@ -92,7 +92,7 @@ TEST(add_executor,calendar_entry)
 	 // This part is to test the General Vector delete function
 	 // #index#description#location#time#date#priority#
 	 // We wil purposefully give the correct details to deleteExecutor
-	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#3######");
+	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#3######",CALENDAR);
 	 //Here we delete the 3rd entry , so the output should be 4 entries without the third one.
 	  delExec.execute();
 	  ASSERT_EQ(testCalendarVector[0],"##1.Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#");
@@ -127,7 +127,7 @@ TEST(add_executor,calendar_entry)
 	  // This part is to test the General Vector delete function
 	  // #index#description#location#time#date#priority#
 	  // We wil purposefully give the correct details to deleteExecutor
-	  DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#3######");
+	  DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#3######",GENERAL);
 	  delExec.execute();
 	  //Here we delete the 3rd entry , so the output should be 4 entries without the thrid one.
 	 
@@ -163,28 +163,27 @@ TEST(add_executor,calendar_entry)
 	 for (int i = 0; i < 2; i++)
 	 {
 		 ostringstream convert;
-		 convert<<testGeneralVector.size()+i+1;
+		 convert<<i+1;
 		 details = "##" + convert.str()+ ".Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#";
 		 AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
 		 addExec.execute();
 	 }// we add two general event to calendar entry list.
 
-	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#4######");
+	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#1######",CALENDAR);
 	 delExec.execute();
-	 //Here we delete the 4th entry ,it should be the 1st entry of CalendarVector as the Calendar Entry's index is its' own index + GenerlVector's size, 
-	 //so here the 1st entry of CalendarVector should be deleted.
+	 //the 1st entry of CalendarVector should be deleted.
 	 
-	 DeleteExecutor delExec2(testGeneralVectorPointer, testCalendarVectorPointer, "#3######");
+	 DeleteExecutor delExec2(testGeneralVectorPointer, testCalendarVectorPointer, "#3######",GENERAL);
 	 delExec2.execute();
 	 //Here we delete the 3rd entry ,it should be the 3rd entry of generalVecotr
 	 //The expectation should be three entry including two general entries and one calendar entries.
 	  
 	 ASSERT_EQ(testGeneralVector[0],"##1.Meeting CS2103#UTown###high#");
 	 ASSERT_EQ(testGeneralVector[1],"##2.Meeting CS2103#UTown###high#");
-	 ASSERT_EQ(testCalendarVector[0],"##5.Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#");
+	 ASSERT_EQ(testCalendarVector[0],"##2.Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#");
 
  }
-
+ 
  TEST(basic_test,search_executor_)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -249,7 +248,7 @@ TEST(add_executor,calendar_entry)
 
 	 EXPECT_EQ(0,testGeneralVectorPointer->size());
  }
-
+ 
  TEST(undo_test,delete_undo)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -269,7 +268,7 @@ TEST(add_executor,calendar_entry)
 
 	 EXPECT_EQ(1,testGeneralVectorPointer->size());
 
-	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#1######");
+	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#1######",GENERAL);
 	 delExec.execute();
 
 	 EXPECT_EQ(0,testGeneralVectorPointer->size());
@@ -299,7 +298,7 @@ TEST(add_executor,calendar_entry)
 
 	 EXPECT_EQ(1,testGeneralVectorPointer->size());
 
-	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#1######");
+	 DeleteExecutor delExec(testGeneralVectorPointer, testCalendarVectorPointer, "#1######",GENERAL);
 	 delExec.execute();
 
 	 EXPECT_EQ(0,testGeneralVectorPointer->size());
@@ -312,7 +311,7 @@ TEST(add_executor,calendar_entry)
 
 	 EXPECT_EQ(0,testGeneralVectorPointer->size());
  }
-
+  
  TEST(integration_test,ui_to_add)
  {
 
