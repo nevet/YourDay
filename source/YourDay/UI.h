@@ -13,10 +13,10 @@
 #define windowsHeight 40
 #define windowsWidth 120
 #define generalTitleHeight 2
-#define generalBoxHeight 15
+#define generalBoxHeight 12
 #define calendarTitleHeight 3
 #define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) 
-#define commandBoxHeight 1
+#define commandBoxHeight 2
 #define bottomBoxHeight 7
 
 #define generalInitY (generalTitleHeight)
@@ -61,7 +61,7 @@
 #define ENTER 13
 #define BACKSPACE 8
 
-#define maxInputSize 150
+#define maxInputSize 192
 
 using namespace std;
 
@@ -109,6 +109,8 @@ public:
 	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
 	string retrieveInput();
 	Signal retrieveFocusedField();
+	void displayMessage(string message);
+	void displayMessage(Signal status);
 
 	~UI();
 };

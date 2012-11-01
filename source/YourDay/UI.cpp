@@ -47,7 +47,7 @@ void UI::drawCommandBox()
 	gotoxy(0,commandInitY);
 	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	cout<<"command:                                                                                                                ";
-	cout<<endl;
+	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
 }
 
@@ -61,8 +61,8 @@ void UI::clearBox(int startH, int height)
 	setBackground();
 	gotoxy(0,startH);
 	for (int i=0; i<height; i++)
-		for (int j=0; j<windowsWidth; j++)
-			cout<<" ";
+		cout<<"                                                                                                                        ";
+	
 	gotoxy(0,startH);
 }
 
@@ -192,13 +192,21 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex > 0)
+		if (diduknowInitRowIndex > bottomBoxHeight)
 		{
-			diduknowInitRowIndex --;
+			diduknowInitRowIndex -= bottomBoxHeight;
 			clearBox(diduknowInitY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 			drawCommandBox();
 		}
+		else if (diduknowInitRowIndex > 0)
+		{
+			diduknowInitRowIndex = 0;
+			clearBox(diduknowInitY, bottomBoxHeight);
+			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
+			drawCommandBox();
+		}
+
 		break;
 	default:
 		assert (false);
@@ -236,9 +244,9 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex < diduknowSize -1)
+		if (diduknowInitRowIndex < diduknowSize -1 - bottomBoxHeight)
 		{
-			diduknowInitRowIndex ++;
+			diduknowInitRowIndex += bottomBoxHeight;
 			clearBox(diduknowInitY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalSize);
 			drawCommandBox();
@@ -476,6 +484,7 @@ bool UI::isGeneral(string row)
 		{
 			i++;
 		}
+		i++;
 		countPart++;
 	}
 
@@ -593,7 +602,7 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGener
 	int rowPosition;
 	string row;
 
-	gotoxy(calendarInitX, calendarInitY);
+	gotoxy(diduknowInitX, diduknowInitY);
 	sizeOfDiduknow=diduknowBoxList->size();
 	entryIndex = diduknowInitRowIndex;
 	rowPosition = diduknowInitY;
@@ -678,6 +687,15 @@ string UI::retrieveInput()
 Signal UI::retrieveFocusedField()
 {
 	return focusedField;
+}
+
+void UI::displayMessage(string message)
+{
+	clearBox(diduknowInitY,bottomBoxHeight);
+	gotoxy(0,diduknowInitY);
+	setBackground();
+	cout << message <<endl;
+	getchar();
 }
 
 UI::~UI()

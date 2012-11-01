@@ -95,6 +95,7 @@ int main(int arg, char** test)
 		}
 		catch (string excpt)
 		{
+			ui.displayMessage(excpt);
 		}
 	}
 	
