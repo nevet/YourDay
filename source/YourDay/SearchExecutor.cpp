@@ -1,7 +1,11 @@
+#include<cassert>
+
 #include "SearchExecutor.h"
 
 void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
 {
+	assert(result!="");
+
 	ostringstream ostring;
 	ostring << "#" << index << result.substr(1,result.size()-1);
 
@@ -10,6 +14,11 @@ void SearchExecutor::formatSearchResult(int index, string result, string* format
 
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
 {
+	assert(details!="");
+	assert(matchedEntryList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_details = details;

@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "UI.h"
 
 void UI::setScreenSize()
@@ -93,6 +95,10 @@ void UI::changeFocusedField()
 
 void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
 {
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
 	switch (focusedField)
 	{
 	case GENERAL:
@@ -130,6 +136,10 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 
 void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
 {
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
 	int generalSize = generalEntryList->size();
 	int calendarSize = calendarEntryList->size();
 	int diduknowSize = diduknowBoxList->size();
@@ -171,6 +181,10 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 
 void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
 {
+	assert(diduknowBoxList!=NULL);
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+
 	char keyIn;
 	input = "";
 
@@ -212,7 +226,11 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 }
 
 void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
-{
+{	
+	assert(index!=NULL);
+	assert(row!="");
+	assert(rowIndex!=NULL);
+
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {indexInitX, descriptionInitX, locationInitX, timeInitX, dateInitX, priorityInitX};
@@ -254,7 +272,9 @@ void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
 }
 
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
-{
+{	
+	assert(generalEntryList!=NULL);
+
 	int sizeOfGeneral;
 	int terminateIndex;
 	int countRow = 0;
@@ -275,6 +295,8 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 {
+	assert(calendarEntryList!=NULL);
+
 	int sizeOfCalendar;
 	int terminateIndex;
 	int countRow = 0;
@@ -293,7 +315,9 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 }
 
 void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList)
-{
+{	
+	assert(diduknowBoxList!=NULL);
+
 	int sizeOfDiduknow;
 	int terminateIndex;
 	int countRow = 0;
@@ -329,7 +353,10 @@ void UI::startingScreenDisplay()
 }
 
 void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
-{
+{	
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(diduknowBoxList!=NULL);
 	setBackground();
 	system("CLS");
 
@@ -352,7 +379,10 @@ UI::UI()
 }
 
 void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
-{
+{	
+	assert(generalEntryList!=NULL);
+	assert(calendarEntryList!=NULL);
+	assert(diduknowBoxList!=NULL);
 	int generalTemp = generalEntryList->size() - generalBoxHeight;
 	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
 	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
