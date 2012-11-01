@@ -42,7 +42,7 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 							  vector<string>* calendarEntryList,
 							  vector<string>* diduknowBoxList) throw (string)
 {
-	//log.write("//logic component entered.");
+	//log.write("logic component entered.");
 	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
