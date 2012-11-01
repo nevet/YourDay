@@ -92,6 +92,7 @@ int main(int arg, char** test)
 			//log.writeExecuted("FunctionHandler::execute()");
 
 			Signal signal = function.getStatus();
+			ui.displayStatus(signal);
 		}
 		catch (string excpt)
 		{

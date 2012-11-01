@@ -69,6 +69,11 @@ class UI
 {
 private:
 
+	static const string CLEAR_SIGNAL_MESSAGE;
+	static const string ADD_SUCCESSFUL_MESSAGE;
+	static const string UPDATE_SUCCESSFUL_MESSAGE;
+	static const string DELETE_SUCCESSFUL_MESSAGE;
+
 	HANDLE hConsole;
 	string input;
 	Signal focusedField;
@@ -76,6 +81,8 @@ private:
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
+
+	string interpreteSignal(Signal status);
 
 	void setScreenSize();
 	void setBackground();
@@ -110,7 +117,7 @@ public:
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);
-	void displayMessage(Signal status);
+	void displayStatus(Signal status);
 
 	~UI();
 };
