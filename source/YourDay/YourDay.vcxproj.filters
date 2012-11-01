@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Unit Test">
+      <UniqueIdentifier>{6b391db9-410c-4613-a298-73d55eb9ea1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="ExitExecutor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\testing\Tester.h">
+      <Filter>Unit Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

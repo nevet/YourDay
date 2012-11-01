@@ -33,6 +33,10 @@
 #include "Signal.h"
 #include "StatusHandler.h"
 #include "FunctionHandler.h"
+
+//This header is for testing purpose
+#include "../../testing/Tester.h"
+
 using namespace std;
 
 #define EXIT_SUCCESS 0
@@ -44,8 +48,11 @@ using namespace std;
 * main() will ask UIHandler to handle the feedback issue.
 */
 
-int main()
+int main(int arg, char** test)
 {
+	 
+	runTest(arg,test);
+	/*
 	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
@@ -85,12 +92,12 @@ int main()
 
 			//after one iteration, status of function handler should be cleared
 			function.clearStatus();
-*/			}
-		catch (string excpt)
+*/			//}
+/* <-delete		catch (string excpt)
 		{
 //			ui.diduknowBoxListDisplay(excpt);
 		}
 	}
-
-	return EXIT_SUCCESS;
+	*/
+	return 0;//EXIT_SUCCESS;
 }
