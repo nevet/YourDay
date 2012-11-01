@@ -30,7 +30,7 @@ TEST(basic_test,add_executor_1)
 	ASSERT_EQ(testGeneralVector[0],"##Meeting CS2103#UTown###high#");
 }
 
-TEST(basic_test,add_executor_2)
+/*TEST(basic_test,add_executor_2)
 {
 	vector<string>* testGeneralVectorPointer;
 	vector<string>* testCalendarVectorPointer;
@@ -47,7 +47,7 @@ TEST(basic_test,add_executor_2)
 	AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
 	addExec.execute();
 	ASSERT_EQ(testCalendarVector[0],"##Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#");
-}
+}*/
 
  TEST(basic_test,add_executor_2)
 {
