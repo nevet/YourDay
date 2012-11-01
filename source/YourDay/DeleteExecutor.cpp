@@ -32,6 +32,7 @@ DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>*
 void DeleteExecutor::execute()
 {
 	int index;
+	int CalendarIndex;
 	
 	vector<string>::iterator position;
 	
