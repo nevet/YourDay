@@ -38,6 +38,8 @@ void UpdateExecutor::execute()
 	string oldDate, oldTime, oldDescription, oldPriority, oldLocation;
 
 	vector<string>::iterator position;
+	
+	newEntry = "##";
 
 	index=extractIndex(_details);
 	
@@ -52,61 +54,62 @@ void UpdateExecutor::execute()
 	else 
 	{
 		oldEntry = _focusingEntryList->at(index-1);
+		
+		newDescription = extractDescription(_details);
+		oldDescription = extractDescription(oldEntry);
+		if(newDescription == "")
+		{
+			newEntry = newEntry + oldDescription + "#";
+		}
+		else
+		{
+			newEntry = newEntry + newDescription + "#";
+		}
+		
+		newLocation = extractLocation(_details);
+		oldLocation = extractLocation(oldEntry);
+		if(newLocation == "")
+		{
+			newEntry = newEntry + oldLocation + "#";
+		}
+		else
+		{
+			newEntry = newEntry + newLocation + "#" ;
+		}
+		
+		newTime = extractTime(_details);
+		oldTime = extractTime(oldEntry);
+		if(newTime == "")
+		{
+			newEntry = newEntry + oldTime + "#";
+		}
+		else
+		{
+			newEntry = newEntry + newTime + "#";
+		}
 
 		newDate = extractDate(_details);
 		oldDate = extractDate(oldEntry);
 		if(newDate == "")
 		{
-			newEntry = "#" + oldDate ;
+			newEntry = newEntry + oldDate + "#";
 		}
 		else
 		{
-			newEntry = "#" +newDate;
-		}
-
-		newTime = extractTime(_details);
-		oldTime = extractTime(oldEntry);
-		if(newTime == "")
-		{
-			newEntry = newEntry + "#" + oldTime;
-		}
-		else
-		{
-			newEntry = newEntry + "#" + newTime;
-		}
-
-		newDescription = extractDescription(_details);
-		oldDescription = extractDescription(oldEntry);
-		if(newDescription == "")
-		{
-			newEntry = newEntry + "#" + oldDescription;
-		}
-		else
-		{
-			newEntry = newEntry + "#" + newDescription;
-		}
-
-		newLocation = extractLocation(_details);
-		oldLocation = extractLocation(oldEntry);
-		if(newLocation == "")
-		{
-			newEntry = newEntry + "#" + oldLocation;
-		}
-		else
-		{
-			newEntry = newEntry + "#" + newLocation;
+			newEntry = newEntry + newDate + "#";
 		}
 
 		newPriority = extractLocation(_details);
 		oldPriority = extractLocation(oldEntry);
 		if(newPriority == "")
 		{
-			newEntry = newEntry + "#" + oldPriority + "#";
+			newEntry = newEntry + oldPriority + "#";
 		}
 		else
 		{
-			newEntry = newEntry + "#" + newPriority + "#";
+			newEntry = newEntry + newPriority + "#";
 		}
+		
 		position = _focusingEntryList->begin() + index - 1;
 		_focusingEntryList->erase(position);
 
