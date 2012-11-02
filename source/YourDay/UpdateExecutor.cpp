@@ -11,20 +11,20 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 
 	switch (focusingField)
 	{
-	case GENERAL:
-		_focusingEntryList = generalEntryList;
-		_undoFocusingEntryList = *generalEntryList;
+		case GENERAL:
+			_focusingEntryList = generalEntryList;
+			_undoFocusingEntryList = *generalEntryList;
 
-		break;
+			break;
 
-	case CALENDAR:
-		_focusingEntryList = calendarEntryList;
-		_undoFocusingEntryList = *calendarEntryList;
+		case CALENDAR:
+			_focusingEntryList = calendarEntryList;
+			_undoFocusingEntryList = *calendarEntryList;
 
-		break;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	_details = details;

@@ -62,6 +62,8 @@ int main(int arg, char** test)
 	//create a logger
 	Log log;
 	
+	log.writeTime();
+	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	log.writeCreated("FunctionHandler instance");
 	

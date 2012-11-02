@@ -23,6 +23,16 @@ void Log::associateFile(string fileName, OPEN_TYPE mode)
 	}
 }
 
+void Log::writeTime()
+{
+	time_t seconds = time(NULL);
+	struct tm * timeinfo = localtime(&seconds);
+	
+	associateFile("log.txt", APP_TYPE);
+	
+	file << tm->tm_year << " " << tm->tm_mon << " " << tm->tm_mday << endl;
+}
+
 void Log::writeCreated(string objName)
 {
 	associateFile("log.txt", APP_TYPE);
