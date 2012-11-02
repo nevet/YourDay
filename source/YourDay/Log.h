@@ -3,6 +3,8 @@
 
 # include <string>
 # include <fstream>
+# include <time.h>
+# include <stdio.h>
 
 # include "Signal.h"
 
@@ -20,6 +22,8 @@ private:
 	
 public:
 
+	void writeTime();
+	
 	void writeCreated(string objName);
 	void writeRetrieved(string varName);
 	void writeExecuted(string fxName);
