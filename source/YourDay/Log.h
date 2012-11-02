@@ -31,6 +31,6 @@ public:
 	void writeData(string dataName, Signal data);
 	
 	void writeException(string exception);
-}
+};
 
 #endif
