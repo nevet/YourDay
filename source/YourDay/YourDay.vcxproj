@@ -84,6 +84,7 @@
     <ClCompile Include="ExitExecutor.cpp" />
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="LangHandler.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SearchExecutor.cpp" />
     <ClCompile Include="StatusHandler.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="ExitExecutor.h" />
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="LangHandler.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="SearchExecutor.h" />
     <ClInclude Include="Signal.h" />
     <ClInclude Include="StatusHandler.h" />

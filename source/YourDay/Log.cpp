@@ -9,7 +9,7 @@ void Log::associateFile(string fileName, OPEN_TYPE mode)
 {
 	switch (mode)
 	{
-		case APP:
+		case APP_TYPE:
 			file.open(fileName.c_str(), fstream::app);
 			
 			break;
@@ -32,7 +32,7 @@ void Log::writeCreated(string objName)
 	disassociateFile();
 }
 
-void Log::writeRetrived(string varName)
+void Log::writeRetrieved(string varName)
 {
 	associateFile("log.txt", APP_TYPE);
 	
@@ -41,7 +41,7 @@ void Log::writeRetrived(string varName)
 	disassociateFile();
 }
 
-void writeExecuted(string fxName)
+void Log::writeExecuted(string fxName)
 {
 	associateFile("log.txt", APP_TYPE);
 	
@@ -50,7 +50,7 @@ void writeExecuted(string fxName)
 	disassociateFile();
 }
 
-void writeConditionEntered(string condition, bool boolValue)
+void Log::writeConditionEntered(string condition, bool boolValue)
 {
 	associateFile("log.txt", APP_TYPE);
 	
@@ -59,7 +59,7 @@ void writeConditionEntered(string condition, bool boolValue)
 	disassociateFile();
 }
 	
-void writeData(string dataName, string data)
+void Log::writeData(string dataName, string data)
 {
 	associateFile("log.txt", APP_TYPE);
 	
@@ -68,7 +68,7 @@ void writeData(string dataName, string data)
 	disassociateFile();
 }
 
-void writeData(string dataName, Signal data)
+void Log::writeData(string dataName, Signal data)
 {
 	associateFile("log.txt", APP_TYPE);
 	
@@ -77,7 +77,7 @@ void writeData(string dataName, Signal data)
 	disassociateFile();
 }
 	
-void writeException(string exception)
+void Log::writeException(string exception)
 {
 	associateFile("log.txt", APP_TYPE);
 	
