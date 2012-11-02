@@ -110,12 +110,11 @@ void UpdateExecutor::execute()
 			newEntry = newEntry + newPriority + "#";
 		}
 		
-		position = _focusingEntryList->begin() + index - 1;
-		_focusingEntryList->erase(position);
-
 		position = _focusingEntryList->begin() +index -1;
 		_focusingEntryList->insert(position,newEntry);
 
+		_focusingEntryList->erase(position + 1);
+		
 		status = UPDATE_S;
 	}
 }

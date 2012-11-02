@@ -48,7 +48,6 @@ bool LangHandler::leap(int year)
 
 bool LangHandler::isDate(string date)
 {
-	assert(date!="");
 	int year, month, day;
 
 	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
@@ -56,7 +55,6 @@ bool LangHandler::isDate(string date)
 
 bool LangHandler::isTime(string time)
 {
-	assert(time!="");
 	int h1, h2, m1, m2;
 
 	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4;
@@ -64,8 +62,6 @@ bool LangHandler::isTime(string time)
 
 bool LangHandler::isInt(string inx)
 {
-	assert(inx!="");
-
 	int x;
 
 	return sscanf(inx.c_str(), "%d", &x) == 1;
@@ -269,7 +265,7 @@ void LangHandler::encoder(string input, Signal command)
 				
 				if (pos == string::npos)
 				{
-					index = input.substr(0, pos - 1);
+					index = input.substr(0, input.length());
 					log.writeExecuted("delete command separation/index separation");
 					
 					if (!isInt(index))
@@ -299,7 +295,7 @@ void LangHandler::encoder(string input, Signal command)
 					log.writeException("edit format error");
 				} else
 				{
-					index = input.substr(0, pos - 1);
+					index = input.substr(0, pos);
 					log.writeExecuted("edit command separation/index separation");
 					
 					if (!isInt(index))
