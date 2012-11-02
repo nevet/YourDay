@@ -12,15 +12,13 @@ class Log
 {
 private:
 
-	enum OPEN_TYPE {APP, OUT_TYPE};
+	enum OPEN_TYPE {APP_TYPE, OUT_TYPE};
 	
 	fstream file;
 	void disassociateFile();
 	void associateFile(string fileName, OPEN_TYPE mode);
 	
 public:
-	
-	Log();
 
 	void writeCreated(string objName);
 	void writeRetrieved(string varName);
