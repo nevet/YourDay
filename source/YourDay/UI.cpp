@@ -7,6 +7,14 @@ const string UI::ADD_SUCCESSFUL_MESSAGE = "Added successfully\n";
 const string UI::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
 const string UI::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
 
+const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
+const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
+const string UI::DID_U_KNOW_EXIT = "To exit, press Enter";
+const string UI::DID_U_KNOW_SEARCH = "To search an entry, type \"search\" followed by the keyword(s). i.e.: search cs2103";
+const string UI::DID_U_KNOW_UPDATE = "To update an entry, type \"update\" followed by the description.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
+const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
+const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
+
 string UI::interpreteSignal(Signal outSignal)
 {
 	string outString;
@@ -28,6 +36,9 @@ string UI::interpreteSignal(Signal outSignal)
 	}
 	return outString;
 }
+
+
+
 void UI::setScreenSize()
 {
     _COORD coord; 
@@ -71,7 +82,7 @@ void UI::drawBanner()
 void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	//SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	cout<<"command:                                                                                                                ";
 	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
@@ -84,7 +95,7 @@ void UI::setBackground()
 
 void UI::clearBox(int startH, int height)
 {
-	setBackground();
+	//setBackground();
 	gotoxy(0,startH);
 	for (int i=0; i<height; i++)
 		cout<<"                                                                                                                        ";
@@ -140,7 +151,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		drawCommandBox();
 		break;
 	case DIDUKNOW:
-		clearBox(diduknowInitY, bottomBoxHeight);
+		clearBox(operationResultY, bottomBoxHeight);
 		diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 		drawCommandBox();
 		break;
@@ -221,14 +232,14 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (diduknowInitRowIndex > bottomBoxHeight)
 		{
 			diduknowInitRowIndex -= bottomBoxHeight;
-			clearBox(diduknowInitY, bottomBoxHeight);
+			clearBox(operationResultY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
-			clearBox(diduknowInitY, bottomBoxHeight);
+			clearBox(operationResultY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
 			drawCommandBox();
 		}
@@ -273,7 +284,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (diduknowInitRowIndex < diduknowSize -1 - bottomBoxHeight)
 		{
 			diduknowInitRowIndex += bottomBoxHeight;
-			clearBox(diduknowInitY, bottomBoxHeight);
+			clearBox(operationResultY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalSize);
 			drawCommandBox();
 		}
@@ -290,6 +301,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	assert(calendarEntryList!=NULL);
 
 	char keyIn;
+	int counter = 0;
 	input = "";
 
 	while ((keyIn = getch()) != ENTER)
@@ -320,6 +332,11 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 				input = input.substr(0, input.size()-1);
 				cout << "\b \b";
+				if(counter>0)
+				{
+					--counter;
+				}
+				diduknowHintDisplay(counter);
 			}
 			break;
 		default:
@@ -327,13 +344,52 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 				cout << keyIn;
 				input += keyIn;
+				diduknowHintDisplay(++counter);
 			}
 			break;
 		}
 	}
 }
+void UI::setDidUKnowStatus()
+{
+	if (input == "add")
+	{
+		diduknowStatus = ADD_COMMAND;
+	}
+	else if (input == "delete")
+	{
+		diduknowStatus = DELETE_COMMAND;
 
-void UI::displayCalendarString(int index, string row, int& rowPosition)
+	}
+	else if (input == "exit")
+	{
+		diduknowStatus = EXIT_COMMAND;
+	}
+	else if (input =="search")
+	{
+		diduknowStatus = SEARCH_COMMAND;
+	}
+	else if (input == "undo")
+	{
+		diduknowStatus = UNDO_COMMAND;
+	}
+	else if (input =="update")
+	{
+		diduknowStatus = EDIT_COMMAND;
+	}
+	else if (input == "")
+	{
+		diduknowStatus = DIDUKNOW_INIT;
+	}
+}
+
+void UI::initializeDidUKnowStatus()
+{
+	diduknowStatus = DIDUKNOW_INIT;
+}
+
+
+void UI::printCalendarString(int index, string row, int& rowPosition)
 {
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
@@ -409,7 +465,7 @@ void UI::displayCalendarString(int index, string row, int& rowPosition)
 	cout<<endl;
 }
 
-void UI::displayGeneralString(int index, string row, int &rowPosition)
+void UI::printGeneralString(int index, string row, int &rowPosition)
 {	
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
@@ -485,16 +541,62 @@ void UI::displayGeneralString(int index, string row, int &rowPosition)
 	cout<<endl;
 }
 
-void UI::displayDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral)
+void UI::printDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral)
 {
 	if (isGeneral(row))
 	{
-		displayGeneralString(index, row, rowPosition);
+		printGeneralString(index, row, rowPosition);
 	}
 	else
 	{
-		displayCalendarString(index + sizeOfGeneral, row, rowPosition);
+		printCalendarString(index + sizeOfGeneral, row, rowPosition);
 	}
+}
+void UI::printDiduknowHints()
+{
+	clearBox(diduknowInitY,didUKnowHeight);
+	gotoxy(diduknowInitX, diduknowInitY);
+	switch (diduknowStatus)
+	{
+		case DIDUKNOW_INIT:
+			{				
+				cout<<DID_U_KNOW_HINTS;
+				break;
+			}
+		case ADD_COMMAND:
+			{
+				cout<<DID_U_KNOW_ADD;
+				break;
+			}
+		case DELETE_COMMAND:
+			{
+				cout<<DID_U_KNOW_DELETE;
+				break;
+			}
+		case EXIT_COMMAND:
+			{
+				cout<<DID_U_KNOW_EXIT;
+				break;
+			}
+		case SEARCH_COMMAND:
+			{
+				cout<<DID_U_KNOW_SEARCH;
+				break;
+			}
+		case UNDO_COMMAND:
+			{
+				cout<<DID_U_KNOW_UNDO;
+				break;
+			}
+		case EDIT_COMMAND:
+			{
+				cout<<DID_U_KNOW_UPDATE;
+				break;
+			}
+		default:
+			break;
+	}
+	cout<<endl;
 }
 
 bool UI::isGeneral(string row)
@@ -590,7 +692,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral)
 	{
 		row = generalEntryList ->at(entryIndex);
-		displayGeneralString(entryIndex + 1, row, rowPosition);
+		printGeneralString(entryIndex + 1, row, rowPosition);
 		entryIndex ++;
 		rowPosition ++;
 	}
@@ -613,7 +715,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	while (rowPosition < commandInitY && entryIndex <sizeOfCalendar)
 	{
 		row = calendarEntryList ->at(entryIndex);
-		displayCalendarString(entryIndex + 1, row, rowPosition);
+		printCalendarString(entryIndex + 1, row, rowPosition);
 		entryIndex ++;
 		rowPosition ++;
 	}
@@ -628,18 +730,24 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGener
 	int rowPosition;
 	string row;
 
-	gotoxy(diduknowInitX, diduknowInitY);
+	gotoxy(operationResultX, operationResultY);
 	sizeOfDiduknow=diduknowBoxList->size();
 	entryIndex = diduknowInitRowIndex;
-	rowPosition = diduknowInitY;
+	rowPosition = operationResultY;
 
 	while (rowPosition < windowsHeight -1 && entryIndex <sizeOfDiduknow)
 	{
 		row = diduknowBoxList ->at(entryIndex);
-		displayDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
+		printDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
 		entryIndex ++;
 		rowPosition ++;
 	}
+}
+void UI::diduknowHintDisplay(int currentChar)
+{	
+	setDidUKnowStatus();
+	printDiduknowHints();
+	gotoxy(8+currentChar,commandInitY);
 }
 
 void UI::startingScreenDisplay()
@@ -671,19 +779,20 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 
 	writeTitle("General: ", 1,0);
 	writeTitle("Calendar: ", 1, calendarInitY -2);
-
+	
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
 	diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
-	
+	initializeDidUKnowStatus();
+	diduknowHintDisplay(inputStartX);
+
 	drawCommandBox();
 }
 
 UI::UI()
 {
 	input = "";
-	focusedField = GENERAL;
-
+	focusedField = GENERAL;	
 	startingScreenDisplay();
 }
 
