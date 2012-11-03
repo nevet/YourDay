@@ -29,6 +29,7 @@
 #define inputStartX 8
 #define inputStartY commandInitY
 #define diduknowInitX 0
+#define diduknowInitY (commandInitY + commandBoxHeight)
 #define operationResultY (diduknowInitY+didUKnowHeight)
 #define operationResultX 0
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
