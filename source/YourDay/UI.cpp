@@ -547,7 +547,7 @@ void UI::printGeneralString(int index, string row, int &rowPosition)
 	cout<<endl;
 }
 
-void UI::printDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral)
+void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGeneral)
 {
 	assert(row!= "");
 	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
@@ -705,7 +705,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	while (rowPosition < windowsHeight-1 && entryIndex <sizeOfDiduknow)
 	{
 		row = resultList ->at(entryIndex);
-		printDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
+		printResultString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
 		entryIndex ++;
 		rowPosition ++;
 	}

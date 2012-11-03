@@ -119,7 +119,7 @@ private:
 
 	void printCalendarString(int index, string row, int &rowPosition);
 	void printGeneralString(int index, string row, int &rowPosition);
-	void printDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral);
+	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	void printDiduknowHints();
 	bool isGeneral(string row);
 
