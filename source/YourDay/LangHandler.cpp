@@ -554,10 +554,10 @@ void LangHandler::separate(string userInput) throw (string)
 Executor* LangHandler::pack(bool* quit, Signal focusingField,
 										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,
-										vector<string>* diduknowBoxList,
+										vector<string>* resultList,
 										StorageHandler* store)
 {
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 	assert(store!=NULL);
@@ -579,7 +579,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case SEARCH_COMMAND:
-			exe = new SearchExecutor(generalEntryList, calendarEntryList, diduknowBoxList, details);
+			exe = new SearchExecutor(generalEntryList, calendarEntryList, resultList, details);
 			log.writeCreated("SearchExecutor");
 			
 			break;

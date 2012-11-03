@@ -109,11 +109,11 @@ private:
 	void writeTitle(string words, int startH, int startW);
 
 	void changeDisplayMode();
-	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
-	void changeFocusedField(vector<string>* diduknowBoxList);
-	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
-	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
-	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void changeFocusedField(vector<string>* resultList);
+	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void setDidUKnowStatus();
 	void initializeDidUKnowStatus();
 
@@ -125,14 +125,14 @@ private:
 
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
-	void diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGeneral);
+	void resultListDisplay(vector<string>* resultList, int sizeOfGeneral);
 	void diduknowHintDisplay(int currentChar);
 	void startingScreenDisplay();
-	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 public:
 	UI();
 
-	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList);
+	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);

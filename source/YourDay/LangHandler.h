@@ -149,7 +149,7 @@ public :
 	Executor* pack(bool* quit, Signal focusingField,
 							   vector<string>* generalEntryList, 
 							   vector<string>* calendarEntryList,
-							   vector<string>* diduknowBoxList,
+							   vector<string>* resultList,
 							   StorageHandler* store);
 
 	~LangHandler();
