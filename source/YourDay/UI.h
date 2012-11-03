@@ -15,7 +15,7 @@
 #define generalTitleHeight 2
 #define generalBoxHeight 12
 #define calendarTitleHeight 3
-#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) 
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight -2) 
 #define commandBoxHeight 2
 #define bottomBoxHeight 6 //don't use the last line of the console
 #define didUKnowHeight 4
@@ -38,7 +38,7 @@
 #define calendarLocationInitX (calendarTimeInitX - 20)
 #define calendarTimeInitX 85
 #define calendarDateInitX 99
-#define calendarPriorityInitX 112
+#define calendarPriorityInitX 113
 
 #define generalIndexInitX 2
 #define generalDescriptionInitX 6
