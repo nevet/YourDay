@@ -199,7 +199,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			generalEntryListDisplay(generalEntryList);
 			drawCommandBox();
 		}
-
+		
 		break;
 	case CALENDAR:
 		if (calendarInitRowIndex > calendarBoxHeight)
@@ -252,27 +252,27 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalInitRowIndex < generalSize -1 - generalBoxHeight)
+		if (generalEndRowIndex != generalSize -1)
 		{
-			generalInitRowIndex += generalBoxHeight;
+			generalInitRowIndex = generalEndRowIndex +1;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
 			drawCommandBox();
 		}
 		break;
 	case CALENDAR:
-		if (calendarInitRowIndex < calendarSize -1 - calendarBoxHeight)
+		if (calendarEndRowIndex != calendarSize -1)
 		{
-			calendarInitRowIndex += calendarBoxHeight;
+			calendarInitRowIndex = calendarEndRowIndex +1;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
 			drawCommandBox();
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex < diduknowSize -1 - bottomBoxHeight)
+		if (diduknowEndRowIndex != diduknowSize -1)
 		{
-			diduknowInitRowIndex += bottomBoxHeight;
+			diduknowInitRowIndex = diduknowEndRowIndex +1;
 			clearBox(diduknowInitY, bottomBoxHeight);
 			diduknowBoxListDisplay(diduknowBoxList, generalSize);
 			drawCommandBox();
@@ -335,6 +335,9 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 
 void UI::displayCalendarString(int index, string row, int& rowPosition)
 {
+	assert(row!= "");
+	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
+
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
@@ -411,6 +414,9 @@ void UI::displayCalendarString(int index, string row, int& rowPosition)
 
 void UI::displayGeneralString(int index, string row, int &rowPosition)
 {	
+	assert(row!= "");
+	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
+	
 	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {generalIndexInitX, generalDescriptionInitX, generalLocationInitX,
@@ -487,6 +493,9 @@ void UI::displayGeneralString(int index, string row, int &rowPosition)
 
 void UI::displayDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral)
 {
+	assert(row!= "");
+	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
+
 	if (isGeneral(row))
 	{
 		displayGeneralString(index, row, rowPosition);
@@ -499,6 +508,8 @@ void UI::displayDiduknowString(int index, string row, int &rowPosition, int size
 
 bool UI::isGeneral(string row)
 {
+	assert(row != "");
+
 	//##CS2103 TUT#COM##Friday##
 	bool ans;
 	int countPart = 0;
@@ -525,54 +536,6 @@ bool UI::isGeneral(string row)
 	return ans;
 }
 
-void UI::coloredDisplayFormattedString(int index, string row, int rowIndex)
-{	
-	assert(index!=NULL);
-	assert(row!="");
-	assert(rowIndex!=NULL);
-
-	string part = "";
-	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
-							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
-	int countPart = 0;
-
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-
-	if (row[0] == '#' && row[1] == '#')		//for search result, the index of result in the entry list is added to result string,
-	{										//so don't need to display index in the diduknowBoxList
-		gotoxy(locationArray[countPart], rowIndex);
-		cout<<index<<". ";
-	}
-
-	for (int i = 1; i<row.size(); i++)
-	{
-		if (row[i] != '#' )
-		{
-			part += row[i];
-		}
-		else
-		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-			gotoxy(locationArray[countPart], rowIndex);
-			countPart++;
-
-			if (countPart != 2 || part.size() <= maxCharDetailCalendar - 3)
-			{
-				cout <<  part;
-			}
-			else
-			{
-				cout <<part.substr(0, maxCharDetailCalendar - 3) << "...";
-			}
-			part = "";
-		}
-		
-	}
-	cout<<endl;
-	
-}
-
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {	
 	assert(generalEntryList!=NULL);
@@ -594,6 +557,8 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 		entryIndex ++;
 		rowPosition ++;
 	}
+
+	generalEndRowIndex = entryIndex -1;
 }
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
@@ -610,13 +575,15 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	entryIndex = calendarInitRowIndex;
 	rowPosition = calendarInitY;
 
-	while (rowPosition < commandInitY && entryIndex <sizeOfCalendar)
+	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar)
 	{
 		row = calendarEntryList ->at(entryIndex);
 		displayCalendarString(entryIndex + 1, row, rowPosition);
 		entryIndex ++;
 		rowPosition ++;
 	}
+
+	calendarEndRowIndex = entryIndex -1;
 }
 
 void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGeneral)
@@ -633,13 +600,15 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGener
 	entryIndex = diduknowInitRowIndex;
 	rowPosition = diduknowInitY;
 
-	while (rowPosition < windowsHeight -1 && entryIndex <sizeOfDiduknow)
+	while (rowPosition < windowsHeight-1 && entryIndex <sizeOfDiduknow)
 	{
 		row = diduknowBoxList ->at(entryIndex);
 		displayDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
 		entryIndex ++;
 		rowPosition ++;
 	}
+
+	diduknowEndRowIndex = entryIndex -1;
 }
 
 void UI::startingScreenDisplay()

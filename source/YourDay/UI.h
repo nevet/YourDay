@@ -15,17 +15,18 @@
 #define generalTitleHeight 2
 #define generalBoxHeight 12
 #define calendarTitleHeight 3
-#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight) 
+#define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight -bottomBoxHeight -2) //14
+														// -2 because don't use the line before command box and the end line of the console
 #define commandBoxHeight 2
-#define bottomBoxHeight 7
+#define bottomBoxHeight 6 //don't use the last line of the console
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
 #define calendarInitY (generalInitY + generalBoxHeight + calendarTitleHeight)
 #define calendarInitX 0
-#define commandInitY (calendarInitY + calendarBoxHeight)
+#define commandInitY (calendarInitY + calendarBoxHeight +1)
 #define commandInitX 0
-#define diduknowInitY (calendarInitY + calendarBoxHeight + commandBoxHeight)
+#define diduknowInitY (commandInitY + commandBoxHeight)
 #define diduknowInitX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
@@ -33,22 +34,20 @@
 #define calendarDescriptionInitX 6
 #define calendarLocationInitX (calendarTimeInitX - 20)
 #define calendarTimeInitX 85
-#define calendarDateInitX 100
-#define calendarPriorityInitX 115
+#define calendarDateInitX 99
+#define calendarPriorityInitX 112
 
 #define generalIndexInitX 2
 #define generalDescriptionInitX 6
 #define generalLocationInitX (generalTimeInitX- 10)
-#define generalTimeInitX 115
-#define generalDateInitX 115
-#define generalPriorityInitX 115
+#define generalTimeInitX 113
+#define generalDateInitX 113
+#define generalPriorityInitX 113
 
 #define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
 #define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)
 #define maxCharLocationGeneral (generalTimeInitX - generalLocationInitX -1)
 #define maxCharDetailGeneral (generalLocationInitX - generalDescriptionInitX -1)
-
-#define maxCharDetail 12
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
 #define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
@@ -81,6 +80,9 @@ private:
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
+	int generalEndRowIndex; // in case an entry occupies > 1 line, end index is not initial index + box height
+	int calendarEndRowIndex;
+	int diduknowEndRowIndex;
 
 	string interpreteSignal(Signal status);
 
@@ -103,7 +105,6 @@ private:
 	void displayGeneralString(int index, string row, int &rowPosition);
 	void displayDiduknowString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	bool isGeneral(string row);
-	void coloredDisplayFormattedString(int,string, int);
 
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
