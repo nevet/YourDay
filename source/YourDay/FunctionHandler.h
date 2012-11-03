@@ -44,7 +44,7 @@ public:
 	*/
 	FunctionHandler(vector<string>* generalEntryList,
 					vector<string>* calendarEntryList,
-					vector<string>* diduknowBoxList) throw (string);
+					vector<string>* resultList) throw (string);
 	
 	/**
 	* Signal will be:
@@ -74,6 +74,6 @@ public:
 	void execute(string input, bool* quit, Signal focusingField,
 				 vector<string>* generalEntryList,
 				 vector<string>* calendarEntryList,
-				 vector<string>* diduknowBoxList);
+				 vector<string>* resultList);
 };
 #endif

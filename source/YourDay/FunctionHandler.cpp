@@ -6,18 +6,18 @@ using namespace std;
 
 FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 								 vector<string>* calendarEntryList,
-								 vector<string>* diduknowBoxList) 
+								 vector<string>* resultList) 
 {	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 
 	//set default value for function handler status
 	fxStatus = CLEAR;
 	
 	//generalEntryList->clear();
 	//calendarEntryList->clear();
-	//diduknowBoxList->clear();
+	//resultList->clear();
 
 	while (!undoStk.empty())
 	{
@@ -40,11 +40,11 @@ void FunctionHandler::clearStatus()
 void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
-							  vector<string>* diduknowBoxList) throw (string)
+							  vector<string>* resultList) throw (string)
 {
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 
 	LangHandler lang;
 	log.writeCreated("Language Handler");
@@ -53,7 +53,7 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 	log.writeCreated("Executor pointer");
 
 	//clear diduknow box list to keep information updated
-	diduknowBoxList->clear();
+	resultList->clear();
 
 	try
 	{
@@ -62,7 +62,7 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 		log.writeExecuted("LangHandler::separate()");
 
 		//no error occured, we should retrieve the packed executor
-		exe = lang.pack(quit, focusingField, generalEntryList, calendarEntryList, diduknowBoxList, &store);
+		exe = lang.pack(quit, focusingField, generalEntryList, calendarEntryList, resultList, &store);
 		log.writeExecuted("LangHandler::separate()");
 
 		//exe is NULL means undo command encountered

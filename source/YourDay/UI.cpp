@@ -100,7 +100,7 @@ void UI::clearBox(int startH, int height)
 	for (int i=0; i<height; i++)
 		cout<<"                                                                                                                        ";
 	
-	gotoxy(0,startH);
+	gotoxy(0,startH-1);
 }
 
 void UI :: gotoxy(int x, int y) //goes to x,y console
@@ -132,9 +132,9 @@ void UI::changeDisplayMode()
 	}
 }
 
-void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
@@ -152,7 +152,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		break;
 	case DIDUKNOW:
 		clearBox(operationResultY, bottomBoxHeight);
-		diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
+		resultListDisplay(resultList, generalEntryList->size());
 		drawCommandBox();
 		break;
 	default:
@@ -160,9 +160,9 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 	}
 }
 
-void UI::changeFocusedField(vector<string>* diduknowBoxList)
+void UI::changeFocusedField(vector<string>* resultList)
 {
-	int sizeOfDiduknow = diduknowBoxList->size();
+	int sizeOfDiduknow = resultList->size();
 
 	switch (focusedField)
 	{
@@ -187,9 +187,9 @@ void UI::changeFocusedField(vector<string>* diduknowBoxList)
 	}
 }
 
-void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
@@ -233,14 +233,14 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		{
 			diduknowInitRowIndex -= bottomBoxHeight;
 			clearBox(operationResultY, bottomBoxHeight);
-			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
+			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
 			clearBox(operationResultY, bottomBoxHeight);
-			diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
+			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
 
@@ -250,15 +250,15 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	}
 }
 
-void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
 	int generalSize = generalEntryList->size();
 	int calendarSize = calendarEntryList->size();
-	int diduknowSize = diduknowBoxList->size();
+	int diduknowSize = resultList->size();
 
 	switch (focusedField)
 	{
@@ -285,7 +285,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		{
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
 			clearBox(operationResultY, bottomBoxHeight);
-			diduknowBoxListDisplay(diduknowBoxList, generalSize);
+			resultListDisplay(resultList, generalSize);
 			drawCommandBox();
 		}
 		break;
@@ -294,9 +294,9 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
-void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
@@ -313,19 +313,19 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			switch (keyIn)
 			{
 			case 72:
-				scrollUp(calendarEntryList, generalEntryList, diduknowBoxList);
+				scrollUp(calendarEntryList, generalEntryList, resultList);
 				break;
 			case 80:
-				scrollDown(calendarEntryList, generalEntryList, diduknowBoxList);
+				scrollDown(calendarEntryList, generalEntryList, resultList);
 				break;
 			case 73:
 				changeDisplayMode();
-				displayNewMode(calendarEntryList, generalEntryList, diduknowBoxList);
+				displayNewMode(calendarEntryList, generalEntryList, resultList);
 				break;
 			}
 			break;
 		case TAB:
-			changeFocusedField(diduknowBoxList);
+			changeFocusedField(resultList);
 			break;
 		case BACKSPACE:
 			if (input.size()>0)
@@ -688,9 +688,9 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	calendarEndRowIndex = entryIndex -1;
 }
 
-void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGeneral)
+void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 {	
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 
 	int sizeOfDiduknow;
 	int entryIndex;
@@ -698,13 +698,13 @@ void UI::diduknowBoxListDisplay(vector<string>* diduknowBoxList, int sizeOfGener
 	string row;
 
 	gotoxy(operationResultX, operationResultY);
-	sizeOfDiduknow=diduknowBoxList->size();
+	sizeOfDiduknow=resultList->size();
 	entryIndex = diduknowInitRowIndex;
 	rowPosition = operationResultY;
 
 	while (rowPosition < windowsHeight-1 && entryIndex <sizeOfDiduknow)
 	{
-		row = diduknowBoxList ->at(entryIndex);
+		row = resultList ->at(entryIndex);
 		printDiduknowString(entryIndex + 1, row, rowPosition, sizeOfGeneral);
 		entryIndex ++;
 		rowPosition ++;
@@ -738,11 +738,11 @@ void UI::startingScreenDisplay()
 	while ((c = getch()) != ENTER);
 }
 
-void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 	setBackground();
 	system("CLS");
 
@@ -751,7 +751,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
-	diduknowBoxListDisplay(diduknowBoxList, generalEntryList->size());
+	resultListDisplay(resultList, generalEntryList->size());
 	initializeDidUKnowStatus();
 	diduknowHintDisplay(inputStartX);
 
@@ -765,22 +765,22 @@ UI::UI()
 	startingScreenDisplay();
 }
 
-void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* diduknowBoxList)
+void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
-	assert(diduknowBoxList!=NULL);
+	assert(resultList!=NULL);
 
 	int generalTemp = generalEntryList->size() - generalBoxHeight;
 	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
-	int diduknowTemp = diduknowBoxList->size() - bottomBoxHeight;
+	int diduknowTemp = resultList->size() - bottomBoxHeight;
 	generalInitRowIndex = max(0, generalTemp);
 	calendarInitRowIndex = max(0, calendarTemp);
 	diduknowInitRowIndex = max(0, diduknowTemp);
 	displayMode = DISPLAY_ALL;
 
-	mainScreenDisplay(calendarEntryList, generalEntryList, diduknowBoxList);
-	traceInput(calendarEntryList, generalEntryList, diduknowBoxList);
+	mainScreenDisplay(calendarEntryList, generalEntryList, resultList);
+	traceInput(calendarEntryList, generalEntryList, resultList);
 }
 
 string UI::retrieveInput()
@@ -799,6 +799,7 @@ void UI::displayMessage(string message)
 	gotoxy(0,diduknowInitY);
 	setBackground();
 	cout << message <<endl;
+	gotoxy(8,commandInitY-1);
 	getchar();
 	drawCommandBox();
 }
