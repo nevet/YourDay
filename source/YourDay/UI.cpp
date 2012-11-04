@@ -89,6 +89,7 @@ void UI::drawCommandBox()
 
 void UI::gotoCommandBox()
 {
+	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	gotoxy(8,commandInitY);
 }
 
@@ -129,8 +130,8 @@ void UI::writeTitle(string words, int startX, int startY)
 	gotoxy(startX,startY);
 	
 	cout<<words<<endl;
-	gotoxy(8,commandInitY);
 	setBackground();
+	gotoCommandBox();
 }
 
 void UI::writeHighlightedTitle(string words,int startX, int startY)
@@ -139,8 +140,8 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
-	gotoxy(8,commandInitY);
 	setBackground();
+	gotoCommandBox();
 }
 
 void UI::changeDisplayMode()
