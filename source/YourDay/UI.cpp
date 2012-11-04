@@ -82,7 +82,10 @@ void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
 	//SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	cout<<"command:                                                                                                                ";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),4|FOREGROUND_INTENSITY);
+	cout<<"command:";
+	setBackground();
+	cout<<"                                                                                                                ";
 	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
 }

@@ -1,7 +1,7 @@
 #include<cassert>
 
 #include "SearchExecutor.h"
-
+//@author A0091734A
 void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
 {
 	assert(result!="");
