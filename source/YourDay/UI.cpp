@@ -81,7 +81,7 @@ void UI::drawBanner()
 void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
-	//SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	cout<<"command:                                                                                                                ";
 	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
@@ -100,10 +100,17 @@ void UI::setBackground()
 
 void UI::clearBox(int startH, int height)
 {
-	//setBackground();
+	setBackground();
 	gotoxy(0,startH);
 	for (int i=0; i<height; i++)
-		cout<<"                                                                                                                        ";
+		if (startH + height == windowsHeight && i == height -1)
+		{
+			cout<<"                                                                                                                       ";
+		}
+		else
+		{
+			cout<<"                                                                                                                        ";
+		}
 	
 	gotoxy(0,startH-1);
 }
@@ -249,17 +256,17 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex > bottomBoxHeight)
+		if (diduknowInitRowIndex > resultBoxHeight)
 		{
-			diduknowInitRowIndex -= bottomBoxHeight;
-			clearBox(operationResultY, bottomBoxHeight);
+			diduknowInitRowIndex -= resultBoxHeight;
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
-			clearBox(operationResultY, bottomBoxHeight);
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
@@ -304,7 +311,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (diduknowEndRowIndex != diduknowSize -1)
 		{
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
-			clearBox(operationResultY, bottomBoxHeight);
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalSize);
 			drawCommandBox();
 		}
@@ -737,6 +744,7 @@ void UI::diduknowHintDisplay(int currentChar)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
 	printDiduknowHints();
+	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	gotoxy(8+currentChar,commandInitY);
 }
 
