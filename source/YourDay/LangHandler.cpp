@@ -464,7 +464,6 @@ void LangHandler::encoder(string input, Signal command)
 
 void LangHandler::setCommand(string userCommand)
 {	
-	assert(userCommand!="");
 	//if user command is valid, set corresponding command type
 	if ( userCommand == "add" )
 	{
