@@ -464,7 +464,6 @@ void LangHandler::encoder(string input, Signal command)
 
 void LangHandler::setCommand(string userCommand)
 {	
-	assert(userCommand!="");
 	//if user command is valid, set corresponding command type
 	if ( userCommand == "add" )
 	{
@@ -494,6 +493,11 @@ void LangHandler::setCommand(string userCommand)
 	if (userCommand == "exit" )
 	{
 		command = EXIT_COMMAND;
+	}
+	else
+	if (userCommand == "")
+	{
+		throw string ("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
 	}
 	else
 	{
