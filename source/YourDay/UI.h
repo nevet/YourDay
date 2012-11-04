@@ -103,10 +103,12 @@ private:
 	void setScreenSize();
 	void setBackground();
 	void drawBanner();
+	void gotoCommandBox();
 	void drawCommandBox();
 	void clearBox(int startH, int height);
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
+	void writeHighlightedTitle(string words,int startH, int startW);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);

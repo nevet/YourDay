@@ -15,6 +15,7 @@ const string UI::DID_U_KNOW_UPDATE = "To update an entry, type \"update\" follow
 const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
 const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
 
+
 string UI::interpreteSignal(Signal outSignal)
 {
 	string outString;
@@ -36,8 +37,6 @@ string UI::interpreteSignal(Signal outSignal)
 	}
 	return outString;
 }
-
-
 
 void UI::setScreenSize()
 {
@@ -88,9 +87,15 @@ void UI::drawCommandBox()
 	gotoxy(8,commandInitY);
 }
 
+void UI::gotoCommandBox()
+{
+	gotoxy(8,commandInitY);
+}
+
 void UI::setBackground()
 {
 	 SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 }
 
 void UI::clearBox(int startH, int height)
@@ -113,11 +118,22 @@ void UI :: gotoxy(int x, int y) //goes to x,y console
 
 void UI::writeTitle(string words, int startX, int startY)
 {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY |
-		FOREGROUND_RED | FOREGROUND_GREEN);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),128);
+	gotoxy(startX,startY);
+	
+	cout<<words<<endl;
+	gotoxy(8,commandInitY);
+	setBackground();
+}
+
+void UI::writeHighlightedTitle(string words,int startX, int startY)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),1|BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY);
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
+	gotoxy(8,commandInitY);
+	setBackground();
 }
 
 void UI::changeDisplayMode()
@@ -168,6 +184,8 @@ void UI::changeFocusedField(vector<string>* resultList)
 	{
 	case GENERAL:
 		focusedField = CALENDAR;
+		writeTitle("General: ", 1,0);
+		writeHighlightedTitle("Calendar: ", 1, calendarInitY -2);
 		break;
 	case CALENDAR:
 		if (sizeOfDiduknow !=0)
@@ -177,6 +195,8 @@ void UI::changeFocusedField(vector<string>* resultList)
 		else
 		{
 			focusedField = GENERAL;
+			writeHighlightedTitle("General: ", 1,0);
+			writeTitle("Calendar: ", 1, calendarInitY -2);
 		}
 		break;
 	case DIDUKNOW:
@@ -350,6 +370,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 		}
 	}
 }
+
 void UI::setDidUKnowStatus()
 {
 	if (input == "add")
@@ -387,7 +408,6 @@ void UI::initializeDidUKnowStatus()
 {
 	diduknowStatus = DIDUKNOW_INIT;
 }
-
 
 void UI::printCalendarString(int index, string row, int& rowPosition)
 {
@@ -714,6 +734,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 }
 void UI::diduknowHintDisplay(int currentChar)
 {	
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
 	printDiduknowHints();
 	gotoxy(8+currentChar,commandInitY);
@@ -746,8 +767,9 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	setBackground();
 	system("CLS");
 
-	writeTitle("General: ", 1,0);
-	writeTitle("Calendar: ", 1, calendarInitY -2);
+
+	writeHighlightedTitle("General: ", 1,0);
+	writeTitle("Calendar: ", 1, calendarInitY -2);	
 	
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
@@ -800,14 +822,15 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	gotoxy(8,commandInitY-1);
-	getchar();
 	drawCommandBox();
+	getchar();
 }
 
 void UI::displayStatus(Signal status)
 {
-	string message = interpreteSignal(status);
-	displayMessage(message);
+	//string message = interpreteSignal(status);
+	//displayMessage(message);
+
 }
 
 UI::~UI()
