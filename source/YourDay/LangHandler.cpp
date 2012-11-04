@@ -498,6 +498,7 @@ void LangHandler::setCommand(string userCommand)
 	else
 	{
 		//if user command is invalid, command error signal should be set
+		
 		throw string ("Command error\n");
 	}
 }
