@@ -81,16 +81,18 @@ void UI::drawBanner()
 void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	cout<<"command:                                                                                                                ";
+	//SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),4|FOREGROUND_INTENSITY);
+	cout<<"command:";
+	setBackground();
+	cout<<"                                                                                                                ";
 	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
 }
 
-void UI::gotoCommandBox(int curCursor)
+void UI::gotoCommandBox()
 {
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
-	gotoxy(8 + curCursor,commandInitY);
+	gotoxy(8,commandInitY);
 }
 
 void UI::setBackground()
@@ -101,17 +103,10 @@ void UI::setBackground()
 
 void UI::clearBox(int startH, int height)
 {
-	setBackground();
+	//setBackground();
 	gotoxy(0,startH);
 	for (int i=0; i<height; i++)
-		if (startH + height == windowsHeight && i == height -1)
-		{
-			cout<<"                                                                                                                       ";
-		}
-		else
-		{
-			cout<<"                                                                                                                        ";
-		}
+		cout<<"                                                                                                                        ";
 	
 	gotoxy(0,startH-1);
 }
@@ -130,8 +125,8 @@ void UI::writeTitle(string words, int startX, int startY)
 	gotoxy(startX,startY);
 	
 	cout<<words<<endl;
+	gotoxy(8,commandInitY);
 	setBackground();
-	gotoCommandBox(0);
 }
 
 void UI::writeHighlightedTitle(string words,int startX, int startY)
@@ -140,8 +135,8 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
+	gotoxy(8,commandInitY);
 	setBackground();
-	gotoCommandBox(0);
 }
 
 void UI::changeDisplayMode()
@@ -156,7 +151,7 @@ void UI::changeDisplayMode()
 	}
 }
 
-void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar)
+void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
 	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
@@ -167,17 +162,17 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 	case GENERAL:
 		clearBox(generalInitY, generalBoxHeight);
 		generalEntryListDisplay(generalEntryList);
-		gotoCommandBox(curChar);
+		drawCommandBox();
 		break;
 	case CALENDAR:
 		clearBox(calendarInitY, calendarBoxHeight);
 		calendarEntryListDisplay(calendarEntryList);
-		gotoCommandBox(curChar);
+		drawCommandBox();
 		break;
 	case DIDUKNOW:
 		clearBox(operationResultY, bottomBoxHeight);
 		resultListDisplay(resultList, generalEntryList->size());
-		gotoCommandBox(curChar);
+		drawCommandBox();
 		break;
 	default:
 		assert (false);
@@ -215,7 +210,7 @@ void UI::changeFocusedField(vector<string>* resultList)
 	}
 }
 
-void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar)
+void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
 	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
@@ -229,14 +224,14 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			generalInitRowIndex -= generalBoxHeight;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		else if (generalInitRowIndex > 0)
 		{
 			generalInitRowIndex = 0;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		
 		break;
@@ -246,14 +241,14 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			calendarInitRowIndex -= calendarBoxHeight;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		else if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex = 0;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		break;
 	case DIDUKNOW:
@@ -262,14 +257,14 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			diduknowInitRowIndex -= resultBoxHeight;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 
 		break;
@@ -278,7 +273,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	}
 }
 
-void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar)
+void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {
 	assert(resultList!=NULL);
 	assert(generalEntryList!=NULL);
@@ -296,7 +291,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			generalInitRowIndex = generalEndRowIndex +1;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		break;
 	case CALENDAR:
@@ -305,7 +300,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			calendarInitRowIndex = calendarEndRowIndex +1;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		break;
 	case DIDUKNOW:
@@ -314,7 +309,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalSize);
-			gotoCommandBox(curChar);
+			drawCommandBox();
 		}
 		break;
 	default:
@@ -341,14 +336,14 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			switch (keyIn)
 			{
 			case 72:
-				scrollUp(calendarEntryList, generalEntryList, resultList, counter);
+				scrollUp(calendarEntryList, generalEntryList, resultList);
 				break;
 			case 80:
-				scrollDown(calendarEntryList, generalEntryList, resultList, counter);
+				scrollDown(calendarEntryList, generalEntryList, resultList);
 				break;
 			case 73:
 				changeDisplayMode();
-				displayNewMode(calendarEntryList, generalEntryList, resultList, counter);
+				displayNewMode(calendarEntryList, generalEntryList, resultList);
 				break;
 			}
 			break;
@@ -360,7 +355,10 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 				input = input.substr(0, input.size()-1);
 				cout << "\b \b";
-				counter--;
+				if(counter>0)
+				{
+					--counter;
+				}
 				diduknowHintDisplay(counter);
 			}
 			break;
@@ -742,7 +740,6 @@ void UI::diduknowHintDisplay(int currentChar)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
 	printDiduknowHints();
-	SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	gotoxy(8+currentChar,commandInitY);
 }
 
@@ -841,4 +838,4 @@ void UI::displayStatus(Signal status)
 
 UI::~UI()
 {
-}
+}	 

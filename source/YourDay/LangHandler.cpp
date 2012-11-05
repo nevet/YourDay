@@ -495,6 +495,11 @@ void LangHandler::setCommand(string userCommand)
 		command = EXIT_COMMAND;
 	}
 	else
+	if (userCommand == "")
+	{
+		throw string ("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
+	}
+	else
 	{
 		//if user command is invalid, command error signal should be set
 		
