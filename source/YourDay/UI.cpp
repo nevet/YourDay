@@ -171,7 +171,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		drawCommandBox();
 		break;
 	case DIDUKNOW:
-		clearBox(operationResultY, bottomBoxHeight);
+		clearBox(operationResultY, resultBoxHeight);
 		resultListDisplay(resultList, generalEntryList->size());
 		drawCommandBox();
 		break;
