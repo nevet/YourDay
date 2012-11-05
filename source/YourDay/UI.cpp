@@ -224,14 +224,12 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			generalInitRowIndex -= generalBoxHeight;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			drawCommandBox();
 		}
 		else if (generalInitRowIndex > 0)
 		{
 			generalInitRowIndex = 0;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			drawCommandBox();
 		}
 		
 		break;
@@ -241,14 +239,12 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			calendarInitRowIndex -= calendarBoxHeight;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			drawCommandBox();
 		}
 		else if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex = 0;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			drawCommandBox();
 		}
 		break;
 	case DIDUKNOW:
@@ -257,14 +253,12 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			diduknowInitRowIndex -= resultBoxHeight;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
-			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
-			drawCommandBox();
 		}
 
 		break;
@@ -291,7 +285,6 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			generalInitRowIndex = generalEndRowIndex +1;
 			clearBox(generalInitY, generalBoxHeight +1);
 			generalEntryListDisplay(generalEntryList);
-			drawCommandBox();
 		}
 		break;
 	case CALENDAR:
@@ -300,7 +293,6 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			calendarInitRowIndex = calendarEndRowIndex +1;
 			clearBox(calendarInitY, calendarBoxHeight);
 			calendarEntryListDisplay(calendarEntryList);
-			drawCommandBox();
 		}
 		break;
 	case DIDUKNOW:
@@ -309,7 +301,6 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
 			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalSize);
-			drawCommandBox();
 		}
 		break;
 	default:
@@ -337,9 +328,11 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 			case 72:
 				scrollUp(calendarEntryList, generalEntryList, resultList);
+				gotoxy(currentChar+8,commandInitY);
 				break;
 			case 80:
 				scrollDown(calendarEntryList, generalEntryList, resultList);
+				gotoxy(currentChar+8,commandInitY);
 				break;
 			case 73:
 				changeDisplayMode();
@@ -365,6 +358,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 		default:
 			if (keyIn != ENTER && input.size() < maxInputSize)
 			{
+				setBackground();
 				cout << keyIn;
 				input += keyIn;
 				currentChar++;
