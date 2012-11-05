@@ -6,6 +6,7 @@ const string UI::CLEAR_SIGNAL_MESSAGE = "Command done\n";
 const string UI::ADD_SUCCESSFUL_MESSAGE = "Added successfully\n";
 const string UI::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
 const string UI::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
+const string UI::ONE_EMPTY_LINE = "                                                                                                                        ";
 
 const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
 const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
@@ -86,7 +87,7 @@ void UI::drawCommandBox()
 	cout<<"command:";
 	setBackground();
 	cout<<"                                                                                                                ";
-	cout<<"                                                                                                                        ";
+	//cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
 }
 
@@ -191,19 +192,26 @@ void UI::changeFocusedField(vector<string>* resultList)
 		writeHighlightedTitle("Calendar: ", 1, calendarInitY -2);
 		break;
 	case CALENDAR:
-		if (sizeOfDiduknow !=0)
+		/*if (flag==1&&sizeOfDiduknow !=0)
 		{
 			focusedField = DIDUKNOW;
+			writeTitle("General: ", 1,0);
+			writeTitle("Calendar: ", 1, calendarInitY -2);
+			writeHighlightedTitle("SearchBox: ",1,commandInitY+2);
 		}
 		else
-		{
-			focusedField = GENERAL;
-			writeHighlightedTitle("General: ", 1,0);
-			writeTitle("Calendar: ", 1, calendarInitY -2);
-		}
+		{*/
+		focusedField = GENERAL;
+		writeHighlightedTitle("General: ", 1,0);
+		writeTitle("Calendar: ", 1, calendarInitY -2);
+		//}
 		break;
 	case DIDUKNOW:
 		focusedField = GENERAL;
+		writeHighlightedTitle("General: ", 1,0);
+		writeTitle("Calendar: ", 1, calendarInitY -2);
+		clearBox(diduknowInitY,didUKnowHeight+2);
+		diduknowHintDisplay();
 		break;
 	default:
 		assert(false);
@@ -420,7 +428,7 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 	bool isOverflow = false;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-
+	clearBox(rowPosition,1);
 	gotoxy(locationArray[countPart], rowPosition);
 	cout<<index<<". ";
 
@@ -569,7 +577,6 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 {
 	assert(row!= "");
 	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
-
 	if (isGeneral(row))
 	{
 		printGeneralString(index, row, rowPosition);
@@ -581,7 +588,7 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 }
 void UI::printDiduknowHints()
 {
-	clearBox(diduknowInitY,didUKnowHeight);
+	clearBox(diduknowInitY,didUKnowHeight+2);
 	gotoxy(diduknowInitX, diduknowInitY);
 	switch (diduknowStatus)
 	{
@@ -668,7 +675,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	sizeOfGeneral=generalEntryList->size();
 	entryIndex = generalInitRowIndex;
 	rowPosition = generalInitY;
-
+	
 	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral)
 	{
 		row = generalEntryList ->at(entryIndex);
@@ -712,12 +719,28 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	int entryIndex;
 	int rowPosition;
 	string row;
-
-	gotoxy(operationResultX, operationResultY);
+	
+	gotoxy(operationResultX, diduknowInitY+1);
 	sizeOfDiduknow=resultList->size();
 	entryIndex = diduknowInitRowIndex;
-	rowPosition = operationResultY;
+	
+	if(resultList->size()>0)
+	{
+		clearBox(commandInitY+2,1);
+		if(focusedField = DIDUKNOW)
+		{
+			writeTitle("General: ", 1,0);
+			writeTitle("Calendar: ", 1, calendarInitY -2);
+			writeHighlightedTitle("SearchBox: ",1,commandInitY+2);
+		}	
+		else
+		{	
+			writeTitle("SearchBox: ",1,commandInitY+2);
+		}
+	}
 
+	gotoxy(1,commandInitY+3);
+	rowPosition = commandInitY+3;
 	while (rowPosition < windowsHeight-1 && entryIndex <sizeOfDiduknow)
 	{
 		row = resultList ->at(entryIndex);
@@ -725,7 +748,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 		entryIndex ++;
 		rowPosition ++;
 	}
-
+	
 	diduknowEndRowIndex = entryIndex -1;
 }
 void UI::diduknowHintDisplay()
@@ -767,12 +790,12 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 
 	writeHighlightedTitle("General: ", 1,0);
 	writeTitle("Calendar: ", 1, calendarInitY -2);	
-	
+	//writeTitle("SearchBox: ", 0, commandInitY+5);
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
-	resultListDisplay(resultList, generalEntryList->size());
 	initializeDidUKnowStatus();
 	diduknowHintDisplay();
+	resultListDisplay(resultList, generalEntryList->size());
 
 	drawCommandBox();
 }

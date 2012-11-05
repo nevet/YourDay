@@ -77,6 +77,7 @@ private:
 	static const string ADD_SUCCESSFUL_MESSAGE;
 	static const string UPDATE_SUCCESSFUL_MESSAGE;
 	static const string DELETE_SUCCESSFUL_MESSAGE;
+	static const string ONE_EMPTY_LINE;
 
 	static const string DID_U_KNOW_ADD;
 	static const string DID_U_KNOW_DELETE;
@@ -92,6 +93,7 @@ private:
 	Signal focusedField;
 	Signal displayMode;
 	Signal diduknowStatus;
+
 
 	int currentChar;
 	int generalInitRowIndex;
