@@ -118,7 +118,7 @@ bool LangHandler::isLogicTime(string time)
 	{
 		flag = false;
 	} else
-	if (m1 > 59 || m1 < 0 || m2 > 59 || m1 < 0)
+	if (m1 > 59 || m1 < 0 || m2 > 59 || m2 < 0)
 	{
 		flag = false;
 	} else
@@ -390,63 +390,13 @@ void LangHandler::encoder(string input, Signal command)
 			
 				break;
 
-			//format will be "[date] [time] description"
+			//format will be "description", further decomposition will be handled by SearchExecutor
 			case SEARCH_COMMAND:
 				log.writeConditionEntered("search command separation", true);
-			
-				//extract potential date information and exmaine it
-				pos = input.find(SPACE_BAR);
-				if (pos != string::npos)
-				{
-					date = input.substr(0, pos);
-				}
-				
-				//only if date field is not empty
-				if (date != NULL_STRING && isDate(date))
-				{
-					input = input.substr(pos + 1);
-					
-					pos = input.find(SPACE_BAR);
-					time = input.substr(0, pos);
-
-					if (isTime(time))
-					{
-						input = input.substr(pos + 1);
-					} else
-					{
-						time = NULL_STRING;
-					}
-				} else
-				{
-					//it might be a time, so we need to exmaine it
-					time = date;
-					date = NULL_STRING;
-
-					if (time != NULL_STRING && isTime(time))
-					{
-						input = input.substr(pos + 1);
-					} else
-					{
-						time = NULL_STRING;
-					}
-				}
-				
-				log.writeExecuted("delete command separation/date and time separation");
 				
 				description = input;
 				
-				//after have done separating, we need to exmaine each field
-				//to make sure they are logic, if applicable
-				if (date != NULL_STRING && !isLogicDate(date))
-				{
-					throw string ("date error\n");
-					log.writeException("date error");
-				} else
-				if (time != NULL_STRING && !isLogicTime(time))
-				{
-					throw string ("time error\n");
-					log.writeException("time error");
-				}
+				log.writeExecuted("search command separation/description saperated");
 				
 				break;
 
