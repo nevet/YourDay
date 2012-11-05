@@ -40,14 +40,14 @@
 #define calendarLocationInitX (calendarTimeInitX - 20)
 #define calendarTimeInitX 85
 #define calendarDateInitX 99
-#define calendarPriorityInitX 112
+#define calendarPriorityInitX 113
 
 #define generalIndexInitX 2
 #define generalDescriptionInitX 6
 #define generalLocationInitX (generalTimeInitX- 10)
-#define generalTimeInitX 112
-#define generalDateInitX 112
-#define generalPriorityInitX 112
+#define generalTimeInitX 113
+#define generalDateInitX 113
+#define generalPriorityInitX 113
 
 #define maxCharLocationCalendar (calendarTimeInitX - calendarLocationInitX -1)
 #define maxCharDetailCalendar (calendarLocationInitX - calendarDescriptionInitX -1)
@@ -105,7 +105,7 @@ private:
 	void setScreenSize();
 	void setBackground();
 	void drawBanner();
-	void gotoCommandBox(int curCursor);
+	void gotoCommandBox();
 	void drawCommandBox();
 	void clearBox(int startH, int height);
 	void gotoxy(int x, int y);
@@ -113,10 +113,10 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 
 	void changeDisplayMode();
-	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar);
+	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void changeFocusedField(vector<string>* resultList);
-	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar);
-	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, int curChar);
+	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void setDidUKnowStatus();
 	void initializeDidUKnowStatus();
