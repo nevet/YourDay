@@ -25,7 +25,7 @@ const string LangHandler::LOCATION_INDICATOR = " at ";
 const string LangHandler::SPACE_BAR = " ";
 const string LangHandler::DELIMINATOR = "#";
 
-bool LangHandler::leap(int year)
+bool LangHandler::isLeap(int year)
 {
 	bool flag = false;
 	
@@ -89,7 +89,7 @@ bool LangHandler::isLogicDate(string date)
 		flag = false;
 	} else
 	{
-		if (!leap(year))
+		if (!isLeap(year))
 		{
 			if (day > MONTH[month - 1])
 			{

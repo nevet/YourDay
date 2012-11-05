@@ -5,8 +5,10 @@
 #include <algorithm>
 #include <sstream>
 #include "Executor.h"
+#include "Log.h"
 
 using namespace std;
+
 
 class SearchExecutor : public Executor
 {
@@ -14,18 +16,30 @@ private:
 	vector<string>* _calendarEntryList;
 	vector<string>* _generalEntryList;
 	vector<string>* _matchedEntryList;
-	
+
 	vector<string> _undoGeneralEntryList;
 	vector<string> _undoCalendarEntryList;
 	vector<string> _undoMatchedEntryList;
 
 	string _details;
 	
+	Log log;
+
 	string splitFirstTerm(string* mString);
 	
-	void searchDate(string key, vector<string>* rank);
-	void searchTime(string key, vector<string>* rank);
-	void searchText(string key, vector<string>* rank);
+	const static int MONTH[12];
+
+	bool isDate(string date);
+	bool isTime(string time);
+	bool isLeap(int year);
+	bool isLogicDate(string date);
+	bool isLogicTime(string time);
+	bool isInTimeRange(string time);
+
+	void initializeVectors(vector<int>* score, vector<int>* rank);
+	void searchDate(string key, vector<int>* rank);
+	void searchTime(string key, vector<int>* rank);
+	void searchText(string key, vector<int>* rank);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
