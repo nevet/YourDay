@@ -93,6 +93,7 @@ private:
 	Signal displayMode;
 	Signal diduknowStatus;
 
+	int currentChar;
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
 	int diduknowInitRowIndex;
@@ -130,7 +131,7 @@ private:
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList, int sizeOfGeneral);
-	void diduknowHintDisplay(int currentChar);
+	void diduknowHintDisplay();
 	void startingScreenDisplay();
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 public:

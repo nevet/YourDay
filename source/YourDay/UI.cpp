@@ -125,7 +125,7 @@ void UI::writeTitle(string words, int startX, int startY)
 	gotoxy(startX,startY);
 	
 	cout<<words<<endl;
-	gotoxy(8,commandInitY);
+	gotoxy(8+currentChar,commandInitY);
 	setBackground();
 }
 
@@ -135,7 +135,7 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
-	gotoxy(8,commandInitY);
+	gotoxy(8+currentChar,commandInitY);
 	setBackground();
 }
 
@@ -324,7 +324,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	assert(calendarEntryList!=NULL);
 
 	char keyIn;
-	int counter = 0;
+	currentChar = 0;
 	input = "";
 
 	while ((keyIn = getch()) != ENTER)
@@ -347,7 +347,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				break;
 			}
 			break;
-		case TAB:
+		case TAB:	
 			changeFocusedField(resultList);
 			break;
 		case BACKSPACE:
@@ -355,11 +355,11 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 				input = input.substr(0, input.size()-1);
 				cout << "\b \b";
-				if(counter>0)
+				if(currentChar>0)
 				{
-					--counter;
+					--currentChar;
 				}
-				diduknowHintDisplay(counter);
+				diduknowHintDisplay();
 			}
 			break;
 		default:
@@ -367,7 +367,8 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 				cout << keyIn;
 				input += keyIn;
-				diduknowHintDisplay(++counter);
+				currentChar++;
+				diduknowHintDisplay();
 			}
 			break;
 		}
@@ -663,7 +664,6 @@ bool UI::isGeneral(string row)
 
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {	
-	assert(generalEntryList!=NULL);
 
 	int sizeOfGeneral;
 	int entryIndex;
@@ -688,7 +688,6 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 {
-	assert(calendarEntryList!=NULL);
 
 	int sizeOfCalendar;
 	int entryIndex;
@@ -735,7 +734,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 
 	diduknowEndRowIndex = entryIndex -1;
 }
-void UI::diduknowHintDisplay(int currentChar)
+void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
@@ -764,6 +763,7 @@ void UI::startingScreenDisplay()
 
 void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
 {	
+	currentChar=0;
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 	assert(resultList!=NULL);
@@ -778,7 +778,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	calendarEntryListDisplay(calendarEntryList);
 	resultListDisplay(resultList, generalEntryList->size());
 	initializeDidUKnowStatus();
-	diduknowHintDisplay(inputStartX);
+	diduknowHintDisplay();
 
 	drawCommandBox();
 }
@@ -799,8 +799,8 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 	int generalTemp = generalEntryList->size() - generalBoxHeight;
 	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
 	int diduknowTemp = resultList->size() - bottomBoxHeight;
-	generalInitRowIndex = max(0, generalTemp);
-	calendarInitRowIndex = max(0, calendarTemp);
+	generalInitRowIndex = min(0, generalTemp);
+	calendarInitRowIndex = min(0, calendarTemp);
 	diduknowInitRowIndex = max(0, diduknowTemp);
 	displayMode = DISPLAY_ALL;
 
