@@ -2,6 +2,19 @@
 
 #include "SearchExecutor.h"
 
+const int SearchExecutor::MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+string SearchExecutor::splitFirstTerm(string* mString)
+{
+	stringstream tempHolder;
+	string firstTerm;
+	char spaceEater;
+	tempHolder<<*mString;
+	tempHolder>>firstTerm;
+	(*mString).erase(0,firstTerm.size()+1);
+	return firstTerm;
+}
+
 void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
 {
 	assert(result!="");
@@ -12,7 +25,7 @@ void SearchExecutor::formatSearchResult(int index, string result, string* format
 	*formattedResult = ostring.str();
 }
 
-bool LangHandler::leap(int year)
+bool SearchExecutor::isLeap(int year)
 {
 	bool flag = false;
 	
@@ -33,28 +46,22 @@ bool LangHandler::leap(int year)
 	return flag;
 }
 
-bool LangHandler::isDate(string date)
+bool SearchExecutor::isDate(string date)
 {
 	int year, month, day;
 
 	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
 }
 
-bool LangHandler::isTime(string time)
+bool SearchExecutor::isTime(string time)
 {
-	int h1, h2, m1, m2;
+	int h, m;
 
-	return sscanf(time.c_str(), "%d:%d", &h1, &m1, &h2, &m2) == 4;
+	return sscanf(time.c_str(), "%d:%d", &h, &m) == 2;
 }
 
-bool LangHandler::isInt(string inx)
-{
-	int x;
 
-	return sscanf(inx.c_str(), "%d", &x) == 1;
-}
-
-bool LangHandler::isLogicDate(string date)
+bool SearchExecutor::isLogicDate(string date)
 {
 	assert(date!="");
 	int year, month, day;
@@ -76,7 +83,7 @@ bool LangHandler::isLogicDate(string date)
 		flag = false;
 	} else
 	{
-		if (!leap(year))
+		if (!isLeap(year))
 		{
 			if (day > MONTH[month - 1])
 			{
@@ -92,7 +99,7 @@ bool LangHandler::isLogicDate(string date)
 	return flag;
 }
 
-bool LangHandler::isLogicTime(string time)
+bool SearchExecutor::isLogicTime(string time)
 {
 	assert(time!="");
 	int h1, m1;
@@ -111,6 +118,20 @@ bool LangHandler::isLogicTime(string time)
 	}
 
 	return flag;
+}
+
+void SearchExecutor::initializeVectors(vector<int>* score, vector<int>* rank)
+{
+}
+void SearchExecutor::searchDate(string key, vector<int>* rank)
+{
+}
+void SearchExecutor::searchTime(string key, vector<int>* rank)
+{
+}
+
+void SearchExecutor::searchText(string key, vector<int>* rank)
+{
 }
 
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
@@ -133,8 +154,8 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 void SearchExecutor::execute()
 {
 	string currentKey;
-	vector<string> rank;
-	vector<string> score;
+	vector<int> rank;
+	vector<int> score;
 	
 	int weight = 1;
 	int totalEntries = _generalEntryList->size() + _calendarEntryList->size();
@@ -155,7 +176,7 @@ void SearchExecutor::execute()
 			} else
 			{
 				throw string ("date error\n");
-				log.writeException("date error");
+				//log.writeException("date error");
 			}
 		} else
 		if (isTime(currentKey))
@@ -175,7 +196,7 @@ void SearchExecutor::execute()
 		
 		for (int i = 0; i < totalEntries; i++)
 		{
-			score[i] = rank[i] * weight;
+			score[i] += rank[i] * weight;
 		}
 		
 		weight ++;

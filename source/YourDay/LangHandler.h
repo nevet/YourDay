@@ -46,7 +46,7 @@ private:
 	const static string SPACE_BAR;
 	const static string DELIMINATOR;
 
-	bool leap(int year);
+	bool isLeap(int year);
 
 	bool isDate(string date);
 	bool isTime(string time);
