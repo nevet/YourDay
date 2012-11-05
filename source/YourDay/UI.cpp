@@ -815,9 +815,9 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 
 	int generalTemp = generalEntryList->size() - generalBoxHeight;
 	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
-	int diduknowTemp = resultList->size() - bottomBoxHeight;
-	generalInitRowIndex = min(0, generalTemp);
-	calendarInitRowIndex = min(0, calendarTemp);
+	int diduknowTemp = resultList->size() - resultBoxHeight;
+	generalInitRowIndex = max(0, generalTemp);
+	calendarInitRowIndex = max(0, calendarTemp);
 	diduknowInitRowIndex = max(0, diduknowTemp);
 	displayMode = DISPLAY_ALL;
 
