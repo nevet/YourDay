@@ -20,6 +20,12 @@ private:
 	vector<string> _undoMatchedEntryList;
 
 	string _details;
+	
+	string splitFirstTerm(string* mString);
+	
+	void searchDate(string key, vector<string>* rank);
+	void searchTime(string key, vector<string>* rank);
+	void searchText(string key, vector<string>* rank);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
