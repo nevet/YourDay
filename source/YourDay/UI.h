@@ -16,10 +16,11 @@
 #define generalBoxHeight 12
 #define calendarTitleHeight 3
 #define calendarBoxHeight (windowsHeight-generalTitleHeight-generalBoxHeight-calendarTitleHeight-commandBoxHeight-bottomBoxHeight -2) 
+							// -2 because don't use the line before command box and the last line of the console
 #define commandBoxHeight 2
 #define bottomBoxHeight 6 //don't use the last line of the console
 #define didUKnowHeight 4
-#define resultBoxHeight (bottomBoxHeight - didUKnowHeight)
+#define resultBoxHeight (bottomBoxHeight -1 ) //use 1 line to write search result title
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
@@ -31,7 +32,7 @@
 #define inputStartY commandInitY
 #define diduknowInitX 0
 #define diduknowInitY (commandInitY + commandBoxHeight)
-#define operationResultY (diduknowInitY+didUKnowHeight)
+#define operationResultY (diduknowInitY + 1)
 #define operationResultX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
