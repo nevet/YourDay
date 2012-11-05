@@ -252,17 +252,17 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex > bottomBoxHeight)
+		if (diduknowInitRowIndex > resultBoxHeight)
 		{
-			diduknowInitRowIndex -= bottomBoxHeight;
-			clearBox(operationResultY, bottomBoxHeight);
+			diduknowInitRowIndex -= resultBoxHeight;
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
-			clearBox(operationResultY, bottomBoxHeight);
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalEntryList->size());
 			drawCommandBox();
 		}
@@ -307,7 +307,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (diduknowEndRowIndex != diduknowSize -1)
 		{
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
-			clearBox(operationResultY, bottomBoxHeight);
+			clearBox(operationResultY, resultBoxHeight);
 			resultListDisplay(resultList, generalSize);
 			drawCommandBox();
 		}
@@ -838,4 +838,4 @@ void UI::displayStatus(Signal status)
 
 UI::~UI()
 {
-}
+}	 
