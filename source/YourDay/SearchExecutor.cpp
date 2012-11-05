@@ -120,14 +120,109 @@ bool SearchExecutor::isLogicTime(string time)
 	return flag;
 }
 
-void SearchExecutor::initializeVectors(vector<int>* score, vector<int>* rank)
+int SearchExecutor::extractDay(string date)
 {
+	int year, month, day;
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+	return day;
+}
+
+int SearchExecutor::extractMonth(string date)
+{
+	int year, month, day;
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+	return month;
+}
+
+int SearchExecutor::extractHour(string time)
+{
+	int hour, minute;
+	sscanf(time.c_str(), "%d:%d", &hour, &minute);
+	return hour;
+}
+
+int SearchExecutor::extractMinute(string time)
+{
+	int hour, minute;
+	sscanf(time.c_str(), "%d:%d", &hour, &minute);
+	return minute;
+}
+
+void SearchExecutor::splitStartEndTime(string* start, string* end, string timeRange)
+{
+	*start=timeRange.substr(0,5);
+	*end=timeRange.substr(6,5);
+}
+
+void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector<int>* rank)
+{
+	int i;
+	score->clear();
+	rank->clear();
+	for(i=0;i<totalSize;i++)
+	{
+		score->push_back(0);
+		rank->push_back(0);
+	}
+	
 }
 void SearchExecutor::searchDate(string key, vector<int>* rank)
 {
+	int i;
+
+	string toBeCompared;
+	int entryDay;
+	int keyDay;
+	int entryMonth;
+	int keyMonth;
+
+	int _generalSize = _generalEntryList->size();
+	int _calendarSize = _calendarEntryList->size();
+	for (i=0;i<_calendarSize;i++)
+	{
+		toBeCompared= extractDate((*_calendarEntryList)[i]);
+
+		//same month score = 1
+		//same day score = 1
+		//same year score = 0
+		// same date score =3
+		entryDay = extractDay(toBeCompared);
+		entryMonth = extractMonth(toBeCompared);
+		keyDay = extractDay(key);
+		keyMonth = extractMonth(key);
+		if (entryDay == keyDay)
+		{
+			if (entryMonth == keyMonth)
+			{
+				(*rank)[i] +=3;
+			}
+			else
+			{
+				(*rank)[i] +=1;
+			}
+		}
+		else if (entryMonth == keyMonth)
+		{
+			(*rank)[i] += 1;
+		}
+
+	}
 }
 void SearchExecutor::searchTime(string key, vector<int>* rank)
 {
+	int i;
+
+	string entryTimeRange;
+	string entryStartTime;
+	string entryEndTime;
+
+	int entryStartHour;
+	int entryEndHour;
+	int entryStartMinute;
+	int entryEndMinute;
+
+	int _generalSize = _generalEntryList->size();
+	int _calendarSize = _calendarEntryList->size();
 }
 
 void SearchExecutor::searchText(string key, vector<int>* rank)
@@ -160,8 +255,7 @@ void SearchExecutor::execute()
 	int weight = 1;
 	int totalEntries = _generalEntryList->size() + _calendarEntryList->size();
 	
-	rank.clear();
-	score.clear();
+	initializeVectors(totalEntries,&score,&rank);
 	
 	//while we can still extract keywords from the input
 	while (!_details.empty())

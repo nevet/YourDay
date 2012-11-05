@@ -36,7 +36,15 @@ private:
 	bool isLogicTime(string time);
 	bool isInTimeRange(string time);
 
-	void initializeVectors(vector<int>* score, vector<int>* rank);
+	int extractDay(string date);
+	int extractMonth(string date);
+
+	int extractHour(string time);
+	int extractMinute(string time);
+
+	void splitStartEndTime(string* start, string* end, string timeRange);
+
+	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
 	void searchDate(string key, vector<int>* rank);
 	void searchTime(string key, vector<int>* rank);
 	void searchText(string key, vector<int>* rank);
