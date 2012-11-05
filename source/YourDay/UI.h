@@ -19,6 +19,7 @@
 #define commandBoxHeight 2
 #define bottomBoxHeight 6 //don't use the last line of the console
 #define didUKnowHeight 4
+#define resultBoxHeight (bottomBoxHeight - didUKnowHeight)
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
@@ -32,6 +33,7 @@
 #define diduknowInitY (commandInitY + commandBoxHeight)
 #define operationResultY (diduknowInitY+didUKnowHeight)
 #define operationResultX 0
+
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define calendarIndexInitX 2
 #define calendarDescriptionInitX 6
