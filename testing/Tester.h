@@ -10,7 +10,7 @@
 /* We write test cases here */
 
 /************************************************************************/
-
+//@author A0088455R
 TEST(add_executor,general_entry)
 {
 	vector<string>* testGeneralVectorPointer;

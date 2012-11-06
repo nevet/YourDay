@@ -28,6 +28,9 @@ private:
 	string splitFirstTerm(string* mString);
 	
 	const static int MONTH[12];
+	
+	const static int PERFECT_MATCH;
+	const static int MEDIOCORE_MATCH;
 
 	bool isDate(string date);
 	bool isTime(string time);
@@ -45,9 +48,9 @@ private:
 	void splitStartEndTime(string* start, string* end, string timeRange);
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
-	void searchDate(string key, vector<int>* rank);
-	void searchTime(string key, vector<int>* rank);
-	void searchText(string key, vector<int>* rank);
+	void searchDate(string keyword, vector<int>* rank);
+	void searchTime(string keyword, vector<int>* rank);
+	void searchText(string keyword, vector<int>* rank);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#

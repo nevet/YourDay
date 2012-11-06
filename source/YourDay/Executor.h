@@ -6,7 +6,7 @@
 
 #include "Signal.h"
 
-
+//@author A0088455R
 const int INDEX_BLOCK_LOCATION			= 1;  
 const int DESCRIPTION_BLOCK_LOCATION	= 2;
 const int LOCATION_BLOCK_LOCATION		= 3;

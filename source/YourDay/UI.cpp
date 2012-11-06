@@ -8,6 +8,7 @@ const string UI::UPDATE_SUCCESSFUL_MESSAGE = "Updated successfully\n";
 const string UI::DELETE_SUCCESSFUL_MESSAGE = "Deleted successfully\n";
 const string UI::ONE_EMPTY_LINE = "                                                                                                                        ";
 
+//@author A0088455R
 const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
 const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
 const string UI::DID_U_KNOW_EXIT = "To exit, press Enter";
@@ -62,6 +63,7 @@ void UI::setScreenSize()
     assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
 
+//@author A0088455R
 void UI::drawBanner()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -377,6 +379,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
+//@author A0088455R
 void UI::setDidUKnowStatus()
 {
 	if (input == "add")
@@ -586,49 +589,56 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 		printCalendarString(index + sizeOfGeneral, row, rowPosition);
 	}
 }
+
+//@author A0088455R
 void UI::printDiduknowHints()
 {
-	clearBox(diduknowInitY,didUKnowHeight+2);
-	gotoxy(diduknowInitX, diduknowInitY);
-	switch (diduknowStatus)
+
+	if (diduknowStatus!=diduknowPrevStatus)
 	{
-		case DIDUKNOW_INIT:
-			{				
-				cout<<DID_U_KNOW_HINTS;
+		clearBox(diduknowInitY,didUKnowHeight+2);
+		gotoxy(diduknowInitX, diduknowInitY);
+		switch (diduknowStatus)
+		{
+			case DIDUKNOW_INIT:
+				{				
+					cout<<DID_U_KNOW_HINTS;
+					break;
+				}
+			case ADD_COMMAND:
+				{
+					cout<<DID_U_KNOW_ADD;
+					break;
+				}
+			case DELETE_COMMAND:
+				{
+					cout<<DID_U_KNOW_DELETE;
+					break;
+				}
+			case EXIT_COMMAND:
+				{
+					cout<<DID_U_KNOW_EXIT;
+					break;
+				}
+			case SEARCH_COMMAND:
+				{
+					cout<<DID_U_KNOW_SEARCH;
+					break;
+				}
+			case UNDO_COMMAND:
+				{
+					cout<<DID_U_KNOW_UNDO;
+					break;
+				}
+			case EDIT_COMMAND:
+				{
+					cout<<DID_U_KNOW_UPDATE;
+					break;
+				}
+			default:
 				break;
-			}
-		case ADD_COMMAND:
-			{
-				cout<<DID_U_KNOW_ADD;
-				break;
-			}
-		case DELETE_COMMAND:
-			{
-				cout<<DID_U_KNOW_DELETE;
-				break;
-			}
-		case EXIT_COMMAND:
-			{
-				cout<<DID_U_KNOW_EXIT;
-				break;
-			}
-		case SEARCH_COMMAND:
-			{
-				cout<<DID_U_KNOW_SEARCH;
-				break;
-			}
-		case UNDO_COMMAND:
-			{
-				cout<<DID_U_KNOW_UNDO;
-				break;
-			}
-		case EDIT_COMMAND:
-			{
-				cout<<DID_U_KNOW_UPDATE;
-				break;
-			}
-		default:
-			break;
+		}
+		diduknowPrevStatus=diduknowStatus;
 	}
 	cout<<endl;
 }
@@ -751,6 +761,8 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	
 	diduknowEndRowIndex = entryIndex -1;
 }
+
+//@author A0088455R
 void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
@@ -759,6 +771,7 @@ void UI::diduknowHintDisplay()
 	gotoxy(8+currentChar,commandInitY);
 }
 
+//@author A0088455R
 void UI::startingScreenDisplay()
 {
 	system("CLS");
@@ -805,6 +818,7 @@ UI::UI()
 	input = "";
 	focusedField = GENERAL;	
 	startingScreenDisplay();
+	diduknowPrevStatus=DIDUKNOW_CLEAR;
 }
 
 void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)

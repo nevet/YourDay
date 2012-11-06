@@ -3,7 +3,7 @@
     LangHandler.cpp
     Purpose: Encodes user's input and decodes stored entry
 
-    @author a0088455r
+    @author A0088455R
     @version 0.1 10/13/2012
 */
 
@@ -412,6 +412,8 @@ void LangHandler::encoder(string input, Signal command)
 	}
 }
 
+
+//@author A00088455R
 void LangHandler::setCommand(string userCommand)
 {	
 	//if user command is valid, set corresponding command type
@@ -468,6 +470,7 @@ Signal LangHandler::getStatus()
 	return langStatus;
 }
 
+//@author A0088455R
 void LangHandler::separate(string userInput) throw (string)
 {
 	stringstream tempHolder(userInput);

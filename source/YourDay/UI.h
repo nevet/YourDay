@@ -94,7 +94,7 @@ private:
 	Signal focusedField;
 	Signal displayMode;
 	Signal diduknowStatus;
-
+	Signal diduknowPrevStatus;
 
 	int currentChar;
 	int generalInitRowIndex;
