@@ -2,7 +2,11 @@
 
 #include "SearchExecutor.h"
 
+//@author A0088455R
 const int SearchExecutor::MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+const int SearchExecutor::PERFECT_MATCH = 3;
+const int SearchExecutor::MEDIOCORE_MATCH = 1;
 
 string SearchExecutor::splitFirstTerm(string* mString)
 {
@@ -55,9 +59,9 @@ bool SearchExecutor::isDate(string date)
 
 bool SearchExecutor::isTime(string time)
 {
-	int h, m;
+	int hour, minute;
 
-	return sscanf(time.c_str(), "%d:%d", &h, &m) == 2;
+	return sscanf(time.c_str(), "%d:%d", &hour, &minute) == 2;
 }
 
 
@@ -102,24 +106,24 @@ bool SearchExecutor::isLogicDate(string date)
 bool SearchExecutor::isLogicTime(string time)
 {
 	assert(time!="");
-	int h1, m1;
+	int hour, minute;
 
 	bool flag = true;
 
-	sscanf(time.c_str(), "%d:%d", &h1, &m1);
+	sscanf(time.c_str(), "%d:%d", &hour, &minute);
 
-	if (h1 > 23 || h1 < 0)
+	if (hour > 23 || hour < 0)
 	{
 		flag = false;
 	} else
-	if (m1 > 59 || m1 < 0)
+	if (minute > 59 || minute < 0)
 	{
 		flag = false;
 	}
 
 	return flag;
 }
-
+//@author A0088455R
 int SearchExecutor::extractDay(string date)
 {
 	int year, month, day;
@@ -166,15 +170,18 @@ void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector
 	}
 	
 }
-void SearchExecutor::searchDate(string key, vector<int>* rank)
+
+void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 {
+	assert(keyword!="");
+
 	int i;
 
 	string toBeCompared;
 	int entryDay;
-	int keyDay;
+	int keywordDay;
 	int entryMonth;
-	int keyMonth;
+	int keywordMonth;
 
 	int _generalSize = _generalEntryList->size();
 	int _calendarSize = _calendarEntryList->size();
@@ -188,11 +195,11 @@ void SearchExecutor::searchDate(string key, vector<int>* rank)
 		// same date score =3
 		entryDay = extractDay(toBeCompared);
 		entryMonth = extractMonth(toBeCompared);
-		keyDay = extractDay(key);
-		keyMonth = extractMonth(key);
-		if (entryDay == keyDay)
+		keywordDay = extractDay(keyword);
+		keywordMonth = extractMonth(keyword);
+		if (entryDay == keywordDay)
 		{
-			if (entryMonth == keyMonth)
+			if (entryMonth == keywordMonth)
 			{
 				(*rank)[i] +=3;
 			}
@@ -201,15 +208,18 @@ void SearchExecutor::searchDate(string key, vector<int>* rank)
 				(*rank)[i] +=1;
 			}
 		}
-		else if (entryMonth == keyMonth)
+		else if (entryMonth == keywordMonth)
 		{
 			(*rank)[i] += 1;
 		}
 
 	}
 }
-void SearchExecutor::searchTime(string key, vector<int>* rank)
+
+void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 {
+	assert(keyword!="");
+
 	int i;
 
 	string entryTimeRange;
@@ -220,9 +230,50 @@ void SearchExecutor::searchTime(string key, vector<int>* rank)
 	int entryEndHour;
 	int entryStartMinute;
 	int entryEndMinute;
+	int keywordHour;
+	int keywordMinute;
 
 	int _generalSize = _generalEntryList->size();
 	int _calendarSize = _calendarEntryList->size();
+
+	for (i=0;i<_calendarSize;i++)
+	{
+		entryTimeRange=extractTime((*_calendarEntryList)[i]);
+		splitStartEndTime(&entryStartTime, &entryEndTime, entryTimeRange);
+		entryStartHour = extractHour(entryStartTime);
+		entryEndHour = extractHour(entryEndTime);
+		entryStartMinute = extractMinute(entryStartTime);
+		entryEndMinute = extractMinute(entryEndTime);
+		keywordHour = extractHour(keyword);
+		keywordMinute = extractMinute(keyword);
+		if (entryStartHour == keywordHour)
+		{
+			if (entryStartMinute <= keywordMinute)
+			{
+				(*rank)[i] += 3;
+			}
+			else
+			{
+				(*rank)[i] += 1;
+			}
+		}
+		else if (entryEndHour == keywordHour)
+		{
+			if (entryEndMinute >= keywordMinute)
+			{
+				(*rank)[i] += 3;
+			}
+			else
+			{
+				(*rank)[i] += 1;
+			}
+		}
+		else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
+		{
+			(*rank)[i] += 3;
+		}
+	}
+	
 }
 
 void SearchExecutor::searchText(string key, vector<int>* rank)

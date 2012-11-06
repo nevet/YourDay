@@ -17,6 +17,7 @@ enum Signal
 	DISPLAY_PART	= DISPLAY | 0x00000005,
 	DIDUKNOW_INIT	= DISPLAY | 0x00000006,
 	DIDUKNOW_CLEAR	= DISPLAY | 0x00000007,
+
 //for interpreting commands that is sent drom language handler
 	ADD_COMMAND		= 0x00000001,
 	DELETE_COMMAND	= 0x00000002,
