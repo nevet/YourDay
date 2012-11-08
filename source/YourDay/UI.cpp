@@ -444,29 +444,157 @@ void UI::initializeResultInitRowIndex(int resultSize)
 	diduknowInitRowIndex = 0;
 }
 
-void UI::printLimitedLengthString(string str, int maxLength, int initX, int initY, int &endY)
+void UI::extractParts(string entry, string* partList)
 {
-	
+	string part = "";
+	char temp;
+	int partCount = 0;
+
+	for (int i =1; i<entry.length(); i++)
+	{
+		temp = entry[i];
+		if (temp != '#')
+		{
+			part += temp;
+		}
+		else
+		{
+			partList[partCount] = part;
+			partCount++;
+			part = "";
+		}
+	}
 }
 
-void UI::printCalendarString(int index, string row, int& rowPosition)
+bool UI::isPartEnoughSpace(int strLength, int maxLength, int spaceLeft)
+{
+	int numberOfRow;
+
+	if (strLength % maxLength == 0)
+	{
+		numberOfRow = strLength / maxLength;
+	}
+	else 
+	{
+		numberOfRow = strLength / maxLength +1;
+	}
+
+	return (numberOfRow <= spaceLeft);
+}
+
+void UI::printPart(string str, int maxLength, int initX, int initY, int &endY)
+{
+	int row = initY;
+	int initIndex = 0;
+
+	for (int i = 0; i < str.length() / maxLength; i++) 
+	{
+		gotoxy(initX, row);
+		cout << str.substr(initIndex, maxLength);
+		initIndex += maxLength;
+		row++;
+	}
+
+	if (str.length() % maxLength != 0)
+	{
+		gotoxy(initX, row);
+		cout << str.substr(initIndex, str.length() % maxLength);
+		row ++;
+	}
+
+	endY = row -1;
+}
+
+bool UI::isCalendarEntryEnoughSpace(string description, string location, int rowPosition)
+{
+	bool ans = false;
+
+	if ((isPartEnoughSpace (description.length(), maxCharDetailCalendar, calendarInitY + calendarBoxHeight - rowPosition))
+		&& (isPartEnoughSpace (location.length(), maxCharLocationCalendar, calendarInitY + calendarBoxHeight - rowPosition)))
+		ans = true;
+
+	return ans;
+}
+
+void UI::printCalendarString(int index, string row, int& rowPosition, bool& isPrinted)
 {
 	assert(row!= "");
 	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
 
-	string part = "";
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
 							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
-	int countPart = 0;
-	bool isOverflow = false;
+	string partArray[6];
+	int endDetailPosition = rowPosition;
+	int endLocationPosition = rowPosition;
 
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-	clearBox(rowPosition,1);
-	gotoxy(locationArray[countPart], rowPosition);
-	cout<<index<<". ";
+	extractParts(row, partArray);
+	string description = partArray[1];
+	string location = partArray[2];
+	
+	switch (displayMode)
+	{
+	case DISPLAY_ALL:
+		if (isCalendarEntryEnoughSpace(description, location, rowPosition))
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+			clearBox(rowPosition,1);	
+			gotoxy(locationArray[0], rowPosition);
+			cout<<index<<". ";
 
-	for (int i = 1; i<row.size(); i++)
+			gotoxy(locationArray[1],rowPosition);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
+			printPart(partArray[1], maxCharDetailCalendar, locationArray[1], rowPosition, endDetailPosition);
+
+			gotoxy(locationArray[2],rowPosition);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[2]);
+			printPart(partArray[2], maxCharLocationCalendar, locationArray[2], rowPosition, endLocationPosition);
+			isPrinted = true;
+
+			for (int i = 3; i<6; i++)
+			{
+				gotoxy(locationArray[i],rowPosition);
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+				cout << partArray[i];
+			}
+		}
+		else
+		{
+			isPrinted = false;
+		}
+
+		break;
+	case DISPLAY_PART:
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+		clearBox(rowPosition,1);
+		gotoxy(locationArray[0], rowPosition);
+		cout<<index<<". ";
+
+		for (int i = 1; i<6; i++)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+			gotoxy(locationArray[i], rowPosition);
+
+				if (i == 1 && partArray[i].size() > maxCharDetailCalendar -3)
+				{
+					printf("%s...", partArray[i].substr(0, maxCharDetailCalendar -3).c_str());
+				}
+				else if (i == 2 && partArray[i].size() > maxCharLocationCalendar - 3)
+				{
+					printf("%s...",partArray[i].substr(0, maxCharLocationCalendar -3).c_str());
+				}
+				else
+				{
+					printf("%s",partArray[i].c_str());
+				}
+		}
+		isPrinted = true;
+		break;
+	}
+
+	rowPosition = max(endDetailPosition, endLocationPosition);
+	cout<<endl;
+/*	for (int i = 1; i<row.size(); i++)
 	{
 		if (row[i] != '#' )
 		{
@@ -480,19 +608,20 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 			switch (displayMode)
 			{
 			case DISPLAY_ALL:
-				if (countPart == 1 && part.size() > maxCharDetailCalendar)
 				{
-					printf ("%s",part.substr(0, maxCharDetailCalendar).c_str());
-					gotoxy(locationArray[countPart], rowPosition + 1);
-					printf ("%s",part.substr(maxCharDetailCalendar, part.size()).c_str());
-					isOverflow = true;
+				if (countPart == 1)
+				{
+					if (isEnoughSpace (part.length(), maxCharDetailCalendar, calendarInitY + calendarBoxHeight - rowPosition))
+					{
+						printLimitedLengthString(part, maxCharDetailCalendar, locationArray[countPart], rowPosition, endDetailPosition);
+					}
 				}
-				else if (countPart == 2 && part.size() > maxCharLocationCalendar)
+				else if (countPart == 2)
 				{
-					printf("%s",part.substr(0, maxCharLocationCalendar));
-					gotoxy(locationArray[countPart], rowPosition + 1);
-					printf("%s",part.substr(maxCharLocationCalendar, part.size()).c_str());
-					isOverflow = true;
+					if (isEnoughSpace (part.length(), maxCharDetailCalendar, calendarInitY + calendarBoxHeight - rowPosition))
+					{
+						printLimitedLengthString(part, maxCharLocationCalendar, locationArray[countPart], rowPosition, endLocationPosition);
+					}
 				}
 				else
 				{
@@ -500,6 +629,7 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 				}
 
 				break;
+				}
 			case DISPLAY_PART:
 				if (countPart == 1 && part.size() > maxCharDetailCalendar -3)
 				{
@@ -520,13 +650,10 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 		}
 		
 	}
-	if (isOverflow)
-	{
-		rowPosition ++;
-	}
 
+	rowPosition = max (endDetailPosition, endLocationPosition);
 	cout<<endl;
-}
+*/}
 
 void UI::printGeneralString(int index, string row, int &rowPosition)
 {	
@@ -617,7 +744,7 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 	}
 	else
 	{
-		printCalendarString(index + sizeOfGeneral, row, rowPosition);
+//		printCalendarString(index + sizeOfGeneral, row, rowPosition, isPrinted);
 	}
 }
 
@@ -742,18 +869,22 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	int entryIndex;
 	int rowPosition;
 	string row;
+	bool isLastLineHaveSpace = true;
 
 	gotoxy(calendarInitX, calendarInitY);
 	sizeOfCalendar=calendarEntryList->size();
 	entryIndex = calendarInitRowIndex;
 	rowPosition = calendarInitY;
 
-	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar)
+	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar && isLastLineHaveSpace)
 	{
 		row = calendarEntryList ->at(entryIndex);
-		printCalendarString(entryIndex + 1, row, rowPosition);
-		entryIndex ++;
-		rowPosition ++;
+		printCalendarString(entryIndex + 1, row, rowPosition, isLastLineHaveSpace);
+		if (isLastLineHaveSpace)
+		{
+			entryIndex ++;
+			rowPosition ++;
+		}
 	}
 
 	calendarEndRowIndex = entryIndex -1;

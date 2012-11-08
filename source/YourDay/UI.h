@@ -131,8 +131,12 @@ private:
 	void initializeCalendarInitRowIndex(int calendarSize);
 	void initializeResultInitRowIndex(int resultSize);
 
-	void printLimitedLengthString(string str, int maxLength, int initX, int initY, int &endY);
-	void printCalendarString(int index, string row, int &rowPosition);
+	void extractParts(string entry, string* partlist);
+	bool isPartEnoughSpace(int strLength, int maxLength, int spaceLeft);
+	bool isCalendarEntryEnoughSpace(string description, string location, int rowPosition);
+	void printPart(string str, int maxLength, int initX, int initY, int &endY);
+
+	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printGeneralString(int index, string row, int &rowPosition);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	void printDiduknowHints();
