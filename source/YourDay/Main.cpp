@@ -94,6 +94,7 @@ int main(int arg, char** test)
 							 &diduknowBoxList);
 			log.writeExecuted("FunctionHandler::execute()");
 
+			Signal signal = function.getStatus();
 		}
 		catch (string excpt)
 		{

@@ -97,6 +97,7 @@ private:
 	Signal displayMode;
 	Signal diduknowStatus;
 	Signal diduknowPrevStatus;
+	Signal curStatus;
 
 	int currentChar;
 	int generalInitRowIndex;
@@ -133,10 +134,11 @@ private:
 	void extractParts(string entry, string* partlist);
 	bool isPartEnoughSpace(int strLength, int maxLength, int spaceLeft);
 	bool isCalendarEntryEnoughSpace(string description, string location, int rowPosition);
+	bool isGeneralEntryEnoughSpace(string description, string location, int rowPosition);
 	void printPart(string part, int maxLength, int initX, int initY, int &endY);
 
 	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
-	void printGeneralString(int index, string row, int &rowPosition);
+	void printGeneralString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	void printDiduknowHints();
 	bool isGeneral(string row);

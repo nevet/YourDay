@@ -529,6 +529,17 @@ bool UI::isCalendarEntryEnoughSpace(string description, string location, int row
 	return ans;
 }
 
+bool UI::isGeneralEntryEnoughSpace(string description, string location, int rowPosition)
+{
+	bool ans = false;
+
+	if ((isPartEnoughSpace (description.length(), maxCharDetailGeneral, generalInitY + generalBoxHeight - rowPosition))
+		&& (isPartEnoughSpace (location.length(), maxCharLocationGeneral, generalInitY + generalBoxHeight - rowPosition)))
+		ans = true;
+
+	return ans;
+}
+
 void UI::printCalendarString(int index, string row, int& rowPosition, bool& isPrinted)
 {
 	assert(row!= "");
@@ -609,82 +620,83 @@ void UI::printCalendarString(int index, string row, int& rowPosition, bool& isPr
 	cout<<endl;
 }
 
-void UI::printGeneralString(int index, string row, int &rowPosition)
+void UI::printGeneralString(int index, string row, int &rowPosition, bool& isPrinted)
 {	
 	assert(row!= "");
 	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
-	
-	string part = "";
+
 	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
 	int locationArray[6] = {generalIndexInitX, generalDescriptionInitX, generalLocationInitX,
 							generalTimeInitX, generalDateInitX, generalPriorityInitX};
-	int countPart = 0;
-	bool isOverflow = false;
+	string partArray[6];
+	int endDetailPosition = rowPosition;
+	int endLocationPosition = rowPosition;
 
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-
-	gotoxy(locationArray[countPart], rowPosition);
-	cout<<index<<". ";
-
-	for (int i = 1; i<row.size(); i++)
+	extractParts(row, partArray);
+	string description = partArray[1];
+	string location = partArray[2];
+	
+	switch (displayMode)
 	{
-		if (row[i] != '#' )
+	case DISPLAY_ALL:
+		if (isGeneralEntryEnoughSpace(description, location, rowPosition))
 		{
-			part += row[i];
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+			clearBox(rowPosition,1);	
+			gotoxy(locationArray[0], rowPosition);
+			cout<<index<<". ";
+
+			gotoxy(locationArray[1],rowPosition);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
+			printPart(partArray[1], maxCharDetailGeneral, locationArray[1], rowPosition, endDetailPosition);
+
+			gotoxy(locationArray[2],rowPosition);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[2]);
+			printPart(partArray[2], maxCharLocationGeneral, locationArray[2], rowPosition, endLocationPosition);
+			isPrinted = true;
+
+			for (int i = 3; i<6; i++)
+			{
+				gotoxy(locationArray[i],rowPosition);
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+				cout << partArray[i];
+			}
 		}
 		else
 		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[countPart]);
-			gotoxy(locationArray[countPart], rowPosition);
-
-			switch (displayMode)
-			{
-			case DISPLAY_ALL:
-				if (countPart == 1 && part.size() > maxCharDetailGeneral)
-				{
-					cout <<part.substr(0, maxCharDetailGeneral);
-					gotoxy(locationArray[countPart], rowPosition + 1);
-					cout <<part.substr(maxCharDetailGeneral, part.size());
-					isOverflow = true;
-				}
-				else if (countPart == 2 && part.size() > maxCharLocationGeneral)
-				{
-					cout <<part.substr(0, maxCharLocationGeneral);
-					gotoxy(locationArray[countPart], rowPosition + 1);
-					cout <<part.substr(maxCharLocationGeneral, part.size());
-					isOverflow = true;
-				}
-				else
-				{
-					cout << part;
-				}
-
-				break;
-			case DISPLAY_PART:
-				if (countPart == 1 && part.size() > maxCharDetailGeneral -3)
-				{
-					cout <<part.substr(0, maxCharDetailGeneral -3) << "...";
-				}
-				else if (countPart == 2 && part.size() > maxCharLocationGeneral - 3)
-				{
-					cout <<part.substr(0, maxCharLocationGeneral -3) << "...";
-				}
-				else
-				{
-					cout << part;
-				}
-				break;
-			}
-			countPart ++;
-			part = "";
+			isPrinted = false;
 		}
-		
-	}
-	if (isOverflow)
-	{
-		rowPosition ++;
+
+		break;
+	case DISPLAY_PART:
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+		clearBox(rowPosition,1);
+		gotoxy(locationArray[0], rowPosition);
+		cout<<index<<". ";
+
+		for (int i = 1; i<6; i++)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+			gotoxy(locationArray[i], rowPosition);
+
+				if (i == 1 && partArray[i].size() > maxCharDetailGeneral -3)
+				{
+					printf("%s...", partArray[i].substr(0, maxCharDetailGeneral -3).c_str());
+				}
+				else if (i == 2 && partArray[i].size() > maxCharLocationGeneral - 3)
+				{
+					printf("%s...",partArray[i].substr(0, maxCharLocationGeneral -3).c_str());
+				}
+				else
+				{
+					printf("%s",partArray[i].c_str());
+				}
+		}
+		isPrinted = true;
+		break;
 	}
 
+	rowPosition = max(endDetailPosition, endLocationPosition);
 	cout<<endl;
 }
 
@@ -694,7 +706,7 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
 	if (isGeneral(row))
 	{
-		printGeneralString(index, row, rowPosition);
+//		printGeneralString(index, row, rowPosition);
 	}
 	else
 	{
@@ -799,13 +811,17 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	sizeOfGeneral=generalEntryList->size();
 	entryIndex = generalInitRowIndex;
 	rowPosition = generalInitY;
+	bool isLastLineHasSpace = true;
 	
-	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral)
+	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral && isLastLineHasSpace)
 	{
 		row = generalEntryList ->at(entryIndex);
-		printGeneralString(entryIndex + 1, row, rowPosition);
-		entryIndex ++;
-		rowPosition ++;
+		printGeneralString(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
+		if (isLastLineHasSpace)
+		{
+			entryIndex ++;
+			rowPosition ++;
+		}
 	}
 
 	generalEndRowIndex = entryIndex -1;
@@ -822,18 +838,18 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	int entryIndex;
 	int rowPosition;
 	string row;
-	bool isLastLineHaveSpace = true;
+	bool isLastLineHasSpace = true;
 
 	gotoxy(calendarInitX, calendarInitY);
 	sizeOfCalendar=calendarEntryList->size();
 	entryIndex = calendarInitRowIndex;
 	rowPosition = calendarInitY;
 
-	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar && isLastLineHaveSpace)
+	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar && isLastLineHasSpace)
 	{
 		row = calendarEntryList ->at(entryIndex);
-		printCalendarString(entryIndex + 1, row, rowPosition, isLastLineHaveSpace);
-		if (isLastLineHaveSpace)
+		printCalendarString(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
+		if (isLastLineHasSpace)
 		{
 			entryIndex ++;
 			rowPosition ++;
