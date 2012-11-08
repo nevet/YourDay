@@ -154,7 +154,7 @@ private:
 public:
 	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 
-	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status);
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);

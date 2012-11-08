@@ -28,13 +28,14 @@ void AddExecutor::execute() throw (string)
 	if (extractDate(_details) == "")
 	{
 		_generalEntryList -> push_back(_details);
+		status = ADD_S_G;
 	}
 	else
 	{
 		_calendarEntryList -> push_back(_details);
+		status = ADD_S_C;
 	}
 
-	status = ADD_S;
 }
 
 void AddExecutor::undo()

@@ -63,6 +63,8 @@ int main(int arg, char** test)
 	Log log;
 	
 	log.writeTime();
+
+	Signal signal = CLEAR;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	log.writeCreated("FunctionHandler instance");
@@ -77,7 +79,7 @@ int main(int arg, char** test)
 	{
 		try
 		{
-			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList, signal);
 			log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
@@ -94,10 +96,11 @@ int main(int arg, char** test)
 							 &diduknowBoxList);
 			log.writeExecuted("FunctionHandler::execute()");
 
-			Signal signal = function.getStatus();
+			signal = function.getStatus();
 		}
 		catch (string excpt)
 		{
+			excpt += "Press Enter to continue..\n";
 			ui.displayMessage(excpt);
 		}
 	}

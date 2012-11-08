@@ -966,12 +966,13 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	startingScreenDisplay();
 }
 
-void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status)
 {	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 	assert(resultList!=NULL);
 
+	curStatus = status;
 	mainScreenDisplay(calendarEntryList, generalEntryList, resultList);
 	traceInput(calendarEntryList, generalEntryList, resultList);
 }
@@ -993,7 +994,9 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
-	getchar();
+
+	char c;
+	while ((c = getch()) != ENTER);
 }
 
 UI::~UI()
