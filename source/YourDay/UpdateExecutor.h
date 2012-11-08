@@ -10,8 +10,12 @@ class UpdateExecutor : public Executor
 {
 private:
 	vector<string>* _focusingEntryList;
+	vector<string>* _generalEntryList;
+	vector<string>* _calendarEntryList;
+
 	vector<string> _undoFocusingEntryList;
 
+	Signal _focusingField;
 	string _details;
 
 public:

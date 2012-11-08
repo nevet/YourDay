@@ -27,6 +27,9 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 			break;
 	}
 
+	_generalEntryList = generalEntryList;
+	_calendarEntryList = calendarEntryList;
+	_focusingField = focusingField;
 	_details = details;
 }
 
@@ -36,6 +39,8 @@ void UpdateExecutor::execute()
 	string oldEntry, newEntry;
 	string newDate, newTime, newDescription, newPriority, newLocation;
 	string oldDate, oldTime, oldDescription, oldPriority, oldLocation;
+
+	bool changeToCalendar = false;
 
 	vector<string>::iterator position;
 	
@@ -85,6 +90,7 @@ void UpdateExecutor::execute()
 		}
 		else
 		{
+			changeToCalendar = true;
 			newEntry = newEntry + newTime + "#";
 		}
 
@@ -96,11 +102,12 @@ void UpdateExecutor::execute()
 		}
 		else
 		{
+			changeToCalendar = true;
 			newEntry = newEntry + newDate + "#";
 		}
 
-		newPriority = extractLocation(_details);
-		oldPriority = extractLocation(oldEntry);
+		newPriority = extractPriority(_details);
+		oldPriority = extractPriority(oldEntry);
 		if(newPriority == "")
 		{
 			newEntry = newEntry + oldPriority + "#";
@@ -110,11 +117,24 @@ void UpdateExecutor::execute()
 			newEntry = newEntry + newPriority + "#";
 		}
 		
-		position = _focusingEntryList->begin() +index -1;
-		_focusingEntryList->insert(position,newEntry);
+		if( _focusingField== GENERAL && changeToCalendar)
+		{
+			position = _calendarEntryList->end() ;
+			_calendarEntryList->insert(position, newEntry);
+			
+			position = _generalEntryList->begin() + index -1;
+			_generalEntryList->insert(position, _generalEntryList->back());	
+			position = _generalEntryList->end() - 1;
+			_generalEntryList->erase(position);
+		}
+		else
+		{
+			position = _focusingEntryList->begin() + index -1;
+			_focusingEntryList->insert(position,newEntry);
 
-		_focusingEntryList->erase(position + 1);
-		
+			position = _focusingEntryList->begin() +index;
+			_focusingEntryList->erase(position);
+		}
 		status = UPDATE_S;
 	}
 }
