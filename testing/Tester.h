@@ -183,7 +183,72 @@ TEST(add_executor,calendar_entry)
 	 ASSERT_EQ(testCalendarVector[0],"##2.Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#");
 
  }
- 
+
+ TEST(update_executor,combined_entries)
+ {
+	 vector<string>* testGeneralVectorPointer;
+	 vector<string>* testCalendarVectorPointer;
+	 vector<string> testGeneralVector;
+	 vector<string> testCalendarVector;
+
+	 testGeneralVectorPointer=&testGeneralVector;
+	 testCalendarVectorPointer=&testCalendarVector;
+
+	 Signal focusingField;
+	 int lastEntry;
+	 string details;
+
+	 for (int i = 0; i < 3; i++)
+	 {
+		 ostringstream convert;
+		 convert<<i+1;
+		 details = "##" + convert.str()+ ".Meeting CS2103#UTown###high#";
+		 AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
+		 addExec.execute();
+	 }// we add three different entries to general List
+
+	 for (int i = 0; i < 2; i++)
+	 {
+		 ostringstream convert;
+		 convert<<i+1;
+		 details = "##" + convert.str()+ ".Meeting CS2103#UTown#13:00-14:00#21/10/2012#high#";
+		 AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
+		 addExec.execute();
+	 }// we add two general event to calendar entry list.
+	 
+	 //this one would be testing on updating full information
+	 focusingField = CALENDAR;
+	 details = "#1#CS2103 Lecture#ICUBE#14:00-15:00#08/11/2012#low#";
+	 UpdateExecutor uptExec0(testGeneralVectorPointer, testCalendarVectorPointer, details ,focusingField);
+	 uptExec0.execute();
+	 ASSERT_EQ(testCalendarVector[0],"##CS2103 Lecture#ICUBE#14:00-15:00#08/11/2012#low#");
+	 
+	 //this one would be testing on an incomplete update with only description
+	 focusingField = GENERAL;
+	 details = "#2#CS2103 Lecture#####";
+	 UpdateExecutor uptExec1(testGeneralVectorPointer, testCalendarVectorPointer, details, focusingField);
+	 uptExec1.execute();
+	 ASSERT_EQ(testGeneralVector[1],"##CS2103 Lecture#UTown###high#");
+	
+	 //this one would be testing on an imcomplete update with only Time
+	 focusingField = CALENDAR;
+	 details = "#1###14:01-15:02###";
+	 UpdateExecutor uptExec2(testGeneralVectorPointer, testCalendarVectorPointer, details ,focusingField);
+	 uptExec2.execute();
+	 ASSERT_EQ(testCalendarVector[0],"##CS2103 Lecture#ICUBE#14:01-15:02#08/11/2012#low#");
+
+	 //this one would be testing on an incomplete update with Time&Date when the foucing filed is General
+	 //The entry in General List should be updated to Calendar List 's lastentry. 
+	 focusingField = GENERAL;
+	 details = "#1###13:00-14:00#09/11/2012##"; 
+	 UpdateExecutor uptExec3(testGeneralVectorPointer, testCalendarVectorPointer, details, focusingField);
+	 uptExec3.execute();
+	 lastEntry=testCalendarVectorPointer->size()-1;
+	 ASSERT_EQ(testCalendarVector[lastEntry], "##CS2103 Lecture#ICUBE#13:00-14:00#09/11/2012#high#");
+	 
+ }
+
+ /*
  TEST(basic_test,search_executor_)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -224,7 +289,7 @@ TEST(add_executor,calendar_entry)
 	 ASSERT_EQ(matchedList[0],"##But most time I am still happy, because I am in a nice group.####");
 	 ASSERT_EQ(matchedList[1],"##Sometimes I feel sad, because as a tester, I find it is harder.####");
  }
-
+ */
  TEST(undo_test,add_undo)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -317,7 +382,7 @@ TEST(add_executor,calendar_entry)
 
  }
 
-
+ /*
  TEST(systematic_test, adding_performance_test_1000entries)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -339,7 +404,7 @@ TEST(add_executor,calendar_entry)
 		 AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
 		 addExec.execute();
 	 }
- }
+ }*/
 
  TEST(systematic_test, adding_performance_test_100entries)
  {
