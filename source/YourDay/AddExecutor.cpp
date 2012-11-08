@@ -124,7 +124,7 @@ bool AddExecutor::isEarlier(string &entry1, string &entry2)
 	ostringstream os1;
 	ostringstream os2;
 	os1<<entryYear1<<monthContender1.str()<<dateContender1.str()<<timeRange1;
-	os2<<entryYear2<<monthContender1.str()<<dateContender1.str()<<timeRange2;
+	os2<<entryYear2<<monthContender2.str()<<dateContender2.str()<<timeRange2;
 	return os1.str() < os2.str();
 }
 
@@ -146,8 +146,6 @@ void AddExecutor::execute() throw (string)
 		_calendarEntryList -> push_back(_details);
 		quickSort(*_calendarEntryList,0,_calendarEntryList->size()-1);
 	}
-
-	status = ADD_S;
 }
 
 void AddExecutor::undo()
