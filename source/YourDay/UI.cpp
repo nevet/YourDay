@@ -128,19 +128,28 @@ void UI::highlightTitle(int searchBoxSize)
 		writeHighlightedTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, calendarInitY -2);	
 		if (searchBoxSize != 0)
-		writeTitle("SearchBox: ", 0, commandInitY+5);
+		{
+			clearBox (commandInitY +2, 1);
+			writeTitle("SearchBox: ", 0, commandInitY+2);
+		}
 		break;
 	case CALENDAR:
 		writeTitle("General: ", 1,0);
 		writeHighlightedTitle("Calendar: ", 1, calendarInitY -2);	
 		if (searchBoxSize != 0)
-		writeTitle("SearchBox: ", 0, commandInitY+5);
+		{
+			clearBox (commandInitY +2, 1);
+			writeTitle("SearchBox: ", 0, commandInitY+2);
+		}
 		break;
 	case DIDUKNOW:
 		writeTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, calendarInitY -2);	
 		if (searchBoxSize != 0)
-		writeHighlightedTitle("SearchBox: ", 0, commandInitY+5);
+		{
+			clearBox (commandInitY +2, 1);
+			writeHighlightedTitle("SearchBox: ", 0, commandInitY+2);
+		}
 		break;
 	}
 }
