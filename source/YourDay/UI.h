@@ -106,8 +106,6 @@ private:
 	int calendarEndRowIndex;
 	int diduknowEndRowIndex;
 
-	string interpreteSignal(Signal status);
-
 	void setScreenSize();
 	void setBackground();
 	void drawBanner();
@@ -117,6 +115,7 @@ private:
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
+	void highlightTitle(int searchBoxSize);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
@@ -134,7 +133,7 @@ private:
 	void extractParts(string entry, string* partlist);
 	bool isPartEnoughSpace(int strLength, int maxLength, int spaceLeft);
 	bool isCalendarEntryEnoughSpace(string description, string location, int rowPosition);
-	void printPart(string str, int maxLength, int initX, int initY, int &endY);
+	void printPart(string part, int maxLength, int initX, int initY, int &endY);
 
 	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printGeneralString(int index, string row, int &rowPosition);
@@ -157,7 +156,6 @@ public:
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);
-	void displayStatus(Signal status);
 
 	~UI();
 };
