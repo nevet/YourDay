@@ -47,13 +47,21 @@ private:
 	const static string DELIMINATOR;
 
 	bool isLeap(int year);
-
 	bool isDate(string date);
 	bool isTime(string time);
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
 	bool isLogicPriority(string priority);
+
+	/**
+	* This operation is used to eliminate leading and trailing spaces of a
+	* string.
+	* 
+	* @param str
+	*			is the string needs to be spaces-freed
+	*/
+	void eliminateSpaces(string& str);
 
 	/**
 	* Encodes the raw string into the correct saving format
