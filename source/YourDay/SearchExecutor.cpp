@@ -219,6 +219,183 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 	}	
 }
 
+void SearchExecutor::splitWords(string encoded, vector<string>* list)
+{
+	string sentence = extractDescription(encoded);
+	stringstream sin(sentence);
+
+	string temp;
+
+	while (sin >> temp)
+	{
+		list->push_back(temp);
+	}
+}
+
+void SearchExecutor::calInfo(int i, int j, string a, string b, string & x, string & y, matchInfo & t)
+{	
+	if (i == 0)
+	{
+		t.ms += g[0][j];
+		t.ms_lead += g[0][j];
+
+		while (g[0][j])
+		{
+			x = " " + x;
+			y = b[g[0][j] - 1] + y;
+
+			g[0][j]--;
+		}
+
+		return;
+	} else
+	if (j == 0)
+	{
+		while (g[i][0])
+		{
+			x = a[g[i][0] - 1] + x;
+			y = " " + y;
+
+			g[i][0]--;
+		}
+
+		return;
+	}
+
+	switch (g[i][j])
+	{
+		case 0:
+			//f[i-1][j]
+			x = a[i - 1] + x;
+			y = " " + y;
+
+			calInfo(i - 1, j, a, b, x, y, t);
+
+			break;
+		
+		case 1:
+			//f[i][j-1]
+			x = " " + x;
+			y = b[j - 1] + y;
+			t.ms++;
+
+			if (!t.match && !t.change) t.ms_trail++;
+			
+			calInfo(i, j - 1, a, b, x, y, t);
+			
+			break;
+		
+		case 2:
+			//not same
+			x = a[i - 1] + x;
+			y = a[i - 1] + y;
+			t.change++;
+
+			calInfo(i - 1, j - 1, a, b, x, y, t);
+
+			break;
+
+		case 3:
+			// same
+			x = a[i - 1] + x;
+			y = b[j - 1] + y;
+			t.match++;
+
+			calInfo(i - 1, j - 1, a, b, x, y, t);
+
+			break;
+	}
+}
+
+int SearchExecutor::notsame(char a, char b)
+{
+	if (tolower(a) == tolower(b)) return 0;
+
+	return 1;
+}
+
+void SearchExecutor::edit(string a, string b, matchInfo & ans)
+{
+	matchInfo temp;
+
+	int lena = a.length();
+	int lenb = b.length();
+
+	memset(f, 0, sizeof(f));
+	memset(g, 0, sizeof(g));
+
+	for (int i = 1; i <= lena; i++)
+	{
+		f[i][0] = i;
+		g[i][0] = i;
+	}
+
+	for (int i = 1; i <= lenb; i++)
+	{
+		f[0][i] = i;
+		g[0][i] = i;
+	}
+
+	for (int i = 1; i <= lena; i++)
+		for (int j = 1; j <= lenb; j++)
+		{
+			f[i][j] = f[i - 1][j] + 1;
+			g[i][j] = 0;
+
+			if (f[i][j - 1] + 1 < f[i][j])
+			{
+				f[i][j] = f[i][j - 1] + 1;
+				g[i][j] = 1;
+			}
+
+			if (f[i - 1][j - 1] + notsame(a[i - 1], b[j - 1]) < f[i][j])
+			{
+				f[i][j] = f[i - 1][j - 1] + notsame(a[i - 1], b[j - 1]);
+				if (notsame(a[i -1], b[j - 1]))
+				{
+					g[i][j] = 2;
+				} else
+				{
+					g[i][j] = 3;
+				}
+			}
+		}
+
+	ans.dis = f[lena][lenb];
+
+	string newa = "";
+	string newb = "";
+
+	calInfo(lena, lenb, a, b, newa, newb, ans);
+
+	ans.continuity = ans.ms - (ans.ms_lead + ans.ms_trail);
+}
+
+bool SearchExecutor::cmp(matchInfo a, matchInfo b)
+{
+	if (a.match > b.match) return true; else
+	if (a.match < b.match) return false; else
+	if (a.continuity < b.continuity) return true; else
+	if (a.continuity > b.continuity) return false; else
+	if (a.ms < b.ms) return true; else
+	if (a.ms > b.ms) return false; else
+	if (a.change < b.change) return true; else
+	if (a.change > b.change) return false;
+
+	return false;
+}
+
+SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
+{
+	if (cmp(a, b))
+	{
+		return a;
+	} else
+	{
+		return b;
+	}
+}
+
 void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 {	
 	assert(keyword!="");
@@ -384,6 +561,57 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 
 void SearchExecutor::searchText(string key, vector<int>* rank)
 {
+	int tot = _combinedEntryList.size();
+	vector<matchInfo> best;
+	
+	for (int j = 0; j < tot; j++)
+	{
+		matchInfo temp;
+		vector<string> list;
+
+		list.clear();
+
+		splitWords(_combinedEntryList[j], &list);
+		
+		temp.dis = -1;
+		
+		for (int k = 0; k < (int)list.size(); k++)
+		{
+			string curP = list[k];
+				
+			matchInfo curM;
+
+			edit(key, curP, curM);
+
+			if (temp.dis == -1)
+			{
+				temp = curM;
+			} else
+			{
+				temp = compare(temp, curM);
+			}
+		}
+			
+		temp.index = j;
+		best.push_back(temp);
+	}
+
+	sort(best.begin(), best.end(), cmp);
+		
+	int p = 0;
+	int q = 1;
+
+	while (p < tot)
+	{
+		while (q < tot && !cmp(best[q - 1], best[q])) q++;
+
+		for (int r = tot - p; p < q; p++)
+		{
+			(*rank)[best[p].index] = r;
+		}
+
+		q++;
+	}
 }
 
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
@@ -451,8 +679,22 @@ void SearchExecutor::execute()
 		{
 			score[i] += rank[i] * weight;
 		}
+	}
+
+	vector<pair<int, int>> v;
+
+	for (int i = 0; i < totalEntries; i++)
+	{
+		v.push_back(make_pair(score[i], i));
+	}
+
+	sort(v.rbegin(), v.rend());
+	
+	for (int i = 0; i < totalEntries; i++)
+	{
+		int curRecord = v[i].second;
 		
-		weight ++;
+		_matchedEntryList->push_back(_combinedEntryList[curRecord]);
 	}
 }
 

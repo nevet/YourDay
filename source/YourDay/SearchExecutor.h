@@ -9,10 +9,19 @@
 
 using namespace std;
 
-
 class SearchExecutor : public Executor
 {
 private:
+	struct matchInfo
+	{
+		int continuity, ms, ms_trail, ms_lead, match, change, dis, index;
+
+		matchInfo()
+		{
+			continuity = ms = ms_trail = ms_lead = match = change = dis = index = 0;
+		}
+	};
+
 	vector<string>* _calendarEntryList;
 	vector<string>* _generalEntryList;
 	vector<string>* _matchedEntryList;
@@ -22,6 +31,9 @@ private:
 	vector<string> _undoMatchedEntryList;
 	
 	vector<string> _combinedEntryList;
+
+	int f[500][500];
+	int g[500][500];
 
 	string _details;
 	
@@ -49,6 +61,7 @@ private:
 	int extractMinute(string time);
 
 	void splitStartEndTime(string* start, string* end, string timeRange);
+	void splitWords(string encodedInput, vector<string>* list);
 	
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
@@ -56,6 +69,13 @@ private:
 	void initializeCombinedEntry();
 	void setRank(int index, int level, vector<int>* rank, int* currentHighest);
 	void adjustRank(vector<int>* rank, int currentHighest);
+
+	void calInfo(int i, int j, string a, string b, string & x, string & y, matchInfo & t);
+	int notsame(char a, char b);
+	void edit(string a, string b, matchInfo & ans);
+	static bool cmp(matchInfo a, matchInfo b);
+	matchInfo compare(matchInfo a, matchInfo b);
+
 	void searchDate(string keyword, vector<int>* rank);
 	void searchTime(string keyword, vector<int>* rank);
 	void searchText(string keyword, vector<int>* rank);
