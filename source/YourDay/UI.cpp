@@ -362,6 +362,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				{
 					--currentChar;
 				}
+
 				diduknowHintDisplay();
 			}
 			break;
@@ -372,6 +373,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				cout << keyIn;
 				input += keyIn;
 				currentChar++;
+
 				diduknowHintDisplay();
 			}
 			break;
@@ -594,52 +596,49 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 void UI::printDiduknowHints()
 {
 
-	if (diduknowStatus!=diduknowPrevStatus)
+	clearBox(diduknowInitY,didUKnowHeight+2);
+	gotoxy(diduknowInitX, diduknowInitY);
+	switch (diduknowStatus)
 	{
-		clearBox(diduknowInitY,didUKnowHeight+2);
-		gotoxy(diduknowInitX, diduknowInitY);
-		switch (diduknowStatus)
-		{
-			case DIDUKNOW_INIT:
-				{				
-					cout<<DID_U_KNOW_HINTS;
-					break;
-				}
-			case ADD_COMMAND:
-				{
-					cout<<DID_U_KNOW_ADD;
-					break;
-				}
-			case DELETE_COMMAND:
-				{
-					cout<<DID_U_KNOW_DELETE;
-					break;
-				}
-			case EXIT_COMMAND:
-				{
-					cout<<DID_U_KNOW_EXIT;
-					break;
-				}
-			case SEARCH_COMMAND:
-				{
-					cout<<DID_U_KNOW_SEARCH;
-					break;
-				}
-			case UNDO_COMMAND:
-				{
-					cout<<DID_U_KNOW_UNDO;
-					break;
-				}
-			case EDIT_COMMAND:
-				{
-					cout<<DID_U_KNOW_UPDATE;
-					break;
-				}
-			default:
+		case DIDUKNOW_INIT:
+			{				
+				cout<<DID_U_KNOW_HINTS;
 				break;
-		}
-		diduknowPrevStatus=diduknowStatus;
+			}
+		case ADD_COMMAND:
+			{
+				cout<<DID_U_KNOW_ADD;
+				break;
+			}
+		case DELETE_COMMAND:
+			{
+				cout<<DID_U_KNOW_DELETE;
+				break;
+			}
+		case EXIT_COMMAND:
+			{
+				cout<<DID_U_KNOW_EXIT;
+				break;
+			}
+		case SEARCH_COMMAND:
+			{
+				cout<<DID_U_KNOW_SEARCH;
+				break;
+			}
+		case UNDO_COMMAND:
+			{
+				cout<<DID_U_KNOW_UNDO;
+				break;
+			}
+		case EDIT_COMMAND:
+			{
+				cout<<DID_U_KNOW_UPDATE;
+				break;
+			}
+		default:
+			break;
 	}
+	diduknowPrevStatus=diduknowStatus;
 	cout<<endl;
 }
 
@@ -767,7 +766,11 @@ void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
-	printDiduknowHints();
+
+	if (diduknowStatus != diduknowPrevStatus)
+	{
+		printDiduknowHints();
+	}
 	gotoxy(8+currentChar,commandInitY);
 }
 
