@@ -401,6 +401,7 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 	assert(keyword!="");
 	int i;
 
+	noMatch = true;
 	string toBeCompared;
 
 	int listSize = _combinedEntryList.size();
@@ -438,19 +439,23 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 					if (entryDay == keywordDay)
 					{
 						setRank( i, 0, rank, &highestRank);
+						noMatch = false;
 					}
 					else
 					{
 						setRank( i, 1, rank, &highestRank);
+						noMatch = false;
 					}
 				}
 				else if (entryDay == keywordDay)
 				{
 					setRank( i, 1, rank, &highestRank);
+					noMatch = false;
 				}
 				else
 				{
 					setRank( i, 2, rank, &highestRank);
+					noMatch = false;
 				}
 			}
 			else if (entryMonth == keywordMonth)
@@ -458,15 +463,18 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 				if (entryDay == keywordDay)
 				{
 					setRank( i, 1, rank, &highestRank);
+					noMatch = false;
 				}
 				else
 				{
 					setRank( i, 2, rank, &highestRank);
+					noMatch = false;
 				}
 			}
 			else if (entryDay == keywordDay)
 			{
 				setRank( i, 2, rank, &highestRank);
+				noMatch = false;
 			}
 			else
 			{
@@ -483,6 +491,8 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 
 	int i;
 	int highestRank=0;
+
+	noMatch = true;
 
 	string entryTimeRange;
 	string entryStartTime;
@@ -521,14 +531,17 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 				if (entryStartMinute == keywordMinute)
 				{
 					setRank( i, 0, rank, &highestRank);
+					noMatch = false;
 				}
 				else if (entryStartMinute < keywordMinute)
 				{
 					setRank( i, 1, rank, &highestRank);
+					noMatch = false;
 				}
 				else
 				{
 					setRank( i, 2, rank, &highestRank);
+					noMatch = false;
 				}
 			}
 			else if (entryEndHour == keywordHour)
@@ -536,19 +549,23 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 				if (entryEndMinute == keywordMinute)
 				{
 					setRank( i, 0, rank, &highestRank);
+					noMatch = false;
 				}
 				else if (entryEndMinute < keywordMinute)
 				{
 					setRank( i, 1, rank, &highestRank);
+					noMatch = false;
 				}
 				else
 				{
 					setRank( i, 2, rank, &highestRank);
+					noMatch = false;
 				}
 			}
 			else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
 			{
 				setRank( i,2, rank, &highestRank);
+				noMatch = false;
 			}
 			else
 			{
