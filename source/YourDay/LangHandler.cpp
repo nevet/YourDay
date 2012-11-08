@@ -17,7 +17,7 @@
 
 #include "LangHandler.h"
 
-const int LangHandler::MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 const string LangHandler::NULL_STRING = "";
 const string LangHandler::PRIORITY_INDICATOR = " priority ";
@@ -89,18 +89,19 @@ bool LangHandler::isLogicDate(string date)
 		flag = false;
 	} else
 	{
-		if (!isLeap(year))
-		{
-			if (day > MONTH[month - 1])
-			{
-				flag = false;
-			}
-		} else
-		if (month == 2 && day > 29)
+		if (day > MONTH[month - 1])
 		{
 			flag = false;
+		} else
+		{
+			if (!isLeap(year) && month == 2 && day == 29)
+			{
+				flag =false;
+			}
 		}
 	}
+
+	log.writeConditionEntered("flag", flag);
 
 	return flag;
 }
