@@ -193,7 +193,7 @@ protected:
 	* if priority field is specified, the return will be the priority otherwise
 	* 0 will be returned.
 	*/
-	int extractPriority(string details);
+	string extractPriority(string details);
 	
 public:
 	/**

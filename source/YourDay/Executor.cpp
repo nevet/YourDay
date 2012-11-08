@@ -99,15 +99,13 @@ string Executor :: extractDate(string details)
 	return tempDate;
 }
 
-int Executor :: extractPriority(string details)
+string Executor :: extractPriority(string details)
 {
 	assert(details!="");
-	string tempPriority = "";
-	int priority;
+	string priority = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
-	tempPriority = extractField(details, indexLocation);
-	priority= atoi(tempPriority.c_str());
+	priority = extractField(details, indexLocation);
 	return priority;
 }
 
