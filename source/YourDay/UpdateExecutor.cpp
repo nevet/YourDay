@@ -135,7 +135,6 @@ void UpdateExecutor::execute()
 			position = _focusingEntryList->begin() +index;
 			_focusingEntryList->erase(position);
 		}
-		status = UPDATE_S;
 	}
 }
 

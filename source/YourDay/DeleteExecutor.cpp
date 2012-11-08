@@ -49,8 +49,7 @@ void DeleteExecutor::execute()
 	{
 		position = _focusingEntryList->begin() + index - 1;
 		_focusingEntryList->erase(position);
-		
-		status = DELETE_S;
+	
 	}
 }
 
