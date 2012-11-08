@@ -298,7 +298,8 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	assert(keyword!="");
 
 	int i;
-	int highestRank;
+	int listSize = _combinedEntryList.size();
+	int highestRank = listSize;
 
 	string entryTimeRange;
 	string entryStartTime;
@@ -311,7 +312,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	int keywordHour;
 	int keywordMinute;
 
-	int listSize = _combinedEntryList.size();
+	
 
 	for (i=0; i<listSize; i++)
 	{
