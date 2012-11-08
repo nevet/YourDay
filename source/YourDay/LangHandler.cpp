@@ -101,8 +101,6 @@ bool LangHandler::isLogicDate(string date)
 		}
 	}
 
-	log.writeConditionEntered("flag", flag);
-
 	return flag;
 }
 
@@ -162,8 +160,8 @@ void LangHandler::encoder(string input, Signal command)
 	//operation should be entertained
 	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
-		throw string ("The length entered exceeds the available range\n");
 		log.writeException("The length entered exceeds the available range");
+		throw string ("The length entered exceeds the available range\n");
 	} else
 	{
 		//input format is different for different command
@@ -242,18 +240,18 @@ void LangHandler::encoder(string input, Signal command)
 				//to make sure they are logic, if applicable
 				if (priority != NULL_STRING && !isLogicPriority(priority))
 				{
-					throw string ("priority error\n");
 					log.writeException("priority error");
+					throw string ("priority error\n");
 				} else
 				if (date != NULL_STRING && !isLogicDate(date))
 				{
-					throw string ("date error\n");
 					log.writeException("date error");
+					throw string ("date error\n");
 				} else
 				if (time != NULL_STRING && !isLogicTime(time))
 				{
-					throw string ("time error\n");
 					log.writeException("time error");
+					throw string ("time error\n");
 				}
 
 				break;
@@ -272,14 +270,15 @@ void LangHandler::encoder(string input, Signal command)
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
-						throw string ("Index error\n");
+						
 						log.writeException("Index error");
+						throw string ("Index error\n");
 					}	
 				}
 				else
 				{
-					throw string("Input error\n");
 					log.writeException("Input error");
+					throw string("Input error\n");
 				}
 				
 				break;
@@ -292,8 +291,8 @@ void LangHandler::encoder(string input, Signal command)
 				
 				if (pos == string::npos)
 				{
-					throw string ("edit format error\n");
 					log.writeException("edit format error");
+					throw string ("edit format error\n");
 				} else
 				{
 					index = input.substr(0, pos);
@@ -302,8 +301,9 @@ void LangHandler::encoder(string input, Signal command)
 					if (!isInt(index))
 					{
 						index = NULL_STRING;
-						throw string ("Index error\n");
+
 						log.writeException("Index error");
+						throw string ("Index error\n");
 					} else
 					{
 						//get rid of index info
@@ -378,13 +378,13 @@ void LangHandler::encoder(string input, Signal command)
 						//to make sure they are logic, if applicable
 						if (date != NULL_STRING && !isLogicDate(date))
 						{
-							throw string ("date error\n");
 							log.writeException("date error");
+							throw string ("date error\n");
 						} else
 						if (time != NULL_STRING && !isLogicTime(time))
 						{
-							throw string ("time error\n");
 							log.writeException("time error");
+							throw string ("time error\n");
 						}
 					}
 				}
@@ -413,8 +413,6 @@ void LangHandler::encoder(string input, Signal command)
 	}
 }
 
-
-//@author A00088455R
 void LangHandler::setCommand(string userCommand)
 {	
 	//if user command is valid, set corresponding command type
@@ -448,15 +446,17 @@ void LangHandler::setCommand(string userCommand)
 		command = EXIT_COMMAND;
 	}
 	else
+	//if set command fails, no other operation should be entertained
 	if (userCommand == "")
 	{
+		log.writeException("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
 		throw string ("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
 	}
 	else
 	{
 		//if user command is invalid, command error signal should be set
-		
-		throw string ("Command error\n");
+		log.writeException("No Such Command\n");
+		throw string ("No Such Command\n");
 	}
 }
 
@@ -471,7 +471,6 @@ Signal LangHandler::getStatus()
 	return langStatus;
 }
 
-//@author A0088455R
 void LangHandler::separate(string userInput) throw (string)
 {
 	stringstream tempHolder(userInput);
@@ -487,27 +486,13 @@ void LangHandler::separate(string userInput) throw (string)
 	log.writeExecuted("LangHandler::setCommand()");
 	log.writeData("userCommand", userCommand);
 	
-	//if set command fails, no other operation should be entertained
-	if (sh.error(langStatus))
-	{
-		throw string ("No such command!\n");
-		log.writeException("No such command!");
-	} else
-	{
-		//to get rid of leading space
-		tempHolder.get(dummySpace);
-		getline(tempHolder, rawString);
+	//to get rid of leading space
+	tempHolder.get(dummySpace);
+	getline(tempHolder, rawString);
 
-		encoder(rawString, command);
-		log.writeExecuted("LangHandler::encoder()");
-		log.writeData("details", details);
-
-		//if no error threw by encoder, langStatus should be set to SUCCESS
-		if (!sh.error(langStatus))
-		{
-			langStatus = SUCCESS;
-		}
-	}
+	encoder(rawString, command);
+	log.writeExecuted("LangHandler::encoder()");
+	log.writeData("details", details);
 }
 
 Executor* LangHandler::pack(bool* quit, Signal focusingField,
