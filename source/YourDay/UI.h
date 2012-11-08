@@ -20,7 +20,7 @@
 #define commandBoxHeight 2
 #define bottomBoxHeight 6 //don't use the last line of the console
 #define didUKnowHeight 4
-#define resultBoxHeight (bottomBoxHeight -1 ) //use 1 line to write search result title
+#define resultBoxHeight (windowsHeight - operationResultY )
 
 #define generalInitY (generalTitleHeight)
 #define generalInitX 0
@@ -32,7 +32,7 @@
 #define inputStartY commandInitY
 #define diduknowInitX 0
 #define diduknowInitY (commandInitY + commandBoxHeight)
-#define operationResultY (diduknowInitY + 1)
+#define operationResultY (diduknowInitY + 4)
 #define operationResultX 0
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
@@ -136,9 +136,11 @@ private:
 	bool isGeneralEntryEnoughSpace(string description, string location, int rowPosition);
 	void printPart(string part, int maxLength, int initX, int initY, int &endY);
 
+	void printPartCalendar(int index, string row, int &rowPosition, bool& isPrinted);
+	void printPartGeneral(int index, string row, int &rowPosition, bool& isPrinted);
 	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printGeneralString(int index, string row, int &rowPosition, bool& isPrinted);
-	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
+	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted);
 	void printDiduknowHints();
 	bool isGeneral(string row);
 
