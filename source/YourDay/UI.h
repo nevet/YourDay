@@ -94,7 +94,8 @@ private:
 	HANDLE hConsole;
 	string input;
 	Signal focusedField;
-	Signal displayMode;
+	Signal generalDisplayMode;
+	Signal calendarDisplayMode;
 	Signal diduknowStatus;
 	Signal diduknowPrevStatus;
 	Signal curStatus;
