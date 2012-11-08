@@ -62,6 +62,8 @@
 #define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
 #define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
 
+#define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
+
 #define TAB 9
 #define ENTER 13
 #define BACKSPACE 8
@@ -125,16 +127,22 @@ private:
 	void setDidUKnowStatus();
 	void initializeDidUKnowStatus();
 
+	void initializeGeneralInitRowIndex(int generalSize);
+	void initializeCalendarInitRowIndex(int calendarSize);
+	void initializeResultInitRowIndex(int resultSize);
+
 	void printCalendarString(int index, string row, int &rowPosition);
 	void printGeneralString(int index, string row, int &rowPosition);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	void printDiduknowHints();
 	bool isGeneral(string row);
 
+	void printContinueFooter();
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList, int sizeOfGeneral);
 	void diduknowHintDisplay();
+
 	void startingScreenDisplay();
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 public:

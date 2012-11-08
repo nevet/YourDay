@@ -247,13 +247,13 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (calendarInitRowIndex > calendarBoxHeight)
 		{
 			calendarInitRowIndex -= calendarBoxHeight;
-			clearBox(calendarInitY, calendarBoxHeight);
+			clearBox(calendarInitY, calendarBoxHeight +1 );
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		else if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex = 0;
-			clearBox(calendarInitY, calendarBoxHeight);
+			clearBox(calendarInitY, calendarBoxHeight +1);
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
@@ -301,7 +301,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (calendarEndRowIndex != calendarSize -1)
 		{
 			calendarInitRowIndex = calendarEndRowIndex +1;
-			clearBox(calendarInitY, calendarBoxHeight);
+			clearBox(calendarInitY, calendarBoxHeight + 1);
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
@@ -420,6 +420,30 @@ void UI::initializeDidUKnowStatus()
 	diduknowStatus = DIDUKNOW_INIT;
 }
 
+void UI::initializeGeneralInitRowIndex(int generalSize)
+{
+	generalInitRowIndex = 0;
+}
+
+void UI::initializeCalendarInitRowIndex(int calendarSize)
+{
+/*	if (calendarSize % calendarBoxHeight)
+	{
+		calendarInitRowIndex = calendarBoxHeight * (calendarSize / calendarBoxHeight);
+	}
+	else
+	{
+		calendarInitRowIndex = calendarBoxHeight * (calendarSize / calendarBoxHeight -1);
+	}
+*/
+	calendarInitRowIndex = 0;
+}
+
+void UI::initializeResultInitRowIndex(int resultSize)
+{
+	diduknowInitRowIndex = 0;
+}
+
 void UI::printCalendarString(int index, string row, int& rowPosition)
 {
 	assert(row!= "");
@@ -453,21 +477,21 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 			case DISPLAY_ALL:
 				if (countPart == 1 && part.size() > maxCharDetailCalendar)
 				{
-					cout <<part.substr(0, maxCharDetailCalendar);
+					printf ("%s",part.substr(0, maxCharDetailCalendar));
 					gotoxy(locationArray[countPart], rowPosition + 1);
 					cout <<part.substr(maxCharDetailCalendar, part.size());
 					isOverflow = true;
 				}
 				else if (countPart == 2 && part.size() > maxCharLocationCalendar)
 				{
-					cout <<part.substr(0, maxCharLocationCalendar);
+					printf("%s",part.substr(0, maxCharLocationCalendar));
 					gotoxy(locationArray[countPart], rowPosition + 1);
 					cout <<part.substr(maxCharLocationCalendar, part.size());
 					isOverflow = true;
 				}
 				else
 				{
-					cout << part;
+					printf("%s", part);
 				}
 
 				break;
@@ -482,7 +506,7 @@ void UI::printCalendarString(int index, string row, int& rowPosition)
 				}
 				else
 				{
-					cout << part;
+					cout<<part;
 				}
 				break;
 			}
@@ -672,6 +696,12 @@ bool UI::isGeneral(string row)
 	return ans;
 }
 
+void UI::printContinueFooter()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
+	printf(" ...");
+}
+
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {	
 
@@ -694,6 +724,8 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	}
 
 	generalEndRowIndex = entryIndex -1;
+	if (generalEndRowIndex != sizeOfGeneral -1)
+		printContinueFooter();
 }
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
@@ -718,6 +750,8 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	}
 
 	calendarEndRowIndex = entryIndex -1;
+	if (calendarEndRowIndex != sizeOfCalendar -1)
+		printContinueFooter();
 }
 
 void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
@@ -830,13 +864,17 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 	assert(calendarEntryList!=NULL);
 	assert(resultList!=NULL);
 
-	int generalTemp = generalEntryList->size() - generalBoxHeight;
-	int calendarTemp = calendarEntryList->size() - calendarBoxHeight;
-	int diduknowTemp = resultList->size() - resultBoxHeight;
-	generalInitRowIndex = max(0, generalTemp);
-	calendarInitRowIndex = max(0, calendarTemp);
-	diduknowInitRowIndex = max(0, diduknowTemp);
-	displayMode = DISPLAY_ALL;
+	int generalSize = generalEntryList->size();
+	int calendarSize = calendarEntryList ->size();
+	int resultSize = resultList ->size();
+
+	initializeGeneralInitRowIndex(generalSize);
+	initializeCalendarInitRowIndex(calendarSize);
+	initializeResultInitRowIndex(resultSize);
+
+	diduknowInitRowIndex = resultSize / resultBoxHeight;
+
+	displayMode = DISPLAY_PART;
 
 	mainScreenDisplay(calendarEntryList, generalEntryList, resultList);
 	traceInput(calendarEntryList, generalEntryList, resultList);
@@ -865,8 +903,8 @@ void UI::displayMessage(string message)
 
 void UI::displayStatus(Signal status)
 {
-	//string message = interpreteSignal(status);
-	//displayMessage(message);
+//	string message = interpreteSignal(status);
+//	displayMessage(message);
 
 }
 
