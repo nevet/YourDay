@@ -30,7 +30,7 @@ void Log::writeTime()
 	
 	associateFile("log.txt", APP_TYPE);
 	
-	file << timeinfo->tm_year + 1900 << " " << timeinfo->tm_mon + 1 << " " << timeinfo->tm_mday << endl;
+	file << timeinfo->tm_year + 1900 << "/" << timeinfo->tm_mon + 1 << "/" << timeinfo->tm_mday << endl;
 }
 
 void Log::writeCreated(string objName)
@@ -64,7 +64,7 @@ void Log::writeConditionEntered(string condition, bool boolValue)
 {
 	associateFile("log.txt", APP_TYPE);
 	
-	file << "condition: " << condition << "evaluated as" << boolValue << endl;
+	file << "condition: " << condition << " is evaluated as " << boolValue << endl;
 	
 	disassociateFile();
 }
@@ -79,6 +79,15 @@ void Log::writeData(string dataName, string data)
 }
 
 void Log::writeData(string dataName, Signal data)
+{
+	associateFile("log.txt", APP_TYPE);
+	
+	file << dataName << " = " << data << endl;
+	
+	disassociateFile();
+}
+
+void Log::writeData(string dataName, bool data)
 {
 	associateFile("log.txt", APP_TYPE);
 	
