@@ -50,7 +50,7 @@ protected:
 	* the method will try to find the second '#' occurance and returns
 	* the index where the '#' found 
 	*/
-	int findBlockIndex(string details, int blockLocation);
+	static int findBlockIndex(string details, int blockLocation);
 
 	/**
 	* Decodes the encoded string and retreives the index
@@ -72,7 +72,7 @@ protected:
 	* the method will try to find the next '#' occurance and returns
 	* string between the '#'s
 	*/
-    string extractField(string details, int startLocation);
+    static string extractField(string details, int startLocation);
 
 	/**
 	* Decodes the encoded string and retreives the index
@@ -92,7 +92,7 @@ protected:
 	* if index field is specified, the return will be the index number otherwise
 	* 0 will be returned.
 	*/
-	int extractIndex(string details);
+	static int extractIndex(string details);
 
 	/**
 	* Decodes the encoded string and retreives the description field
@@ -112,7 +112,7 @@ protected:
 	* if description field is specified, the return will be the description
 	* otherwise empty string.
 	*/
-	string extractDescription(string details);
+	static string extractDescription(string details);
 
 	/**
 	* Decodes the encoded string and retreives the location field
@@ -133,7 +133,7 @@ protected:
 	* if location field is specified, the return will be the location
 	* otherwise it returns an empty string.
 	*/
-	string extractLocation(string details);
+	static string extractLocation(string details);
 
 	/**
 	* Decodes the encoded string and retreives the time field
@@ -153,7 +153,7 @@ protected:
 	* if time field is specified, the return will be the time field
 	* otherwise it will return an empty string.
 	*/
-	string extractTime(string details);
+	static string extractTime(string details);
 
 	/**
 	* Decodes the encoded string and retreives the date field
@@ -173,7 +173,7 @@ protected:
 	* if date field is specified, the return will be the date field
 	* otherwise it will return an empty string.
 	*/
-	string extractDate(string details);
+	static string extractDate(string details);
 
 	/**
 	* Decodes the encoded string and retreives the priority field
