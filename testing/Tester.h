@@ -244,7 +244,7 @@ TEST(add_executor,calendar_entry)
 	 UpdateExecutor uptExec3(testGeneralVectorPointer, testCalendarVectorPointer, details, focusingField);
 	 uptExec3.execute();
 	 lastEntry=testCalendarVectorPointer->size()-1;
-	 ASSERT_EQ(testCalendarVector[lastEntry], "##CS2103 Lecture#ICUBE#13:00-14:00#09/11/2012#high#");
+	 ASSERT_EQ(testCalendarVector[lastEntry], "##1.Meeting CS2103#UTown#13:00-14:00#09/11/2012#high#");
 	 
  }
 
@@ -288,8 +288,129 @@ TEST(add_executor,calendar_entry)
 	 //this is only one entry containing "wupei".
 	 ASSERT_EQ(matchedList[0],"##But most time I am still happy, because I am in a nice group.####");
 	 ASSERT_EQ(matchedList[1],"##Sometimes I feel sad, because as a tester, I find it is harder.####");
+ }*/
+
+ TEST(Power_search_test, nothing_matched)
+ {
+	 vector<string>* testGeneralVectorPointer;
+	 vector<string>* testCalendarVectorPointer;
+	 vector<string>* matchedListPointer;
+	 vector<string> testGeneralVector;
+	 vector<string> testCalendarVector;
+	 vector<string> matchedList;
+
+	 string details;
+
+	 testGeneralVectorPointer=&testGeneralVector;
+	 testCalendarVectorPointer=&testCalendarVector;
+	 matchedListPointer=&matchedList;
+
+
+	 details = "##Wu Pei####";
+	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec1.execute();
+	 details =  "##Ignatius Damai####";
+	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec2.execute();
+	 details =  "##Nhu Thao Nguyen####";
+	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec3.execute();
+	 details =  "##Da Huang####";
+	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec4.execute();
+
+	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##Soe Myat####");
+	 searchExec1.execute();
+	 //As nothing matched, there should be no result.
+	 ASSERT_EQ(matchedListPointer->size(),0);
+
  }
- */
+
+ TEST(power_search_test, time_search)
+ {
+	 vector<string>* testGeneralVectorPointer;
+	 vector<string>* testCalendarVectorPointer;
+	 vector<string>* matchedListPointer;
+	 vector<string> testGeneralVector;
+	 vector<string> testCalendarVector;
+	 vector<string> matchedList;
+
+	 testGeneralVectorPointer=&testGeneralVector;
+	 testCalendarVectorPointer=&testCalendarVector;
+	 matchedListPointer=&matchedList;
+
+	 Signal focusingField;
+	 int lastEntry;
+	 string details;
+
+	 details = "##Meeting CS2100#UTown#13:01-13:05#21/10/2012#high#";
+	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec1.execute();
+	 details = "##Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#";
+	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec2.execute();
+	 details =  "##Meeting CS2103#UTown#15:00-18:00#21/10/2012#high#";
+	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec3.execute();
+	 details = "##Meeting CS2103#UTown#16:00-19:00#20/10/2012#high#";
+	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec4.execute();
+	 //when there are two calendar entries containing this specific time, one is at front ,one is at the back
+	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##13:05####");
+	 searchExec1.execute();
+	 ASSERT_EQ(matchedList[0],"##Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#");
+	 ASSERT_EQ(matchedList[1],"##Meeting CS2100#UTown#13:01-13:05#22/10/2012#high#");
+	 ASSERT_EQ(matchedListPointer->size(),2);
+	 //when there are two calendar entries containing the same time, one is in the between, one is at the front.
+	 SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##16:00####");
+	 searchExec2.execute();
+	 ASSERT_EQ(matchedList[0],"##Meeting CS2104#UTown#16:00-19:00#23/10/2012#high#");
+	 ASSERT_EQ(matchedList[1],"##Meeting CS2106#UTown#15:00-18:00#24/10/2012#high#");
+	 ASSERT_EQ(matchedListPointer->size(),2);
+	 //when there is no entry containing this specific time.
+	 SearchExecutor searchExec3(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##14:02####");
+	 searchExec3.execute();
+	 ASSERT_EQ(matchedListPointer->size(),0);
+ }
+
+ TEST(power_search_test, date_search)
+ {
+	 vector<string>* testGeneralVectorPointer;
+	 vector<string>* testCalendarVectorPointer;
+	 vector<string>* matchedListPointer;
+	 vector<string> testGeneralVector;
+	 vector<string> testCalendarVector;
+	 vector<string> matchedList;
+
+	 testGeneralVectorPointer=&testGeneralVector;
+	 testCalendarVectorPointer=&testCalendarVector;
+	 matchedListPointer=&matchedList;
+
+	 Signal focusingField;
+	 int lastEntry;
+	 string details;
+
+	 details = "##Meeting CS2100#UTown#13:01-13:05#21/10/2012#high#";
+	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec1.execute();
+	 details = "##Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#";
+	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec2.execute();
+	 details =  "##Meeting CS2103#UTown#15:00-18:00#21/10/2012#high#";
+	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec3.execute();
+	 details = "##Meeting CS2103#UTown#16:00-19:00#20/10/2012#high#";
+	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, details);
+	 addExec4.execute();
+	 //when there are two calendar entries containing this specific time, one is at front ,one is at the back
+	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##21/10/20212####");
+	 searchExec1.execute();
+	 ASSERT_EQ(matchedList[0],"##Meeting CS2103#UTown#15:00-18:00#21/10/2012#high#");
+	 ASSERT_EQ(matchedListPointer->size(),1);
+	 
+	 
+ }
+
  TEST(undo_test,add_undo)
  {
 	 vector<string>* testGeneralVectorPointer;
@@ -427,7 +548,9 @@ TEST(add_executor,calendar_entry)
 		 AddExecutor addExec(testGeneralVectorPointer, testCalendarVectorPointer, details);
 		 addExec.execute();
 	 }
+	 ASSERT_EQ(testCalendarVector.size(),100);
  }
+
 
 void runTest(int argument_count, char** argument_vars)
 
