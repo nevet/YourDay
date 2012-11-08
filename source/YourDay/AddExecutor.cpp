@@ -1,6 +1,7 @@
 #include "AddExecutor.h"
 #include <cassert>
 #include <sstream>
+#include <algorithm>
 
 AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
 {
@@ -17,37 +18,34 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_undoGeneralEntryList = *generalEntryList;
 }
 
+int AddExecutor::partition(vector<string> &entryList, int low, int high)
+{
+	if (low == high) return low;
+	string pivot = entryList[low];
+	
+	int m = low;
+	for ( int k = low+1; k <= high; ++k )
+	{
+		if ( isEarlier(entryList[k], pivot))
+		{		
+			++m;
+			swap(entryList[k], entryList[m]);
+		}
+    }
+
+  swap(entryList[low], entryList[m]);  	
+  return m;
+}
+
 void AddExecutor::quickSort(vector<string> &entryList, int low, int high)
 {
-	int left, right;
-	string entry;
-	if (low >= high) return;
-
-	left = low;
-	right = high;
-	entry = entryList[(low + high) /2];
-
-	while ( left <= right )
+	int pivotIdx;
+	if (low < high)
 	{
-		while (isEarlier(entryList[left],entry))
-		{
-			left ++;
-		}
-		while (isEarlier(entry,entryList[right]))
-		{
-			right --;
-		}
-
-		if (left <= right)
-		{
-			swap(entryList[left], entryList[right]);
-			left ++;
-			right --;
-		}
+		pivotIdx = partition(entryList, low, high);
+		quickSort(entryList, low, pivotIdx - 1);
+		quickSort(entryList, pivotIdx + 1, high);
 	}
-
-	quickSort(entryList, low, right);
-	quickSort(entryList, left, high);
 }
 
 int AddExecutor::extractDay(string date)
@@ -87,10 +85,46 @@ bool AddExecutor::isEarlier(string &entry1, string &entry2)
 	int entryDay2 = extractDay(entryDate2);
 	int entryMonth2 = extractMonth(entryDate2);
 	int entryYear2 = extractYear(entryDate2);
+	ostringstream dateContender1;
+	ostringstream dateContender2;
+	ostringstream monthContender1;
+	ostringstream monthContender2;
+	if (entryDay1 < 10)
+	{
+		dateContender1<<"0"<<entryDay1;
+	}
+	else
+	{
+		dateContender1<<entryDay1;
+	}
+	if (entryDay2 < 10)
+	{
+		dateContender2<<"0"<<entryDay2;
+	}
+	else
+	{
+		dateContender2<<entryDay2;
+	}
+	if (entryMonth1 < 10)
+	{
+		monthContender1<<"0"<<entryMonth1;
+	}
+	else
+	{
+		monthContender1<<entryMonth1;
+	}
+	if (entryMonth2 < 10)
+	{
+		monthContender2<<"0"<<entryMonth2;
+	}
+	else
+	{
+		monthContender2<<entryMonth2;
+	}
 	ostringstream os1;
 	ostringstream os2;
-	os1<<entryYear1<<entryMonth1<<entryDay1<<timeRange1;
-	os2<<entryYear2<<entryMonth2<<entryDay2<<timeRange2;
+	os1<<entryYear1<<monthContender1.str()<<dateContender1.str()<<timeRange1;
+	os2<<entryYear2<<monthContender1.str()<<dateContender1.str()<<timeRange2;
 	return os1.str() < os2.str();
 }
 
@@ -110,6 +144,7 @@ void AddExecutor::execute() throw (string)
 	else
 	{
 		_calendarEntryList -> push_back(_details);
+		quickSort(*_calendarEntryList,0,_calendarEntryList->size()-1);
 	}
 
 	status = ADD_S;
