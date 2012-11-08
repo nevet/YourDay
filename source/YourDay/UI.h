@@ -66,7 +66,7 @@
 #define ENTER 13
 #define BACKSPACE 8
 
-#define maxInputSize 192
+#define maxInputSize (windowsWidth * 2 -9)
 
 using namespace std;
 
