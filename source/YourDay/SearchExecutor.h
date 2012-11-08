@@ -52,6 +52,7 @@ private:
 	
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
+	void initializeRank(int totalSize, vector<int>* rank);
 	void initializeCombinedEntry();
 	void setRank(int index, int level, vector<int>* rank, int* currentHighest);
 	void adjustRank(vector<int>* rank, int currentHighest);

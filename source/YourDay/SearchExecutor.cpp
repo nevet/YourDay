@@ -170,12 +170,18 @@ void SearchExecutor::splitStartEndTime(string* start, string* end, string timeRa
 
 void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector<int>* rank)
 {
-	int i;
 	score->clear();
 	rank->clear();
 	score->assign(totalSize,NULL);
 	rank->assign(totalSize,NULL);
 }
+
+void SearchExecutor::initializeRank(int totalSize, vector<int>* rank)
+{
+	rank->clear();
+	rank->assign(totalSize,totalSize);
+}
+
 void SearchExecutor::initializeCombinedEntry()
 {
 	int i;
@@ -193,10 +199,14 @@ void SearchExecutor::initializeCombinedEntry()
 
 void SearchExecutor::setRank(int index, int level, vector<int>* rank, int* currentHighest)
 {
-	(*rank)[index] = level;
-	if( *currentHighest > (*rank)[index])
+	(*rank)[index]-= level;
+	if( *currentHighest < (*rank)[index])
 	{
-		*currentHighest = level;
+		*currentHighest = (*rank)[index];
+	}
+	if ( (*rank)[index]<0)
+	{
+		(*rank)[index] = 0;
 	}
 }
 
@@ -208,13 +218,13 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 	{
 		for (i = 0; i < listSize; i++)
 		{
-			(*rank)[i] -= ( currentHighest - 1);
+			(*rank)[i] += ( listSize-currentHighest  );
 		}
-	}
+	}	
 }
 
 void SearchExecutor::searchDate(string keyword, vector<int>* rank)
-{
+{	
 	assert(keyword!="");
 	int i;
 
@@ -222,7 +232,7 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 
 	int listSize = _combinedEntryList.size();
 
-	int highestRank=listSize;
+	int highestRank=0;
 	int entryDay;
 	int keywordDay;
 	int entryMonth;
@@ -230,13 +240,15 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 	int entryYear;
 	int keywordYear;
 
+	initializeRank(listSize, rank);
+
 	for (i = 0; i < listSize; i++)
 	{
 		toBeCompared= extractDate(_combinedEntryList[i]);
 
 		if (toBeCompared == "")
 		{
-			setRank( i, 5, rank, &highestRank);
+			setRank( i, 4, rank, &highestRank);
 		}
 		else
 		{
@@ -252,45 +264,44 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 				{
 					if (entryDay == keywordDay)
 					{
-						setRank( i, 1, rank, &highestRank);
+						setRank( i, 0, rank, &highestRank);
 					}
 					else
 					{
-						setRank( i, 2, rank, &highestRank);
+						setRank( i, 1, rank, &highestRank);
 					}
 				}
 				else if (entryDay == keywordDay)
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, 1, rank, &highestRank);
 				}
 				else
 				{
-					setRank( i, 3, rank, &highestRank);
+					setRank( i, 2, rank, &highestRank);
 				}
 			}
 			else if (entryMonth == keywordMonth)
 			{
 				if (entryDay == keywordDay)
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, 1, rank, &highestRank);
 				}
 				else
 				{
-					setRank( i, 3, rank, &highestRank);
+					setRank( i, 2, rank, &highestRank);
 				}
 			}
 			else if (entryDay == keywordDay)
 			{
-				setRank( i, 3, rank, &highestRank);
+				setRank( i, 2, rank, &highestRank);
 			}
 			else
 			{
-				setRank( i, 4, rank, &highestRank);
+				setRank( i, 3, rank, &highestRank);
 			}
 		}
 	}
-	adjustRank(rank, highestRank);
-	
+	adjustRank(rank, highestRank);	
 }
 
 void SearchExecutor::searchTime(string keyword, vector<int>* rank)
@@ -298,8 +309,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	assert(keyword!="");
 
 	int i;
-	int listSize = _combinedEntryList.size();
-	int highestRank = listSize;
+	int highestRank=0;
 
 	string entryTimeRange;
 	string entryStartTime;
@@ -312,14 +322,17 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	int keywordHour;
 	int keywordMinute;
 
+	int listSize = _combinedEntryList.size();
+
 	
+	initializeRank(listSize, rank);
 
 	for (i=0; i<listSize; i++)
 	{
 		entryTimeRange=extractTime(_combinedEntryList[i]);
 		if (entryTimeRange == "")
 		{
-			setRank( i, 5, rank, &highestRank);
+			setRank( i, 4, rank, &highestRank);
 		}
 		else
 		{
@@ -334,39 +347,39 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 			{
 				if (entryStartMinute == keywordMinute)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, 0, rank, &highestRank);
 				}
 				else if (entryStartMinute < keywordMinute)
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, 1, rank, &highestRank);
 				}
 				else
 				{
-					setRank( i, 3, rank, &highestRank);
+					setRank( i, 2, rank, &highestRank);
 				}
 			}
 			else if (entryEndHour == keywordHour)
 			{
 				if (entryEndMinute == keywordMinute)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, 0, rank, &highestRank);
 				}
 				else if (entryEndMinute < keywordMinute)
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, 1, rank, &highestRank);
 				}
 				else
 				{
-					setRank( i, 3, rank, &highestRank);
+					setRank( i, 2, rank, &highestRank);
 				}
 			}
 			else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
 			{
-				setRank( i,3, rank, &highestRank);
+				setRank( i,2, rank, &highestRank);
 			}
 			else
 			{
-				setRank( i, 4, rank, &highestRank);
+				setRank( i, 3, rank, &highestRank);
 			}
 		}
 	}
