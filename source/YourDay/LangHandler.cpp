@@ -140,22 +140,30 @@ bool LangHandler::isLogicPriority(string priority)
 
 void LangHandler::eliminateSpaces(string& str)
 {
+	int len = str.length();
+	
 	int lead = 0;
-	int trail = str.length()-1;
+	int trail = len-1;
 
 	if (!str.empty())
 	{
-		while (str[lead] == ' ')
+		while (lead <= trail && str[lead] == ' ')
 		{
 			lead++;
 		}
 
-		while (str[trail] == ' ')
+		while (trail >= lead && str[trail] == ' ')
 		{
 			trail--;
 		}
 
-		str = str.substr(lead, trail - lead + 1);
+		if (lead < trail)
+		{
+			str = str.substr(lead, trail - lead + 1);
+		} else
+		{
+			str = NULL_STRING;
+		}
 	}
 }
 
