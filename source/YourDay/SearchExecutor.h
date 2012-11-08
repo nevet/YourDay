@@ -32,6 +32,8 @@ private:
 	
 	vector<string> _combinedEntryList;
 
+	bool noMatch;
+
 	int f[500][500];
 	int g[500][500];
 
