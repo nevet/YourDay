@@ -343,6 +343,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
+	diduknowStatus = DIDUKNOW_INIT;
 	char keyIn;
 	currentChar = 0;
 	input = "";
@@ -436,6 +437,7 @@ void UI::setDidUKnowStatus()
 
 void UI::initializeDidUKnowStatus()
 {
+	diduknowPrevStatus = DIDUKNOW_CLEAR;
 	diduknowStatus = DIDUKNOW_INIT;
 }
 
@@ -996,6 +998,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	diduknowHintDisplay();
 	resultListDisplay(resultList, generalEntryList->size());
 
+	diduknowPrevStatus = CLEAR;
 	drawCommandBox();
 }
 
@@ -1047,6 +1050,7 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
+	diduknowPrevStatus = ERR;
 }
 
 UI::~UI()
