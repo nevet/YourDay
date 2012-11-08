@@ -463,11 +463,6 @@ void LangHandler::encoder(string input, Signal command)
 						
 						//after have done separating, we need to exmaine each field
 						//to make sure they are logic, if applicable
-						if (description.empty() && (!priority.empty() || !date.empty() || !time.empty() || !location.empty()))
-						{
-							log.writeException("empty description error");
-							throw string ("empty description error\n");
-						}
 						if (!priority.empty() && !isLogicPriority(priority))
 						{
 							log.writeException("priority error");
