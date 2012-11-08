@@ -56,12 +56,11 @@ void UI::drawBanner()
 void UI::drawCommandBox()
 {
 	gotoxy(0,commandInitY);
-	//SetConsoleTextAttribute(hConsole, BACKGROUND_INTENSITY|FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),4|FOREGROUND_INTENSITY);
 	cout<<"command:";
 	setBackground();
 	cout<<"                                                                                                                ";
-	//cout<<"                                                                                                                        ";
+	cout<<"                                                                                                                        ";
 	gotoxy(8,commandInitY);
 }
 
@@ -706,7 +705,6 @@ void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGe
 //@author A0088455R
 void UI::printDiduknowHints()
 {
-
 	clearBox(diduknowInitY,didUKnowHeight+2);
 	gotoxy(diduknowInitX, diduknowInitY);
 	switch (diduknowStatus)
@@ -978,7 +976,6 @@ void UI::displayMessage(string message)
 	gotoxy(0,diduknowInitY);
 	setBackground();
 	cout << message <<endl;
-	gotoxy(8,commandInitY-1);
 	drawCommandBox();
 	getchar();
 }
