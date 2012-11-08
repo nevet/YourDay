@@ -87,7 +87,7 @@ private:
 public:
 	SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details);
 
-	void execute();
+	void execute() throw (string);
 	void undo();
 };
 

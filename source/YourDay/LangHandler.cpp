@@ -161,6 +161,8 @@ void LangHandler::eliminateSpaces(string& str)
 
 void LangHandler::encoder(string input, Signal command)
 {
+	log.writeEntered("LangHandler::encoder()");
+	
 	stringstream tempHolder(input);
 	
 	string date = NULL_STRING;
@@ -176,6 +178,8 @@ void LangHandler::encoder(string input, Signal command)
 
 	//eliminate spaces first
 	eliminateSpaces(input);
+	log.writeExecuted("eliminateSpaces");
+	log.writeData("Input after eliminated spaces", input);
 	
 	//if empty string or string with all spaces is entered by user, exception
 	//will be thrown and no more operation should be entertained
@@ -192,6 +196,8 @@ void LangHandler::encoder(string input, Signal command)
 			case ADD_COMMAND:
 				log.writeConditionEntered("add command separation", true);
 				
+				//add a space in front to avoid indicator missing
+				input = " " + input;
 				//check whether we have priority
 				pos = input.rfind(PRIORITY_INDICATOR);
 				//contains priority info
@@ -201,7 +207,10 @@ void LangHandler::encoder(string input, Signal command)
 					//get rid of priority info
 					input = input.substr(0, pos);
 				}
-				
+
+				//backtrack
+				eliminateSpaces(input);
+				log.writeData("Input after eliminated spaces", input);
 				log.writeExecuted("add command separation/priority separation");
 
 				//add a space before the string in case "at " happens
@@ -216,7 +225,9 @@ void LangHandler::encoder(string input, Signal command)
 					input = input.substr(0, pos);
 				}
 				
+				//backtrack
 				eliminateSpaces(input);
+				log.writeData("Input after eliminated spaces", input);
 				log.writeExecuted("add command separation/locatoin separation");
 
 				pos = input.find(SPACE_BAR);
@@ -236,6 +247,10 @@ void LangHandler::encoder(string input, Signal command)
 					if (pos != string::npos)
 					{
 						input = input.substr(pos + 1);
+						
+						//get rid of possible redundant spaces between date and time field
+						eliminateSpaces(input);
+						log.writeData("Input after eliminated spaces", input);
 
 						pos = input.find(SPACE_BAR);
 					
@@ -286,6 +301,9 @@ void LangHandler::encoder(string input, Signal command)
 				}
 				
 				log.writeExecuted("add command separation/date and time separtation");
+				
+				eliminateSpaces(input);
+				log.writeData("Input after eliminated spaces", input);
 
 				description = input;
 
@@ -366,7 +384,10 @@ void LangHandler::encoder(string input, Signal command)
 					{
 						//get rid of index info
 						input = input.substr(pos + 1);
+						eliminateSpaces(input);
+						log.writeData("Input after eliminated spaces", input);
 						
+						input = " " + input;
 						//check whether we have priority
 						pos = input.rfind(PRIORITY_INDICATOR);
 						//contains priority info
@@ -377,8 +398,11 @@ void LangHandler::encoder(string input, Signal command)
 							input = input.substr(0, pos);
 						}
 						
+						eliminateSpaces(input);
+						log.writeData("Input after eliminated spaces", input);
 						log.writeExecuted("edit command separation/priority separation");
 
+						input = " " + input;
 						//check whether we have location
 						pos = input.rfind(LOCATION_INDICATOR);
 						//contains location info
@@ -389,6 +413,8 @@ void LangHandler::encoder(string input, Signal command)
 							input = input.substr(0, pos);
 						}
 						
+						eliminateSpaces(input);
+						log.writeData("Input after eliminated spaces", input);
 						log.writeExecuted("edit command separation/location separation");
 						
 						pos = input.find(SPACE_BAR);
@@ -408,6 +434,9 @@ void LangHandler::encoder(string input, Signal command)
 							if (pos != string::npos)
 							{
 								input = input.substr(pos + 1);
+								
+								eliminateSpaces(input);
+								log.writeData("Input after eliminated spaces", input);
 
 								pos = input.find(SPACE_BAR);
 					
@@ -458,6 +487,9 @@ void LangHandler::encoder(string input, Signal command)
 						}
 				
 						log.writeExecuted("add command separation/date and time separtation");
+
+						eliminateSpaces(input);
+						log.writeData("Input after eliminated spaces", input);
 
 						description = input;
 						
@@ -539,7 +571,7 @@ void LangHandler::setCommand(string userCommand)
 	if (userCommand == "")
 	{
 		log.writeException("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
-		throw string ("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"");
+		throw string ("Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"\n");
 	}
 	else
 	{
@@ -562,6 +594,8 @@ Signal LangHandler::getStatus()
 
 void LangHandler::separate(string userInput) throw (string)
 {
+	log.writeEntered("LangHandler::separate()");
+	
 	stringstream tempHolder(userInput);
 
 	string userCommand;

@@ -631,7 +631,7 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 	_undoMatchedEntryList = *matchedEntryList;
 }
 
-void SearchExecutor::execute()
+void SearchExecutor::execute() throw (string)
 {
 	string currentKey;
 	vector<int> rank;
@@ -694,6 +694,7 @@ void SearchExecutor::execute()
 	{
 		int curRecord = v[i].second;
 		
+		log.writeData("record", _combinedEntryList[curRecord]);
 		_matchedEntryList->push_back(_combinedEntryList[curRecord]);
 	}
 }
