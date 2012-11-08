@@ -614,20 +614,28 @@ void SearchExecutor::searchText(string key, vector<int>* rank)
 	}
 
 	sort(best.begin(), best.end(), cmp);
-		
-	int p = 0;
-	int q = 1;
 
-	while (p < tot)
+	if (best[0].match == 0)
 	{
-		while (q < tot && !cmp(best[q - 1], best[q])) q++;
+		noMatch = true;
+	} else
+	{
+		noMatch = false;
 
-		for (int r = tot - p; p < q; p++)
+		int p = 0;
+		int q = 1;
+
+		while (p < tot)
 		{
-			(*rank)[best[p].index] = r;
-		}
+			while (q < tot && !cmp(best[q - 1], best[q])) q++;
 
-		q++;
+			for (int r = tot - p; p < q; p++)
+			{
+				(*rank)[best[p].index] = r;
+			}
+
+			q++;
+		}
 	}
 }
 
@@ -653,6 +661,8 @@ void SearchExecutor::execute() throw (string)
 	string currentKey;
 	vector<int> rank;
 	vector<int> score;
+
+	bool allNoMatch = true;
 	
 	int weight = 1;
 	initializeCombinedEntry();
@@ -696,23 +706,32 @@ void SearchExecutor::execute() throw (string)
 		{
 			score[i] += rank[i] * weight;
 		}
+
+		allNoMatch = (allNoMatch && noMatch);
 	}
 
-	vector<pair<int, int>> v;
-
-	for (int i = 0; i < totalEntries; i++)
+	if (allNoMatch)
 	{
-		v.push_back(make_pair(score[i], i));
-	}
+		log.writeException("No Match Found");
+		throw string("No Match Found\n");
+	} else
+	{
+		vector<pair<int, int>> v;
 
-	sort(v.rbegin(), v.rend());
+		for (int i = 0; i < totalEntries; i++)
+		{
+			v.push_back(make_pair(score[i], i));
+		}
+
+		sort(v.rbegin(), v.rend());
 	
-	for (int i = 0; i < totalEntries; i++)
-	{
-		int curRecord = v[i].second;
+		for (int i = 0; i < totalEntries; i++)
+		{
+			int curRecord = v[i].second;
 		
-		log.writeData("record", _combinedEntryList[curRecord]);
-		_matchedEntryList->push_back(_combinedEntryList[curRecord]);
+			log.writeData("record", _combinedEntryList[curRecord]);
+			_matchedEntryList->push_back(_combinedEntryList[curRecord]);
+		}
 	}
 }
 
