@@ -604,7 +604,6 @@ void UI::printPartGeneral(int index, string row, int &rowPosition, bool& isPrint
 	string partArray[6];
 	extractParts(row, partArray);
 
-
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
 	clearBox(rowPosition,1);
 	gotoxy(locationArray[0], rowPosition);
@@ -873,6 +872,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	generalEndRowIndex = entryIndex -1;
 	if (generalEndRowIndex != sizeOfGeneral -1)
 	{
+		gotoxy(0, rowPosition);
 		printContinueFooter();
 	}
 }
@@ -905,6 +905,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	calendarEndRowIndex = entryIndex -1;
 	if (calendarEndRowIndex != sizeOfCalendar -1)
 	{
+		gotoxy(0, rowPosition);
 		printContinueFooter();
 	}
 }

@@ -139,6 +139,7 @@ private:
 
 	void printPartCalendar(int index, string row, int &rowPosition, bool& isPrinted);
 	void printPartGeneral(int index, string row, int &rowPosition, bool& isPrinted);
+
 	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printGeneralString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted);
