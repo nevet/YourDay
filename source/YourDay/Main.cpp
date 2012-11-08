@@ -67,7 +67,7 @@ int main(int arg, char** test)
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	log.writeCreated("FunctionHandler instance");
 	
-	UI ui;
+	UI ui(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 	log.writeCreated("UI instance created.");
 
 	//terminating indicator, should be false at the beginning

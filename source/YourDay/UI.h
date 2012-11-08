@@ -131,6 +131,7 @@ private:
 	void initializeCalendarInitRowIndex(int calendarSize);
 	void initializeResultInitRowIndex(int resultSize);
 
+	void printLimitedLengthString(string str, int maxLength, int initX, int initY, int &endY);
 	void printCalendarString(int index, string row, int &rowPosition);
 	void printGeneralString(int index, string row, int &rowPosition);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
@@ -146,7 +147,7 @@ private:
 	void startingScreenDisplay();
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 public:
-	UI();
+	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 
 	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	string retrieveInput();
