@@ -51,6 +51,15 @@ void Log::writeRetrieved(string varName)
 	disassociateFile();
 }
 
+void Log::writeEntered(string fxName)
+{
+	associateFile("log.txt", APP_TYPE);
+	
+	file << fxName << "is entered." << endl;
+	
+	disassociateFile();
+}
+
 void Log::writeExecuted(string fxName)
 {
 	associateFile("log.txt", APP_TYPE);

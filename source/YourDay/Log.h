@@ -5,6 +5,7 @@
 # include <fstream>
 # include <time.h>
 # include <stdio.h>
+# include <vector>
 
 # include "Signal.h"
 
@@ -17,6 +18,7 @@ private:
 	enum OPEN_TYPE {APP_TYPE, OUT_TYPE};
 	
 	fstream file;
+
 	void disassociateFile();
 	void associateFile(string fileName, OPEN_TYPE mode);
 	
@@ -26,6 +28,7 @@ public:
 	
 	void writeCreated(string objName);
 	void writeRetrieved(string varName);
+	void writeEntered(string fxName);
 	void writeExecuted(string fxName);
 	void writeConditionEntered(string condition, bool boolValue);
 	
