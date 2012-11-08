@@ -157,7 +157,7 @@ void LangHandler::eliminateSpaces(string& str)
 			trail--;
 		}
 
-		if (lead < trail)
+		if (lead <= trail)
 		{
 			str = str.substr(lead, trail - lead + 1);
 		} else
