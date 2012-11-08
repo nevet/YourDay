@@ -31,6 +31,7 @@ public:
 	
 	void writeData(string dataName, string data);
 	void writeData(string dataName, Signal data);
+	void writeData(string dataName, bool data);
 	
 	void writeException(string exception);
 };
