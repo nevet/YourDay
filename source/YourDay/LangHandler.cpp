@@ -69,7 +69,6 @@ bool LangHandler::isInt(string inx)
 
 bool LangHandler::isLogicDate(string date)
 {
-	assert(date!="");
 	int year, month, day;
 
 	bool flag = true;
@@ -106,7 +105,6 @@ bool LangHandler::isLogicDate(string date)
 
 bool LangHandler::isLogicTime(string time)
 {
-	assert(time!="");
 	int h1, h2, m1, m2;
 
 	bool flag = true;
@@ -137,8 +135,28 @@ bool LangHandler::isLogicTime(string time)
 
 bool LangHandler::isLogicPriority(string priority)
 {
-	assert(priority!="");
 	return (priority == "high") || (priority == "mid") || (priority == "low");
+}
+
+void LangHandler::eliminateSpaces(string& str)
+{
+	int lead = 0;
+	int trail = str.length()-1;
+
+	if (!str.empty())
+	{
+		while (str[lead] == ' ')
+		{
+			lead++;
+		}
+
+		while (str[trail] == ' ')
+		{
+			trail--;
+		}
+
+		str = str.substr(lead, trail - lead + 1);
+	}
 }
 
 void LangHandler::encoder(string input, Signal command)
@@ -156,14 +174,17 @@ void LangHandler::encoder(string input, Signal command)
 
 	size_t pos;
 
-	//if empty string is entered by user, LENGTH_Z_E will be set and no more
-	//operation should be entertained
+	//eliminate spaces first
+	eliminateSpaces(input);
+	
+	//if empty string or string with all spaces is entered by user, exception
+	//will be thrown and no more operation should be entertained
 	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
 		log.writeException("The length entered exceeds the available range");
 		throw string ("The length entered exceeds the available range\n");
 	} else
-	{
+	{		
 		//input format is different for different command
 		switch (command)
 		{
@@ -183,6 +204,8 @@ void LangHandler::encoder(string input, Signal command)
 				
 				log.writeExecuted("add command separation/priority separation");
 
+				//add a space before the string in case "at " happens
+				input = " " + input;
 				//check whether we have location
 				pos = input.rfind(LOCATION_INDICATOR);
 				//contains location info
@@ -193,29 +216,53 @@ void LangHandler::encoder(string input, Signal command)
 					input = input.substr(0, pos);
 				}
 				
+				eliminateSpaces(input);
 				log.writeExecuted("add command separation/locatoin separation");
 
-				//extract potential date information and exmaine it
 				pos = input.find(SPACE_BAR);
+
 				if (pos != string::npos)
 				{
+					//extract potential date information and exmaine it
 					date = input.substr(0, pos);
+				} else
+				{
+					date = input;
 				}
 				
 				//only if date field is not empty
-				if (date != NULL_STRING && isDate(date))
+				if (isDate(date))
 				{
-					input = input.substr(pos + 1);
-					
-					pos = input.find(SPACE_BAR);
-					time = input.substr(0, pos);
-
-					if (isTime(time))
+					if (pos != string::npos)
 					{
 						input = input.substr(pos + 1);
+
+						pos = input.find(SPACE_BAR);
+					
+						if (pos != string::npos)
+						{
+							time = input.substr(0, pos);
+						} else
+						{
+							time = input;
+						}
+
+						if (isTime(time))
+						{
+							if (pos != string::npos)
+							{
+								input = input.substr(pos + 1);
+							} else
+							{
+								input = NULL_STRING;
+							}
+						} else
+						{
+							time = NULL_STRING;
+						}
 					} else
 					{
-						time = NULL_STRING;
+						input = NULL_STRING;
 					}
 				} else
 				{
@@ -223,9 +270,15 @@ void LangHandler::encoder(string input, Signal command)
 					time = date;
 					date = NULL_STRING;
 
-					if (time != NULL_STRING && isTime(time))
+					if (isTime(time))
 					{
-						input = input.substr(pos + 1);
+						if (pos != string::npos)
+						{
+							input = input.substr(pos + 1);
+						} else
+						{
+							input = NULL_STRING;
+						}
 					} else
 					{
 						time = NULL_STRING;
@@ -238,17 +291,22 @@ void LangHandler::encoder(string input, Signal command)
 
 				//after have done separating, we need to exmaine each field
 				//to make sure they are logic, if applicable
-				if (priority != NULL_STRING && !isLogicPriority(priority))
+				if (description.empty() && (!priority.empty() || !date.empty() || !time.empty() || !location.empty()))
+				{
+					log.writeException("empty description error");
+					throw string ("empty description error\n");
+				}
+				if (!priority.empty() && !isLogicPriority(priority))
 				{
 					log.writeException("priority error");
 					throw string ("priority error\n");
 				} else
-				if (date != NULL_STRING && !isLogicDate(date))
+				if (!date.empty() && !isLogicDate(date))
 				{
 					log.writeException("date error");
 					throw string ("date error\n");
 				} else
-				if (time != NULL_STRING && !isLogicTime(time))
+				if (!time.empty() && !isLogicTime(time))
 				{
 					log.writeException("time error");
 					throw string ("time error\n");
@@ -334,26 +392,49 @@ void LangHandler::encoder(string input, Signal command)
 						log.writeExecuted("edit command separation/location separation");
 						
 						pos = input.find(SPACE_BAR);
-						
+
 						if (pos != string::npos)
 						{
+							//extract potential date information and exmaine it
 							date = input.substr(0, pos);
-						}
-						
-						//only if date field is not empty
-						if (date != NULL_STRING && isDate(date))
+						} else
 						{
-							input = input.substr(pos + 1);
-							
-							pos = input.find(SPACE_BAR);
-							time = input.substr(0, pos);
-
-							if (isTime(time))
+							date = input;
+						}
+				
+						//only if date field is not empty
+						if (isDate(date))
+						{
+							if (pos != string::npos)
 							{
 								input = input.substr(pos + 1);
+
+								pos = input.find(SPACE_BAR);
+					
+								if (pos != string::npos)
+								{
+									time = input.substr(0, pos);
+								} else
+								{
+									time = input;
+								}
+
+								if (isTime(time))
+								{
+									if (pos != string::npos)
+									{
+										input = input.substr(pos + 1);
+									} else
+									{
+										input = NULL_STRING;
+									}
+								} else
+								{
+									time = NULL_STRING;
+								}
 							} else
 							{
-								time = NULL_STRING;
+								input = NULL_STRING;
 							}
 						} else
 						{
@@ -361,27 +442,43 @@ void LangHandler::encoder(string input, Signal command)
 							time = date;
 							date = NULL_STRING;
 
-							if (time != NULL_STRING && isTime(time))
+							if (isTime(time))
 							{
-								input = input.substr(pos + 1);
+								if (pos != string::npos)
+								{
+									input = input.substr(pos + 1);
+								} else
+								{
+									input = NULL_STRING;
+								}
 							} else
 							{
 								time = NULL_STRING;
 							}
 						}
-						
-						log.writeExecuted("delete command separation/date and time separation");
-						
+				
+						log.writeExecuted("add command separation/date and time separtation");
+
 						description = input;
 						
 						//after have done separating, we need to exmaine each field
 						//to make sure they are logic, if applicable
-						if (date != NULL_STRING && !isLogicDate(date))
+						if (description.empty() && (!priority.empty() || !date.empty() || !time.empty() || !location.empty()))
+						{
+							log.writeException("empty description error");
+							throw string ("empty description error\n");
+						}
+						if (!priority.empty() && !isLogicPriority(priority))
+						{
+							log.writeException("priority error");
+							throw string ("priority error\n");
+						} else
+						if (!date.empty() && !isLogicDate(date))
 						{
 							log.writeException("date error");
 							throw string ("date error\n");
 						} else
-						if (time != NULL_STRING && !isLogicTime(time))
+						if (!time.empty() && !isLogicTime(time))
 						{
 							log.writeException("time error");
 							throw string ("time error\n");
@@ -405,11 +502,8 @@ void LangHandler::encoder(string input, Signal command)
 				break;
 		}
 
-		if (!sh.error(langStatus))
-		{
-			details = DELIMINATOR + index + DELIMINATOR + description + DELIMINATOR + 
-					  location + DELIMINATOR + time + DELIMINATOR + date + DELIMINATOR + priority + DELIMINATOR;
-		}
+		details = DELIMINATOR + index + DELIMINATOR + description + DELIMINATOR + 
+					location + DELIMINATOR + time + DELIMINATOR + date + DELIMINATOR + priority + DELIMINATOR;
 	}
 }
 

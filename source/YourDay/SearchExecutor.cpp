@@ -152,15 +152,12 @@ int SearchExecutor::extractHour(string time)
 	return hour;
 }
 
-
-
 int SearchExecutor::extractMinute(string time)
 {
 	int hour, minute;
 	sscanf(time.c_str(), "%d:%d", &hour, &minute);
 	return minute;
 }
-
 
 void SearchExecutor::splitStartEndTime(string* start, string* end, string timeRange)
 {
@@ -176,6 +173,7 @@ void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector
 	score->assign(totalSize,NULL);
 	rank->assign(totalSize,NULL);
 }
+
 void SearchExecutor::initializeCombinedEntry()
 {
 	int i;
