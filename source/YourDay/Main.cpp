@@ -79,7 +79,7 @@ int main(int arg, char** test)
 	{
 		try
 		{
-			ui.userInteract(&calendarEntryList, &generalEntryList, &diduknowBoxList, signal);
+			ui.traceInput(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 			log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
@@ -97,10 +97,10 @@ int main(int arg, char** test)
 			log.writeExecuted("FunctionHandler::execute()");
 
 			signal = function.getStatus();
+			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 		}
 		catch (string excpt)
 		{
-			excpt += "Press Enter to continue..\n";
 			ui.displayMessage(excpt);
 		}
 	}

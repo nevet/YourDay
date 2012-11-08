@@ -964,9 +964,10 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	diduknowPrevStatus=DIDUKNOW_CLEAR;
 
 	startingScreenDisplay();
+	mainScreenDisplay( calendarEntryList, generalEntryList, resultList);
 }
 
-void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status)
+/*void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status)
 {	
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
@@ -976,7 +977,7 @@ void UI::userInteract(vector<string>* calendarEntryList, vector<string>* general
 	mainScreenDisplay(calendarEntryList, generalEntryList, resultList);
 	traceInput(calendarEntryList, generalEntryList, resultList);
 }
-
+*/
 string UI::retrieveInput()
 {
 	return input;
@@ -994,9 +995,6 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
-
-	char c;
-	while ((c = getch()) != ENTER);
 }
 
 UI::~UI()

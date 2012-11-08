@@ -123,7 +123,6 @@ private:
 	void changeFocusedField(vector<string>* resultList);
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void setDidUKnowStatus();
 	void initializeDidUKnowStatus();
 
@@ -150,11 +149,12 @@ private:
 	void diduknowHintDisplay();
 
 	void startingScreenDisplay();
-	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 public:
 	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 
-	void userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);
