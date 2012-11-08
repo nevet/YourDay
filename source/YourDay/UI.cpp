@@ -155,14 +155,29 @@ void UI::highlightTitle(int searchBoxSize)
 }
 
 void UI::changeDisplayMode()
-{
-	if (displayMode == DISPLAY_ALL)
+{	
+	switch (focusedField)
 	{
-		displayMode = DISPLAY_PART;
-	}
-	else
-	{
-		displayMode = DISPLAY_ALL;
+	case GENERAL:
+		if (generalDisplayMode == DISPLAY_ALL)
+		{
+			generalDisplayMode = DISPLAY_PART;
+		}
+		else
+		{
+			generalDisplayMode = DISPLAY_ALL;
+		}
+		break;
+	case CALENDAR:
+		if (calendarDisplayMode == DISPLAY_ALL)
+		{
+			calendarDisplayMode = DISPLAY_PART;
+		}
+		else
+		{
+			calendarDisplayMode = DISPLAY_ALL;
+		}
+		break;
 	}
 }
 
@@ -633,7 +648,7 @@ void UI::printCalendarString(int index, string row, int& rowPosition, bool& isPr
 	string description = partArray[1];
 	string location = partArray[2];
 	
-	switch (displayMode)
+	switch (calendarDisplayMode)
 	{
 	case DISPLAY_ALL:
 		if (isCalendarEntryEnoughSpace(description, location, rowPosition))
@@ -690,7 +705,7 @@ void UI::printGeneralString(int index, string row, int &rowPosition, bool& isPri
 	string description = partArray[1];
 	string location = partArray[2];
 	
-	switch (displayMode)
+	switch (generalDisplayMode)
 	{
 	case DISPLAY_ALL:
 		if (isGeneralEntryEnoughSpace(description, location, rowPosition))
@@ -994,7 +1009,8 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeCalendarInitRowIndex(calendarSize);
 	initializeResultInitRowIndex(resultSize);
 
-	displayMode = DISPLAY_ALL;
+	generalDisplayMode = DISPLAY_ALL;
+	calendarDisplayMode = DISPLAY_ALL;
 	focusedField = GENERAL;	
 	diduknowPrevStatus=DIDUKNOW_CLEAR;
 
