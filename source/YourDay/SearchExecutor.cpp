@@ -3,7 +3,7 @@
 #include "SearchExecutor.h"
 
 //@author A0088455R
-const int SearchExecutor::MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int SearchExecutor::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 const int SearchExecutor::PERFECT_MATCH = 3;
 const int SearchExecutor::MEDIOCORE_MATCH = 1;
@@ -64,7 +64,6 @@ bool SearchExecutor::isTime(string time)
 	return sscanf(time.c_str(), "%d:%d", &hour, &minute) == 2;
 }
 
-
 bool SearchExecutor::isLogicDate(string date)
 {
 	assert(date!="");
@@ -74,6 +73,7 @@ bool SearchExecutor::isLogicDate(string date)
 
 	//extract year, month and day from the string
 	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+
 	if (year > 9999 || year < 1000)
 	{
 		flag = false;
@@ -87,16 +87,15 @@ bool SearchExecutor::isLogicDate(string date)
 		flag = false;
 	} else
 	{
-		if (!isLeap(year))
-		{
-			if (day > MONTH[month - 1])
-			{
-				flag = false;
-			}
-		} else
-		if (month == 2 && day > 29)
+		if (day > MONTH[month - 1])
 		{
 			flag = false;
+		} else
+		{
+			if (!isLeap(year) && month == 2 && day == 29)
+			{
+				flag =false;
+			}
 		}
 	}
 

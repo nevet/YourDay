@@ -97,6 +97,7 @@ private:
 	Signal displayMode;
 	Signal diduknowStatus;
 	Signal diduknowPrevStatus;
+	Signal curStatus;
 
 	int currentChar;
 	int generalInitRowIndex;
@@ -105,8 +106,6 @@ private:
 	int generalEndRowIndex; // in case an entry occupies > 1 line, end index is not initial index + box height
 	int calendarEndRowIndex;
 	int diduknowEndRowIndex;
-
-	string interpreteSignal(Signal status);
 
 	void setScreenSize();
 	void setBackground();
@@ -117,6 +116,7 @@ private:
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
+	void highlightTitle(int searchBoxSize);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
@@ -134,10 +134,11 @@ private:
 	void extractParts(string entry, string* partlist);
 	bool isPartEnoughSpace(int strLength, int maxLength, int spaceLeft);
 	bool isCalendarEntryEnoughSpace(string description, string location, int rowPosition);
-	void printPart(string str, int maxLength, int initX, int initY, int &endY);
+	bool isGeneralEntryEnoughSpace(string description, string location, int rowPosition);
+	void printPart(string part, int maxLength, int initX, int initY, int &endY);
 
 	void printCalendarString(int index, string row, int &rowPosition, bool& isPrinted);
-	void printGeneralString(int index, string row, int &rowPosition);
+	void printGeneralString(int index, string row, int &rowPosition, bool& isPrinted);
 	void printResultString(int index, string row, int &rowPosition, int sizeOfGeneral);
 	void printDiduknowHints();
 	bool isGeneral(string row);
@@ -157,7 +158,6 @@ public:
 	string retrieveInput();
 	Signal retrieveFocusedField();
 	void displayMessage(string message);
-	void displayStatus(Signal status);
 
 	~UI();
 };
