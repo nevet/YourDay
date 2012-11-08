@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//@author A0091734A
 FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 								 vector<string>* calendarEntryList,
 								 vector<string>* resultList) 
