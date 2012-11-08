@@ -20,6 +20,8 @@ private:
 	vector<string> _undoGeneralEntryList;
 	vector<string> _undoCalendarEntryList;
 	vector<string> _undoMatchedEntryList;
+	
+	vector<string> _combinedEntryList;
 
 	string _details;
 	
@@ -41,13 +43,19 @@ private:
 
 	int extractDay(string date);
 	int extractMonth(string date);
+	int extractYear(string date);
 
 	int extractHour(string time);
 	int extractMinute(string time);
 
 	void splitStartEndTime(string* start, string* end, string timeRange);
+	
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
+	void initializeRank(int totalSize, vector<int>* rank);
+	void initializeCombinedEntry();
+	void setRank(int index, int level, vector<int>* rank, int* currentHighest);
+	void adjustRank(vector<int>* rank, int currentHighest);
 	void searchDate(string keyword, vector<int>* rank);
 	void searchTime(string keyword, vector<int>* rank);
 	void searchText(string keyword, vector<int>* rank);
