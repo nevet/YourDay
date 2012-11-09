@@ -21,6 +21,7 @@ using namespace std;
 * store data into the file or read data from file.
 * Only Storage Handler directly operate the file system.
 */
+//@author A0091734A
 class StorageHandler
 {
 public :
