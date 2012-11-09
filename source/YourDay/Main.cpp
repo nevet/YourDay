@@ -49,10 +49,10 @@ using namespace std;
 
 int main(int arg, char** test)
 {
-	 
-//	runTest(arg,test);
+ 
+	runTest(arg,test);
 
-	//recording general entries
+/*	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
 	vector<string> calendarEntryList;
@@ -105,5 +105,5 @@ int main(int arg, char** test)
 		}
 	}
 	
-	return EXIT_SUCCESS;
+	return EXIT_SUCCESS;*/
 }
