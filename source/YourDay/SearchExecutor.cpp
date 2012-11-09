@@ -615,7 +615,7 @@ void SearchExecutor::searchText(string key, vector<int>* rank)
 
 	sort(best.begin(), best.end(), cmp);
 
-	if (best[0].match == 0)
+	if (best.empty() || best[0].match == 0)
 	{
 		noMatch = true;
 	} else
@@ -734,6 +734,9 @@ void SearchExecutor::execute() throw (string)
 			_matchedEntryList->push_back(_combinedEntryList[curRecord]);
 		}
 	}
+	/*
+	key = extractDescription(_details);
+	_matchedEntryList->push_back(key);*/
 }
 
 void SearchExecutor::undo()
