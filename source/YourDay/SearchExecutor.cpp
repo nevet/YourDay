@@ -663,6 +663,7 @@ void SearchExecutor::execute() throw (string)
 	vector<int> score;
 
 	bool allNoMatch = true;
+	string key = extractDescription(_details);
 	
 	int weight = 1;
 	initializeCombinedEntry();
@@ -672,9 +673,9 @@ void SearchExecutor::execute() throw (string)
 	initializeVectors(totalEntries,&score,&rank);
 	
 	//while we can still extract keywords from the input
-	while (!_details.empty())
+	while (!key.empty())
 	{
-		currentKey = splitFirstTerm(&_details);
+		currentKey = splitFirstTerm(&key);
 		
 		if (isDate(currentKey))
 		{
@@ -683,8 +684,8 @@ void SearchExecutor::execute() throw (string)
 				searchDate(currentKey, &rank);
 			} else
 			{
+				log.writeException("date error");
 				throw string ("date error\n");
-				//log.writeException("date error");
 			}
 		} else
 		if (isTime(currentKey))
@@ -694,8 +695,8 @@ void SearchExecutor::execute() throw (string)
 				searchTime(currentKey, &rank);
 			} else
 			{
-				throw string ("time error\n");
 				log.writeException("time error");
+				throw string ("time error\n");
 			}
 		} else
 		{
