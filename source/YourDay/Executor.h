@@ -4,6 +4,7 @@
 #include<iostream>
 #include<string>
 
+#include "Log.h"
 #include "Signal.h"
 
 //@author A0088455R
@@ -27,6 +28,8 @@ class Executor
 //we set status as protected variable so that subclass is able to make change
 protected:
 	Signal status;
+
+	Log log;
 	
 	/**
 	* Decodes the encoded string and retreives the index

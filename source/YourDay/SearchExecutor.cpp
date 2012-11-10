@@ -222,7 +222,7 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
-	string sentence = extractDescription(encoded) + " " + extractLocation(encoded);
+	string sentence = extractDescription(encoded) + " " + extractLocation(encoded) + " " + extractPriority(encoded);
 	stringstream sin(sentence);
 
 	string temp;
@@ -671,7 +671,7 @@ void SearchExecutor::execute() throw (string)
 {
 	vector<int> rank;
 	vector<int> score;
-
+	
 	string suggestWords = "#";
 
 	vector<integerPair> tempMatchedList;

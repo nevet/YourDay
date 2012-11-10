@@ -11,6 +11,8 @@ class AddExecutor : public Executor
 private:
 	vector<string>* _calendarEntryList;
 	vector<string>* _generalEntryList;
+	vector<string>* _resultList;
+
 	vector<string> _undoGeneralEntryList;
 	vector<string> _undoCalendarEntryList;
 
@@ -23,9 +25,9 @@ private:
 	int partition(vector<string> &entryList, int low, int high);
 	void quickSort(vector<string> &entryList, int low, int high);
 public:
-	AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details) throw (string);
+	AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, string details);
 
-	void execute();
+	void execute() throw (string);
 	void undo();
 };
 
