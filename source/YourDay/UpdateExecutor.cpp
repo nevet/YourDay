@@ -2,7 +2,8 @@
 
 #include "UpdateExecutor.h"
 
-UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details, Signal focusingField)
+UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList,
+							   string details, Signal focusingField)
 {
 	assert(details!="");
 	assert(generalEntryList!=NULL);
@@ -29,6 +30,8 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
+	_resultList = resultList;
+
 	_focusingField = focusingField;
 	_details = details;
 }
@@ -126,6 +129,8 @@ void UpdateExecutor::execute()
 		{
 			newEntry = newEntry + newPriority + "#";
 		}
+
+		_resultList->push_back(newEntry);
 		
 		if( _focusingField== GENERAL && changeToCalendar)
 		{
@@ -162,4 +167,6 @@ void UpdateExecutor::execute()
 void UpdateExecutor::undo()
 {
 	*_focusingEntryList = _undoFocusingEntryList;
+	
+	_resultList->pop_back();
 }

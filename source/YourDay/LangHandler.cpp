@@ -649,7 +649,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 	switch (command)
 	{
 		case ADD_COMMAND:
-			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
+			exe = new AddExecutor(generalEntryList, calendarEntryList, resultList, details);
 			log.writeCreated("AddExecutor");
 			
 			break;
@@ -667,7 +667,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, resultList, details, focusingField);
 			log.writeCreated("UpdateExecutor");
 			
 			break;

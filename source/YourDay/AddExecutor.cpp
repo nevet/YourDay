@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 
-AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
+AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, string details)
 {
 	assert(details!="");
 	assert(generalEntryList!=NULL);
@@ -11,6 +11,7 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
+	_resultList = resultList;
 	_details = details;
 
 	//a local copy of entry list for undo using
@@ -71,24 +72,27 @@ int AddExecutor::extractYear(string date)
 
 bool AddExecutor::isEarlier(string &entry1, string &entry2)
 {
-	string timeRange1;
-	string timeRange2;
-	timeRange1=extractTime(entry1);
-	timeRange2=extractTime(entry2);
-	string entryDate1;
-	string entryDate2;
-	entryDate1=extractDate(entry1);
-	entryDate2=extractDate(entry2);
+	string timeRange1 = extractTime(entry1);
+	string timeRange2 = extractTime(entry2);
+
+	string entryDate1 = extractDate(entry1);
+	string entryDate2 = extractDate(entry2);
+
 	int entryDay1 = extractDay(entryDate1);
-	int entryMonth1 = extractMonth(entryDate1);
-	int entryYear1 = extractYear(entryDate2);
 	int entryDay2 = extractDay(entryDate2);
+
+	int entryMonth1 = extractMonth(entryDate1);
 	int entryMonth2 = extractMonth(entryDate2);
+
+	int entryYear1 = extractYear(entryDate2);
 	int entryYear2 = extractYear(entryDate2);
+
 	ostringstream dateContender1;
 	ostringstream dateContender2;
+
 	ostringstream monthContender1;
 	ostringstream monthContender2;
+
 	if (entryDay1 < 10)
 	{
 		dateContender1<<"0"<<entryDay1;
@@ -121,10 +125,13 @@ bool AddExecutor::isEarlier(string &entry1, string &entry2)
 	{
 		monthContender2<<entryMonth2;
 	}
+
 	ostringstream os1;
 	ostringstream os2;
+
 	os1<<entryYear1<<monthContender1.str()<<dateContender1.str()<<timeRange1;
 	os2<<entryYear2<<monthContender2.str()<<dateContender2.str()<<timeRange2;
+
 	return os1.str() < os2.str();
 }
 
@@ -139,11 +146,14 @@ void AddExecutor::execute() throw (string)
 
 	if (extractDate(_details) == "")
 	{
-		_generalEntryList -> push_back(_details);
+		_generalEntryList->push_back(_details);
+		_resultList->push_back(_details);
 	}
 	else
 	{
 		_calendarEntryList -> push_back(_details);
+		_resultList->push_back(_details);
+
 		quickSort(*_calendarEntryList,0,_calendarEntryList->size()-1);
 	}
 }
@@ -152,4 +162,6 @@ void AddExecutor::undo()
 {
 	*_generalEntryList = _undoGeneralEntryList;
 	*_calendarEntryList = _undoCalendarEntryList;
+	
+	_resultList->pop_back();
 }

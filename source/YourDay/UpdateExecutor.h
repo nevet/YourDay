@@ -12,6 +12,7 @@ private:
 	vector<string>* _focusingEntryList;
 	vector<string>* _generalEntryList;
 	vector<string>* _calendarEntryList;
+	vector<string>* _resultList;
 
 	vector<string> _undoFocusingEntryList;
 
@@ -19,7 +20,8 @@ private:
 	string _details;
 
 public:
-	UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details, Signal focusingField);
+	UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, 
+				   string details, Signal focusingField);
 
 	void execute();
 	void undo();

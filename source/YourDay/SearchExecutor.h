@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <sstream>
 #include "Executor.h"
-#include "Log.h"
 
 using namespace std;
 
@@ -41,15 +40,13 @@ private:
 	vector<string> _undoMatchedEntryList;
 	
 	vector<string> _combinedEntryList;
-
-	bool noMatch;
+	
+	string _details;
 
 	int f[500][500];
 	int g[500][500];
 
-	string _details;
-	
-	Log log;
+	bool noMatch;
 
 	string splitFirstTerm(string* mString);
 	
