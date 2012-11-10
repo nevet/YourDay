@@ -1,4 +1,5 @@
 #include <cassert>
+#include <direct.h>
 
 #include "StorageHandler.h"
 //@author A0091734A
@@ -7,21 +8,35 @@ using namespace std;
 
 
 const string StorageHandler::ENTRY_STORE_FORMAT = "%s %s %s\n";
+const string StorageHandler::FILEPATH = "YourdayBin/";
 
-string StorageHandler::DataBaseGeneralFile = "YourDayGEntry.txt";
-string StorageHandler::DataBaseCalendarFile = "YourDayCEntry.txt";
+const string StorageHandler::DataBaseCalendarFile = "YourDayCEntry.yd";
+const string StorageHandler::DataBaseGeneralFile = "YourDayGEntry.yd";
+const string StorageHandler::GeneralFile = "YourDayGEntry.txt";
+const string StorageHandler::CalendarFile = "YourDayCEntry.txt";
 
 StorageHandler::StorageHandler()
 {
-	if(!checkFileExistence("",DataBaseGeneralFile))
+	_mkdir("YourdayBin");
+
+	if(!checkFileExistence(FILEPATH, DataBaseGeneralFile))
 		ofstream writeFile(DataBaseGeneralFile);
 
-	if(!checkFileExistence("",DataBaseCalendarFile))
+	if(!checkFileExistence(FILEPATH, DataBaseCalendarFile))
 		ofstream writeFile(DataBaseCalendarFile);
 }
 
 StorageHandler::~StorageHandler()
-{}
+{
+
+	if(checkFileExistence(FILEPATH, GeneralFile))
+		renameFile(FILEPATH, GeneralFile, DataBaseGeneralFile);
+
+	if(checkFileExistence(FILEPATH, CalendarFile))
+		renameFile(FILEPATH, CalendarFile, DataBaseCalendarFile);
+	
+	
+}
 
 void StorageHandler::setStatus()
 {
@@ -33,7 +48,10 @@ void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string> 
 	assert(ramForGeneralList!=NULL);
 	assert(ramForCalendarList!=NULL);
 
-	ifstream infileG(DataBaseGeneralFile);
+	renameFile(FILEPATH, DataBaseCalendarFile , CalendarFile);
+	renameFile(FILEPATH, DataBaseGeneralFile, GeneralFile);
+
+	ifstream infileG(FILEPATH + GeneralFile);
 	string textLine;
 	while(getline(infileG,textLine))
 	{
@@ -41,7 +59,7 @@ void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string> 
 	}
 	infileG.close();
 
-	ifstream infileC(DataBaseCalendarFile);
+	ifstream infileC(FILEPATH + CalendarFile);
 	while(getline(infileC,textLine))
 	{
 		ramForCalendarList->push_back(textLine);
@@ -56,22 +74,24 @@ void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>
 	assert(ramForGeneralList!=NULL);
 	assert(ramForCalendarList!=NULL);
 
-	ofstream clearFileG(DataBaseGeneralFile);
-	ofstream outfileG(DataBaseGeneralFile,ofstream::app);
+	ofstream clearFileG(FILEPATH + GeneralFile);
+	ofstream outfileG(FILEPATH + GeneralFile,ofstream::app);
 	
 	for(int i=0;i<ramForGeneralList->size();i++)
 	{
 		outfileG<<(ramForGeneralList->at(i))<<endl;
 	}
-	outfileG.close();
+	
+	
 
-	ofstream clearFileC(DataBaseCalendarFile);
-	ofstream outfileC(DataBaseCalendarFile,ofstream::app);
+	ofstream clearFileC(FILEPATH + CalendarFile);
+	ofstream outfileC(FILEPATH + CalendarFile,ofstream::app);
 
 	for(int i=0;i<ramForCalendarList->size();i++)
 	{
 		outfileC<<(ramForCalendarList->at(i))<<endl;
 	}
+	outfileG.close();
 	outfileC.close();
 
 	return ;
