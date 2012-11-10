@@ -375,7 +375,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				{
 					--currentChar;
 				}
-
+				
 				diduknowHintDisplay();
 			}
 			break;
@@ -397,6 +397,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 //@author A0088455R
 void UI::setDidUKnowStatus()
 {
+
 	if (input == "add")
 	{
 		diduknowStatus = ADD_COMMAND;
@@ -423,6 +424,15 @@ void UI::setDidUKnowStatus()
 		diduknowStatus = EDIT_COMMAND;
 	}
 	else if (input == "")
+	{
+		diduknowStatus = DIDUKNOW_INIT;
+	}
+	else if ((diduknowStatus == ADD_COMMAND && input.find("add")) ||
+			(diduknowStatus == DELETE_COMMAND &&  input.find("delete")) ||
+			(diduknowStatus == EXIT_COMMAND && input.find("edit")) ||
+			(diduknowStatus == SEARCH_COMMAND && input.find("search")) ||
+			(diduknowStatus == UNDO_COMMAND && input.find("undo")) ||
+			(diduknowStatus == EDIT_COMMAND && input.find("edit")))
 	{
 		diduknowStatus = DIDUKNOW_INIT;
 	}
@@ -611,6 +621,18 @@ int UI::getNextResultInitIndex(bool& isValid)
 		}
 		break;
 	}
+	return ans;
+}
+
+int UI::findNearestInitArrayIndex(int rowIndex)
+{
+	int ans;
+	switch (focusedField)
+	{
+		case CALENDAR:
+	for (int i = 0; i < )
+	}
+
 	return ans;
 }
 
@@ -1173,7 +1195,7 @@ void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
-
+	
 	if (diduknowStatus != diduknowPrevStatus)
 	{
 		printDiduknowHints();
@@ -1213,6 +1235,8 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	highlightTitle(resultList->size());
 
 	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
+	if(resultList->size() !=0 )
+		focusedField = SEARCH_RESULT;
 	indexCurResultInitArray = 0;
 
 	generalEntryListDisplay(generalEntryList);

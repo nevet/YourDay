@@ -125,6 +125,16 @@ private:
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
 	void initializeFocusedField();
+
+	void extractParts(string entry, string* partArray);
+	int countPartLine(string part, int maxLength);
+	bool isGeneral(string row);
+	void setGeneralInitArrayPart(vector<string>* generalEntryList);
+	void setGeneralInitArrayFull(vector<string>* generalEntryList);
+	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
+	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
+	void setResultInitArrayPart(vector<string>* resultList);
+	void setResultInitArrayFull(vector<string>* resultList);
 	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	
 	int getGeneralInitIndex();
@@ -133,15 +143,7 @@ private:
 	int getNextCalendarInitIndex(bool& isValid);
 	int getResultInitIndex();
 	int getNextResultInitIndex(bool& isValid);
-
-	void extractParts(string entry, string* partArray);
-	int countPartLine(string part, int maxLength);
-	void setGeneralInitArrayPart(vector<string>* generalEntryList);
-	void setGeneralInitArrayFull(vector<string>* generalEntryList);
-	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
-	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
-	void setResultInitArrayPart(vector<string>* resultList);
-	void setResultInitArrayFull(vector<string>* resultList);
+	int findNearestInitArrayIndex(int entryIndex);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
@@ -158,7 +160,6 @@ private:
 	void printGeneralEntry(int index, string row, int &rowPosition);
 	void printResultEntry(int index, string row, int &rowPosition);
 	void printDiduknowHints();
-	bool isGeneral(string row);
 
 	void printGeneralFooter();
 	void printCalendarFooter();
