@@ -131,6 +131,7 @@ void UI::highlightTitle(int searchBoxSize)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
+			printResultFooter();
 		}
 		break;
 	case CALENDAR:
@@ -140,6 +141,7 @@ void UI::highlightTitle(int searchBoxSize)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
+			printResultFooter();
 		}
 		break;
 	case SEARCH_RESULT:
@@ -149,6 +151,7 @@ void UI::highlightTitle(int searchBoxSize)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
+			printResultFooter();
 		}
 		break;
 	}
@@ -272,16 +275,12 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		}
 		break;
 	case SEARCH_RESULT:
-	//
-	//		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-	//		resultListDisplay(resultList);
-	//	}
-	//	else if (resultInitRowIndex > 0)
-	//	{
-	//		resultInitRowIndex = 0;
-	//		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-	//		resultListDisplay(resultList);
-	//	}
+		if (indexCurResultInitArray > 0)
+		{
+			indexCurResultInitArray --;
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
+			resultListDisplay(resultList);
+		}
 
 		break;
 	default:
@@ -318,12 +317,13 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		}
 		break;
 	case SEARCH_RESULT:
-		//if (resultEndRowIndex != diduknowSize -1)
-		//{
-		//	resultInitRowIndex = resultEndRowIndex +1;
-		//	clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-		//	resultListDisplay(resultList);
-		//}
+		getNextResultInitIndex(isValid);
+		if (isValid)
+		{
+			indexCurResultInitArray ++;
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
+			resultListDisplay(resultList);
+		}
 		break;
 	default:
 		assert (false);
@@ -438,6 +438,7 @@ void UI::initializeInitArrayIndices()
 {
 	indexCurCalendarInitArray = 0;
 	indexCurGeneralInitArray = 0;
+	indexCurResultInitArray = 0;
 }
 
 void UI::initializeDisplayModes()
@@ -451,6 +452,23 @@ void UI::initializeDisplayModes()
 void UI::initializeFocusedField()
 {
 	focusedField = GENERAL;	
+}
+
+void UI::setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+{
+	generalInitArrayPart.clear();
+	generalInitArrayFull.clear();
+	calendarInitArrayPart.clear();
+	calendarInitArrayFull.clear();
+	resultInitArrayPart.clear();
+	resultInitArrayFull.clear();
+
+	setGeneralInitArrayPart(generalEntryList);
+	setGeneralInitArrayFull(generalEntryList);
+	setCalendarInitArrayPart(calendarEntryList);
+	setCalendarInitArrayFull(calendarEntryList);
+	setResultInitArrayPart(resultList);
+	setResultInitArrayFull(resultList);
 }
 
 int UI::getGeneralInitIndex()
@@ -537,6 +555,54 @@ int UI::getNextCalendarInitIndex(bool& isValid)
 		if (indexCurCalendarInitArray < calendarInitArrayFull.size() -1)
 		{
 			ans = calendarInitArrayFull[indexCurCalendarInitArray +1];
+			isValid = true;
+		}
+		else
+		{
+			isValid = false;
+		}
+		break;
+	}
+	return ans;
+}
+
+int UI::getResultInitIndex()
+{
+	int ans;
+
+	switch (resultDisplayMode)
+	{
+	case PART_MODE:
+		ans = resultInitArrayPart[indexCurResultInitArray];
+		break;
+	case FULL_MODE:
+		ans = resultInitArrayFull[indexCurResultInitArray];
+		break;
+	}
+	return ans;
+}
+
+int UI::getNextResultInitIndex(bool& isValid)
+{
+	int ans = -1;
+
+	switch (resultDisplayMode)
+	{
+	case PART_MODE:
+		if (indexCurResultInitArray < resultInitArrayPart.size() -1)
+		{
+			ans = resultInitArrayPart[indexCurResultInitArray +1];
+			isValid = true;
+		}
+		else
+		{
+			isValid = false;
+		}
+		break;
+	case FULL_MODE:
+		if (indexCurResultInitArray < resultInitArrayFull.size() -1)
+		{
+			ans = resultInitArrayFull[indexCurResultInitArray +1];
 			isValid = true;
 		}
 		else
@@ -687,6 +753,67 @@ void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
 		}
 	}
 	calendarInitArrayFull.push_back(index);
+}
+
+void UI::setResultInitArrayPart(vector<string>* resultList)
+{
+	int index = 0;
+	int resultSize = resultList ->size();
+
+	while (index < resultSize)
+	{
+		resultInitArrayPart.push_back(index);
+		index += RESULT_BOX_HEIGHT;
+	}
+}
+
+void UI::setResultInitArrayFull(vector<string>* resultList)
+{
+	int resultSize = resultList->size();
+	string row;
+	string description;
+	string location;
+	int descriptionLength;
+	int locationLength;
+	int descriptionMaxLength;
+	int locationMaxLength;
+	int lineOccupied;
+	string partArray[NUMBER_OF_ENTRY_PARTS];
+
+	int index = 0;
+	int countLine = 0;
+
+	for (int i =0; i < resultSize; i++)
+	{
+		row = resultList->at(i);
+		extractParts(row, partArray);
+		description = partArray[1];
+		location = partArray [2];
+
+		if (isGeneral(row))
+		{	
+			descriptionMaxLength = GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1;
+			locationMaxLength = GENERAL_DATE_INIT_X - GENERAL_LOCATION_INIT_X -1;
+		}
+		else
+		{
+			descriptionMaxLength = CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1;
+			locationMaxLength = CALENDAR_DATE_INIT_X - CALENDAR_LOCATION_INIT_X -1;
+		}
+
+		descriptionLength = countPartLine(description, descriptionMaxLength);
+		locationLength = countPartLine(location, locationMaxLength);
+		lineOccupied = max(descriptionLength, locationLength);
+
+		countLine += lineOccupied;
+		if (countLine > RESULT_BOX_HEIGHT)		
+		{
+			resultInitArrayFull.push_back(index);
+			countLine = lineOccupied;
+			index = i;
+		}
+	}
+	resultInitArrayFull.push_back(index);
 }
 
 void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition)
@@ -952,6 +1079,21 @@ void UI::printCalendarFooter()
 	}
 }
 
+void UI::printResultFooter()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
+	gotoxy(15, COMMAND_INIT_Y +2);
+	switch (resultDisplayMode)
+	{
+	case PART_MODE:
+		cout << "Page" << indexCurResultInitArray + 1 << "/" << resultInitArrayPart.size();
+		break;
+	case FULL_MODE:
+		cout << "Page" << indexCurResultInitArray + 1<< "/" << resultInitArrayFull.size();
+		break;
+	}
+}
+
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {	
 	int sizeOfGeneral = generalEntryList->size();
@@ -998,38 +1140,32 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 
 void UI::resultListDisplay(vector<string>* resultList)
 {	
-	//assert(resultList!=NULL);
+	assert(resultList!=NULL);
 
-	//int sizeOfDiduknow;
-	//int entryIndex;
-	//int rowPosition;
-	//string row;
-	//bool isLastLineHasSpace = true;
-	//
-	//gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
-	//sizeOfDiduknow=resultList->size();
-	//entryIndex = resultInitRowIndex;
-	//
-	//if(resultList->size()>0)
-	//{
-	//	clearBox(COMMAND_INIT_Y+5,1);
-	//	highlightTitle(resultList->size());
-	//}
+	int resultSize = resultList->size();
+	int entryIndex = getResultInitIndex();
+	int rowPosition = OPERATION_RESULT_Y;
+	bool isValid = true;
+	int nextInitIndex = getNextResultInitIndex(isValid);
+	string row;
 
-	//gotoxy(1,OPERATION_RESULT_Y);
-	//rowPosition = OPERATION_RESULT_Y;
-	//while (rowPosition < WINDOWS_HEIGHT-1 && entryIndex <sizeOfDiduknow && isLastLineHasSpace)
-	//{
-	//	row = resultList ->at(entryIndex);
-	//	printResultEntry(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
-	//	if (isLastLineHasSpace)
-	//	{
-	//		entryIndex ++;
-	//		rowPosition ++;
-	//	}
-	//}
-	//
-	//resultEndRowIndex = entryIndex -1;
+	if(resultSize>0)
+	{
+		clearBox(COMMAND_INIT_Y+5,1);
+		highlightTitle(resultSize);
+	}
+
+	gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
+	
+	while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
+	{
+		row = resultList ->at(entryIndex);
+		printResultEntry(entryIndex + 1, row, rowPosition);
+		entryIndex ++;
+		rowPosition ++;
+	}
+
+	printResultFooter();
 }
 
 //@author A0088455R
@@ -1076,10 +1212,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 
 	highlightTitle(resultList->size());
 
-	setGeneralInitArrayPart(generalEntryList);
-	setGeneralInitArrayFull(generalEntryList);
-	setCalendarInitArrayPart(calendarEntryList);
-	setCalendarInitArrayFull(calendarEntryList);
+	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
