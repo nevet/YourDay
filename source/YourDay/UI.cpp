@@ -178,6 +178,16 @@ void UI::changeDisplayMode()
 			calendarDisplayMode = FULL_MODE;
 		}
 		break;
+	case SEARCH_RESULT:
+		if (resultDisplayMode == FULL_MODE)
+		{
+			resultDisplayMode = PART_MODE;
+		}
+		else
+		{
+			resultDisplayMode = FULL_MODE;
+		}
+		break;
 	}
 }
 
@@ -201,7 +211,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		break;
 	case SEARCH_RESULT:
 		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-		resultListDisplay(resultList, generalEntryList->size());
+		resultListDisplay(resultList);
 		drawCommandBox();
 		break;
 	default:
@@ -279,13 +289,13 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		{
 			resultInitRowIndex -= RESULT_BOX_HEIGHT;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-			resultListDisplay(resultList, generalEntryList->size());
+			resultListDisplay(resultList);
 		}
 		else if (resultInitRowIndex > 0)
 		{
 			resultInitRowIndex = 0;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-			resultListDisplay(resultList, generalEntryList->size());
+			resultListDisplay(resultList);
 		}
 
 		break;
@@ -327,7 +337,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		{
 			resultInitRowIndex = resultEndRowIndex +1;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-			resultListDisplay(resultList, generalSize);
+			resultListDisplay(resultList);
 		}
 		break;
 	default:
@@ -439,17 +449,17 @@ void UI::initializeDidUKnowStatus()
 	diduknowStatus = DIDUKNOW_INIT;
 }
 
-void UI::initializeGeneralInitRowIndex(int generalSize)
+void UI::initializeGeneralInitRowIndex()
 {
 	generalInitRowIndex = 0;
 }
 
-void UI::initializeCalendarInitRowIndex(int calendarSize)
+void UI::initializeCalendarInitRowIndex()
 {
 	calendarInitRowIndex = 0;
 }
 
-void UI::initializeResultInitRowIndex(int resultSize)
+void UI::initializeResultInitRowIndex()
 {
 	resultInitRowIndex = 0;
 }
@@ -658,13 +668,25 @@ void UI::printGeneralEntry(int index, string entry, int &rowPosition, bool& isPr
 
 void UI::printResultEntry(int index, string row, int &rowPosition, bool& isPrinted)
 {
+	Signal temp;
+
 	if (isGeneral(row))
 	{
+		temp = generalDisplayMode;
+		generalDisplayMode = resultDisplayMode;
+
 		printGeneralEntry(index, row, rowPosition, isPrinted);
+
+		generalDisplayMode = temp;
 	}
 	else
 	{
+		temp = calendarDisplayMode;
+		calendarDisplayMode = resultDisplayMode;
+
 		printCalendarEntry(index, row, rowPosition, isPrinted);
+
+		calendarDisplayMode = temp;
 	}
 }
 
@@ -819,7 +841,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	}
 }
 
-void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
+void UI::resultListDisplay(vector<string>* resultList)
 {	
 	assert(resultList!=NULL);
 
@@ -903,7 +925,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	calendarEntryListDisplay(calendarEntryList);
 	initializeDidUKnowStatus();
 	diduknowHintDisplay();
-	resultListDisplay(resultList, generalEntryList->size());
+	resultListDisplay(resultList);
 
 	diduknowPrevStatus = CLEAR;
 	drawCommandBox();
@@ -913,15 +935,13 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 {
 	input = "";
 
-	int generalSize = generalEntryList->size();
-	int calendarSize = calendarEntryList ->size();
-	int resultSize = resultList ->size();
-	initializeGeneralInitRowIndex(generalSize);
-	initializeCalendarInitRowIndex(calendarSize);
-	initializeResultInitRowIndex(resultSize);
+	initializeGeneralInitRowIndex();
+	initializeCalendarInitRowIndex();
+	initializeResultInitRowIndex();
 
 	generalDisplayMode = PART_MODE;
 	calendarDisplayMode = PART_MODE;
+	resultDisplayMode = PART_MODE;
 	focusedField = GENERAL;	
 	diduknowPrevStatus=DIDUKNOW_CLEAR;
 
@@ -929,17 +949,6 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	mainScreenDisplay( calendarEntryList, generalEntryList, resultList);
 }
 
-/*void UI::userInteract(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList, Signal status)
-{	
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-	assert(resultList!=NULL);
-
-	curStatus = status;
-	mainScreenDisplay(calendarEntryList, generalEntryList, resultList);
-	traceInput(calendarEntryList, generalEntryList, resultList);
-}
-*/
 string UI::retrieveInput()
 {
 	return input;
