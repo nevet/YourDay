@@ -624,17 +624,17 @@ int UI::getNextResultInitIndex(bool& isValid)
 	return ans;
 }
 
-int UI::findNearestInitArrayIndex(int rowIndex)
-{
-	int ans;
-	switch (focusedField)
-	{
-		case CALENDAR:
-	for (int i = 0; i < )
-	}
-
-	return ans;
-}
+//int UI::findNearestInitArrayIndex(int rowIndex)
+//{
+//	int ans;
+//	switch (focusedField)
+//	{
+//		case CALENDAR:
+//	for (int i = 0; i < )
+//	}
+//
+//	return ans;
+//}
 
 void UI::extractParts(string entry, string* partList)
 {
