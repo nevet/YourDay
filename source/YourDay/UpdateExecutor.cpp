@@ -36,7 +36,10 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 void UpdateExecutor::execute()
 {
 	int index;
+	int newIndex = NO_INDEX_IN_DESCRIPTION;
 	string oldEntry, newEntry;
+	string tempEntry;
+	string newTempEntry;
 	string newDate, newTime, newDescription, newPriority, newLocation;
 	string oldDate, oldTime, oldDescription, oldPriority, oldLocation;
 
@@ -66,9 +69,16 @@ void UpdateExecutor::execute()
 		{
 			newEntry = newEntry + oldDescription + "#";
 		}
-		else
+		else 
 		{
-			newEntry = newEntry + newDescription + "#";
+			if(extractIndexFromDescription(newDescription) != NO_INDEX_IN_DESCRIPTION)
+			{
+				newIndex = extractIndexFromDescription(newDescription);
+			}
+			else
+			{
+				newEntry = newEntry + newDescription + "#";	
+			}
 		}
 		
 		newLocation = extractLocation(_details);
@@ -119,21 +129,32 @@ void UpdateExecutor::execute()
 		
 		if( _focusingField== GENERAL && changeToCalendar)
 		{
-			position = _calendarEntryList->end() ;
-			_calendarEntryList->insert(position, newEntry);
+			_calendarEntryList->push_back (newEntry);
+			position = _focusingEntryList->begin() + index - 1;
+			_focusingEntryList->erase(position);	
+		}
+		else if (newIndex != NO_INDEX_IN_DESCRIPTION)
+		{
+			if(newIndex > _focusingEntryList->size())
+			{
+				throw string("Update Error");
+			}
+			int thresholdValue;
+			tempEntry = _focusingEntryList -> at(index - 1);
+			position = _focusingEntryList->begin() +newIndex -1;
 			
-			position = _generalEntryList->begin() + index -1;
-			_generalEntryList->insert(position, _generalEntryList->back());	
-			position = _generalEntryList->end() - 1;
-			_generalEntryList->erase(position);
+			if( index >= newIndex)
+				thresholdValue = 1;
+			else 
+				thresholdValue = 0;
+
+			_focusingEntryList->insert(position + 1- thresholdValue, tempEntry);
+			position = _focusingEntryList->begin() + index -1 + thresholdValue;
+			_focusingEntryList->erase(position);	
 		}
 		else
 		{
-			position = _focusingEntryList->begin() + index -1;
-			_focusingEntryList->insert(position,newEntry);
-
-			position = _focusingEntryList->begin() +index;
-			_focusingEntryList->erase(position);
+			 _focusingEntryList->at(index -1) = newEntry ;
 		}
 	}
 }
