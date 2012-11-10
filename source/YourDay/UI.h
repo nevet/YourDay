@@ -40,14 +40,14 @@
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define CALENDAR_INDEX_INIT_X 2
 #define CALENDAR_DESCRIPTION_INIT_X 6
-#define CALENDAR_LOCATION_INIT_X (CALENDAR_TIME_INIT_X - 20)
+#define CALENDAR_LOCATION_INIT_X 65
 #define CALENDAR_TIME_INIT_X 85
 #define CALENDAR_DATE_INIT_X 99
 #define CALENDAR_PRIORITY_INIT_X 113
 
 #define GENERAL_INDEX_INIT_X 2
 #define GENERAL_DESCRIPTION_INIT_X 6
-#define GENERAL_LOCATION_INIT_X (GENERAL_TIME_INIT_X- 10)
+#define GENERAL_LOCATION_INIT_X 93
 #define GENERAL_TIME_INIT_X 113
 #define GENERAL_DATE_INIT_X 113
 #define GENERAL_PRIORITY_INIT_X 113
@@ -92,6 +92,7 @@ private:
 	Signal focusedField;
 	Signal generalDisplayMode;
 	Signal calendarDisplayMode;
+	Signal resultDisplayMode;
 	Signal diduknowStatus;
 	Signal diduknowPrevStatus;
 	Signal curStatus;
@@ -123,9 +124,9 @@ private:
 	void setDidUKnowStatus();
 
 	void initializeDidUKnowStatus();
-	void initializeGeneralInitRowIndex(int generalSize);
-	void initializeCalendarInitRowIndex(int calendarSize);
-	void initializeResultInitRowIndex(int resultSize);
+	void initializeGeneralInitRowIndex();
+	void initializeCalendarInitRowIndex();
+	void initializeResultInitRowIndex();
 	void printStringVector(vector<string>* lineVector, int initX, int initY);
 
 	void extractParts(string entry, string* partArray);
@@ -143,7 +144,7 @@ private:
 	void printContinueFooter();
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
-	void resultListDisplay(vector<string>* resultList, int sizeOfGeneral);
+	void resultListDisplay(vector<string>* resultList);
 	void diduknowHintDisplay();
 
 	void startingScreenDisplay();
