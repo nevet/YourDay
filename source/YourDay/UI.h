@@ -52,11 +52,6 @@
 #define GENERAL_DATE_INIT_X 113
 #define GENERAL_PRIORITY_INIT_X 113
 
-#define MAX_CHAR_LOCATION_CALENDAR (CALENDAR_TIME_INIT_X - CALENDAR_LOCATION_INIT_X -1)
-#define MAX_CHAR_DETAIL_CALENDAR (CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1)
-#define MAX_CHAR_LOCATION_GENERAL (GENERAL_TIME_INIT_X - GENERAL_LOCATION_INIT_X -1)
-#define MAX_CHAR_DETAIL_GENERAL (GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1)
-
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
 #define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
 #define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
@@ -104,10 +99,10 @@ private:
 	int currentChar;
 	int generalInitRowIndex;
 	int calendarInitRowIndex;
-	int diduknowInitRowIndex;
+	int resultInitRowIndex;
 	int generalEndRowIndex; // in case an entry occupies > 1 line, end index is not initial index + box height
 	int calendarEndRowIndex;
-	int diduknowEndRowIndex;
+	int resultEndRowIndex;
 
 	void setScreenSize();
 	void setBackground();
@@ -131,17 +126,17 @@ private:
 	void initializeGeneralInitRowIndex(int generalSize);
 	void initializeCalendarInitRowIndex(int calendarSize);
 	void initializeResultInitRowIndex(int resultSize);
+	void printStringVector(vector<string>* lineVector, int initX, int initY);
 
 	void extractParts(string entry, string* partArray);
-	void printEntryPartMode(int* locationArray, int* colorArray, string* partArray, int index, int rowPosition);
-	void printEntryFullMode(int* locationArray, int* colorArray, string* partArray, int index, int& rowPosition, bool& isPrinted);
-	void splitPartToLines(string part, int maxLength, int &numnberOfLines, vector<string>* lineVector);
-	bool isEnoughSpace(int, int);
-	void printLineVector(vector<string>* lineVector);
+	void splitPartToLines(string part, int maxLength, vector<string>* lineVector);
+	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
+	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray,
+							vector<string>* description, vector<string>* location, int index, int rowPosition);
 
 	void printCalendarEntry(int index, string row, int &rowPosition, bool& isPrinted);
 	void printGeneralEntry(int index, string row, int &rowPosition, bool& isPrinted);
-	void printResultEntry(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted);
+	void printResultEntry(int index, string row, int &rowPosition, bool& isPrinted);
 	void printDiduknowHints();
 	bool isGeneral(string row);
 
