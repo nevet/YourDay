@@ -129,17 +129,27 @@ void UpdateExecutor::execute()
 		
 		if( _focusingField== GENERAL && changeToCalendar)
 		{
-			
 			_calendarEntryList->push_back (newEntry);
 			position = _focusingEntryList->begin() + index - 1;
 			_focusingEntryList->erase(position);	
 		}
 		else if (newIndex != NO_INDEX_IN_DESCRIPTION)
 		{
+			if(newIndex > _focusingEntryList->size())
+			{
+				throw string("Update Error");
+			}
+			int thresholdValue;
 			tempEntry = _focusingEntryList -> at(index - 1);
-			newTempEntry = _focusingEntryList -> at(newIndex - 1);
-			_focusingEntryList->at(index -1) = newTempEntry;
-			_focusingEntryList->at(newIndex -1) = tempEntry;
+			position = _focusingEntryList->begin() +newIndex -1;
+			_focusingEntryList->insert(position, tempEntry);
+			if( index >= newIndex)
+				thresholdValue = 1;
+			else 
+				thresholdValue = 0;
+
+			position = _focusingEntryList->begin() + index -1 + thresholdValue;
+			_focusingEntryList->erase(position);	
 		}
 		else
 		{
