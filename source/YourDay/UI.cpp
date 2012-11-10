@@ -15,14 +15,14 @@ const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"s
 void UI::setScreenSize()
 {
     _COORD coord; 
-    coord.X = windowsWidth; 
-    coord.Y = windowsHeight; 
+    coord.X = WINDOWS_WIDTH; 
+    coord.Y = WINDOWS_HEIGHT; 
 
     _SMALL_RECT Rect; 
     Rect.Top = 0; 
     Rect.Left = 0; 
-    Rect.Bottom = windowsHeight - 1; 
-    Rect.Right = windowsWidth - 1; 
+    Rect.Bottom = WINDOWS_HEIGHT - 1; 
+    Rect.Right = WINDOWS_WIDTH - 1; 
 
     // Get handle of the standard output 
     HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE); 
@@ -55,18 +55,18 @@ void UI::drawBanner()
 
 void UI::drawCommandBox()
 {
-	gotoxy(0,commandInitY);
+	gotoxy(0,COMMAND_INIT_Y);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),4|FOREGROUND_INTENSITY);
 	cout<<"command:";
 	setBackground();
 	cout<<"                                                                                                                ";
 	cout<<"                                                                                                                        ";
-	gotoxy(8,commandInitY);
+	gotoxy(8,COMMAND_INIT_Y);
 }
 
 void UI::gotoCommandBox()
 {
-	gotoxy(8,commandInitY);
+	gotoxy(8,COMMAND_INIT_Y);
 }
 
 void UI::setBackground()
@@ -80,7 +80,7 @@ void UI::clearBox(int startH, int height)
 	//setBackground();
 	gotoxy(0,startH);
 	for (int i=0; i<height; i++)
-		if (startH + height == windowsHeight && i == height -1)
+		if (startH + height == WINDOWS_HEIGHT && i == height -1)
 		{
 			cout<<"                                                                                                                       ";
 		}
@@ -106,7 +106,7 @@ void UI::writeTitle(string words, int startX, int startY)
 	gotoxy(startX,startY);
 	
 	cout<<words<<endl;
-	gotoxy(8+currentChar,commandInitY);
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 	setBackground();
 }
 
@@ -116,7 +116,7 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
-	gotoxy(8+currentChar,commandInitY);
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 	setBackground();
 }
 
@@ -126,29 +126,29 @@ void UI::highlightTitle(int searchBoxSize)
 	{
 	case GENERAL:
 		writeHighlightedTitle("General: ", 1,0);
-		writeTitle("Calendar: ", 1, calendarInitY -2);	
+		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (searchBoxSize != 0)
 		{
-			clearBox (commandInitY +2, 1);
-			writeTitle("SearchBox: ", 0, commandInitY+2);
+			clearBox (COMMAND_INIT_Y +2, 1);
+			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 		}
 		break;
 	case CALENDAR:
 		writeTitle("General: ", 1,0);
-		writeHighlightedTitle("Calendar: ", 1, calendarInitY -2);	
+		writeHighlightedTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (searchBoxSize != 0)
 		{
-			clearBox (commandInitY +2, 1);
-			writeTitle("SearchBox: ", 0, commandInitY+2);
+			clearBox (COMMAND_INIT_Y +2, 1);
+			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 		}
 		break;
 	case DIDUKNOW:
 		writeTitle("General: ", 1,0);
-		writeTitle("Calendar: ", 1, calendarInitY -2);	
+		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (searchBoxSize != 0)
 		{
-			clearBox (commandInitY +2, 1);
-			writeHighlightedTitle("SearchBox: ", 0, commandInitY+2);
+			clearBox (COMMAND_INIT_Y +2, 1);
+			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 		}
 		break;
 	}
@@ -159,23 +159,23 @@ void UI::changeDisplayMode()
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalDisplayMode == DISPLAY_ALL)
+		if (generalDisplayMode == DISPLAY_FULL)
 		{
 			generalDisplayMode = DISPLAY_PART;
 		}
 		else
 		{
-			generalDisplayMode = DISPLAY_ALL;
+			generalDisplayMode = DISPLAY_FULL;
 		}
 		break;
 	case CALENDAR:
-		if (calendarDisplayMode == DISPLAY_ALL)
+		if (calendarDisplayMode == DISPLAY_FULL)
 		{
 			calendarDisplayMode = DISPLAY_PART;
 		}
 		else
 		{
-			calendarDisplayMode = DISPLAY_ALL;
+			calendarDisplayMode = DISPLAY_FULL;
 		}
 		break;
 	}
@@ -190,17 +190,17 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 	switch (focusedField)
 	{
 	case GENERAL:
-		clearBox(generalInitY, generalBoxHeight);
+		clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT);
 		generalEntryListDisplay(generalEntryList);
 		drawCommandBox();
 		break;
 	case CALENDAR:
-		clearBox(calendarInitY, calendarBoxHeight);
+		clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT);
 		calendarEntryListDisplay(calendarEntryList);
 		drawCommandBox();
 		break;
 	case DIDUKNOW:
-		clearBox(operationResultY, resultBoxHeight);
+		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 		resultListDisplay(resultList, generalEntryList->size());
 		drawCommandBox();
 		break;
@@ -230,7 +230,7 @@ void UI::changeFocusedField(vector<string>* resultList)
 		break;
 	case DIDUKNOW:
 		focusedField = GENERAL;
-		clearBox(diduknowInitY,didUKnowHeight+2);
+		clearBox(DIDUKNOW_INIT_Y,DIDUKNOW_HEIGHT+2);
 		diduknowHintDisplay();
 		break;
 	default:
@@ -248,45 +248,45 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalInitRowIndex > generalBoxHeight)
+		if (generalInitRowIndex > GENERAL_BOX_HEIGHT)
 		{
-			generalInitRowIndex -= generalBoxHeight;
-			clearBox(generalInitY, generalBoxHeight +1);
+			generalInitRowIndex -= GENERAL_BOX_HEIGHT;
+			clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 			generalEntryListDisplay(generalEntryList);
 		}
 		else if (generalInitRowIndex > 0)
 		{
 			generalInitRowIndex = 0;
-			clearBox(generalInitY, generalBoxHeight +1);
+			clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 			generalEntryListDisplay(generalEntryList);
 		}
 		
 		break;
 	case CALENDAR:
-		if (calendarInitRowIndex > calendarBoxHeight)
+		if (calendarInitRowIndex > CALENDAR_BOX_HEIGHT)
 		{
-			calendarInitRowIndex -= calendarBoxHeight;
-			clearBox(calendarInitY, calendarBoxHeight +1 );
+			calendarInitRowIndex -= CALENDAR_BOX_HEIGHT;
+			clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT +1 );
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		else if (calendarInitRowIndex > 0)
 		{
 			calendarInitRowIndex = 0;
-			clearBox(calendarInitY, calendarBoxHeight +1);
+			clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT +1);
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
 	case DIDUKNOW:
-		if (diduknowInitRowIndex > resultBoxHeight)
+		if (diduknowInitRowIndex > RESULT_BOX_HEIGHT)
 		{
-			diduknowInitRowIndex -= resultBoxHeight;
-			clearBox(operationResultY, resultBoxHeight);
+			diduknowInitRowIndex -= RESULT_BOX_HEIGHT;
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalEntryList->size());
 		}
 		else if (diduknowInitRowIndex > 0)
 		{
 			diduknowInitRowIndex = 0;
-			clearBox(operationResultY, resultBoxHeight);
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalEntryList->size());
 		}
 
@@ -312,7 +312,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (generalEndRowIndex != generalSize -1)
 		{
 			generalInitRowIndex = generalEndRowIndex +1;
-			clearBox(generalInitY, generalBoxHeight +1);
+			clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 			generalEntryListDisplay(generalEntryList);
 		}
 		break;
@@ -320,7 +320,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (calendarEndRowIndex != calendarSize -1)
 		{
 			calendarInitRowIndex = calendarEndRowIndex +1;
-			clearBox(calendarInitY, calendarBoxHeight + 1);
+			clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT + 1);
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
@@ -328,7 +328,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (diduknowEndRowIndex != diduknowSize -1)
 		{
 			diduknowInitRowIndex = diduknowEndRowIndex +1;
-			clearBox(operationResultY, resultBoxHeight);
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalSize);
 		}
 		break;
@@ -358,11 +358,11 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			{
 			case 72:
 				scrollUp(calendarEntryList, generalEntryList, resultList);
-				gotoxy(currentChar+8,commandInitY);
+				gotoxy(currentChar+8,COMMAND_INIT_Y);
 				break;
 			case 80:
 				scrollDown(calendarEntryList, generalEntryList, resultList);
-				gotoxy(currentChar+8,commandInitY);
+				gotoxy(currentChar+8,COMMAND_INIT_Y);
 				break;
 			case 73:
 				changeDisplayMode();
@@ -387,7 +387,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			}
 			break;
 		default:
-			if (keyIn != ENTER && input.size() < maxInputSize)
+			if (keyIn != ENTER && input.size() < MAX_INPUT_SIZE)
 			{
 				setBackground();
 				cout << keyIn;
@@ -478,294 +478,124 @@ void UI::extractParts(string entry, string* partList)
 	}
 }
 
-bool UI::isPartEnoughSpace(int strLength, int maxLength, int spaceLeft)
+void UI::printEntryPartMode(int* locationArray, int* colorArray, string* partArray, int index, int rowPosition)
 {
-	int numberOfRow;
+	string part;
+	int maxPartLength;
 
-	if (strLength % maxLength == 0)
-	{
-		numberOfRow = strLength / maxLength;
-	}
-	else 
-	{
-		numberOfRow = strLength / maxLength +1;
-	}
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+	gotoxy(locationArray[0], rowPosition);
+	cout<<index<<". ";
 
-	return (numberOfRow <= spaceLeft);
+
+	for (int i = 1; i < NUMBER_OF_ENTRY_PARTS; i++)
+	{
+		part = partArray[i];
+		maxPartLength = locationArray[i+1]- locationArray[i] -1;
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+		gotoxy(locationArray[i], rowPosition);
+
+		if (part.length() >  maxPartLength)
+			cout << part.substr(0, maxPartLength -3 ) << "...";
+		else
+			cout <<part;
+	}
+	cout <<endl;
 }
 
-void UI::printPart(string part, int maxLength, int initX, int initY, int &endY)
+void UI::printEntryFullMode(int* locationArray, int* colorArray, string* partArray, int index, int& RowPosition, bool& isPrinted)
 {
-/*	int curY = initY;
-	int curX = initX;
 
-	string word;
-	istringstream str(part);
-	
-	while (str >> word)
-	{
-		gotoxy(curX, curY);
-		if (curX + word.length() <= maxLength)	
-		{
-			cout << word;
-			curX += word.length();
+}
 
-			if (curX != maxLength)
-			{
-				cout <<" ";
-				curX ++;
-			}
-		}
-		else
-		{
-			curY ++;
-		}
-	}
-*/
+void UI::splitPartToLines(string part, int maxLength, int& numberOfLines, vector<string>* lineVector)
+{
 	int initIndex = 0;
+	numberOfLines = 0;
 
 	for (int i = 0; i < part.length() / maxLength; i++) 
 	{
-		gotoxy(initX, initY);
-		cout << part.substr(initIndex, maxLength);
+		lineVector->push_back(part.substr(initIndex, maxLength));
 		initIndex += maxLength;
-		initY++;
+		numberOfLines++;
 	}
 
 	if (part.length() % maxLength != 0)
 	{
-		gotoxy(initX, initY);
-		cout << part.substr(initIndex, part.length() % maxLength);
-		initY ++;
+		lineVector->push_back(part.substr(initIndex, part.length() % maxLength));
+		numberOfLines ++;
 	}
 
-	endY = initY -1;
 }
 
-bool UI::isCalendarEntryEnoughSpace(string description, string location, int rowPosition)
+bool UI::isEnoughSpace(int entryEnd, int spaceEnd)
 {
-	bool ans = false;
-
-	if ((isPartEnoughSpace (description.length(), maxCharDetailCalendar, calendarInitY + calendarBoxHeight - rowPosition))
-		&& (isPartEnoughSpace (location.length(), maxCharLocationCalendar, calendarInitY + calendarBoxHeight - rowPosition)))
-		ans = true;
-
-	return ans;
+	if (entryEnd > spaceEnd )
+		return false;
+	return true;
 }
 
-bool UI::isGeneralEntryEnoughSpace(string description, string location, int rowPosition)
+void UI::printCalendarEntry(int index, string entry, int &rowPosition, bool& isPrinted)
 {
-	bool ans = false;
+	assert(entry!= "");
+	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
-	if ((isPartEnoughSpace (description.length(), maxCharDetailGeneral, generalInitY + generalBoxHeight - rowPosition))
-		&& (isPartEnoughSpace (location.length(), maxCharLocationGeneral, generalInitY + generalBoxHeight - rowPosition)))
-		ans = true;
+	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
+	int locationArray[NUMBER_OF_ENTRY_PARTS] = {CALENDAR_INDEX_INIT_X, CALENDAR_DESCRIPTION_INIT_X, CALENDAR_LOCATION_INIT_X,
+		CALENDAR_TIME_INIT_X, CALENDAR_DATE_INIT_X, CALENDAR_PRIORITY_INIT_X};
+	string partArray[NUMBER_OF_ENTRY_PARTS];
+	extractParts(entry, partArray);
 
-	return ans;
-}
-
-void UI::printPartCalendar(int index, string row, int &rowPosition, bool& isPrinted)
-{
-	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
-							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
-	string partArray[6];
-	extractParts(row, partArray);
-
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
-	clearBox(rowPosition,1);
-	gotoxy(locationArray[0], rowPosition);
-	cout<<index<<". ";
-
-	for (int i = 1; i<6; i++)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
-		gotoxy(locationArray[i], rowPosition);
-
-			if (i == 1 && partArray[i].size() > maxCharDetailCalendar -3)
-			{
-				printf("%s...", partArray[i].substr(0, maxCharDetailCalendar -3).c_str());
-			}
-			else if (i == 2 && partArray[i].size() > maxCharLocationCalendar - 3)
-			{
-				printf("%s...",partArray[i].substr(0, maxCharLocationCalendar -3).c_str());
-			}
-			else
-			{
-				printf("%s",partArray[i].c_str());
-			}
-	}
-	isPrinted = true;
-}
-
-void UI::printPartGeneral(int index, string row, int &rowPosition, bool& isPrinted)
-{
-	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
-							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
-	string partArray[6];
-	extractParts(row, partArray);
-
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
-	clearBox(rowPosition,1);
-	gotoxy(locationArray[0], rowPosition);
-	cout<<index<<". ";
-
-	for (int i = 1; i<6; i++)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
-		gotoxy(locationArray[i], rowPosition);
-
-			if (i == 1 && partArray[i].size() > maxCharDetailGeneral -3)
-			{
-				printf("%s...", partArray[i].substr(0, maxCharDetailGeneral -3).c_str());
-			}
-			else if (i == 2 && partArray[i].size() > maxCharLocationGeneral - 3)
-			{
-				printf("%s...",partArray[i].substr(0, maxCharLocationGeneral -3).c_str());
-			}
-			else
-			{
-				printf("%s",partArray[i].c_str());
-			}
-	}
-	isPrinted = true;
-
-}
-
-void UI::printCalendarString(int index, string row, int& rowPosition, bool& isPrinted)
-{
-	assert(row!= "");
-	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
-
-	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {calendarIndexInitX, calendarDescriptionInitX, calendarLocationInitX,
-							calendarTimeInitX, calendarDateInitX, calendarPriorityInitX};
-	string partArray[6];
-	int endDetailPosition = rowPosition;
-	int endLocationPosition = rowPosition;
-
-	extractParts(row, partArray);
-	string description = partArray[1];
-	string location = partArray[2];
-	
 	switch (calendarDisplayMode)
 	{
-	case DISPLAY_ALL:
-		if (isCalendarEntryEnoughSpace(description, location, rowPosition))
-		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
-			clearBox(rowPosition,1);	
-			gotoxy(locationArray[0], rowPosition);
-			cout<<index<<". ";
-
-			gotoxy(locationArray[1],rowPosition);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
-			printPart(partArray[1], maxCharDetailCalendar, locationArray[1], rowPosition, endDetailPosition);
-
-			gotoxy(locationArray[2],rowPosition);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[2]);
-			printPart(partArray[2], maxCharLocationCalendar, locationArray[2], rowPosition, endLocationPosition);
-			isPrinted = true;
-
-			for (int i = 3; i<6; i++)
-			{
-				gotoxy(locationArray[i],rowPosition);
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
-				cout << partArray[i];
-			}
-		}
-		else
-		{
-			isPrinted = false;
-		}
+	case DISPLAY_PART:
+		printEntryPartMode(locationArray, colorArray, partArray, index, rowPosition);
+		break;
+	case DISPLAY_FULL:
 
 		break;
-	case DISPLAY_PART:
-		printPartCalendar(index, row, rowPosition, isPrinted);
+	default:
+		assert(false);
 		break;
 	}
-
-	rowPosition = max(endDetailPosition, endLocationPosition);
-	cout<<endl;
 }
 
-void UI::printGeneralString(int index, string row, int &rowPosition, bool& isPrinted)
-{	
-	assert(row!= "");
-	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
+void UI::printGeneralEntry(int index, string entry, int &rowPosition, bool& isPrinted)
+{
+	assert(entry!= "");
+	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
-	int colorArray[6] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[6] = {generalIndexInitX, generalDescriptionInitX, generalLocationInitX,
-							generalTimeInitX, generalDateInitX, generalPriorityInitX};
-	string partArray[6];
-	int endDetailPosition = rowPosition;
-	int endLocationPosition = rowPosition;
+	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
+	int locationArray[NUMBER_OF_ENTRY_PARTS] = {GENERAL_INDEX_INIT_X, GENERAL_DESCRIPTION_INIT_X, GENERAL_LOCATION_INIT_X,
+		GENERAL_TIME_INIT_X, GENERAL_DATE_INIT_X, GENERAL_PRIORITY_INIT_X};
+	string partArray[NUMBER_OF_ENTRY_PARTS];
+	extractParts(entry, partArray);
 
-	extractParts(row, partArray);
-	string description = partArray[1];
-	string location = partArray[2];
-	
 	switch (generalDisplayMode)
 	{
-	case DISPLAY_ALL:
-		if (isGeneralEntryEnoughSpace(description, location, rowPosition))
-		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
-			clearBox(rowPosition,1);	
-			gotoxy(locationArray[0], rowPosition);
-			cout<<index<<". ";
-
-			gotoxy(locationArray[1],rowPosition);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
-			printPart(partArray[1], maxCharDetailGeneral, locationArray[1], rowPosition, endDetailPosition);
-
-			gotoxy(locationArray[2],rowPosition);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[2]);
-			printPart(partArray[2], maxCharLocationGeneral, locationArray[2], rowPosition, endLocationPosition);
-			isPrinted = true;
-
-			for (int i = 3; i<6; i++)
-			{
-				gotoxy(locationArray[i],rowPosition);
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
-				cout << partArray[i];
-			}
-		}
-		else
-		{
-			isPrinted = false;
-		}
+	case DISPLAY_PART:
+		printEntryPartMode(locationArray, colorArray, partArray, index, rowPosition);
+		break;
+	case DISPLAY_FULL:
 
 		break;
-	case DISPLAY_PART:
-		printPartGeneral(index, row, rowPosition, isPrinted);
+	default:
+		assert(false);
 		break;
 	}
-
-	rowPosition = max(endDetailPosition, endLocationPosition);
-	cout<<endl;
 }
 
-void UI::printResultString(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted)
+void UI::printResultEntry(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted)
 {
-	assert(row!= "");
-	assert(rowPosition >= 0 && rowPosition <= windowsHeight);
-	if (isGeneral(row))
-	{
-		printPartGeneral(index, row, rowPosition, isPrinted);
-	}
-	else
-	{
-		printPartCalendar(index, row, rowPosition, isPrinted);
-	}
+
 }
 
 //@author A0088455R
 void UI::printDiduknowHints()
 {
-	clearBox(diduknowInitY,didUKnowHeight+2);
-	gotoxy(diduknowInitX, diduknowInitY);
+	clearBox(DIDUKNOW_INIT_Y,DIDUKNOW_HEIGHT+2);
+	gotoxy(DIDUKNOW_INIT_X, DIDUKNOW_INIT_Y);
 	switch (diduknowStatus)
 	{
 		case DIDUKNOW_INIT:
@@ -854,16 +684,16 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	int rowPosition;
 	string row;
 
-	gotoxy(generalInitX, generalInitY);
+	gotoxy(GENERAL_INIT_X, GENERAL_INIT_Y);
 	sizeOfGeneral=generalEntryList->size();
 	entryIndex = generalInitRowIndex;
-	rowPosition = generalInitY;
+	rowPosition = GENERAL_INIT_Y;
 	bool isLastLineHasSpace = true;
 	
-	while (rowPosition < (calendarInitY - calendarTitleHeight) && entryIndex <sizeOfGeneral && isLastLineHasSpace)
+	while (rowPosition < (CALENDAR_INIT_Y - CALENDAR_TITLE_HEIGHT) && entryIndex <sizeOfGeneral && isLastLineHasSpace)
 	{
 		row = generalEntryList ->at(entryIndex);
-		printGeneralString(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
+		printGeneralEntry(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
 		if (isLastLineHasSpace)
 		{
 			entryIndex ++;
@@ -888,15 +718,15 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	string row;
 	bool isLastLineHasSpace = true;
 
-	gotoxy(calendarInitX, calendarInitY);
+	gotoxy(CALENDAR_INIT_X, CALENDAR_INIT_Y);
 	sizeOfCalendar=calendarEntryList->size();
 	entryIndex = calendarInitRowIndex;
-	rowPosition = calendarInitY;
+	rowPosition = CALENDAR_INIT_Y;
 
-	while (rowPosition < calendarInitY + calendarBoxHeight && entryIndex <sizeOfCalendar && isLastLineHasSpace)
+	while (rowPosition < CALENDAR_INIT_Y + CALENDAR_BOX_HEIGHT && entryIndex <sizeOfCalendar && isLastLineHasSpace)
 	{
 		row = calendarEntryList ->at(entryIndex);
-		printCalendarString(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
+		printCalendarEntry(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
 		if (isLastLineHasSpace)
 		{
 			entryIndex ++;
@@ -922,22 +752,22 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	string row;
 	bool isLastLineHasSpace = true;
 	
-	gotoxy(operationResultX, operationResultY);
+	gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
 	sizeOfDiduknow=resultList->size();
 	entryIndex = diduknowInitRowIndex;
 	
 	if(resultList->size()>0)
 	{
-		clearBox(commandInitY+5,1);
+		clearBox(COMMAND_INIT_Y+5,1);
 		highlightTitle(resultList->size());
 	}
 
-	gotoxy(1,operationResultY);
-	rowPosition = operationResultY;
-	while (rowPosition < windowsHeight-1 && entryIndex <sizeOfDiduknow && isLastLineHasSpace)
+	gotoxy(1,OPERATION_RESULT_Y);
+	rowPosition = OPERATION_RESULT_Y;
+	while (rowPosition < WINDOWS_HEIGHT-1 && entryIndex <sizeOfDiduknow && isLastLineHasSpace)
 	{
 		row = resultList ->at(entryIndex);
-		printResultString(entryIndex + 1, row, rowPosition, sizeOfGeneral, isLastLineHasSpace);
+		printResultEntry(entryIndex + 1, row, rowPosition, sizeOfGeneral, isLastLineHasSpace);
 		if (isLastLineHasSpace)
 		{
 			entryIndex ++;
@@ -958,7 +788,7 @@ void UI::diduknowHintDisplay()
 	{
 		printDiduknowHints();
 	}
-	gotoxy(8+currentChar,commandInitY);
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 //@author A0088455R
@@ -1013,8 +843,8 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeCalendarInitRowIndex(calendarSize);
 	initializeResultInitRowIndex(resultSize);
 
-	generalDisplayMode = DISPLAY_ALL;
-	calendarDisplayMode = DISPLAY_ALL;
+	generalDisplayMode = DISPLAY_PART;
+	calendarDisplayMode = DISPLAY_PART;
 	focusedField = GENERAL;	
 	diduknowPrevStatus=DIDUKNOW_CLEAR;
 
@@ -1045,8 +875,8 @@ Signal UI::retrieveFocusedField()
 
 void UI::displayMessage(string message)
 {
-	clearBox(diduknowInitY,bottomBoxHeight);
-	gotoxy(0,diduknowInitY);
+	clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
+	gotoxy(0,DIDUKNOW_INIT_Y);
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
