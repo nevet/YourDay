@@ -142,12 +142,13 @@ void UpdateExecutor::execute()
 			int thresholdValue;
 			tempEntry = _focusingEntryList -> at(index - 1);
 			position = _focusingEntryList->begin() +newIndex -1;
-			_focusingEntryList->insert(position, tempEntry);
+			
 			if( index >= newIndex)
 				thresholdValue = 1;
 			else 
 				thresholdValue = 0;
 
+			_focusingEntryList->insert(position + 1- thresholdValue, tempEntry);
 			position = _focusingEntryList->begin() + index -1 + thresholdValue;
 			_focusingEntryList->erase(position);	
 		}
