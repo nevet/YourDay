@@ -76,6 +76,8 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 			
 			undoStk.push(exe);
 			log.writeExecuted("stack::push()");
+
+			store.writeData(generalEntryList, calendarEntryList);
 		} else
 		{
 			log.writeConditionEntered("exe != NULL", false);
