@@ -3,6 +3,7 @@
 #include "Executor.h"
 //@author A0088455R
 
+
 Executor::Executor()
 {
 	status = CLEAR;
@@ -107,6 +108,50 @@ string Executor :: extractPriority(string details)
 	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
 	priority = extractField(details, indexLocation);
 	return priority;
+}
+
+//@author A0091734
+int Executor :: extractIndexFromDescription(string description)
+{
+	assert(description!="");
+	char * cstr;
+	char * firstWord;
+	int length;
+	int index;
+	bool isAllNumber = true;
+
+
+	int size=description.size();
+	cstr = new char [description.size()+1];
+	strcpy (cstr, description.c_str());	
+
+	// cstr now contains a c-string copy of description
+	firstWord=strtok (cstr," ");
+
+	string mystring(firstWord);
+	length = mystring.size();
+
+	for(int i=0;i<length;i++)
+	{
+		if(!(firstWord[i]<='9' && firstWord[i]>='0'))
+		{
+			isAllNumber = false;
+		}
+	}
+	
+
+
+	if(isAllNumber)
+	{
+		index = atoi(firstWord);
+		delete[] cstr;  
+		return index;
+	}
+	else
+	{
+		delete[] cstr;  
+		return NO_INDEX_IN_DESCRIPTION;
+	}
 }
 
 void Executor::execute()

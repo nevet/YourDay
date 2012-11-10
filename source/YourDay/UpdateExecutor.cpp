@@ -36,7 +36,10 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 void UpdateExecutor::execute()
 {
 	int index;
+	int newIndex = NO_INDEX_IN_DESCRIPTION;
 	string oldEntry, newEntry;
+	string tempEntry;
+	string newTempEntry;
 	string newDate, newTime, newDescription, newPriority, newLocation;
 	string oldDate, oldTime, oldDescription, oldPriority, oldLocation;
 
@@ -66,9 +69,16 @@ void UpdateExecutor::execute()
 		{
 			newEntry = newEntry + oldDescription + "#";
 		}
-		else
+		else 
 		{
-			newEntry = newEntry + newDescription + "#";
+			if(extractIndexFromDescription(newDescription) != NO_INDEX_IN_DESCRIPTION)
+			{
+				newIndex = extractIndexFromDescription(newDescription);
+			}
+			else
+			{
+				newEntry = newEntry + newDescription + "#";	
+			}
 		}
 		
 		newLocation = extractLocation(_details);
@@ -119,21 +129,21 @@ void UpdateExecutor::execute()
 		
 		if( _focusingField== GENERAL && changeToCalendar)
 		{
-			position = _calendarEntryList->end() ;
-			_calendarEntryList->insert(position, newEntry);
 			
-			position = _generalEntryList->begin() + index -1;
-			_generalEntryList->insert(position, _generalEntryList->back());	
-			position = _generalEntryList->end() - 1;
-			_generalEntryList->erase(position);
+			_calendarEntryList->push_back (newEntry);
+			position = _focusingEntryList->begin() + index - 1;
+			_focusingEntryList->erase(position);	
+		}
+		else if (newIndex != NO_INDEX_IN_DESCRIPTION)
+		{
+			tempEntry = _focusingEntryList -> at(index - 1);
+			newTempEntry = _focusingEntryList -> at(newIndex - 1);
+			_focusingEntryList->at(index -1) = newTempEntry;
+			_focusingEntryList->at(newIndex -1) = tempEntry;
 		}
 		else
 		{
-			position = _focusingEntryList->begin() + index -1;
-			_focusingEntryList->insert(position,newEntry);
-
-			position = _focusingEntryList->begin() +index;
-			_focusingEntryList->erase(position);
+			 _focusingEntryList->at(index -1) = newEntry ;
 		}
 	}
 }
