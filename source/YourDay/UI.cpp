@@ -278,7 +278,7 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (indexCurResultInitArray > 0)
 		{
 			indexCurResultInitArray --;
-			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 			resultListDisplay(resultList);
 		}
 
@@ -321,7 +321,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{
 			indexCurResultInitArray ++;
-			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
+			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 			resultListDisplay(resultList);
 		}
 		break;
@@ -698,7 +698,7 @@ void UI::setGeneralInitArrayFull(vector<string>* generalEntryList)
 	int descriptionLength;
 	int locationLength;
 	int descriptionMaxLength = GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1;
-	int locationMaxLength = GENERAL_DATE_INIT_X - GENERAL_LOCATION_INIT_X -1;
+	int locationMaxLength = GENERAL_TIME_INIT_X - GENERAL_LOCATION_INIT_X -1;
 	int lineOccupied;
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 
@@ -748,7 +748,7 @@ void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
 	int descriptionLength;
 	int locationLength;
 	int descriptionMaxLength = CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1;
-	int locationMaxLength = CALENDAR_DATE_INIT_X - CALENDAR_LOCATION_INIT_X -1;
+	int locationMaxLength = CALENDAR_TIME_INIT_X - CALENDAR_LOCATION_INIT_X -1;
 	int lineOccupied;
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 
@@ -815,12 +815,12 @@ void UI::setResultInitArrayFull(vector<string>* resultList)
 		if (isGeneral(row))
 		{	
 			descriptionMaxLength = GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1;
-			locationMaxLength = GENERAL_DATE_INIT_X - GENERAL_LOCATION_INIT_X -1;
+			locationMaxLength = GENERAL_TIME_INIT_X - GENERAL_LOCATION_INIT_X -1;
 		}
 		else
 		{
 			descriptionMaxLength = CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1;
-			locationMaxLength = CALENDAR_DATE_INIT_X - CALENDAR_LOCATION_INIT_X -1;
+			locationMaxLength = CALENDAR_TIME_INIT_X - CALENDAR_LOCATION_INIT_X -1;
 		}
 
 		descriptionLength = countPartLine(description, descriptionMaxLength);
@@ -1118,50 +1118,56 @@ void UI::printResultFooter()
 
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 {	
+	assert(generalEntryList, NULL);
+
 	int sizeOfGeneral = generalEntryList->size();
-	int entryIndex = getGeneralInitIndex();
-	bool isValid = true;
-	int nextInitIndex = getNextGeneralInitIndex(isValid);
-	int rowPosition = GENERAL_INIT_Y;
-	string row;
 
-	gotoxy(GENERAL_INIT_X, GENERAL_INIT_Y);
-	
-	while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfGeneral))
+	if (sizeOfGeneral > 0 )
 	{
-		row = generalEntryList ->at(entryIndex);
-		printGeneralEntry(entryIndex + 1, row, rowPosition);
-		entryIndex ++;
-		rowPosition ++;
-	}
+		int entryIndex = getGeneralInitIndex();
+		bool isValid = true;
+		int nextInitIndex = getNextGeneralInitIndex(isValid);
+		int rowPosition = GENERAL_INIT_Y;
+		string row;
 
-	if (sizeOfGeneral >0)
-	{
+		gotoxy(GENERAL_INIT_X, GENERAL_INIT_Y);
+
+		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfGeneral))
+		{
+			row = generalEntryList ->at(entryIndex);
+			printGeneralEntry(entryIndex + 1, row, rowPosition);
+			entryIndex ++;
+			rowPosition ++;
+		}
+
 		printGeneralFooter();
 	}
 }
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 {
+	assert(calendarEntryList, NULL);
 	int sizeOfCalendar = calendarEntryList->size();
-	int entryIndex = getCalendarInitIndex();
-	bool isValid = true;
-	int nextInitIndex = getNextCalendarInitIndex(isValid);
-	int rowPosition = CALENDAR_INIT_Y;
-	string row;
 
-	gotoxy(CALENDAR_INIT_X, CALENDAR_INIT_Y);
-
-	while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfCalendar))
+	if (sizeOfCalendar > 0)
 	{
-		row = calendarEntryList ->at(entryIndex);
-		printCalendarEntry(entryIndex + 1, row, rowPosition);
-		entryIndex ++;
-		rowPosition ++;
-	}
 
-	if (sizeOfCalendar >0)
-	{
+		int entryIndex = getCalendarInitIndex();
+		bool isValid = true;
+		int nextInitIndex = getNextCalendarInitIndex(isValid);
+		int rowPosition = CALENDAR_INIT_Y;
+		string row;
+
+		gotoxy(CALENDAR_INIT_X, CALENDAR_INIT_Y);
+
+		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfCalendar))
+		{
+			row = calendarEntryList ->at(entryIndex);
+			printCalendarEntry(entryIndex + 1, row, rowPosition);
+			entryIndex ++;
+			rowPosition ++;
+		}
+
 		printCalendarFooter();
 	}
 }
@@ -1171,30 +1177,31 @@ void UI::resultListDisplay(vector<string>* resultList)
 	assert(resultList!=NULL);
 
 	int resultSize = resultList->size();
-	int entryIndex = getResultInitIndex();
-	int rowPosition = OPERATION_RESULT_Y;
-	bool isValid = true;
-	int nextInitIndex = getNextResultInitIndex(isValid);
-	string row;
 
-	if(resultSize>0)
+	if (resultSize > 0 )
 	{
-		clearBox(COMMAND_INIT_Y+5,1);
-		highlightTitle(resultSize);
-	}
+		int entryIndex = getResultInitIndex();
+		int rowPosition = OPERATION_RESULT_Y;
+		bool isValid = true;
+		int nextInitIndex = getNextResultInitIndex(isValid);
+		string row;
 
-	gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
+		if(resultSize>0)
+		{
+			clearBox(COMMAND_INIT_Y+5,1);
+			highlightTitle(resultSize);
+		}
+
+		gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
 	
-	while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
-	{
-		row = resultList ->at(entryIndex);
-		printResultEntry(entryIndex + 1, row, rowPosition);
-		entryIndex ++;
-		rowPosition ++;
-	}
+		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
+		{
+			row = resultList ->at(entryIndex);
+			printResultEntry(entryIndex + 1, row, rowPosition);
+			entryIndex ++;
+			rowPosition ++;
+		}
 
-	if (resultSize >0)
-	{
 		printResultFooter();
 	}
 }
