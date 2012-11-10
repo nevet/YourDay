@@ -142,7 +142,7 @@ void UI::highlightTitle(int searchBoxSize)
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 		}
 		break;
-	case DIDUKNOW:
+	case SEARCH_RESULT:
 		writeTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (searchBoxSize != 0)
@@ -159,23 +159,23 @@ void UI::changeDisplayMode()
 	switch (focusedField)
 	{
 	case GENERAL:
-		if (generalDisplayMode == DISPLAY_FULL)
+		if (generalDisplayMode == FULL_MODE)
 		{
-			generalDisplayMode = DISPLAY_PART;
+			generalDisplayMode = PART_MODE;
 		}
 		else
 		{
-			generalDisplayMode = DISPLAY_FULL;
+			generalDisplayMode = FULL_MODE;
 		}
 		break;
 	case CALENDAR:
-		if (calendarDisplayMode == DISPLAY_FULL)
+		if (calendarDisplayMode == FULL_MODE)
 		{
-			calendarDisplayMode = DISPLAY_PART;
+			calendarDisplayMode = PART_MODE;
 		}
 		else
 		{
-			calendarDisplayMode = DISPLAY_FULL;
+			calendarDisplayMode = FULL_MODE;
 		}
 		break;
 	}
@@ -199,7 +199,7 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 		calendarEntryListDisplay(calendarEntryList);
 		drawCommandBox();
 		break;
-	case DIDUKNOW:
+	case SEARCH_RESULT:
 		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 		resultListDisplay(resultList, generalEntryList->size());
 		drawCommandBox();
@@ -225,10 +225,10 @@ void UI::changeFocusedField(vector<string>* resultList)
 		}
 		else
 		{
-			focusedField = DIDUKNOW;
+			focusedField = SEARCH_RESULT;
 		}
 		break;
-	case DIDUKNOW:
+	case SEARCH_RESULT:
 		focusedField = GENERAL;
 		clearBox(DIDUKNOW_INIT_Y,DIDUKNOW_HEIGHT+2);
 		diduknowHintDisplay();
@@ -276,16 +276,16 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
-	case DIDUKNOW:
-		if (diduknowInitRowIndex > RESULT_BOX_HEIGHT)
+	case SEARCH_RESULT:
+		if (resultInitRowIndex > RESULT_BOX_HEIGHT)
 		{
-			diduknowInitRowIndex -= RESULT_BOX_HEIGHT;
+			resultInitRowIndex -= RESULT_BOX_HEIGHT;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalEntryList->size());
 		}
-		else if (diduknowInitRowIndex > 0)
+		else if (resultInitRowIndex > 0)
 		{
-			diduknowInitRowIndex = 0;
+			resultInitRowIndex = 0;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalEntryList->size());
 		}
@@ -324,10 +324,10 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
-	case DIDUKNOW:
-		if (diduknowEndRowIndex != diduknowSize -1)
+	case SEARCH_RESULT:
+		if (resultEndRowIndex != diduknowSize -1)
 		{
-			diduknowInitRowIndex = diduknowEndRowIndex +1;
+			resultInitRowIndex = resultEndRowIndex +1;
 			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 			resultListDisplay(resultList, generalSize);
 		}
@@ -453,7 +453,21 @@ void UI::initializeCalendarInitRowIndex(int calendarSize)
 
 void UI::initializeResultInitRowIndex(int resultSize)
 {
-	diduknowInitRowIndex = 0;
+	resultInitRowIndex = 0;
+}
+
+void UI::printStringVector(vector<string>* stringVector, int initX, int initY)
+{
+	int curLine = initY;
+	string row;
+
+	for (int i = 0; i < stringVector->size(); i++)
+	{
+		row = stringVector->at(i);
+		gotoxy(initX, curLine);
+		cout << row;
+		curLine++;
+	}
 }
 
 void UI::extractParts(string entry, string* partList)
@@ -478,23 +492,40 @@ void UI::extractParts(string entry, string* partList)
 	}
 }
 
-void UI::printEntryPartMode(int* locationArray, int* colorArray, string* partArray, int index, int rowPosition)
+void UI::splitPartToLines(string part, int maxLength, vector<string>* lineVector)
+{
+	int initIndex = 0;
+
+	for (int i = 0; i < part.length() / maxLength; i++) 
+	{
+		lineVector->push_back(part.substr(initIndex, maxLength));
+		initIndex += maxLength;
+	}
+
+	if (part.length() % maxLength != 0)
+	{
+		lineVector->push_back(part.substr(initIndex, part.length() % maxLength));
+	}
+
+}
+
+void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
 {
 	string part;
 	int maxPartLength;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
-	gotoxy(locationArray[0], rowPosition);
+	gotoxy(positionArray[0], rowPosition);
 	cout<<index<<". ";
 
 
 	for (int i = 1; i < NUMBER_OF_ENTRY_PARTS; i++)
 	{
 		part = partArray[i];
-		maxPartLength = locationArray[i+1]- locationArray[i] -1;
+		maxPartLength = positionArray[i+1]- positionArray[i] -1;
 
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
-		gotoxy(locationArray[i], rowPosition);
+		gotoxy(positionArray[i], rowPosition);
 
 		if (part.length() >  maxPartLength)
 			cout << part.substr(0, maxPartLength -3 ) << "...";
@@ -504,36 +535,26 @@ void UI::printEntryPartMode(int* locationArray, int* colorArray, string* partArr
 	cout <<endl;
 }
 
-void UI::printEntryFullMode(int* locationArray, int* colorArray, string* partArray, int index, int& RowPosition, bool& isPrinted)
+void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArray,
+							vector<string>* description, vector<string>* location,
+							int index, int rowPosition)
 {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
+	gotoxy(positionArray[0], rowPosition);
+	cout<<index<<". ";
 
-}
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
+	printStringVector(description, positionArray[1], rowPosition);
 
-void UI::splitPartToLines(string part, int maxLength, int& numberOfLines, vector<string>* lineVector)
-{
-	int initIndex = 0;
-	numberOfLines = 0;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[2]);
+	printStringVector(location, positionArray[2], rowPosition);
 
-	for (int i = 0; i < part.length() / maxLength; i++) 
+	for (int i = 3; i< NUMBER_OF_ENTRY_PARTS; i++)
 	{
-		lineVector->push_back(part.substr(initIndex, maxLength));
-		initIndex += maxLength;
-		numberOfLines++;
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
+		gotoxy(positionArray[i], rowPosition);
+		cout << partArray[i];
 	}
-
-	if (part.length() % maxLength != 0)
-	{
-		lineVector->push_back(part.substr(initIndex, part.length() % maxLength));
-		numberOfLines ++;
-	}
-
-}
-
-bool UI::isEnoughSpace(int entryEnd, int spaceEnd)
-{
-	if (entryEnd > spaceEnd )
-		return false;
-	return true;
 }
 
 void UI::printCalendarEntry(int index, string entry, int &rowPosition, bool& isPrinted)
@@ -542,19 +563,45 @@ void UI::printCalendarEntry(int index, string entry, int &rowPosition, bool& isP
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
 	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[NUMBER_OF_ENTRY_PARTS] = {CALENDAR_INDEX_INIT_X, CALENDAR_DESCRIPTION_INIT_X, CALENDAR_LOCATION_INIT_X,
+	int positionArray[NUMBER_OF_ENTRY_PARTS] = {CALENDAR_INDEX_INIT_X, CALENDAR_DESCRIPTION_INIT_X, CALENDAR_LOCATION_INIT_X,
 		CALENDAR_TIME_INIT_X, CALENDAR_DATE_INIT_X, CALENDAR_PRIORITY_INIT_X};
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 	extractParts(entry, partArray);
 
 	switch (calendarDisplayMode)
 	{
-	case DISPLAY_PART:
-		printEntryPartMode(locationArray, colorArray, partArray, index, rowPosition);
+	case PART_MODE:
+		printEntryPartMode(positionArray, colorArray, partArray, index, rowPosition);
+		isPrinted = true;
 		break;
-	case DISPLAY_FULL:
+	case FULL_MODE:
+		{
+		string desciption = partArray[1];
+		string location = partArray[2];
+		int maxDescriptionLength = positionArray[2] - positionArray[1] -1;
+		int maxLocationLength = positionArray[3] - positionArray[2] -1;
+		vector<string> descriptionLines;
+		vector<string> locationLines;
+		int lineOccupied;
+
+		splitPartToLines(desciption, maxDescriptionLength, &descriptionLines);
+		splitPartToLines(location, maxLocationLength, &locationLines);
+		lineOccupied = max(descriptionLines.size(), locationLines.size());
+
+		if (rowPosition + lineOccupied > CALENDAR_INIT_Y + CALENDAR_BOX_HEIGHT)
+		{
+			isPrinted = false;
+		}
+		else
+		{
+			printEntryFullMode(positionArray, colorArray, partArray, 
+								&descriptionLines, &locationLines, index, rowPosition);
+			rowPosition += lineOccupied -1;
+			isPrinted = true;
+		}
 
 		break;
+		}
 	default:
 		assert(false);
 		break;
@@ -567,28 +614,60 @@ void UI::printGeneralEntry(int index, string entry, int &rowPosition, bool& isPr
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
 	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
-	int locationArray[NUMBER_OF_ENTRY_PARTS] = {GENERAL_INDEX_INIT_X, GENERAL_DESCRIPTION_INIT_X, GENERAL_LOCATION_INIT_X,
+	int positionArray[NUMBER_OF_ENTRY_PARTS] = {GENERAL_INDEX_INIT_X, GENERAL_DESCRIPTION_INIT_X, GENERAL_LOCATION_INIT_X,
 		GENERAL_TIME_INIT_X, GENERAL_DATE_INIT_X, GENERAL_PRIORITY_INIT_X};
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 	extractParts(entry, partArray);
 
 	switch (generalDisplayMode)
 	{
-	case DISPLAY_PART:
-		printEntryPartMode(locationArray, colorArray, partArray, index, rowPosition);
+	case PART_MODE:
+		printEntryPartMode(positionArray, colorArray, partArray, index, rowPosition);
 		break;
-	case DISPLAY_FULL:
+	case FULL_MODE:
+		{
+		string desciption = partArray[1];
+		string location = partArray[2];
+		int maxDescriptionLength = positionArray[2] - positionArray[1] -1;
+		int maxLocationLength = positionArray[3] - positionArray[2] -1;
+		vector<string> descriptionLines;
+		vector<string> locationLines;
+		int lineOccupied;
+
+		splitPartToLines(desciption, maxDescriptionLength, &descriptionLines);
+		splitPartToLines(location, maxLocationLength, &locationLines);
+		lineOccupied = max(descriptionLines.size(), locationLines.size());
+
+		if (rowPosition + lineOccupied > GENERAL_INIT_Y + GENERAL_BOX_HEIGHT)
+		{
+			isPrinted = false;
+		}
+		else
+		{
+			printEntryFullMode(positionArray, colorArray, partArray, 
+				&descriptionLines, &locationLines, index, rowPosition);
+			rowPosition += lineOccupied -1;
+			isPrinted = true;
+		}
 
 		break;
+		}
 	default:
 		assert(false);
 		break;
 	}
 }
 
-void UI::printResultEntry(int index, string row, int &rowPosition, int sizeOfGeneral, bool& isPrinted)
+void UI::printResultEntry(int index, string row, int &rowPosition, bool& isPrinted)
 {
-
+	if (isGeneral(row))
+	{
+		printGeneralEntry(index, row, rowPosition, isPrinted);
+	}
+	else
+	{
+		printCalendarEntry(index, row, rowPosition, isPrinted);
+	}
 }
 
 //@author A0088455R
@@ -754,7 +833,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	
 	gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
 	sizeOfDiduknow=resultList->size();
-	entryIndex = diduknowInitRowIndex;
+	entryIndex = resultInitRowIndex;
 	
 	if(resultList->size()>0)
 	{
@@ -767,7 +846,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 	while (rowPosition < WINDOWS_HEIGHT-1 && entryIndex <sizeOfDiduknow && isLastLineHasSpace)
 	{
 		row = resultList ->at(entryIndex);
-		printResultEntry(entryIndex + 1, row, rowPosition, sizeOfGeneral, isLastLineHasSpace);
+		printResultEntry(entryIndex + 1, row, rowPosition, isLastLineHasSpace);
 		if (isLastLineHasSpace)
 		{
 			entryIndex ++;
@@ -775,7 +854,7 @@ void UI::resultListDisplay(vector<string>* resultList, int sizeOfGeneral)
 		}
 	}
 	
-	diduknowEndRowIndex = entryIndex -1;
+	resultEndRowIndex = entryIndex -1;
 }
 
 //@author A0088455R
@@ -843,8 +922,8 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeCalendarInitRowIndex(calendarSize);
 	initializeResultInitRowIndex(resultSize);
 
-	generalDisplayMode = DISPLAY_PART;
-	calendarDisplayMode = DISPLAY_PART;
+	generalDisplayMode = PART_MODE;
+	calendarDisplayMode = PART_MODE;
 	focusedField = GENERAL;	
 	diduknowPrevStatus=DIDUKNOW_CLEAR;
 
