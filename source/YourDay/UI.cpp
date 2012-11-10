@@ -973,7 +973,7 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 //@author A0088455R
 void UI::printDiduknowHints()
 {
-	clearBox(DIDUKNOW_INIT_Y,DIDUKNOW_HEIGHT+2);
+	clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
 	gotoxy(DIDUKNOW_INIT_X, DIDUKNOW_INIT_Y);
 	switch (diduknowStatus)
 	{
@@ -1213,6 +1213,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	highlightTitle(resultList->size());
 
 	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
+	indexCurResultInitArray = 0;
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
