@@ -429,10 +429,10 @@ void UI::setDidUKnowStatus()
 	}
 	else if ((diduknowStatus == ADD_COMMAND && input.find("add")) ||
 			(diduknowStatus == DELETE_COMMAND &&  input.find("delete")) ||
-			(diduknowStatus == EXIT_COMMAND && input.find("edit")) ||
+			(diduknowStatus == EXIT_COMMAND && input.find("exit")) ||
 			(diduknowStatus == SEARCH_COMMAND && input.find("search")) ||
 			(diduknowStatus == UNDO_COMMAND && input.find("undo")) ||
-			(diduknowStatus == EDIT_COMMAND && input.find("edit")))
+			(diduknowStatus == EDIT_COMMAND && input.find("update")))
 	{
 		diduknowStatus = DIDUKNOW_INIT;
 	}
@@ -1135,7 +1135,10 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 		rowPosition ++;
 	}
 
-	printGeneralFooter();
+	if (sizeOfGeneral >0)
+	{
+		printGeneralFooter();
+	}
 }
 
 void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
@@ -1157,7 +1160,10 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 		rowPosition ++;
 	}
 
-	printCalendarFooter();
+	if (sizeOfCalendar >0)
+	{
+		printCalendarFooter();
+	}
 }
 
 void UI::resultListDisplay(vector<string>* resultList)
@@ -1187,7 +1193,10 @@ void UI::resultListDisplay(vector<string>* resultList)
 		rowPosition ++;
 	}
 
-	printResultFooter();
+	if (resultSize >0)
+	{
+		printResultFooter();
+	}
 }
 
 //@author A0088455R
