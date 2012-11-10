@@ -103,9 +103,12 @@ private:
 	vector<int> generalInitArrayFull;
 	vector<int> calendarInitArrayPart;
 	vector<int> calendarInitArrayFull;
+	vector<int> resultInitArrayPart;
+	vector<int> resultInitArrayFull;
 
 	int indexCurGeneralInitArray;
 	int indexCurCalendarInitArray;
+	int indexCurResultInitArray;
 
 	void setScreenSize();
 	void setBackground();
@@ -122,11 +125,14 @@ private:
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
 	void initializeFocusedField();
+	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
 	int getCalendarInitIndex();
 	int getNextCalendarInitIndex(bool& isValid);
+	int getResultInitIndex();
+	int getNextResultInitIndex(bool& isValid);
 
 	void extractParts(string entry, string* partArray);
 	int countPartLine(string part, int maxLength);
@@ -134,6 +140,8 @@ private:
 	void setGeneralInitArrayFull(vector<string>* generalEntryList);
 	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
 	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
+	void setResultInitArrayPart(vector<string>* resultList);
+	void setResultInitArrayFull(vector<string>* resultList);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
@@ -151,8 +159,10 @@ private:
 	void printResultEntry(int index, string row, int &rowPosition);
 	void printDiduknowHints();
 	bool isGeneral(string row);
+
 	void printGeneralFooter();
 	void printCalendarFooter();
+	void printResultFooter();
 
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
