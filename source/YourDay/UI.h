@@ -47,19 +47,19 @@
 
 #define GENERAL_INDEX_INIT_X 2
 #define GENERAL_DESCRIPTION_INIT_X 6
-#define GENERAL_LOCATION_INIT_X 93
+#define GENERAL_LOCATION_INIT_X 85
 #define GENERAL_TIME_INIT_X 113
 #define GENERAL_DATE_INIT_X 113
 #define GENERAL_PRIORITY_INIT_X 113
 
 #define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
-#define DESCRIPTION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE
-#define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
-#define TIME_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
-#define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN
+#define DESCRIPTION_COLOR FOREGROUND_INTENSITY |FOREGROUND_BLUE | FOREGROUND_GREEN
+#define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_RED
+#define TIME_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
+#define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN 
 #define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
 
-#define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
+#define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED
 
 #define TAB 9
 #define ENTER 13
@@ -98,12 +98,14 @@ private:
 	Signal curStatus;
 
 	int currentChar;
-	int generalInitRowIndex;
-	int calendarInitRowIndex;
-	int resultInitRowIndex;
-	int generalEndRowIndex; // in case an entry occupies > 1 line, end index is not initial index + box height
-	int calendarEndRowIndex;
-	int resultEndRowIndex;
+
+	vector<int> generalInitArrayPart;
+	vector<int> generalInitArrayFull;
+	vector<int> calendarInitArrayPart;
+	vector<int> calendarInitArrayFull;
+
+	int indexCurGeneralInitArray;
+	int indexCurCalendarInitArray;
 
 	void setScreenSize();
 	void setBackground();
@@ -116,6 +118,23 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle(int searchBoxSize);
 
+	void initializeDidUKnowStatus();
+	void initializeInitArrayIndices();
+	void initializeDisplayModes();
+	void initializeFocusedField();
+	
+	int getGeneralInitIndex();
+	int getNextGeneralInitIndex(bool& isValid);
+	int getCalendarInitIndex();
+	int getNextCalendarInitIndex(bool& isValid);
+
+	void extractParts(string entry, string* partArray);
+	int countPartLine(string part, int maxLength);
+	void setGeneralInitArrayPart(vector<string>* generalEntryList);
+	void setGeneralInitArrayFull(vector<string>* generalEntryList);
+	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
+	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
+
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void changeFocusedField(vector<string>* resultList);
@@ -123,25 +142,18 @@ private:
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void setDidUKnowStatus();
 
-	void initializeDidUKnowStatus();
-	void initializeGeneralInitRowIndex();
-	void initializeCalendarInitRowIndex();
-	void initializeResultInitRowIndex();
-	void printStringVector(vector<string>* lineVector, int initX, int initY);
-
-	void extractParts(string entry, string* partArray);
-	void splitPartToLines(string part, int maxLength, vector<string>* lineVector);
+	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
 	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
-	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray,
-							vector<string>* description, vector<string>* location, int index, int rowPosition);
+	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
 
-	void printCalendarEntry(int index, string row, int &rowPosition, bool& isPrinted);
-	void printGeneralEntry(int index, string row, int &rowPosition, bool& isPrinted);
-	void printResultEntry(int index, string row, int &rowPosition, bool& isPrinted);
+	void printCalendarEntry(int index, string row, int &rowPosition);
+	void printGeneralEntry(int index, string row, int &rowPosition);
+	void printResultEntry(int index, string row, int &rowPosition);
 	void printDiduknowHints();
 	bool isGeneral(string row);
+	void printGeneralFooter();
+	void printCalendarFooter();
 
-	void printContinueFooter();
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList);
