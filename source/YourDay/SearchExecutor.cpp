@@ -168,8 +168,9 @@ void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector
 {
 	score->clear();
 	rank->clear();
-	score->assign(totalSize,NULL);
-	rank->assign(totalSize,NULL);
+
+	score->assign(totalSize, NULL);
+	rank->assign(totalSize, NULL);
 }
 
 void SearchExecutor::initializeRank(int totalSize, vector<int>* rank)
@@ -221,7 +222,7 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
-	string sentence = extractDescription(encoded);
+	string sentence = extractDescription(encoded) + " " + extractLocation(encoded);
 	stringstream sin(sentence);
 
 	string temp;
@@ -394,6 +395,11 @@ SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
 	{
 		return b;
 	}
+}
+
+void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
+{
+	*suggestWords = *suggestWords + updWord + '#';
 }
 
 void SearchExecutor::searchDate(string keyword, vector<int>* rank)
@@ -576,7 +582,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	adjustRank(rank, highestRank);
 }
 
-void SearchExecutor::searchText(string key, vector<int>* rank)
+void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWords)
 {
 	int tot = _combinedEntryList.size();
 	vector<matchInfo> best;
@@ -596,7 +602,7 @@ void SearchExecutor::searchText(string key, vector<int>* rank)
 		{
 			string curP = list[k];
 				
-			matchInfo curM;
+			matchInfo curM(curP);
 
 			edit(key, curP, curM);
 
@@ -621,6 +627,11 @@ void SearchExecutor::searchText(string key, vector<int>* rank)
 	} else
 	{
 		noMatch = false;
+
+		if (best[0].match != key.length())
+		{
+			updateSuggestWords(suggestWords, best[0].str);
+		}
 
 		int p = 0;
 		int q = 1;
@@ -658,14 +669,20 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 
 void SearchExecutor::execute() throw (string)
 {
-	string currentKey;
 	vector<int> rank;
 	vector<int> score;
 
-	bool allNoMatch = true;
-	string key = extractDescription(_details);
+	string suggestWords = "#";
+
+	vector<integerPair> tempMatchedList;
+
+	int weight;
 	
-	int weight = 1;
+	string key = extractDescription(_details);
+	string currentKey;
+	
+	updateSuggestWords(&suggestWords, key);
+	
 	initializeCombinedEntry();
 	
 	int totalEntries = _combinedEntryList.size();
@@ -676,6 +693,7 @@ void SearchExecutor::execute() throw (string)
 	while (!key.empty())
 	{
 		currentKey = splitFirstTerm(&key);
+		weight = 1;
 		
 		if (isDate(currentKey))
 		{
@@ -700,43 +718,41 @@ void SearchExecutor::execute() throw (string)
 			}
 		} else
 		{
-			searchText(currentKey, &rank);
+			searchText(currentKey, &rank, &suggestWords);
 		}
+
+		//if there is no match, weight will be zero, i.e. this key is omitted
+		weight = (int) !noMatch;
 		
 		for (int i = 0; i < totalEntries; i++)
 		{
 			score[i] += rank[i] * weight;
 		}
-
-		allNoMatch = (allNoMatch && noMatch);
 	}
 
-	if (allNoMatch)
+	for (int i = 0; i < totalEntries; i++)
+	{
+		tempMatchedList.push_back(integerPair(score[i], i));
+	}
+
+	sort(tempMatchedList.rbegin(), tempMatchedList.rend());
+
+	if (!score[0])
 	{
 		log.writeException("No Match Found");
 		throw string("No Match Found\n");
 	} else
 	{
-		vector<pair<int, int>> v;
-
 		for (int i = 0; i < totalEntries; i++)
 		{
-			v.push_back(make_pair(score[i], i));
-		}
-
-		sort(v.rbegin(), v.rend());
-	
-		for (int i = 0; i < totalEntries; i++)
-		{
-			int curRecord = v[i].second;
+			int curRecord = tempMatchedList[i].second;
 		
 			log.writeData("record", _combinedEntryList[curRecord]);
 			_matchedEntryList->push_back(_combinedEntryList[curRecord]);
 		}
+		
+		_matchedEntryList->push_back(suggestWords);
 	}
-	/*
-	key = extractDescription(_details);
-	_matchedEntryList->push_back(key);*/
 }
 
 void SearchExecutor::undo()

@@ -30,7 +30,8 @@ void Log::writeTime()
 	
 	associateFile("log.txt", APP_TYPE);
 	
-	file << timeinfo->tm_year + 1900 << "/" << timeinfo->tm_mon + 1 << "/" << timeinfo->tm_mday << endl;
+	file << timeinfo->tm_year + 1900 << "/" << timeinfo->tm_mon + 1 << "/" << timeinfo->tm_mday << " ";
+	file << timeinfo->tm_hour << ":" <<timeinfo->tm_min << endl;
 }
 
 void Log::writeCreated(string objName)
