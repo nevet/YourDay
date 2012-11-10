@@ -230,8 +230,6 @@ void UI::changeFocusedField(vector<string>* resultList)
 		break;
 	case SEARCH_RESULT:
 		focusedField = GENERAL;
-		clearBox(DIDUKNOW_INIT_Y,DIDUKNOW_HEIGHT+2);
-		diduknowHintDisplay();
 		break;
 	default:
 		assert(false);
