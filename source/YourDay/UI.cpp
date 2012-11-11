@@ -1118,6 +1118,17 @@ void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY
 	endPosition = curRow -1;
 }
 
+
+void UI::printMark(string mark)
+{
+	if(mark=="*")
+	{	
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xcc);
+		cout<<" ";
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xcc);
+		cout<<" ";
+	}
+}
 void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
 {
 	string part;
@@ -1138,6 +1149,8 @@ void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArr
 
 		if (part.length() >  maxPartLength)
 			cout << part.substr(0, maxPartLength -3 ) << "...";
+		else if(i == NUMBER_OF_ENTRY_PARTS-1)
+			printMark(part);
 		else
 			cout <<part;
 	}
@@ -1169,7 +1182,10 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
 		gotoxy(positionArray[i], rowPosition);
-		cout << partArray[i];
+		if(i == NUMBER_OF_ENTRY_PARTS -1 )
+			printMark(partArray[i]);
+		else
+			cout << partArray[i];
 	}
 
 	rowPosition = max(descriptionEnd, locationEnd);
