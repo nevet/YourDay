@@ -110,6 +110,56 @@ string Executor :: extractPriority(string details)
 	return priority;
 }
 
+int Executor::extractDay(string date)
+{
+	assert(date!="");
+	int year, month, day;
+
+	assert(sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year)==3);
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+	return day;
+}
+
+int Executor::extractMonth(string date)
+{
+	assert(date!="");
+	int year, month, day;
+
+	assert(sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year)==3);
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+	return month;
+}
+
+int Executor::extractYear(string date)
+{
+	assert(date!="");
+	int year, month, day;
+	
+	assert(sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year)==3);
+
+	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
+	return year;
+}
+
+int Executor::extractHour(string time)
+{
+	int hour, minute;
+	sscanf(time.c_str(), "%d:%d", &hour, &minute);
+	return hour;
+}
+
+int Executor::extractMinute(string time)
+{
+	int hour, minute;
+	sscanf(time.c_str(), "%d:%d", &hour, &minute);
+	return minute;
+}
+
+void Executor::splitStartEndTime(string* start, string* end, string timeRange)
+{
+	*start=timeRange.substr(0,5);
+	*end=timeRange.substr(6,5);
+}
 //@author A0091734
 int Executor :: extractIndexFromDescription(string description)
 {
