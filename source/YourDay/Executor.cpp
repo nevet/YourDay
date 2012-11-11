@@ -14,7 +14,7 @@ const int Executor::DESCRIPTION_BLOCK_LOCATION	= 2;
 const int Executor::LOCATION_BLOCK_LOCATION		= 3;
 const int Executor::TIME_BLOCK_LOCATION			= 4;
 const int Executor::DATE_BLOCK_LOCATION			= 5;
-const int Executor::PRIORITY_BLOCK_LOCATION		= 6;
+const int Executor::MARK_BLOCK_LOCATION		= 6;
 const int Executor::NO_INDEX_IN_DESCRIPTION		= -1;
 
 int Executor :: findBlockIndex(string details, int blockLocation)
@@ -113,7 +113,7 @@ string Executor :: extractMark(string details)
 	assert(details!="");
 	string mark = "";
 	int indexLocation;
-	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
+	indexLocation = findBlockIndex(details, MARK_BLOCK_LOCATION);
 	mark = extractField(details, indexLocation);
 	return mark;
 }

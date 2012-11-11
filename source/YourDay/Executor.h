@@ -39,7 +39,7 @@ protected:
 	const static int LOCATION_BLOCK_LOCATION;
 	const static int TIME_BLOCK_LOCATION;
 	const static int DATE_BLOCK_LOCATION;
-	const static int PRIORITY_BLOCK_LOCATION;
+	const static int MARK_BLOCK_LOCATION;
 	const static int NO_INDEX_IN_DESCRIPTION;
 
 	Log log;
@@ -193,22 +193,22 @@ protected:
 	string extractDate(string details);
 
 	/**
-	* Decodes the encoded string and retreives the priority field
+	* Decodes the encoded string and retreives the "Mark as important" field
 	*
 	* @param details
 	*			is a encoded string that needs to be decoded	
 	*			format DD/MM/YYYY
 	* @return priority
-	*			is the priority field of retrieved from encoded 
+	*			is the mark as important field of retrieved from encoded 
 	* 
 	* if priority field is empty
 	* e.g.
 	* encoded	= "#cs2103 meeting#biz canteen####"
-	* priority will be returned as blank.
+	* mark will be returned as blank.
 	* 
 	* explanation:
 	*
-	* if priority field is specified, the return will be the priority otherwise
+	* if mark as important field is specified, the return will be the priority otherwise
 	* blank will be returned.
 	*/
 	string extractMark(string details);
