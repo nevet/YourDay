@@ -167,6 +167,4 @@ void UpdateExecutor::execute()
 void UpdateExecutor::undo()
 {
 	*_focusingEntryList = _undoFocusingEntryList;
-	
-	_resultList->pop_back();
 }
