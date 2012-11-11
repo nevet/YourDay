@@ -62,7 +62,7 @@ int main(int arg, char** test)
 	//create a logger
 	Log log;
 	
-	log.writeTime();
+	log.updateLogFile();
 
 	Signal signal = CLEAR;
 	
@@ -79,6 +79,8 @@ int main(int arg, char** test)
 	{
 		try
 		{
+			log.updateLogFile();
+
 			ui.traceInput(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 			log.writeCreated("UI interface");
 			

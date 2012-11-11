@@ -11,23 +11,33 @@
 
 using namespace std;
 
+# define KILO_BYTE 1024
+# define SIZE_THRESHOLD 50
+
 class Log
 {
 private:
 
-	enum OPEN_TYPE {APP_TYPE, OUT_TYPE};
+	enum OPEN_TYPE {APP_TYPE, OUT_TYPE, IN_TYPE};
+	enum ERROR_TYPE {DEFAULT, OPEN_ERR, OVER_SIZE_ERR};
 	
 	fstream file;
 
-	string filePath;
-	string fileName;
+	const static string logPath;
+	const static string logName;
+	const static string fullLogPath;
+	const static int sizeThreshold;
+
+	int logSize;
 
 	void disassociateFile();
-	void associateFile(string fileName, OPEN_TYPE mode);
-
-	void checkFileSize();
+	bool associateFile(string fileName, OPEN_TYPE mode);
+	void deleteLogFile();
 	
-public:
+	ERROR_TYPE checkLogSize();
+	
+public:	
+	void updateLogFile();
 
 	void writeTime();
 	
