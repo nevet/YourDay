@@ -73,6 +73,7 @@ private:
 
 	void splitPriority(string* str, string* priority) throw (string);
 	void splitLocation(string* str, string* location) throw (string);
+	void splitIndex(string* str, string* index) throw (string);
 	void splitDate(string* str, string* date) throw (string);
 	void splitTime(string* str, string* time, string* date) throw (string);
 	void splitDescription(string* str, string* description) throw (string);

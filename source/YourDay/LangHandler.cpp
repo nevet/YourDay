@@ -265,6 +265,40 @@ void LangHandler::splitLocation(string* str, string* location) throw (string)
 	*str = input;
 }
 
+void LangHandler::splitIndex(string* str, string* index) throw (string)
+{
+	string input = *str;
+	string potentialIndex;
+
+	//extract the first term of the input and exam whether it is an integer
+	int pos = input.find(SPACE_BAR);
+	
+	//if multiple entries detected, an exception should be thown since we do
+	//not support multiple delete entries
+	if (pos == string::npos)
+	{
+		potentialIndex = getPrefix(input, input.length());
+					
+		if (isInt(potentialIndex))
+		{
+			*index = potentialIndex;
+		} else
+		{
+			*index = NULL_STRING;
+						
+			log.writeException("Index error");
+			throw string ("Index error\n");
+		}
+	}
+	else
+	{
+		log.writeException("Input error");
+		throw string("Input error\n");
+	}
+
+	*str = input;
+}
+
 void LangHandler::splitDate(string* str, string* date) throw (string)
 {
 	string input = *str;
@@ -430,8 +464,8 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 	//will be thrown and no more operation should be entertained
 	if (input == NULL_STRING && command != EXIT_COMMAND && command != UNDO_COMMAND)
 	{
-		log.writeException("The length entered exceeds the available range");
-		throw string ("The length entered exceeds the available range\n");
+		log.writeException("Empty command!");
+		throw string ("Empty command!\n");
 	} else
 	{		
 		//input format is different for different command
@@ -481,31 +515,15 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case DELETE_COMMAND:
 				log.writeConditionEntered("delete command separation", true);
 				
-				log.writeData("Input eliminates spaces", input);
-				pos = input.find(SPACE_BAR);
-				
-				if (pos == string::npos)
-				{
-					index = input.substr(0, input.length());
-					log.writeExecuted("delete command separation/index separation");
-					
-					if (!isInt(index))
-					{
-						index = NULL_STRING;
-						
-						log.writeException("Index error");
-						throw string ("Index error\n");
-					}
-				}
-				else
-				{
-					log.writeException("Input error");
-					throw string("Input error\n");
-				}
+				splitIndex(&input, &index);
+
+				log.writeExecuted("LangHandler::splitDescription()");
+				log.writeData("input", input);
+				log.writeData("description", description);				
 				
 				break;
 
-			//format will be "index [date] [time] description [at location] [priority [high, mid, low]]"
+			//format will be "index [date] [time] description [at location] [marked, unmarked]"
 			case UPDATE_COMMAND:
 				log.writeConditionEntered("edit command separation", true);
 				
@@ -684,10 +702,12 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case SEARCH_COMMAND:
 				log.writeConditionEntered("search command separation", true);
 				
-				description = input;
-				
-				log.writeData("description", input);
-				log.writeExecuted("search command separation/description saperated");
+				splitDescription(&input, &description);
+				regulateDescription(&description);
+
+				log.writeExecuted("LangHandler::splitDescription()");
+				log.writeData("input", input);
+				log.writeData("description", description);
 				
 				break;
 
