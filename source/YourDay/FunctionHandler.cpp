@@ -64,7 +64,7 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 
 		//no error occured, we should retrieve the packed executor
 		exe = lang.pack(quit, focusingField, generalEntryList, calendarEntryList, resultList, &store);
-		log.writeExecuted("LangHandler::separate()");
+		log.writeExecuted("LangHandler::pack()");
 
 		//exe is NULL means undo command encountered
 		if (exe != NULL)
