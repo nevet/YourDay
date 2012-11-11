@@ -451,7 +451,7 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 			}
 			else
 			{
-				setRank( i, LOW_MATCH, rank, &highestRank);
+//				setRank( i, LOW_MATCH, rank, &highestRank);
 			}
 		}
 	}
@@ -542,7 +542,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 			}
 			else
 			{
-				setRank( i, LOW_MATCH, rank, &highestRank);
+//				setRank( i, LOW_MATCH, rank, &highestRank);
 			}
 		}
 	}
