@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <string>
 #include "Signal.h"
 #include "StatusHandler.h"
 #include "StorageHandler.h"
@@ -40,10 +40,10 @@ private:
 
 	const static int MONTH[12];
 	
-	const static string NULL_STRING;
 	const static string PRIORITY_INDICATOR;
 	const static string LOCATION_INDICATOR;
 	const static string SPACE_BAR;
+	const static string NULL_STRING;
 	const static string DELIMINATOR;
 
 	bool isLeap(int year);

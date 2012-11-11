@@ -3,9 +3,9 @@
 #include "UpdateExecutor.h"
 
 UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList,
-							   string details, Signal focusingField)
+							   string encodedUserInput, Signal focusingField)
 {
-	assert(details!="");
+	assert(encodedUserInput!="");
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 	assert(focusingField!=GENERAL || focusingField!=CALENDAR);
@@ -33,7 +33,7 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 	_resultList = resultList;
 
 	_focusingField = focusingField;
-	_details = details;
+	_encodedUserInput = encodedUserInput;
 }
 
 void UpdateExecutor::execute()
@@ -48,119 +48,135 @@ void UpdateExecutor::execute()
 
 	bool changeToCalendar = false;
 
-	vector<string>::iterator position;
+	index=extractIndex(_encodedUserInput);
 	
-	newEntry = "##";
-
-	index=extractIndex(_details);
-	
-	if(index < 1)
+	if(isIndexValid(index))
 	{
-		throw string ("index is not existing\n");
-	}
-	else if(index > (_focusingEntryList->size()))
-	{
-		throw string ("index is larger than list size\n");
-	}
-	else 
-	{
-		oldEntry = _focusingEntryList->at(index-1);
+		oldEntry = _focusingEntryList->at(index-1);		
+		newEntry = constructNewEntry(oldEntry);
+		newIndex = extractNewIndex(newEntry);
+		changeToCalendar = verifyTheFiledChange(newEntry);
 		
-		newDescription = extractDescription(_details);
-		oldDescription = extractDescription(oldEntry);
-		if(newDescription == "")
+		_resultList->push_back(newEntry);
+		addNewEntryToRightPosition(newEntry, index, newIndex, changeToCalendar);
+	}
+	else
+	{
+		throw string(MESSAGE_INDEX_NOT_VALID);
+	}
+
+}
+
+bool UpdateExecutor::verifyTheFiledChange(string newEntry)
+{
+	if(extractDate(newEntry)!=NULL_STRING || extractTime(newEntry)!= NULL_STRING)
+	{
+		if(_focusingField == GENERAL)
 		{
-			newEntry = newEntry + oldDescription + "#";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+void UpdateExecutor::addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar)
+{
+	vector<string>::iterator position;
+	int thresholdValue;
+	string tempEntry;
+
+	if(changeToCalendar)
+	{
+		_calendarEntryList->push_back (newEntry);
+		position = _focusingEntryList->begin() + index - 1;
+		_focusingEntryList->erase(position);	
+	}
+	else if (newIndex != NO_INDEX_IN_DESCRIPTION)
+	{
+		if(isIndexValid(newIndex))
+		{
+			tempEntry = _focusingEntryList -> at(index - 1);
+			position = _focusingEntryList->begin() +newIndex -1;
+
+			if( index >= newIndex)
+				thresholdValue = 0;
+			else 
+				thresholdValue = 1;
+
+			_focusingEntryList->insert(position + thresholdValue , tempEntry);
+			position = _focusingEntryList->begin() + index - thresholdValue ;
+			_focusingEntryList->erase(position);	
+		}
+		else
+		{
+			throw string(MESSAGE_INDEX_NOT_VALID);
+		}
+	}
+	else
+	{
+		_focusingEntryList->at(index -1) = newEntry ;
+	}
+	return;
+}
+
+int UpdateExecutor::extractNewIndex(string newEntry)
+{
+	string newDescription;
+	int newIndex;
+
+	newDescription = extractDescription(newEntry);
+	newIndex = extractIndexFromDescription(newDescription);
+	
+	return newIndex;
+}
+
+string UpdateExecutor::constructNewEntry(string oldEntry)
+{
+	string newEntry = DELIMINATOR + DELIMINATOR;
+	string oldAndNewEntries[CHOICES_OF_ENTRY][TOTAL_NO_OF_FIELDS];
+	string entries[CHOICES_OF_ENTRY];
+	entries[OLD_ENTRY] = oldEntry;
+	entries[NEW_ENTRY] = _encodedUserInput;
+
+	for(int i=OLD_ENTRY; i<CHOICES_OF_ENTRY; i++)
+	{
+		oldAndNewEntries[i][DESCRIPTION_FIELD] = extractDescription(entries[i]);
+		oldAndNewEntries[i][LOCATION_FIELD] = extractLocation(entries[i]);
+		oldAndNewEntries[i][TIME_FIELD] = extractTime(entries[i]);
+		oldAndNewEntries[i][DATE_FIELD] = extractDate(entries[i]);
+		oldAndNewEntries[i][PRIORITY_FIELD] = extractPriority(entries[i]);
+	}
+
+	for(int numOfField=0; numOfField<TOTAL_NO_OF_FIELDS; numOfField++ )
+	{
+		if(oldAndNewEntries[NEW_ENTRY][numOfField] != NULL_STRING)
+		{
+			newEntry = newEntry + oldAndNewEntries[NEW_ENTRY][numOfField] + DELIMINATOR;
 		}
 		else 
 		{
-			if(extractIndexFromDescription(newDescription) != NO_INDEX_IN_DESCRIPTION)
-			{
-				newIndex = extractIndexFromDescription(newDescription);
-			}
-			else
-			{
-				newEntry = newEntry + newDescription + "#";	
-			}
+			newEntry = newEntry + oldAndNewEntries[OLD_ENTRY][numOfField] + DELIMINATOR;
 		}
-		
-		newLocation = extractLocation(_details);
-		oldLocation = extractLocation(oldEntry);
-		if(newLocation == "")
-		{
-			newEntry = newEntry + oldLocation + "#";
-		}
-		else
-		{
-			newEntry = newEntry + newLocation + "#" ;
-		}
-		
-		newTime = extractTime(_details);
-		oldTime = extractTime(oldEntry);
-		if(newTime == "")
-		{
-			newEntry = newEntry + oldTime + "#";
-		}
-		else
-		{
-			changeToCalendar = true;
-			newEntry = newEntry + newTime + "#";
-		}
+	}
+}
 
-		newDate = extractDate(_details);
-		oldDate = extractDate(oldEntry);
-		if(newDate == "")
-		{
-			newEntry = newEntry + oldDate + "#";
-		}
-		else
-		{
-			changeToCalendar = true;
-			newEntry = newEntry + newDate + "#";
-		}
-
-		newPriority = extractPriority(_details);
-		oldPriority = extractPriority(oldEntry);
-		if(newPriority == "")
-		{
-			newEntry = newEntry + oldPriority + "#";
-		}
-		else
-		{
-			newEntry = newEntry + newPriority + "#";
-		}
-
-		_resultList->push_back(newEntry);
-		
-		if( _focusingField== GENERAL && changeToCalendar)
-		{
-			_calendarEntryList->push_back (newEntry);
-			position = _focusingEntryList->begin() + index - 1;
-			_focusingEntryList->erase(position);	
-		}
-		else if (newIndex != NO_INDEX_IN_DESCRIPTION)
-		{
-			if(newIndex > _focusingEntryList->size())
-			{
-				throw string("Update Error");
-			}
-			int thresholdValue;
-			tempEntry = _focusingEntryList -> at(index - 1);
-			position = _focusingEntryList->begin() +newIndex -1;
-			
-			if( index >= newIndex)
-				thresholdValue = 1;
-			else 
-				thresholdValue = 0;
-
-			_focusingEntryList->insert(position + 1- thresholdValue, tempEntry);
-			position = _focusingEntryList->begin() + index -1 + thresholdValue;
-			_focusingEntryList->erase(position);	
-		}
-		else
-		{
-			 _focusingEntryList->at(index -1) = newEntry ;
-		}
+bool UpdateExecutor::isIndexValid(int index)
+{
+	if(index>0 && index <_focusingEntryList->size())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
