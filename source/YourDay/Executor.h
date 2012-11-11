@@ -198,7 +198,7 @@ protected:
 	* if priority field is specified, the return will be the priority otherwise
 	* blank will be returned.
 	*/
-	string extractPriority(string details);
+	string extractMark(string details);
 	
 	/**
 	* Extracts the day from a date string

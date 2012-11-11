@@ -1,4 +1,3 @@
-
 #ifndef UI_H
 #define UI_H
 
@@ -74,12 +73,6 @@ class UI
 {
 private:
 
-	static const string CLEAR_SIGNAL_MESSAGE;
-	static const string ADD_SUCCESSFUL_MESSAGE;
-	static const string UPDATE_SUCCESSFUL_MESSAGE;
-	static const string DELETE_SUCCESSFUL_MESSAGE;
-	static const string ONE_EMPTY_LINE;
-
 	static const string DID_U_KNOW_ADD;
 	static const string DID_U_KNOW_DELETE;
 	static const string DID_U_KNOW_EXIT;
@@ -112,8 +105,8 @@ private:
 	int indexCurCalendarInitArray;
 	int indexCurResultInitArray;
 
-	int highlightGeneralRowIndex;
-	int highlightCalendarRowIndex;
+	string highlightGeneralRowIndex;
+	string highlightCalendarRowIndex;
 	string searchKey;
 	vector<string> searchSuggest;
 
@@ -127,6 +120,8 @@ private:
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle();
+
+	string intToString(int number);
 
 	void initializeDidUKnowStatus();
 	void initializeInitArrayIndices();
@@ -160,12 +155,13 @@ private:
 	void setDidUKnowStatus();
 
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
-	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
-	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
-
+	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, string index, int rowPosition);
+	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition);
+	
+	void printMark(string mark);
 	void printCalendarEntry(int index, string row, int &rowPosition);
-	void printGeneralEntry(int index, string row, int &rowPosition);
-	void printResultEntry(int index, string row, int &rowPosition);
+	void printGeneralEntry(string index, string row, int &rowPosition);
+	void printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition);
 	void printDiduknowHints();
 
 	void printGeneralFooter();

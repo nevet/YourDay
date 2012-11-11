@@ -30,17 +30,16 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 
 	_focusingField = focusingField;
 	_encodedUserInput = encodedUserInput;
+
+	_undoCalendarEntryList = *calendarEntryList;
+	_undoGeneralEntryList = *generalEntryList;
 }
 
 void UpdateExecutor::execute()
 {
-	int index;
-	int newIndex = NO_INDEX_IN_DESCRIPTION;
+	int index, newIndex;
 	string oldEntry, newEntry;
 	string tempEntry;
-	string newTempEntry;
-	string newDate, newTime, newDescription, newPriority, newLocation;
-	string oldDate, oldTime, oldDescription, oldPriority, oldLocation;
 
 	bool changeToCalendar = false;
 
@@ -48,7 +47,7 @@ void UpdateExecutor::execute()
 	
 	if(isIndexValid(index))
 	{
-		oldEntry = _focusingEntryList->at(index-1);		
+		oldEntry = _focusingEntryList->at(index);		
 		newEntry = constructNewEntry(oldEntry);
 		newIndex = extractNewIndex(newEntry);
 		changeToCalendar = verifyTheFiledChange(newEntry);
@@ -92,23 +91,23 @@ void UpdateExecutor::addNewEntryToRightPosition(string newEntry,int index, int n
 	if(changeToCalendar)
 	{
 		_calendarEntryList->push_back (newEntry);
-		position = _focusingEntryList->begin() + index - 1;
+		position = _focusingEntryList->begin() + index ;
 		_focusingEntryList->erase(position);	
 	}
 	else if (newIndex != NO_INDEX_IN_DESCRIPTION)
 	{
 		if(isIndexValid(newIndex))
 		{
-			tempEntry = _focusingEntryList -> at(index - 1);
-			position = _focusingEntryList->begin() +newIndex -1;
+			tempEntry = _focusingEntryList -> at(index );
+			position = _focusingEntryList->begin() +newIndex ;
 
 			if( index >= newIndex)
-				thresholdValue = 0;
+				thresholdValue = -1;
 			else 
-				thresholdValue = 1;
-
-			_focusingEntryList->insert(position + thresholdValue , tempEntry);
-			position = _focusingEntryList->begin() + index - thresholdValue ;
+				thresholdValue = 0;
+		
+			_focusingEntryList->insert(position + thresholdValue +1 , tempEntry);
+			position = _focusingEntryList->begin() +index -thresholdValue;
 			_focusingEntryList->erase(position);	
 		}
 		else
@@ -118,7 +117,7 @@ void UpdateExecutor::addNewEntryToRightPosition(string newEntry,int index, int n
 	}
 	else
 	{
-		_focusingEntryList->at(index -1) = newEntry ;
+		_focusingEntryList->at(index) = newEntry ;
 	}
 	return;
 }
@@ -148,7 +147,7 @@ string UpdateExecutor::constructNewEntry(string oldEntry)
 		oldAndNewEntries[i][LOCATION_FIELD] = extractLocation(entries[i]);
 		oldAndNewEntries[i][TIME_FIELD] = extractTime(entries[i]);
 		oldAndNewEntries[i][DATE_FIELD] = extractDate(entries[i]);
-		oldAndNewEntries[i][PRIORITY_FIELD] = extractPriority(entries[i]);
+		oldAndNewEntries[i][PRIORITY_FIELD] = extractMark(entries[i]);
 	}
 
 	for(int numOfField=0; numOfField<TOTAL_NO_OF_FIELDS; numOfField++ )
@@ -167,7 +166,7 @@ string UpdateExecutor::constructNewEntry(string oldEntry)
 
 bool UpdateExecutor::isIndexValid(int index)
 {
-	if(index>0 && index <_focusingEntryList->size())
+	if(index>=0 && index < _focusingEntryList->size())
 	{
 		return true;
 	}
