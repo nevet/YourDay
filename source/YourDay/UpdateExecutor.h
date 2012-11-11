@@ -10,9 +10,8 @@ using namespace std;
 
 /**
 * UpdateExecutor is used to update the information of existing entry. 
-* It derives from Executor supper class, 
-*
-*
+* It derives from Executor supper class, so it contains execute() and undo()method.
+* 
 */
 class UpdateExecutor : public Executor
 {
