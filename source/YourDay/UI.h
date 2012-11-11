@@ -1,3 +1,4 @@
+
 #ifndef UI_H
 #define UI_H
 
@@ -73,6 +74,12 @@ class UI
 {
 private:
 
+	static const string CLEAR_SIGNAL_MESSAGE;
+	static const string ADD_SUCCESSFUL_MESSAGE;
+	static const string UPDATE_SUCCESSFUL_MESSAGE;
+	static const string DELETE_SUCCESSFUL_MESSAGE;
+	static const string ONE_EMPTY_LINE;
+
 	//@author A0088455R
 	/**
 	* These are the predefined values for hints string
@@ -110,10 +117,11 @@ private:
 	int indexCurCalendarInitArray;
 	int indexCurResultInitArray;
 
-	string highlightGeneralRowIndex;
-	string highlightCalendarRowIndex;
+	int highlightGeneralRowIndex;
+	int highlightCalendarRowIndex;
 	string searchKey;
 	vector<string> searchSuggest;
+
 	//@author A0088455R
 	/**
 	* Sets the window size of the program
@@ -121,12 +129,14 @@ private:
 	* @return void
 	**/
 	void setScreenSize();
+
+	//@author A0088455R
 	/**
 	* Sets the background color of a text 
-	* @param void
-	* @return void
 	**/
 	void setBackground();
+	
+	//@author A0088455R
 	/*
 	* This function draws the Banner of YOURDAY program
 	* designed by A0088455R
@@ -153,8 +163,6 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle();
 
-	string intToString(int number);
-
 	//@author A0088455R
 	/*
 	* Initializes the DidUKnow hints box status when the program starts up
@@ -176,16 +184,6 @@ private:
 	void setResultInitArrayPart(vector<string>* resultList);
 	void setResultInitArrayFull(vector<string>* resultList);
 	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	//@author A0088455R
-	/**
-	* This function will set the didUKnow hints box status when there is a change of input
-	* @param void
-	* @return void
-	*
-	* This function will change the didUknow status if and only if the user changed their command
-	* or backspaces all of his/her input.
-	*/
-	void setDidUKnowStatus();
 
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
@@ -200,15 +198,26 @@ private:
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	
+
+	//@author A0088455R
+	/**
+	* This function will set the didUKnow hints box status when there is a change of input
+	* @param void
+	* @return void
+	*
+	* This function will change the didUknow status if and only if the user changed their command
+	* or backspaces all of his/her input.
+	*/
+	void setDidUKnowStatus();
+
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
-	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, string index, int rowPosition);
-	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition);
-	
-	void printMark(string mark);
-	void printCalendarEntry(string index, string row, int &rowPosition);
-	void printGeneralEntry(string index, string row, int &rowPosition);
-	void printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition);
+	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
+	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
+
+	void printCalendarEntry(int index, string row, int &rowPosition);
+	void printGeneralEntry(int index, string row, int &rowPosition);
+	void printResultEntry(int index, string row, int &rowPosition);
+
 	//@author A0088455R
 	/**
 	* This method prints the didUKnow hints box is a change of didUknow status.
@@ -232,6 +241,7 @@ private:
 	* @return void
 	*/
 	void diduknowHintDisplay();
+
 	void lockResultDisplay();
 
 	void processResultList(vector<string>* resultList, string& info);
