@@ -14,14 +14,10 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 	{
 		case GENERAL:
 			_focusingEntryList = generalEntryList;
-			_undoFocusingEntryList = *generalEntryList;
-
 			break;
 
 		case CALENDAR:
 			_focusingEntryList = calendarEntryList;
-			_undoFocusingEntryList = *calendarEntryList;
-
 			break;
 
 		default:

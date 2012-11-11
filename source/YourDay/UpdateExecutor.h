@@ -32,7 +32,8 @@ private:
 	vector<string>* _calendarEntryList;
 	vector<string>* _resultList;
 
-	vector<string> _undoFocusingEntryList;
+	vector<string> _undoGeneralEntryList;
+	vector<string> _undoCalendarEntryList;
 	//signal indicates which area the user choose
 	Signal _focusingField;
 	string _encodedUserInput;
