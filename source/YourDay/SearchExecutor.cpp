@@ -5,8 +5,11 @@
 //@author A0088455R
 const int SearchExecutor::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-const int SearchExecutor::PERFECT_MATCH = 3;
-const int SearchExecutor::MEDIOCORE_MATCH = 1;
+const int SearchExecutor::PERFECT_MATCH = 0;
+const int SearchExecutor::HIGH_MATCH = 1;
+const int SearchExecutor::NORMAL_MATCH = 2;
+const int SearchExecutor::MEDIOCORE_MATCH = 3;
+const int SearchExecutor::NO_MATCH = 4;
 
 string SearchExecutor::splitFirstTerm(string* mString)
 {
@@ -31,6 +34,7 @@ void SearchExecutor::formatSearchResult(int index, string result, string* format
 
 bool SearchExecutor::isLeap(int year)
 {
+
 	bool flag = false;
 	
 	if (year % 100 == 0)
@@ -121,47 +125,6 @@ bool SearchExecutor::isLogicTime(string time)
 	}
 
 	return flag;
-}
-//@author A0088455R
-int SearchExecutor::extractDay(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return day;
-}
-
-int SearchExecutor::extractMonth(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return month;
-}
-
-int SearchExecutor::extractYear(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return year;
-}
-
-int SearchExecutor::extractHour(string time)
-{
-	int hour, minute;
-	sscanf(time.c_str(), "%d:%d", &hour, &minute);
-	return hour;
-}
-
-int SearchExecutor::extractMinute(string time)
-{
-	int hour, minute;
-	sscanf(time.c_str(), "%d:%d", &hour, &minute);
-	return minute;
-}
-
-void SearchExecutor::splitStartEndTime(string* start, string* end, string timeRange)
-{
-	*start=timeRange.substr(0,5);
-	*end=timeRange.substr(6,5);
 }
 
 void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector<int>* rank)
@@ -402,6 +365,7 @@ void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
 	*suggestWords = *suggestWords + updWord + '#';
 }
 
+//@author A0088455R
 void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 {	
 	assert(keyword!="");

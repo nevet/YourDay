@@ -48,12 +48,16 @@ private:
 
 	bool noMatch;
 
+	//@author A0088455R
 	string splitFirstTerm(string* mString);
 	
 	const static int MONTH[12];
 	
 	const static int PERFECT_MATCH;
+	const static int HIGH_MATCH;
+	const static int NORMAL_MATCH;
 	const static int MEDIOCORE_MATCH;
+	const static int NO_MATCH;
 
 	bool isDate(string date);
 	bool isTime(string time);
@@ -62,14 +66,7 @@ private:
 	bool isLogicTime(string time);
 	bool isInTimeRange(string time);
 
-	int extractDay(string date);
-	int extractMonth(string date);
-	int extractYear(string date);
 
-	int extractHour(string time);
-	int extractMinute(string time);
-
-	void splitStartEndTime(string* start, string* end, string timeRange);
 	void splitWords(string encodedInput, vector<string>* list);
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);

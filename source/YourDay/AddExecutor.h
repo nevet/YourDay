@@ -16,14 +16,10 @@ private:
 	vector<string> _undoGeneralEntryList;
 	vector<string> _undoCalendarEntryList;
 
-	int extractDay(string date);
-	int extractMonth(string date);
-	int extractYear(string date);
-
 	bool isEarlier(string &entry1, string &entry2);
 	string _details;
 
-	
+	//@author A0088455R	
 	int searchIndex(vector<string>* _entryList, string input);
 	int binarySearch(vector<string>* _entryList, string key, int imin, int imax);
 	void addToPosition(vector<string>* _entryList, int position, string input);
