@@ -18,7 +18,7 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_undoCalendarEntryList = *calendarEntryList;
 	_undoGeneralEntryList = *generalEntryList;
 }
-
+//@author A0088455R
 int AddExecutor::searchIndex(vector<string>* _entryList, string input)
 {
 	assert(_entryList != NULL);
@@ -92,26 +92,6 @@ void AddExecutor::addToPosition(vector<string>* _entryList, int index, string in
 	}
 }
 
-int AddExecutor::extractDay(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return day;
-}
-
-int AddExecutor::extractMonth(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return month;
-}
-
-int AddExecutor::extractYear(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return year;
-}
 
 bool AddExecutor::isEarlier(string &entry1, string &entry2)
 {
