@@ -96,7 +96,7 @@ private:
 	Signal resultDisplayMode;
 	Signal diduknowStatus;
 	Signal diduknowPrevStatus;
-	Signal curStatus;
+	Signal prevCommand;
 
 	int currentChar;
 
@@ -170,6 +170,12 @@ private:
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList);
 	void diduknowHintDisplay();
+
+	void handleResultList(vector<string>* resultList);
+	void handleInitialGeneralIndex();
+	void handleInitialCalendarIndex();
+	void handleInitialResultIndex();
+	void handleInitialIndices();
 
 	void startingScreenDisplay();
 public:

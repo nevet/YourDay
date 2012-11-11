@@ -398,6 +398,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			break;
 		}
 	}
+	prevCommand = diduknowStatus;
 }
 
 //@author A0088455R
@@ -485,6 +486,82 @@ void UI::setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>
 	setCalendarInitArrayFull(calendarEntryList);
 	setResultInitArrayPart(resultList);
 	setResultInitArrayFull(resultList);
+}
+
+void UI::handleInitialGeneralIndex()
+{	
+	assert(generalInitArrayFull.size() != 0);
+	assert(generalInitArrayPart.size() != 0);
+
+	switch (generalDisplayMode)
+	{
+	case PART_MODE:
+		if (indexCurGeneralInitArray > generalInitArrayPart.size() -1)
+		{
+			indexCurGeneralInitArray --;		
+		}
+		break;
+	case FULL_MODE:
+		if (indexCurGeneralInitArray > generalInitArrayFull.size() -1)
+		{
+			indexCurGeneralInitArray --;
+		}
+		break;
+	}
+
+}
+
+void UI::handleInitialCalendarIndex()
+{	
+	assert(calendarInitArrayFull.size() != 0);
+	assert(calendarInitArrayPart.size() != 0);
+
+	switch (calendarDisplayMode)
+	{
+	case PART_MODE:
+		if (indexCurCalendarInitArray > calendarInitArrayPart.size() -1)
+		{
+			indexCurCalendarInitArray --;		
+		}
+		break;
+	case FULL_MODE:
+		if (indexCurCalendarInitArray > calendarInitArrayFull.size() -1)
+		{
+			indexCurCalendarInitArray --;
+		}
+		break;
+	}
+
+}
+
+void UI::handleInitialResultIndex()
+{	
+	assert(resultInitArrayFull.size() != 0);
+	assert(resultInitArrayPart.size() != 0);
+
+	switch (resultDisplayMode)
+	{
+	case PART_MODE:
+		if (indexCurResultInitArray > resultInitArrayPart.size() -1)
+		{
+			indexCurResultInitArray --;		
+		}
+		break;
+	case FULL_MODE:
+		if (indexCurResultInitArray > resultInitArrayFull.size() -1)
+		{
+			indexCurResultInitArray --;
+		}
+		break;
+	}
+
+}
+
+void UI::handleInitialIndices()
+{
+	handleInitialGeneralIndex();
+	handleInitialCalendarIndex();
+	handleInitialResultIndex();
 }
 
 int UI::getGeneralInitIndex()
@@ -677,6 +754,8 @@ void UI::extractParts(string entry, string* partList)
 			part = "";
 		}
 	}
+
+	assert(partCount!= NUMBER_OF_ENTRY_PARTS -1);
 }
 
 int UI::countPartLine(string part, int maxLength)
@@ -707,6 +786,11 @@ void UI::setGeneralInitArrayPart(vector<string>* generalEntryList)
 	{
 		generalInitArrayPart.push_back(index);
 		index += GENERAL_BOX_HEIGHT;
+	}
+	
+	if (generalSize == 0)
+	{
+		generalInitArrayPart.push_back(index);
 	}
 }
 
@@ -758,6 +842,11 @@ void UI::setCalendarInitArrayPart(vector<string>* calendarEntryList)
 		calendarInitArrayPart.push_back(index);
 		index += CALENDAR_BOX_HEIGHT;
 	}
+
+	if (calendarSize == 0)
+	{
+		calendarInitArrayPart.push_back(index);
+	}
 }
 
 void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
@@ -807,6 +896,11 @@ void UI::setResultInitArrayPart(vector<string>* resultList)
 	{
 		resultInitArrayPart.push_back(index);
 		index += RESULT_BOX_HEIGHT;
+	}
+
+	if (resultSize == 0)
+	{
+		resultInitArrayPart.push_back(index);
 	}
 }
 
@@ -1240,6 +1334,28 @@ void UI::diduknowHintDisplay()
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
+void UI::handleResultList(vector<string>* resultList)
+{
+	int resultSize = resultList ->size();
+	
+	if (prevCommand == ADD_COMMAND && resultSize ==1)
+	{
+		resultList->pop_back();
+	}
+	else if (prevCommand == DELETE_COMMAND && resultSize == 1)
+	{
+		resultList ->pop_back();
+	}
+	else if (prevCommand == EDIT_COMMAND && resultSize == 1)
+	{
+		resultList ->pop_back();
+	}
+	else if (prevCommand == SEARCH_COMMAND && resultSize >0)
+	{
+		resultList ->pop_back();
+	}
+}
+
 //@author A0088455R
 void UI::startingScreenDisplay()
 {
@@ -1271,7 +1387,10 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 
 	highlightTitle(resultList->size());
 
+	handleResultList(resultList);
 	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
+	handleInitialIndices();
+
 	if(resultList->size() !=0 )
 		focusedField = SEARCH_RESULT;
 	indexCurResultInitArray = 0;
