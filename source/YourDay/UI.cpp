@@ -4,6 +4,9 @@
 #include "UI.h"
 
 //@author A0088455R
+/*
+* These are predefined values for did you know hints.
+*/
 const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
 const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
 const string UI::DID_U_KNOW_EXIT = "To exit, press Enter";
@@ -12,6 +15,11 @@ const string UI::DID_U_KNOW_UPDATE = "To update an entry, type \"update\" follow
 const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
 const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
 
+/**
+* This function sets the screen/window size for the program
+* This function utilizes the Windows.h and conio.h library.
+* adapted from http://v2.cplusplus.com/forum/general/64928/
+**/
 void UI::setScreenSize()
 {
 	_COORD coord; 
@@ -35,7 +43,19 @@ void UI::setScreenSize()
 	assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
 
+/**
+* This method sets the background color of the console
+**/
+void UI::setBackground()
+{
+	SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+}
+
 //@author A0088455R
+/*
+* This method draws the Banner through hConsole colorings and arttributes
+*/
 void UI::drawBanner()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -69,11 +89,7 @@ void UI::gotoCommandBox()
 	gotoxy(8,COMMAND_INIT_Y);
 }
 
-void UI::setBackground()
-{
-	SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
-}
+
 
 void UI::clearBox(int startH, int height)
 {
@@ -92,6 +108,11 @@ void UI::clearBox(int startH, int height)
 		gotoxy(0,startH-1);
 }
 
+//@author A0088455R
+/*
+* This method allows the cursor to move by utilizing the Windows.h and conio.h
+* method libraries
+*/
 void UI :: gotoxy(int x, int y) //goes to x,y console
 {
 	COORD coord;
@@ -412,6 +433,9 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 }
 
 //@author A0088455R
+/*
+* sets the DidUKnow hints box status corresponding to user's input
+*/
 void UI::setDidUKnowStatus()
 {
 
@@ -454,15 +478,9 @@ void UI::setDidUKnowStatus()
 		diduknowStatus = DIDUKNOW_INIT;
 	}
 }
-
-string UI::intToString(int number)
-{
-	ostringstream ostring;
-	ostring << number;
-
-	return ostring.str();
-}
-
+/*
+* Initialized DidUKnow Hints box status when starting up the program for the first time
+*/
 void UI::initializeDidUKnowStatus()
 {
 	diduknowPrevStatus = DIDUKNOW_CLEAR;
@@ -1100,18 +1118,7 @@ void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY
 	endPosition = curRow -1;
 }
 
-void UI::printMark(string mark)
-{
-	if(mark=="*")
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xcc);
-		cout<<" ";
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xcc);
-		cout<<" ";
-	}
-}
-
-void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, string index, int rowPosition)
+void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
 {
 	string part;
 	int maxPartLength;
@@ -1131,15 +1138,13 @@ void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArr
 
 		if (part.length() >  maxPartLength)
 			cout << part.substr(0, maxPartLength -3 ) << "...";
-		else if(i == NUMBER_OF_ENTRY_PARTS-1)
-			printMark(part);
 		else
 			cout <<part;
 	}
 	cout <<endl;
 }
 
-void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition)
+void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition)
 {
 	string description = partArray[1];
 	string location = partArray[2];
@@ -1164,18 +1169,15 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[i]);
 		gotoxy(positionArray[i], rowPosition);
-		if(i == NUMBER_OF_ENTRY_PARTS -1 )
-			printMark(partArray[i]);
-		else
-			cout << partArray[i];
+		cout << partArray[i];
 	}
 
 	rowPosition = max(descriptionEnd, locationEnd);
 }
 
-void UI::printCalendarEntry(string index, string entry, int& rowPosition)
+void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 {
-	assert(entry!= "");
+	//assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
 	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
@@ -1188,7 +1190,7 @@ void UI::printCalendarEntry(string index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN;
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
 		}
 	}
 
@@ -1206,7 +1208,7 @@ void UI::printCalendarEntry(string index, string entry, int& rowPosition)
 	}
 }
 
-void UI::printGeneralEntry(string index, string entry, int& rowPosition)
+void UI::printGeneralEntry(int index, string entry, int& rowPosition)
 {
 	assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
@@ -1221,7 +1223,7 @@ void UI::printGeneralEntry(string index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN;
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
 		}
 	}
 
@@ -1239,18 +1241,15 @@ void UI::printGeneralEntry(string index, string entry, int& rowPosition)
 	}
 }
 
-void UI::printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition)
+void UI::printResultEntry(int index, string row, int &rowPosition)
 {
 	Signal temp;
-	string index;
 
 	if (isGeneral(row))
 	{
 		temp = generalDisplayMode;
 		generalDisplayMode = resultDisplayMode;
-		
-		generalIndex ++;
-		index = "G" + intToString(generalIndex);
+
 		printGeneralEntry(index, row, rowPosition);
 
 		generalDisplayMode = temp;
@@ -1260,8 +1259,6 @@ void UI::printResultEntry(int& generalIndex, int& calendarIndex, string row, int
 		temp = calendarDisplayMode;
 		calendarDisplayMode = resultDisplayMode;
 
-		calendarIndex ++;
-		index = "C" + intToString(calendarIndex);
 		printCalendarEntry(index, row, rowPosition);
 
 		calendarDisplayMode = temp;
@@ -1269,6 +1266,10 @@ void UI::printResultEntry(int& generalIndex, int& calendarIndex, string row, int
 }
 
 //@author A0088455R
+/*
+* This method prints the DidUKnow hints box
+* The printing process will only be called if there is a change of DidUKnowStatus
+*/
 void UI::printDiduknowHints()
 {
 	clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
@@ -1406,15 +1407,13 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 		int nextInitIndex = getNextGeneralInitIndex(isValid);
 		int rowPosition = GENERAL_INIT_Y;
 		string row;
-		string indexString;
 
 		gotoxy(GENERAL_INIT_X, GENERAL_INIT_Y);
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfGeneral))
 		{
 			row = generalEntryList ->at(entryIndex);
-			indexString = intToString(entryIndex + 1);
-			printGeneralEntry(indexString, row, rowPosition);
+			printGeneralEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1436,15 +1435,13 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 		int nextInitIndex = getNextCalendarInitIndex(isValid);
 		int rowPosition = CALENDAR_INIT_Y;
 		string row;
-		string indexString;
 
 		gotoxy(CALENDAR_INIT_X, CALENDAR_INIT_Y);
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfCalendar))
 		{
 			row = calendarEntryList ->at(entryIndex);
-			indexString = intToString(entryIndex + 1);
-			printCalendarEntry(indexString, row, rowPosition);
+			printCalendarEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1466,8 +1463,6 @@ void UI::resultListDisplay(vector<string>* resultList)
 		bool isValid = true;
 		int nextInitIndex = getNextResultInitIndex(isValid);
 		string row;
-		int generalIndex = 0;
-		int calendarIndex = 0;
 
 		clearBox(COMMAND_INIT_Y+5,1);
 		highlightTitle();
@@ -1477,8 +1472,7 @@ void UI::resultListDisplay(vector<string>* resultList)
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
 		{
 			row = resultList ->at(entryIndex);
-			
-			printResultEntry(generalIndex, calendarIndex, row, rowPosition);
+			printResultEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1488,6 +1482,11 @@ void UI::resultListDisplay(vector<string>* resultList)
 }
 
 //@author A0088455R
+/**
+* This Method Triggers the didUKnowHints display functionalities
+* This Method should be triggered everytim user gives an input
+**/
+
 void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
@@ -1554,8 +1553,6 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 
 	if (isGeneral(info))
 	{
-		focusedField = GENERAL;
-
 		i = generalSize -1;
 		while (i >= 0 && !isFound)	
 		{
@@ -1570,7 +1567,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 				{
 					indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, i);
 				}
-				highlightGeneralRowIndex = intToString(i +1);
+				highlightGeneralRowIndex = i +1;
 				isFound = true;
 			}
 			i--;
@@ -1578,9 +1575,8 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 	}
 	else
 	{
-		focusedField = CALENDAR;
-
 		i = calendarSize -1;
+
 		while (i >=0 && !isFound)	
 		{
 			row = calendarList->at(i);
@@ -1594,7 +1590,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 				{
 					indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, i);
 				}
-				highlightCalendarRowIndex = intToString(i +1);
+				highlightCalendarRowIndex = i +1;
 				isFound = true;
 			}
 			i--;
@@ -1665,6 +1661,9 @@ void UI::printSearchInfo()
 }
 
 //@author A0088455R
+/**
+* This method prints the starting screen display
+**/
 void UI::startingScreenDisplay()
 {
 	system("CLS");

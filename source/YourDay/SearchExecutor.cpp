@@ -3,22 +3,34 @@
 #include "SearchExecutor.h"
 
 //@author A0088455R
+/**
+* Sets predifined days of a month
+**/
 const int SearchExecutor::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+/**
+* These are predefined value for the matching level of the
+* keyword and the string inside the entry list
+* applicable for searchDate and searchTime
+**/
 const int SearchExecutor::PERFECT_MATCH = 0;
 const int SearchExecutor::HIGH_MATCH = 1;
 const int SearchExecutor::MEDIOCORE_MATCH = 2;
 const int SearchExecutor::LOW_MATCH = 3;
 const int SearchExecutor::NO_MATCH = 4;
 
-string SearchExecutor::splitFirstTerm(string* mString)
+/**
+* This methods retrieves user's input word by word ad erasing it from the whole
+* chunk of input
+**/
+string SearchExecutor::splitFirstTerm(string* rawString)
 {
 	stringstream tempHolder;
 	string firstTerm;
 	char spaceEater;
-	tempHolder<<*mString;
+	tempHolder<<*rawString;
 	tempHolder>>firstTerm;
-	(*mString).erase(0,firstTerm.size()+1);
+	(*rawString).erase(0,firstTerm.size()+1);
 	return firstTerm;
 }
 
@@ -127,6 +139,9 @@ bool SearchExecutor::isLogicTime(string time)
 	return flag;
 }
 
+/**
+* This method uses assign function of vector to assign a predefined value of 0
+**/
 void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector<int>* rank)
 {
 	assert(score != NULL);
@@ -134,17 +149,26 @@ void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector
 
 	score->clear();
 	rank->clear();
-	//assigns NULL value to both arrays with the size of 
+	//assigns NULL value to both arrays with the size of totalSize
 	score->assign(totalSize, NULL);
 	rank->assign(totalSize, NULL);
 }
 
+/**
+* This method initializes rank vector to the value of totalSize
+* the ranks are going to be demoted later according to the match level
+* highest rank = totalSize, lowest rank = 0
+**/
 void SearchExecutor::initializeRank(int totalSize, vector<int>* rank)
 {
 	rank->clear();
 	rank->assign(totalSize,totalSize);
 }
 
+/**
+* this method initializes the combined entry list consisting of
+* general entry and calendar entry
+**/
 void SearchExecutor::initializeCombinedEntry()
 {
 	int i;
@@ -160,19 +184,23 @@ void SearchExecutor::initializeCombinedEntry()
 	}
 }
 
+/**
+* This method changes the rank of each etry according to its level of match
+**/
 void SearchExecutor::setRank(int index, int level, vector<int>* rank, int* currentHighest)
 {
 	(*rank)[index]-= level;
+
 	if( *currentHighest < (*rank)[index])
 	{
 		*currentHighest = (*rank)[index];
 	}
-	if ( (*rank)[index]<0)
-	{
-		(*rank)[index] = 0;
-	}
+
 }
 
+/**
+* This method adjust the rank if none of the entry has a perfect match
+**/
 void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 {
 	int listSize = _combinedEntryList.size();
@@ -182,9 +210,16 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 		for (i = 0; i < listSize; i++)
 		{
 			(*rank)[i] += ( listSize-currentHighest  );
+			// The rank cannot be less than 0.
+			if ( (*rank)[i] < 0 )
+			{
+				(*rank)[i] = 0;
+			}
 		}
-	}	
+	}
 }
+
+	
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
@@ -376,17 +411,14 @@ void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
 }
 
 //@author A0088455R
-void SearchExecutor::searchDate(string keyword, vector<int>* rank)
-{	
-	assert(keyword!="");
-	int i;
 
-	noMatch = true;
+/**
+* Checks the entry at index "index" for matching date
+**/
+void SearchExecutor::checkEntryDate(int index, vector<int>* rank, string keyword , int &highestRank)
+{
 	string toBeCompared;
 
-	int listSize = _combinedEntryList.size();
-
-	int highestRank=0;
 	int entryDay;
 	int keywordDay;
 	int entryMonth;
@@ -394,15 +426,11 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 	int entryYear;
 	int keywordYear;
 
-	initializeRank(listSize, rank);
-
-	for (i = 0; i < listSize; i++)
-	{
-		toBeCompared= extractDate(_combinedEntryList[i]);
+	toBeCompared= extractDate(_combinedEntryList[index]);
 
 		if (toBeCompared == "")
 		{
-			setRank( i, NO_MATCH, rank, &highestRank);
+			setRank( index, NO_MATCH, rank, &highestRank);
 		}
 		else
 		{
@@ -412,29 +440,30 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 			keywordDay = extractDay(keyword);
 			keywordMonth = extractMonth(keyword);
 			keywordYear = extractYear(keyword);
+
 			if (entryYear == keywordYear)
 			{
 				if (entryMonth == keywordMonth)
 				{
 					if (entryDay == keywordDay)
 					{
-						setRank( i, PERFECT_MATCH, rank, &highestRank);
+						setRank( index, PERFECT_MATCH, rank, &highestRank);
 						noMatch = false;
 					}
 					else
 					{
-						setRank( i, HIGH_MATCH, rank, &highestRank);
+						setRank( index, HIGH_MATCH, rank, &highestRank);
 						noMatch = false;
 					}
 				}
 				else if (entryDay == keywordDay)
 				{
-					setRank( i, HIGH_MATCH, rank, &highestRank);
+					setRank( index, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
+					setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
@@ -442,39 +471,58 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 			{
 				if (entryDay == keywordDay)
 				{
-					setRank( i, HIGH_MATCH, rank, &highestRank);
+					setRank( index, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
+					setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
 			else if (entryDay == keywordDay)
 			{
-				setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
+				setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
 				noMatch = false;
 			}
 			else
 			{
-//				setRank( i, LOW_MATCH, rank, &highestRank);
+				//setRank( index, LOW_MATCH, rank, &highestRank);
 			}
 		}
+}
+
+/**
+* Iterates through the entry list and searches for a matching date
+* The ranks are going to be updated after this method called
+**/
+void SearchExecutor::searchDate(string keyword, vector<int>* rank)
+{	
+	assert(keyword!="");
+
+	int i;
+
+	noMatch = true;
+
+	int listSize = _combinedEntryList.size();
+
+	int highestRank=0;
+
+
+	initializeRank(listSize, rank);
+
+	for (i = 0; i < listSize; i++)
+	{
+		checkEntryDate(i , rank, keyword , highestRank);
 	}
 	adjustRank(rank, highestRank);	
 }
 
-void SearchExecutor::searchTime(string keyword, vector<int>* rank)
+/**
+* Checks the entry at index "index" for matching time, including checking the time intervals
+**/
+void SearchExecutor::checkEntryTime(int index, vector<int>* rank, string keyword , int &highestRank)
 {
-	assert(keyword!="");
-
-	int i;
-	int highestRank=0;
-
-	noMatch = true;
-
-	string entryTimeRange;
 	string entryStartTime;
 	string entryEndTime;
 
@@ -485,6 +533,82 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	int keywordHour;
 	int keywordMinute;
 
+	string entryTimeRange = extractTime(_combinedEntryList[index]);
+
+	if (entryTimeRange == "")
+	{
+		setRank( index, NO_MATCH, rank, &highestRank);
+	}
+	else
+	{
+		splitStartEndTime(&entryStartTime, &entryEndTime, entryTimeRange);
+		entryStartHour = extractHour(entryStartTime);
+		entryEndHour = extractHour(entryEndTime);
+		entryStartMinute = extractMinute(entryStartTime);
+		entryEndMinute = extractMinute(entryEndTime);
+		keywordHour = extractHour(keyword);
+		keywordMinute = extractMinute(keyword);
+		if (entryStartHour == keywordHour)
+		{
+			if (entryStartMinute == keywordMinute)
+			{
+				setRank( index, PERFECT_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+			else if (entryStartMinute < keywordMinute)
+			{
+				setRank( index, HIGH_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+			else
+			{
+				setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+		}
+		else if (entryEndHour == keywordHour)
+		{
+			if (entryEndMinute == keywordMinute)
+			{
+				setRank( index, PERFECT_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+			else if (entryEndMinute < keywordMinute)
+			{
+				setRank( index, HIGH_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+			else
+			{
+				setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
+				noMatch = false;
+			}
+		}
+		else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
+		{
+			setRank( index, MEDIOCORE_MATCH, rank, &highestRank);
+			noMatch = false;
+		}
+		else
+		{
+			setRank( index, LOW_MATCH, rank, &highestRank);
+		}
+	}
+}
+
+/**
+* Iterates through the entry list and searches for a matching time
+* The ranks are going to be updated after this method called
+**/
+void SearchExecutor::searchTime(string keyword, vector<int>* rank)
+{
+	assert(keyword!="");
+
+	int i;
+	int highestRank=0;
+
+	noMatch = true;
+
 	int listSize = _combinedEntryList.size();
 
 	
@@ -492,66 +616,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 
 	for (i=0; i<listSize; i++)
 	{
-		entryTimeRange=extractTime(_combinedEntryList[i]);
-		if (entryTimeRange == "")
-		{
-			setRank( i, NO_MATCH, rank, &highestRank);
-		}
-		else
-		{
-			splitStartEndTime(&entryStartTime, &entryEndTime, entryTimeRange);
-			entryStartHour = extractHour(entryStartTime);
-			entryEndHour = extractHour(entryEndTime);
-			entryStartMinute = extractMinute(entryStartTime);
-			entryEndMinute = extractMinute(entryEndTime);
-			keywordHour = extractHour(keyword);
-			keywordMinute = extractMinute(keyword);
-			if (entryStartHour == keywordHour)
-			{
-				if (entryStartMinute == keywordMinute)
-				{
-					setRank( i, PERFECT_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-				else if (entryStartMinute < keywordMinute)
-				{
-					setRank( i, HIGH_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-				else
-				{
-					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-			}
-			else if (entryEndHour == keywordHour)
-			{
-				if (entryEndMinute == keywordMinute)
-				{
-					setRank( i, PERFECT_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-				else if (entryEndMinute < keywordMinute)
-				{
-					setRank( i, HIGH_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-				else
-				{
-					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
-					noMatch = false;
-				}
-			}
-			else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
-			{
-				setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
-				noMatch = false;
-			}
-			else
-			{
-//				setRank( i, LOW_MATCH, rank, &highestRank);
-			}
-		}
+		checkEntryTime(i, rank, keyword, highestRank);
 	}
 	adjustRank(rank, highestRank);
 }
