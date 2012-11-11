@@ -17,7 +17,9 @@ private:
 	
 	struct matchInfo
 	{
-		int continuity, ms, ms_trail, ms_lead, match, change, dis, index;
+		int continuity, match, change, dis, index;
+		int ms, ms_trail, ms_lead;
+
 		string str;
 
 		matchInfo()

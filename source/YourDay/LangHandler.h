@@ -50,12 +50,14 @@ private:
 	string details;
 
 	const static int MONTH[12];
+
+	const static char SPACE_BAR;
+	const static char DELIMINATOR;
+	const static char PRIORITY_INDICATOR;
 	
 	const static string ADD_MARK_INDICATOR;
 	const static string LOCATION_INDICATOR;
-	const static string SPACE_BAR;
 	const static string NULL_STRING;
-	const static string DELIMINATOR;
 	const static string UPDATE_MARK_INDICATOR;
 	const static string UPDATE_UNMARK_INDICATOR;
 
@@ -66,9 +68,21 @@ private:
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
 
+	string getSuffix(string str, int pos);
+	string getPrefix(string str, int pos);
+
+	void splitPriority(string* str, string* priority) throw (string);
+	void splitLocation(string* str, string* location) throw (string);
+	void splitDate(string* str, string* date) throw (string);
+	void splitTime(string* str, string* time, string* date) throw (string);
+	void splitDescription(string* str, string* description) throw (string);
+
 	void fillUpDate(string* date);
+
 	void regulateDate(string* date);
 	void regulateTime(string* time);
+	void regulateLocation(string* location);
+	void regulateDescription(string* description);
 
 	/**
 	* This operation is used to eliminate leading and trailing spaces of a
@@ -77,7 +91,7 @@ private:
 	* @param str
 	*			is the string needs to be spaces-freed
 	*/
-	void eliminateSpaces(string& str);
+	void eliminateSpaces(string* str);
 
 	/**
 	* Encodes the raw string into the correct saving format
@@ -129,7 +143,7 @@ private:
 	*
 	* only index field is specified, so other fields should be "blank".
 	*/
-	void encoder(string input, Signal command);
+	void encoder(string input, Signal command) throw (string);
 
 	//@author A0088455R
 	/**

@@ -10,14 +10,15 @@
 
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+const char LangHandler::SPACE_BAR = ' ';
+const char LangHandler::DELIMINATOR = '#';
+const char LangHandler::PRIORITY_INDICATOR = '*';
 
 const string LangHandler::ADD_MARK_INDICATOR = " !!!";
 const string LangHandler::UPDATE_MARK_INDICATOR = " marked";
 const string LangHandler::UPDATE_UNMARK_INDICATOR = " unmarked";
 const string LangHandler::LOCATION_INDICATOR = " at ";
-const string LangHandler::SPACE_BAR = " ";
 const string LangHandler::NULL_STRING = "";
-const string LangHandler::DELIMINATOR = "#";
 
 bool LangHandler::isLeap(int year)
 {
@@ -131,21 +132,23 @@ bool LangHandler::isLogicTime(string time)
 	return flag;
 }
 
-void LangHandler::eliminateSpaces(string& str)
+void LangHandler::eliminateSpaces(string* s)
 {
+	string str = *s;
+	
 	int len = str.length();
 	
 	int lead = 0;
-	int trail = len-1;
+	int trail = len - 1;
 
 	if (!str.empty())
 	{
-		while (lead <= trail && str[lead] == ' ')
+		while (lead <= trail && str[lead] == SPACE_BAR)
 		{
 			lead++;
 		}
 
-		while (trail >= lead && str[trail] == ' ')
+		while (trail >= lead && str[trail] == SPACE_BAR)
 		{
 			trail--;
 		}
@@ -158,6 +161,42 @@ void LangHandler::eliminateSpaces(string& str)
 			str = NULL_STRING;
 		}
 	}
+
+	*s = str;
+}
+
+string LangHandler::getPrefix(string str, int pos)
+{
+	string prefix;
+
+	if (pos == string::npos)
+	{
+		prefix = str;
+	} else
+	{
+		prefix = str.substr(0, pos);
+	}
+
+	eliminateSpaces(&prefix);
+	
+	return prefix;
+}
+
+string LangHandler::getSuffix(string str, int pos)
+{
+	string suffix;
+	
+	if (pos == string::npos)
+	{
+		suffix = NULL_STRING;
+	} else
+	{
+		suffix = str.substr(pos);
+	}
+
+	eliminateSpaces(&suffix);
+	
+	return suffix;
 }
 
 void LangHandler::fillUpDate(string* date)
@@ -178,17 +217,165 @@ void LangHandler::fillUpDate(string* date)
 	*date += tempDate;
 }
 
+void LangHandler::splitPriority(string* str, string* priority) throw (string)
+{
+	string input = *str;
+	
+	//add a space in front to avoid indicator missing
+	input = SPACE_BAR + input;
+	//check whether we have priority
+	int pos = input.rfind(ADD_MARK_INDICATOR);
+				
+	//contains priority info
+	if (pos != string::npos)
+	{
+		*priority = PRIORITY_INDICATOR;		
+	} else
+	{
+		*priority = NULL_STRING;
+	}
+	
+	//get rid of priority info
+	input = getPrefix(input, pos);
+
+	*str = input;
+}
+
+void LangHandler::splitLocation(string* str, string* location) throw (string)
+{
+	string input = *str;
+	
+	//add a space before the string in case "at " happens
+	input = SPACE_BAR + input;
+	//check whether we have location
+	int pos = input.rfind(LOCATION_INDICATOR);
+
+	//contains location info
+	if (pos != string::npos)
+	{
+		*location = getSuffix(input, pos + LOCATION_INDICATOR.length());
+	} else
+	{
+		*location = NULL_STRING;
+	}
+	
+	//get rid of location info
+	input = getPrefix(input, pos);
+
+	*str = input;
+}
+
+void LangHandler::splitDate(string* str, string* date) throw (string)
+{
+	string input = *str;
+	string potentialDate;
+
+	//extract the first term of the input and exam whether it is a date
+	int pos = input.find(SPACE_BAR);
+
+	if (pos != string::npos)
+	{
+		potentialDate = getPrefix(input, pos);
+	} else
+	{
+		potentialDate = input;
+	}
+
+	//if the potential is a logic date, we take down the date and get rid of it
+	//from the input string; else if it is a date but not logical, we throw an
+	//exception; else if it is not even a date, date field should be set to
+	//empty since nowhere else can find a date, and the input should remain
+	//unchange.
+	if (isDate(potentialDate))
+	{
+		if (isLogicDate(potentialDate))
+		{
+			*date = potentialDate;
+			input = getSuffix(input, pos);
+		} else
+		{
+			*date = NULL_STRING;
+			
+			log.writeException("date error");
+			throw string ("date error\n");
+		}
+	} else
+	{
+		*date = NULL_STRING;
+	}
+
+	*str = input;
+}
+
+void LangHandler::splitTime(string* str, string* time, string* date) throw (string)
+{
+	string input = *str;
+	string potentialTime;
+
+	//extract the first term of the input and exam whether it is a time
+	int pos = input.find(SPACE_BAR);
+
+	if (pos != string::npos)
+	{
+		potentialTime = getPrefix(input, pos);
+	} else
+	{
+		potentialTime = input;
+	}
+
+	//if the potential is a logic time, we take down the time and get rid of it
+	//from the input string; else if it is a time but not logical, we throw an
+	//exception; else if it is not even a time, date field should be set to
+	//empty since nowhere else can find a time, and the input should remain
+	//unchange.
+	if (isTime(potentialTime))
+	{
+		if (isLogicTime(potentialTime))
+		{
+			*time = potentialTime;
+			input = getSuffix(input, pos);
+		} else
+		{
+			*time = NULL_STRING;
+			
+			log.writeException("time error");
+			throw string ("time error\n");
+		}
+	} else
+	{
+		*time = NULL_STRING;
+	}
+
+	//if date field is omitted with time field specified, we will auto-fill the
+	//date field with current date
+	if (!time->empty() && date->empty())
+	{
+		fillUpDate(date);
+		log.writeData("date after auto fill up", date);
+	}
+
+	*str = input;
+}
+
+void LangHandler::splitDescription(string* str, string* description) throw (string)
+{
+	*description = *str;
+}
+
 void LangHandler::regulateDate(string* date)
 {
 	int year, month, day;
 	
 	char tempDate[15];
 
-	sscanf(date->c_str(), "%d/%d/%d", &day, &month, &year);
-	sprintf(tempDate, "%02d/%02d/%d", day, month, year);
+	if (!date->empty())
+	{
+		sscanf(date->c_str(), "%d/%d/%d", &day, &month, &year);
+		sprintf(tempDate, "%02d/%02d/%d", day, month, year);
 
-	*date = NULL_STRING;
-	*date += tempDate;
+		*date = NULL_STRING;
+		*date += tempDate;
+	}
 }
 
 void LangHandler::regulateTime(string* time)
@@ -197,32 +384,45 @@ void LangHandler::regulateTime(string* time)
 
 	char tempTime[15];
 
-	sscanf(time->c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
-	sprintf(tempTime, "%02d:%02d-%02d:%02d", h1, m1, h2, m2);
+	if (!time->empty())
+	{
+		sscanf(time->c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
+		sprintf(tempTime, "%02d:%02d-%02d:%02d", h1, m1, h2, m2);
 
-	*time = NULL_STRING;
-	*time += tempTime;
+		*time = NULL_STRING;
+		*time += tempTime;
+	}
 }
 
-void LangHandler::encoder(string input, Signal command)
+void LangHandler::regulateDescription(string* description)
+{
+	eliminateSpaces(description);
+}
+
+void LangHandler::regulateLocation(string* location)
+{
+	eliminateSpaces(location);
+}
+
+void LangHandler::encoder(string input, Signal command) throw (string)
 {
 	log.writeEntered("LangHandler::encoder()");
 	
 	stringstream tempHolder(input);
 	
-	string date = NULL_STRING;
-	string time = NULL_STRING;
-	string index = NULL_STRING;
-	string description = NULL_STRING;
-	string location = NULL_STRING;
-	string priority = NULL_STRING;
+	string date			= NULL_STRING;
+	string time			= NULL_STRING;
+	string index		= NULL_STRING;
+	string description	= NULL_STRING;
+	string location		= NULL_STRING;
+	string priority		= NULL_STRING;
 
 	string temp;
 
 	size_t pos;
 
 	//eliminate spaces first
-	eliminateSpaces(input);
+	eliminateSpaces(&input);
 	log.writeExecuted("eliminateSpaces");
 	log.writeData("Input after eliminated spaces", input);
 	
@@ -237,160 +437,43 @@ void LangHandler::encoder(string input, Signal command)
 		//input format is different for different command
 		switch (command)
 		{
-			//format will be "[date] [time] description [at location] [priority [high, mid, low]]"
+			//format will be "[date] [time] description [at location] [marked, unmarked]"
 			case ADD_COMMAND:
 				log.writeConditionEntered("add command separation", true);
-				
-				//add a space in front to avoid indicator missing
-				input = " " + input;
-				//check whether we have priority
-				pos = input.rfind(ADD_MARK_INDICATOR);
-				//contains priority info
-				if (pos != string::npos)
-				{
-					priority = "*";
-					//eliminateSpaces(priority);
-					//get rid of priority info
-					input = input.substr(0, pos);
-				}
 
-				//backtrack
-				eliminateSpaces(input);
-				log.writeData("Input after eliminated spaces", input);
-				log.writeExecuted("add command separation/priority separation");
+				splitPriority(&input, &priority);
 
-				//add a space before the string in case "at " happens
-				input = " " + input;
-				//check whether we have location
-				pos = input.rfind(LOCATION_INDICATOR);
-				//contains location info
-				if (pos != string::npos)
-				{
-					location = input.substr(pos + LOCATION_INDICATOR.length());
-					eliminateSpaces(location);
-					//get rid of location info
-					input = input.substr(0, pos);
-				}
-				
-				//backtrack
-				eliminateSpaces(input);
-				log.writeData("Input after eliminated spaces", input);
-				log.writeExecuted("add command separation/locatoin separation");
+				log.writeExecuted("LangHandler::splitPriority()");
+				log.writeData("input", input);
+				log.writeData("priority", priority);
 
-				pos = input.find(SPACE_BAR);
+				splitLocation(&input, &location);
+				regulateLocation(&location);
 
-				if (pos != string::npos)
-				{
-					//extract potential date information and exmaine it
-					date = input.substr(0, pos);
-				} else
-				{
-					date = input;
-				}
-				
-				//only if date field is not empty
-				if (isDate(date))
-				{
-					if (pos != string::npos)
-					{
-						input = input.substr(pos + 1);
-						
-						//get rid of possible redundant spaces between date and time field
-						eliminateSpaces(input);
-						log.writeData("Input after eliminated spaces", input);
+				log.writeExecuted("LangHandler::splitLocation()");
+				log.writeData("input", input);
+				log.writeData("location", location);
 
-						pos = input.find(SPACE_BAR);
-					
-						if (pos != string::npos)
-						{
-							time = input.substr(0, pos);
-						} else
-						{
-							time = input;
-						}
+				splitDate(&input, &date);
+				regulateDate(&date);
 
-						if (isTime(time))
-						{
-							if (pos != string::npos)
-							{
-								input = input.substr(pos + 1);
-							} else
-							{
-								input = NULL_STRING;
-							}
-						} else
-						{
-							time = NULL_STRING;
-						}
-					} else
-					{
-						input = NULL_STRING;
-					}
-				} else
-				{
-					//it might be a time, so we need to exmaine it
-					time = date;
-					date = NULL_STRING;
+				log.writeExecuted("LangHandler::splitDate()");
+				log.writeData("input", input);
+				log.writeData("date", date);
 
-					if (isTime(time))
-					{
-						if (pos != string::npos)
-						{
-							input = input.substr(pos + 1);
-						} else
-						{
-							input = NULL_STRING;
-						}
-					} else
-					{
-						time = NULL_STRING;
-					}
-				}
-				
-				log.writeExecuted("add command separation/date and time separtation");
-				
-				eliminateSpaces(input);
-				log.writeData("Input after eliminated spaces", input);
+				splitTime(&input, &time, &date);
+				regulateTime(&time);
 
-				description = input;
+				log.writeExecuted("LangHandler::splitTime()");
+				log.writeData("input", input);
+				log.writeData("time", time);
 
-				if (!time.empty() && date.empty())
-				{
-					fillUpDate(&date);
-					log.writeData("date after auto fill up", date);
-				}
+				splitDescription(&input, &description);
+				regulateDescription(&description);
 
-				//after have done separating, we need to exmaine each field
-				//to make sure they are logic, if applicable
-				if (description.empty() && (!priority.empty() || !date.empty() || !time.empty() || !location.empty()))
-				{
-					log.writeException("empty description error");
-					throw string ("empty description error\n");
-				}
-
-				if (!date.empty())
-				{
-					if (!isLogicDate(date))
-					{
-						log.writeException("date error");
-						throw string ("date error\n");
-					} else
-					{
-						regulateDate(&date);
-					}
-				}
-
-				if (!time.empty())
-				{
-					if (!isLogicTime(time))
-					{
-						log.writeException("time error");
-						throw string ("time error\n");
-					} else
-					{
-						regulateTime(&time);
-					}
-				}
+				log.writeExecuted("LangHandler::splitDescription()");
+				log.writeData("input", input);
+				log.writeData("description", description);
 
 				break;
 
@@ -448,7 +531,7 @@ void LangHandler::encoder(string input, Signal command)
 					{
 						//get rid of index info
 						input = input.substr(pos + 1);
-						eliminateSpaces(input);
+						eliminateSpaces(&input);
 						log.writeData("Input after eliminated spaces", input);
 						
 						input = " " + input;
@@ -471,7 +554,7 @@ void LangHandler::encoder(string input, Signal command)
 							input = input.substr(0, pos);
 						}
 
-						eliminateSpaces(input);
+						eliminateSpaces(&input);
 						log.writeData("Input after eliminated spaces", input);
 						log.writeExecuted("edit command separation/priority separation");
 
@@ -482,12 +565,12 @@ void LangHandler::encoder(string input, Signal command)
 						if (pos != string::npos)
 						{
 							location = input.substr(pos + LOCATION_INDICATOR.length());
-							eliminateSpaces(location);
+							eliminateSpaces(&location);
 							//get rid of location info
 							input = input.substr(0, pos);
 						}
 						
-						eliminateSpaces(input);
+						eliminateSpaces(&input);
 						log.writeData("Input after eliminated spaces", input);
 						log.writeExecuted("edit command separation/location separation");
 						
@@ -509,7 +592,7 @@ void LangHandler::encoder(string input, Signal command)
 							{
 								input = input.substr(pos + 1);
 								
-								eliminateSpaces(input);
+								eliminateSpaces(&input);
 								log.writeData("Input after eliminated spaces", input);
 
 								pos = input.find(SPACE_BAR);
@@ -562,7 +645,7 @@ void LangHandler::encoder(string input, Signal command)
 				
 						log.writeExecuted("add command separation/date and time separtation");
 
-						eliminateSpaces(input);
+						eliminateSpaces(&input);
 						log.writeData("Input after eliminated spaces", input);
 
 						description = input;
