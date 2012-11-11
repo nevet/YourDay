@@ -19,9 +19,12 @@ using namespace std;
 * StorageHandler is the database handler in the logic component. Storage handler
 * would be only called by CommandExecutor and FunctionHandler,which is used to
 * store data into the file or read data from file.
+* The storage file would be stored as .txt format, but the name would be changed to .yd to protect the content. 
 * Only Storage Handler directly operate the file system.
-*/
+*
 //@author A0091734A
+*/
+
 class StorageHandler
 {
 public :
@@ -58,7 +61,7 @@ public :
 	@return void
 	*/
 
-
+	//@return true->file exists,  false-> file doesn't exist
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,
@@ -71,9 +74,9 @@ public :
 
 private :
 	char buffer[MAXMIUM_WORDS];
+
 	static const string DataBaseGeneralFile;
-	static const string DataBaseCalendarFile; 
-	
+	static const string DataBaseCalendarFile;
 	static const string GeneralFile;
 	static const string CalendarFile;
 	static const string FILEPATH;
