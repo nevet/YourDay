@@ -1151,7 +1151,7 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 
 void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 {
-	//assert(entry!= "");
+	assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
 	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
@@ -1164,7 +1164,7 @@ void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN;
 		}
 	}
 
@@ -1197,7 +1197,7 @@ void UI::printGeneralEntry(int index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN;
 		}
 	}
 
@@ -1518,6 +1518,8 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 
 	if (isGeneral(info))
 	{
+		focusedField = GENERAL;
+
 		i = generalSize -1;
 		while (i >= 0 && !isFound)	
 		{
@@ -1540,8 +1542,9 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 	}
 	else
 	{
-		i = calendarSize -1;
+		focusedField = CALENDAR;
 
+		i = calendarSize -1;
 		while (i >=0 && !isFound)	
 		{
 			row = calendarList->at(i);
