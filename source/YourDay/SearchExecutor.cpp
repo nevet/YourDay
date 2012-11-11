@@ -223,7 +223,7 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
-	string sentence = extractDescription(encoded) + " " + extractLocation(encoded) + " " + extractMark(encoded);
+	string sentence = extractDescription(encoded) + " " + extractLocation(encoded);
 	stringstream sin(sentence);
 
 	string temp;
@@ -382,7 +382,9 @@ bool SearchExecutor::cmp(matchInfo a, matchInfo b)
 	if (a.ms < b.ms) return true; else
 	if (a.ms > b.ms) return false; else
 	if (a.change < b.change) return true; else
-	if (a.change > b.change) return false;
+	if (a.change > b.change) return false; else
+	if (a.str < b.str) return true; else
+	if (a.str > b.str) return false;
 
 	return false;
 }
@@ -396,6 +398,11 @@ SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
 	{
 		return b;
 	}
+}
+
+bool SearchExecutor::unrelavent(matchInfo info, string key)
+{
+	return info.match <= key.length() / 3 || info.match <= info.str.length() / 3 || info.continuity > info.str.length() / 2;
 }
 
 void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
@@ -614,10 +621,13 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	adjustRank(rank, highestRank);
 }
 
-void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWords)
+void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* suggestWords, int suggestWordsCnt)
 {
 	int tot = _combinedEntryList.size();
+	int tempTreshold = -1;
+
 	vector<matchInfo> best;
+	vector<string> tempSuggestWords;
 	
 	for (int j = 0; j < tot; j++)
 	{
@@ -646,31 +656,28 @@ void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWo
 				temp = compare(temp, curM);
 			}
 		}
-			
+		
 		temp.index = j;
 		best.push_back(temp);
 	}
 
 	sort(best.begin(), best.end(), cmp);
 
-	if (best.empty() || best[0].match == 0)
-	{
-		noMatch = true;
-	} else
+	if (!best.empty())
 	{
 		noMatch = false;
 
-		if (best[0].match != key.length())
-		{
-			updateSuggestWords(suggestWords, best[0].str);
-		}
-
 		int p = 0;
 		int q = 1;
-		int r;
+		int r = tot;
 
 		while (p < tot)
 		{
+			if (unrelavent(best[p], key) && tempTreshold == -1)
+			{
+				tempTreshold = r;
+			}
+			
 			while (q < tot && !cmp(best[q - 1], best[q])) q++;
 
 			r = tot - p;
@@ -687,7 +694,29 @@ void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWo
 
 			q++;
 		}
+
+		for (int i = 0; i < best.size() && suggestWords->size() < 4; i++)
+		{
+			if (unrelavent(best[i], key))
+			{
+				break;
+			}
+
+			if (best[i].match != best[i].str.length())
+			{
+				if (suggestWords->empty())
+				{
+					suggestWords->push_back(best[i].str);
+				} else
+				if (best[i].str != suggestWords->back())
+				{
+					suggestWords->push_back(best[i].str);
+				}
+			}
+		}
 	}
+
+	treshold += tempTreshold;
 }
 
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
@@ -702,6 +731,8 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 	_details = details;
 	_matchedEntryList = matchedEntryList;
 
+	treshold = 0;
+
 	_undoCalendarEntryList = *calendarEntryList;
 	_undoGeneralEntryList = *generalEntryList;
 	_undoMatchedEntryList = *matchedEntryList;
@@ -711,17 +742,20 @@ void SearchExecutor::execute() throw (string)
 {
 	vector<int> rank;
 	vector<int> score;
+
+	vector<string> suggestWords;
 	
-	string suggestWords = "#";
+	string encodedSuggestWords = "#";
 
 	vector<integerPair> tempMatchedList;
 
 	int weight;
+	int suggestWordsCnt = 1;
 	
 	string key = extractDescription(_details);
 	string currentKey;
-	
-	updateSuggestWords(&suggestWords, key);
+
+	updateSuggestWords(&encodedSuggestWords, key);
 	
 	initializeCombinedEntry();
 	
@@ -758,7 +792,12 @@ void SearchExecutor::execute() throw (string)
 			}
 		} else
 		{
-			searchText(currentKey, &rank, &suggestWords);
+			searchText(currentKey, &rank, &suggestWords, suggestWordsCnt);
+			
+			if (suggestWordsCnt < 8)
+			{
+				suggestWordsCnt *= 2;
+			}
 		}
 
 		//if there is no match, weight will be zero, i.e. this key is omitted
@@ -772,7 +811,7 @@ void SearchExecutor::execute() throw (string)
 
 	for (int i = 0; i < totalEntries; i++)
 	{
-		if (score[i] == 0) continue;
+		if (score[i] < treshold) continue;
 		tempMatchedList.push_back(integerPair(score[i], i));
 	}
 
@@ -788,11 +827,17 @@ void SearchExecutor::execute() throw (string)
 		{
 			int curRecord = tempMatchedList[i].second;
 		
-			log.writeData("record", _combinedEntryList[curRecord]);
 			_matchedEntryList->push_back(_combinedEntryList[curRecord]);
+			log.writeData("record", _matchedEntryList->back());
 		}
 		
-		_matchedEntryList->push_back(suggestWords);
+		for (int i = 0; i < suggestWords.size(); i++)
+		{
+			updateSuggestWords(&encodedSuggestWords, suggestWords[i]);
+		}
+
+		_matchedEntryList->push_back(encodedSuggestWords);
+		log.writeData("record", _matchedEntryList->back());
 	}
 }
 
