@@ -1376,7 +1376,7 @@ void UI::handleResultInfo(string info, vector<string>* generalList, vector<strin
 
 	if (prevCommand == SEARCH_COMMAND && info != "")
 	{
-		processSearchInfo(info);
+//		processSearchInfo(info);
 	}
 	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && info != "")
 	{
