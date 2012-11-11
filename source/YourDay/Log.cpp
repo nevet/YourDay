@@ -49,7 +49,7 @@ bool Log::checkLogSize()
 
 	file.seekg(0, fstream::end);
 	logSize = file.tellg();
-
+		
 	if (logSize > sizeThreshold)
 	{
 		overSize = true;
