@@ -159,7 +159,7 @@ private:
 	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition);
 	
 	void printMark(string mark);
-	void printCalendarEntry(int index, string row, int &rowPosition);
+	void printCalendarEntry(string index, string row, int &rowPosition);
 	void printGeneralEntry(string index, string row, int &rowPosition);
 	void printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition);
 	void printDiduknowHints();
