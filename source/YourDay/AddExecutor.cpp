@@ -39,7 +39,12 @@ int AddExecutor::binarySearch(vector<string>* _entryList, string key, int imin, 
 {
 	assert(_entryList != NULL);
 	assert(key != "");
-	int imid = (imin + imax) / 2;
+	int imid;
+	imid = (imin + imax) / 2;
+	if ((( imin + imax) % 2 ) == 1)
+	{
+		imid += 1;
+	}
 	while (imax >= imin)
 	{
 		if (isEarlier((*_entryList)[imid],key))
@@ -53,8 +58,12 @@ int AddExecutor::binarySearch(vector<string>* _entryList, string key, int imin, 
 		else
 		{
 			return imid;
-		}
+		}			
 		imid = (imin + imax) / 2;
+		if ((( imin + imax) % 2 ) == 1)
+		{
+			imid += 1;
+		}
 	}
 	return imid;
 }
@@ -79,7 +88,7 @@ void AddExecutor::addToPosition(vector<string>* _entryList, int index, string in
 		{
 			(*_entryList)[i] = (*_entryList)[i-1];
 		}
-		(*_entryList)[index+1] = input;
+		(*_entryList)[index] = input;
 	}
 }
 
