@@ -162,7 +162,8 @@ private:
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
 	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
 	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
-
+	
+	void printMark(string mark);
 	void printCalendarEntry(int index, string row, int &rowPosition);
 	void printGeneralEntry(int index, string row, int &rowPosition);
 	void printResultEntry(int index, string row, int &rowPosition);

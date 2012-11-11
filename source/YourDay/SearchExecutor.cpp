@@ -188,7 +188,7 @@ void SearchExecutor::adjustRank(vector<int>* rank, int currentHighest)
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
-	string sentence = extractDescription(encoded) + " " + extractLocation(encoded) + " " + extractPriority(encoded);
+	string sentence = extractDescription(encoded) + " " + extractLocation(encoded) + " " + extractMark(encoded);
 	stringstream sin(sentence);
 
 	string temp;

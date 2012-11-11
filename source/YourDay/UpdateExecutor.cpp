@@ -147,7 +147,7 @@ string UpdateExecutor::constructNewEntry(string oldEntry)
 		oldAndNewEntries[i][LOCATION_FIELD] = extractLocation(entries[i]);
 		oldAndNewEntries[i][TIME_FIELD] = extractTime(entries[i]);
 		oldAndNewEntries[i][DATE_FIELD] = extractDate(entries[i]);
-		oldAndNewEntries[i][PRIORITY_FIELD] = extractPriority(entries[i]);
+		oldAndNewEntries[i][PRIORITY_FIELD] = extractMark(entries[i]);
 	}
 
 	for(int numOfField=0; numOfField<TOTAL_NO_OF_FIELDS; numOfField++ )
