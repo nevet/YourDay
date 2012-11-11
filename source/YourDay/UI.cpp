@@ -152,6 +152,7 @@ void UI::highlightTitle()
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 			printResultFooter();
+			printSearchInfo();
 		}
 		break;
 	}
@@ -393,7 +394,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				input += keyIn;
 				currentChar++;
 
-				isResultDisplay = false;
+				lockResultDisplay();
 				diduknowHintDisplay();
 			}
 			break;
@@ -1226,10 +1227,10 @@ void UI::printCalendarFooter()
 	switch (calendarDisplayMode)
 	{
 	case PART_MODE:
-		cout << "Page" << indexCurCalendarInitArray + 1 << "/" << calendarInitArrayPart.size();
+		cout << "Page " << indexCurCalendarInitArray + 1 << "/" << calendarInitArrayPart.size();
 		break;
 	case FULL_MODE:
-		cout << "Page" << indexCurCalendarInitArray + 1<< "/" << calendarInitArrayFull.size();
+		cout << "Page " << indexCurCalendarInitArray + 1<< "/" << calendarInitArrayFull.size();
 		break;
 	}
 }
@@ -1241,10 +1242,10 @@ void UI::printResultFooter()
 	switch (resultDisplayMode)
 	{
 	case PART_MODE:
-		cout << "Page" << indexCurResultInitArray + 1 << "/" << resultInitArrayPart.size();
+		cout << "Page " << indexCurResultInitArray + 1 << "/" << resultInitArrayPart.size();
 		break;
 	case FULL_MODE:
-		cout << "Page" << indexCurResultInitArray + 1<< "/" << resultInitArrayFull.size();
+		cout << "Page " << indexCurResultInitArray + 1<< "/" << resultInitArrayFull.size();
 		break;
 	}
 }
@@ -1348,6 +1349,15 @@ void UI::diduknowHintDisplay()
 	}
 }
 
+void UI::lockResultDisplay()
+{
+	isResultDisplay = false;
+	if (focusedField == SEARCH_RESULT)
+	{
+		changeFocusedField();
+	}
+}
+
 void UI::processResultList(vector<string>* resultList, string& info)
 {
 	int resultSize = resultList ->size();
@@ -1376,8 +1386,7 @@ void UI::handleResultInfo(string info, vector<string>* generalList, vector<strin
 
 	if (prevCommand == SEARCH_COMMAND && info != "")
 	{
-		processSearchInfo(info, keyWord, &suggestion);
-		printSearchInfo(keyWord, &suggestion);
+		processSearchInfo(info);
 	}
 	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && info != "")
 	{
@@ -1441,7 +1450,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 	}
 }
 
-void UI::processSearchInfo(string info, string& keyWord, vector<string>* suggestion)
+void UI::processSearchInfo(string info)
 {
 	// format: #keyWord#suggestion #suggestion#...#
 	int i =1;
@@ -1449,7 +1458,7 @@ void UI::processSearchInfo(string info, string& keyWord, vector<string>* suggest
 	string temp = "";
 	char ch;
 	int countPart = 0;
-	suggestion->clear();
+	searchSuggest.clear();
 
 	while (i < length)
 	{
@@ -1462,12 +1471,12 @@ void UI::processSearchInfo(string info, string& keyWord, vector<string>* suggest
 		{
 			if (countPart == 0)
 			{
-				keyWord = temp;
+				searchKey = temp;
 				countPart ++;
 			}
 			else
 			{
-				suggestion->push_back(temp);
+				searchSuggest.push_back(temp);
 			}
 
 			temp = "";
@@ -1476,19 +1485,19 @@ void UI::processSearchInfo(string info, string& keyWord, vector<string>* suggest
 	}
 }
 
-void UI::printSearchInfo(string info, vector<string>* suggestion)
+void UI::printSearchInfo()
 {
-	int suggestionSize = suggestion->size();
+	int suggestionSize = searchSuggest.size();
 	string row;
 
 	gotoxy(28,COMMAND_INIT_Y + 2);
-	cout << "Keyword: " << info;
+	cout << "Keyword: " << searchKey;
 	if (suggestionSize != 0)
 	{
-		cout << "Do you mean: ";
+		cout << "  Do you mean: ";
 		for (int i = 0; i< suggestionSize; i++)
 		{
-			row = suggestion->at(i);
+			row = searchSuggest.at(i);
 			cout << row;
 			if (i != suggestionSize -1)
 			{

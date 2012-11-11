@@ -114,6 +114,8 @@ private:
 
 	int highlightGeneralRowIndex;
 	int highlightCalendarRowIndex;
+	string searchKey;
+	vector<string> searchSuggest;
 
 	void setScreenSize();
 	void setBackground();
@@ -174,12 +176,13 @@ private:
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList);
 	void diduknowHintDisplay();
+	void lockResultDisplay();
 
 	void processResultList(vector<string>* resultList, string& info);
 	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
 	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
-	void processSearchInfo(string info, string& keyWord, vector<string>* suggestion);
-	void printSearchInfo(string key, vector<string>* suggestion);
+	void processSearchInfo(string info);
+	void printSearchInfo();
 
 	void handleInitialGeneralIndexOverflow();
 	void handleInitialCalendarIndexOverflow();
