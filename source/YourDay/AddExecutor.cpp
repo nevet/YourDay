@@ -18,6 +18,7 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_undoCalendarEntryList = *calendarEntryList;
 	_undoGeneralEntryList = *generalEntryList;
 }
+
 //@author A0088455R
 int AddExecutor::searchIndex(vector<string>* _entryList, string input)
 {

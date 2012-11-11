@@ -3,7 +3,7 @@
     LangHandler.h
     Purpose: Calculates the total of 6 checks
 
-    @author a0088455
+    @author a0088455R
     @version 0.1 10/13/2012
 */
 #ifndef LANGHANDLER_H
@@ -115,6 +115,7 @@ private:
 	*/
 	void encoder(string input, Signal command);
 
+	//@author A0088455R
 	/**
 	* This operation will set command type using userCommand. If userCommand
 	* took from the user is invalid, COMMAND_E Signal will be set.
@@ -132,6 +133,7 @@ public :
 	*/
 	Signal getStatus();
 
+	//@author A0088455R
 	/**
 	* Seperates user input's string into 2 parts, the command and the
 	* encoded string.
