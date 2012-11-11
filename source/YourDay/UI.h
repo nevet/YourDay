@@ -111,6 +111,9 @@ private:
 	int indexCurCalendarInitArray;
 	int indexCurResultInitArray;
 
+	int highlightGeneralRowIndex;
+	int highlightCalendarRowIndex;
+
 	void setScreenSize();
 	void setBackground();
 	void drawBanner();
@@ -171,11 +174,16 @@ private:
 	void resultListDisplay(vector<string>* resultList);
 	void diduknowHintDisplay();
 
-	void handleResultList(vector<string>* resultList);
-	void handleInitialGeneralIndex();
-	void handleInitialCalendarIndex();
-	void handleInitialResultIndex();
-	void handleInitialIndices();
+	void processResultList(vector<string>* resultList, string& info);
+	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
+	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
+	void processSearchInfo(string info);
+	void printSearchInfo(string key, string suggestion);
+
+	void handleInitialGeneralIndexOverflow();
+	void handleInitialCalendarIndexOverflow();
+	void handleInitialResultIndexOverflow();
+	void handleInitialIndicesOverflow();
 
 	void startingScreenDisplay();
 public:
