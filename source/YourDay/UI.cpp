@@ -1153,7 +1153,8 @@ void UI::printDiduknowHints()
 		break;
 	}
 	diduknowPrevStatus=diduknowStatus;
-	cout<<endl;
+	cout<<endl;	
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 bool UI::isGeneral(string row)
@@ -1331,7 +1332,6 @@ void UI::diduknowHintDisplay()
 	{
 		printDiduknowHints();
 	}
-	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 void UI::handleResultList(vector<string>* resultList)
