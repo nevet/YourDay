@@ -49,8 +49,8 @@ using namespace std;
 
 int main(int arg, char** test)
 {
-	 
-//	runTest(arg,test);
+ 
+	//runTest(arg,test);
 
 	//recording general entries
 	vector<string> generalEntryList;

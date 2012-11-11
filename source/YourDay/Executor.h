@@ -4,6 +4,7 @@
 #include<iostream>
 #include<string>
 
+#include "Log.h"
 #include "Signal.h"
 
 //@author A0088455R
@@ -13,7 +14,7 @@ const int LOCATION_BLOCK_LOCATION		= 3;
 const int TIME_BLOCK_LOCATION			= 4;
 const int DATE_BLOCK_LOCATION			= 5;
 const int PRIORITY_BLOCK_LOCATION		= 6;
-
+const int NO_INDEX_IN_DESCRIPTION = -1;
 
 using namespace std;
 
@@ -28,6 +29,8 @@ class Executor
 protected:
 	Signal status;
 
+	Log log;
+	
 	/**
 	* Decodes the encoded string and retreives the index
 	*
@@ -195,6 +198,8 @@ protected:
 	*/
 	string extractPriority(string details);
 	
+	int extractIndexFromDescription(string description);
+
 public:
 	/**
 	* Note that different subclass may take in different parameter, so this

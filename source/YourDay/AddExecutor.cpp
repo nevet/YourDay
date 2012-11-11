@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 
-AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, string details)
+AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, string details)
 {
 	assert(details!="");
 	assert(generalEntryList!=NULL);
@@ -11,6 +11,7 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
+	_resultList = resultList;
 	_details = details;
 
 	//a local copy of entry list for undo using
@@ -18,33 +19,66 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_undoGeneralEntryList = *generalEntryList;
 }
 
-int AddExecutor::partition(vector<string> &entryList, int low, int high)
+int AddExecutor::searchIndex(vector<string>* _entryList, string input)
 {
-	if (low == high) return low;
-	string pivot = entryList[low];
-	
-	int m = low;
-	for ( int k = low+1; k <= high; ++k )
-	{
-		if ( isEarlier(entryList[k], pivot))
-		{		
-			++m;
-			swap(entryList[k], entryList[m]);
-		}
-    }
+	assert(_entryList != NULL);
+	assert(input != "");
+	int listSize = _entryList->size();
 
-  swap(entryList[low], entryList[m]);  	
-  return m;
+	if (listSize == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return binarySearch(_entryList, input, 0, listSize-1);
+	}
 }
 
-void AddExecutor::quickSort(vector<string> &entryList, int low, int high)
+int AddExecutor::binarySearch(vector<string>* _entryList, string key, int imin, int imax)
 {
-	int pivotIdx;
-	if (low < high)
+	assert(_entryList != NULL);
+	assert(key != "");
+	int imid = (imin + imax) / 2;
+	while (imax >= imin)
 	{
-		pivotIdx = partition(entryList, low, high);
-		quickSort(entryList, low, pivotIdx - 1);
-		quickSort(entryList, pivotIdx + 1, high);
+		if (isEarlier((*_entryList)[imid],key))
+		{
+			imin = imid + 1;
+		}
+		else if (isEarlier(key,(*_entryList)[imid]))
+		{
+			imax = imid - 1;
+		}
+		else
+		{
+			return imid;
+		}
+		imid = (imin + imax) / 2;
+	}
+	return imid;
+}
+
+void AddExecutor::addToPosition(vector<string>* _entryList, int index, string input)
+{
+	assert(_entryList != NULL);
+	assert(input != "");
+	int listSize = _entryList->size();
+	int i;
+
+	if (listSize == 0)
+	{
+		_entryList -> push_back(input);
+	}
+	else
+	{
+		string dummyString = "";
+		_entryList -> push_back(dummyString);
+		for (i = (listSize - 1); i > index; i--)
+		{
+			(*_entryList)[i] = (*_entryList)[i-1];
+		}
+		(*_entryList)[index+1] = input;
 	}
 }
 
@@ -71,24 +105,27 @@ int AddExecutor::extractYear(string date)
 
 bool AddExecutor::isEarlier(string &entry1, string &entry2)
 {
-	string timeRange1;
-	string timeRange2;
-	timeRange1=extractTime(entry1);
-	timeRange2=extractTime(entry2);
-	string entryDate1;
-	string entryDate2;
-	entryDate1=extractDate(entry1);
-	entryDate2=extractDate(entry2);
+	string timeRange1 = extractTime(entry1);
+	string timeRange2 = extractTime(entry2);
+
+	string entryDate1 = extractDate(entry1);
+	string entryDate2 = extractDate(entry2);
+
 	int entryDay1 = extractDay(entryDate1);
-	int entryMonth1 = extractMonth(entryDate1);
-	int entryYear1 = extractYear(entryDate2);
 	int entryDay2 = extractDay(entryDate2);
+
+	int entryMonth1 = extractMonth(entryDate1);
 	int entryMonth2 = extractMonth(entryDate2);
+
+	int entryYear1 = extractYear(entryDate2);
 	int entryYear2 = extractYear(entryDate2);
+
 	ostringstream dateContender1;
 	ostringstream dateContender2;
+
 	ostringstream monthContender1;
 	ostringstream monthContender2;
+
 	if (entryDay1 < 10)
 	{
 		dateContender1<<"0"<<entryDay1;
@@ -121,10 +158,13 @@ bool AddExecutor::isEarlier(string &entry1, string &entry2)
 	{
 		monthContender2<<entryMonth2;
 	}
+
 	ostringstream os1;
 	ostringstream os2;
+
 	os1<<entryYear1<<monthContender1.str()<<dateContender1.str()<<timeRange1;
 	os2<<entryYear2<<monthContender2.str()<<dateContender2.str()<<timeRange2;
+
 	return os1.str() < os2.str();
 }
 
@@ -139,12 +179,14 @@ void AddExecutor::execute() throw (string)
 
 	if (extractDate(_details) == "")
 	{
-		_generalEntryList -> push_back(_details);
+		_generalEntryList->push_back(_details);
+		_resultList->push_back(_details);
 	}
 	else
 	{
-		_calendarEntryList -> push_back(_details);
-		quickSort(*_calendarEntryList,0,_calendarEntryList->size()-1);
+		int index = searchIndex(_calendarEntryList, _details);
+		addToPosition(_calendarEntryList, index, _details);
+		addToPosition(_resultList,index,_details);
 	}
 }
 
@@ -152,4 +194,6 @@ void AddExecutor::undo()
 {
 	*_generalEntryList = _undoGeneralEntryList;
 	*_calendarEntryList = _undoCalendarEntryList;
+	
+	_resultList->pop_back();
 }
