@@ -467,19 +467,19 @@ void SearchExecutor::encodeIndex(string* encodedEntry, int index)
 	
 	if (index < _generalEntryList->size())
 	{
-		*encodedEntry = "#G" + tempInx + encodedEntry->substr(1);
-		
 		sprintf(inx, "%d", index);
 
 		string tempInx(inx);
+		
+		*encodedEntry = "#G" + tempInx + encodedEntry->substr(1);
 	} else
 	{
 		index -= _generalEntryList->size();
-		
+				
 		sprintf(inx, "%d", index);
 
 		string tempInx(inx);
-		
+
 		*encodedEntry = "#C" + tempInx + encodedEntry->substr(1);
 	}
 }

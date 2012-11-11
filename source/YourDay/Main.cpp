@@ -3,13 +3,13 @@
 * program. Input format for each function is listed below:
 * 
 * To add:
-*		add [date] [time] description [at location] [priority ]
+*		add [date] [time] description [at location] [priority]
 * To delete:
 *		delete index
 * To search:
 *		search description
 * To update:
-*		edit index description
+*		update index description
 *
 * date:
 *		DD/MM/YYYY  
@@ -22,7 +22,8 @@
 * index:
 *		positive integer
 * priority:
-*		can only be one of {high, mid, low}
+*		can be set by using keyword "marked" and be unset by using keyword
+*		"unmarked"
 */
 
 #include <iostream>
@@ -41,10 +42,10 @@ using namespace std;
 #define EXIT_SUCCESS 0
 
 /**
-* Main() is the over all work flow controller. It knows UIHandler and
-* FunctionHandler. It repeatedly calls UIHandler to handler the user input and
+* Main() is the over all work flow controller. It only knows UIHandler and
+* FunctionHandler. It repeatedly calls UIHandler to take in the user input and
 * then pass the input to FunctionHandler to handle. If any error happens,
-* main() will ask UIHandler to handle the feedback issue.
+* main() will ask UIHandler to handle the feedback exception.
 */
 
 int main(int arg, char** test)
