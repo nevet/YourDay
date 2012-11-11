@@ -278,7 +278,7 @@ void LangHandler::splitIndex(string* str, string* index, bool multiple) throw (s
 		//is specified, description missing exception should be thorwn
 		if (pos != string::npos)
 		{
-			potentialIndex = getPrefix(input, input.length());
+			potentialIndex = getPrefix(input, pos);
 					
 			if (isInt(potentialIndex))
 			{
@@ -421,7 +421,16 @@ void LangHandler::splitTime(string* str, string* time, string* date) throw (stri
 
 void LangHandler::splitDescription(string* str, string* description) throw (string)
 {
-	*description = *str;
+	if (*str == NULL_STRING)
+	{
+		*description = NULL_STRING;
+		
+		log.writeException("Empty Description!");
+		throw string ("Empty Description!\n");
+	} else
+	{
+		*description = *str;
+	}
 }
 
 void LangHandler::regulateDate(string* date)
@@ -478,10 +487,6 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 	string description	= NULL_STRING;
 	string location		= NULL_STRING;
 	string priority		= NULL_STRING;
-
-	string temp;
-
-	size_t pos;
 
 	//eliminate spaces first
 	eliminateSpaces(&input);
@@ -545,184 +550,55 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				
 				splitIndex(&input, &index, false);
 
-				log.writeExecuted("LangHandler::splitDescription()");
+				log.writeExecuted("LangHandler::splitIndex()");
 				log.writeData("input", input);
-				log.writeData("description", description);				
+				log.writeData("index", index);				
 				
 				break;
 
 			//format will be "index [date] [time] description [at location] [marked, unmarked]"
 			case UPDATE_COMMAND:
 				log.writeConditionEntered("edit command separation", true);
-				
-				pos = input.find(SPACE_BAR);
-				
-				if (pos == string::npos)
-				{
-					log.writeException("edit format error");
-					throw string ("edit format error\n");
-				} else
-				{
-					index = input.substr(0, pos);
-					log.writeData("index", index);
-					log.writeExecuted("edit command separation/index separation");
-					
-					if (!isInt(index))
-					{
-						index = NULL_STRING;
 
-						log.writeException("Index error");
-						throw string ("Index error\n");
-					} else
-					{
-						//get rid of index info
-						input = input.substr(pos + 1);
-						eliminateSpaces(&input);
-						log.writeData("Input after eliminated spaces", input);
-						
-						input = " " + input;
-						//check whether we have priority
-						pos = input.rfind(UPDATE_MARK_INDICATOR);
+				splitIndex(&input, &index, true);
 
-						if (pos != string::npos)
-						{
-							priority = "*";
-							//get rid of priority info
-							input = input.substr(0, pos);
-						}
+				log.writeExecuted("LangHandler::splitIndex()");
+				log.writeData("input", input);
+				log.writeData("index", index);
 
-						pos = input.rfind(UPDATE_UNMARK_INDICATOR);
+				splitPriority(&input, &priority);
 
-						if (pos != string::npos)
-						{
-							priority = " ";
-							//get rid of priority info
-							input = input.substr(0, pos);
-						}
+				log.writeExecuted("LangHandler::splitPriority()");
+				log.writeData("input", input);
+				log.writeData("priority", priority);
 
-						eliminateSpaces(&input);
-						log.writeData("Input after eliminated spaces", input);
-						log.writeExecuted("edit command separation/priority separation");
+				splitLocation(&input, &location);
+				regulateLocation(&location);
 
-						input = " " + input;
-						//check whether we have location
-						pos = input.rfind(LOCATION_INDICATOR);
-						//contains location info
-						if (pos != string::npos)
-						{
-							location = input.substr(pos + LOCATION_INDICATOR.length());
-							eliminateSpaces(&location);
-							//get rid of location info
-							input = input.substr(0, pos);
-						}
-						
-						eliminateSpaces(&input);
-						log.writeData("Input after eliminated spaces", input);
-						log.writeExecuted("edit command separation/location separation");
-						
-						pos = input.find(SPACE_BAR);
+				log.writeExecuted("LangHandler::splitLocation()");
+				log.writeData("input", input);
+				log.writeData("location", location);
 
-						if (pos != string::npos)
-						{
-							//extract potential date information and exmaine it
-							date = input.substr(0, pos);
-						} else
-						{
-							date = input;
-						}
-				
-						//only if date field is not empty
-						if (isDate(date))
-						{
-							if (pos != string::npos)
-							{
-								input = input.substr(pos + 1);
-								
-								eliminateSpaces(&input);
-								log.writeData("Input after eliminated spaces", input);
+				splitDate(&input, &date);
+				regulateDate(&date);
 
-								pos = input.find(SPACE_BAR);
-					
-								if (pos != string::npos)
-								{
-									time = input.substr(0, pos);
-								} else
-								{
-									time = input;
-								}
+				log.writeExecuted("LangHandler::splitDate()");
+				log.writeData("input", input);
+				log.writeData("date", date);
 
-								if (isTime(time))
-								{
-									if (pos != string::npos)
-									{
-										input = input.substr(pos + 1);
-									} else
-									{
-										input = NULL_STRING;
-									}
-								} else
-								{
-									time = NULL_STRING;
-								}
-							} else
-							{
-								input = NULL_STRING;
-							}
-						} else
-						{
-							//it might be a time, so we need to exmaine it
-							time = date;
-							date = NULL_STRING;
+				splitTime(&input, &time, &date);
+				regulateTime(&time);
 
-							if (isTime(time))
-							{
-								if (pos != string::npos)
-								{
-									input = input.substr(pos + 1);
-								} else
-								{
-									input = NULL_STRING;
-								}
-							} else
-							{
-								time = NULL_STRING;
-							}
-						}
-				
-						log.writeExecuted("add command separation/date and time separtation");
+				log.writeExecuted("LangHandler::splitTime()");
+				log.writeData("input", input);
+				log.writeData("time", time);
 
-						eliminateSpaces(&input);
-						log.writeData("Input after eliminated spaces", input);
+				splitDescription(&input, &description);
+				regulateDescription(&description);
 
-						description = input;
-						
-						//after have done separating, we need to exmaine each field
-						//to make sure they are logic, if applicable
-						if (!date.empty())
-						{
-							if (!isLogicDate(date))
-							{
-								log.writeException("date error");
-								throw string ("date error\n");
-							} else
-							{
-								regulateDate(&date);
-							}
-						}
-
-						if (!time.empty())
-						{
-							if (!isLogicTime(time))
-							{
-								log.writeException("time error");
-								throw string ("time error\n");
-							} else
-							{
-								regulateTime(&time);
-							}
-						}
-					}
-				}
+				log.writeExecuted("LangHandler::splitDescription()");
+				log.writeData("input", input);
+				log.writeData("description", description);
 			
 				break;
 
