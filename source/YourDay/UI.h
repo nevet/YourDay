@@ -33,7 +33,7 @@
 #define INPUT_START_Y COMMAND_INIT_Y
 #define DIDUKNOW_INIT_X 0
 #define DIDUKNOW_INIT_Y (COMMAND_INIT_Y + COMMAND_BOX_HEIGHT)
-#define OPERATION_RESULT_Y (DIDUKNOW_INIT_Y +1)
+#define OPERATION_RESULT_Y (DIDUKNOW_INIT_Y +2)
 #define OPERATION_RESULT_X 0
 
 #define NUMBER_OF_ENTRY_PARTS 6
@@ -114,6 +114,8 @@ private:
 
 	int highlightGeneralRowIndex;
 	int highlightCalendarRowIndex;
+	string searchKey;
+	vector<string> searchSuggest;
 
 	void setScreenSize();
 	void setBackground();
@@ -174,12 +176,13 @@ private:
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList);
 	void diduknowHintDisplay();
+	void lockResultDisplay();
 
 	void processResultList(vector<string>* resultList, string& info);
 	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
 	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
-	void processSearchInfo(string info, string& keyWord, vector<string>* suggestion);
-	void printSearchInfo(string key, vector<string>* suggestion);
+	void processSearchInfo(string info);
+	void printSearchInfo();
 
 	void handleInitialGeneralIndexOverflow();
 	void handleInitialCalendarIndexOverflow();
