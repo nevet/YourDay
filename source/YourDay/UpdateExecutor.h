@@ -6,6 +6,14 @@
 
 using namespace std;
 //@author A0091734A
+
+
+/**
+* UpdateExecutor is used to update the information of existing entry. 
+* It derives from Executor supper class, 
+*
+*
+*/
 class UpdateExecutor : public Executor
 {
 private:

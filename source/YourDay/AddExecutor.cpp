@@ -196,5 +196,4 @@ void AddExecutor::undo()
 	*_generalEntryList = _undoGeneralEntryList;
 	*_calendarEntryList = _undoCalendarEntryList;
 	
-	//_resultList->pop_back();
 }
