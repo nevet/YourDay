@@ -635,12 +635,20 @@ void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWo
 
 		int p = 0;
 		int q = 1;
+		int r;
 
 		while (p < tot)
 		{
 			while (q < tot && !cmp(best[q - 1], best[q])) q++;
 
-			for (int r = tot - p; p < q; p++)
+			r = tot - p;
+
+			if (best[p].match == 0)
+			{
+				r = 0;
+			}
+
+			for (; p < q; p++)
 			{
 				(*rank)[best[p].index] = r;
 			}
@@ -732,18 +740,19 @@ void SearchExecutor::execute() throw (string)
 
 	for (int i = 0; i < totalEntries; i++)
 	{
+		if (score[i] == 0) continue;
 		tempMatchedList.push_back(integerPair(score[i], i));
 	}
 
-	sort(tempMatchedList.rbegin(), tempMatchedList.rend());
-
-	if (!score[0])
+	if (tempMatchedList.empty())
 	{
 		log.writeException("No Match Found");
 		throw string("No Match Found\n");
 	} else
 	{
-		for (int i = 0; i < totalEntries; i++)
+		sort(tempMatchedList.rbegin(), tempMatchedList.rend());
+
+		for (int i = 0; i < tempMatchedList.size(); i++)
 		{
 			int curRecord = tempMatchedList[i].second;
 		

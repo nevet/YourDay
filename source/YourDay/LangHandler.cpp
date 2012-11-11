@@ -48,16 +48,20 @@ bool LangHandler::isLeap(int year)
 
 bool LangHandler::isDate(string date)
 {
-	int year, month, day;
+	int day, month, year;
+	
+	bool flag = (sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3);
 
-	return sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3;
+	return flag;
 }
 
 bool LangHandler::isTime(string time)
 {
 	int h1, h2, m1, m2;
 
-	return sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4;
+	bool flag = (sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4);
+
+	return flag;
 }
 
 bool LangHandler::isInt(string inx)
