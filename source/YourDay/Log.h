@@ -6,6 +6,7 @@
 # include <time.h>
 # include <stdio.h>
 # include <vector>
+# include <cassert>
 
 # include "Signal.h"
 
@@ -19,7 +20,6 @@ class Log
 private:
 
 	enum OPEN_TYPE {APP_TYPE, OUT_TYPE, IN_TYPE};
-	enum ERROR_TYPE {DEFAULT, OPEN_ERR, OVER_SIZE_ERR};
 	
 	fstream file;
 
@@ -31,10 +31,10 @@ private:
 	int logSize;
 
 	void disassociateFile();
-	bool associateFile(string fileName, OPEN_TYPE mode);
+	void associateFile(string fileName, OPEN_TYPE mode);
 	void deleteLogFile();
 	
-	ERROR_TYPE checkLogSize();
+	bool checkLogSize();
 	
 public:	
 	void updateLogFile();

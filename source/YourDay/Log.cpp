@@ -11,15 +11,12 @@ void Log::disassociateFile()
 	if (file.is_open()) file.close();
 }
 
-bool Log::associateFile(string fileName, OPEN_TYPE mode)
+void Log::associateFile(string fileName, OPEN_TYPE mode)
 {
-	bool openFail;
-	
 	switch (mode)
 	{
 		case IN_TYPE:
 			file.open(fileName.c_str(), fstream::in);
-			openFail = file.is_open();
 
 			break;
 	
@@ -32,11 +29,10 @@ bool Log::associateFile(string fileName, OPEN_TYPE mode)
 			file.open(fileName.c_str(), fstream::out);
 			
 			break;
+
 		default:
 			break;
 	}
-
-	return openFail;
 }
 
 void Log::deleteLogFile()
@@ -44,56 +40,38 @@ void Log::deleteLogFile()
 	remove(fullLogPath.c_str());
 }
 
-Log::ERROR_TYPE Log::checkLogSize()
+bool Log::checkLogSize()
 {
-	bool openFail;
+	bool overSize;
 
-	ERROR_TYPE err = DEFAULT;
-	
-	openFail = associateFile(fullLogPath.c_str(), IN_TYPE);
+	associateFile(fullLogPath.c_str(), IN_TYPE);
+	assert(file.is_open());
 
-	if (!openFail)
+	file.seekg(0, fstream::end);
+	logSize = file.tellg();
+
+	if (logSize > sizeThreshold)
 	{
-		file.seekg(0, fstream::end);
-		logSize = file.tellg();
-
-		if (logSize > sizeThreshold)
-		{
-			err = OVER_SIZE_ERR;
-		}
-
-		disassociateFile();
+		overSize = true;
 	} else
 	{
-		err = OPEN_ERR;
+		overSize = false;
 	}
 
-	return err;
+	disassociateFile();
+
+	return overSize;
 }
 
 void Log::updateLogFile()
 {
-	ERROR_TYPE err = checkLogSize();
+	bool overSize = checkLogSize();
 	
-	switch (checkLogSize())
+	if (overSize)
 	{
-		case OVER_SIZE_ERR:
-			deleteLogFile();
-			associateFile(fullLogPath, APP_TYPE);
+		deleteLogFile();
 
-			writeTime();
-
-			break;
-
-		case OPEN_ERR:
-			associateFile(fullLogPath, APP_TYPE);
-
-			writeTime();
-
-			break;
-
-		default:
-			break;
+		writeTime();
 	}
 }
 
@@ -104,8 +82,14 @@ void Log::writeTime()
 	
 	associateFile(fullLogPath, APP_TYPE);
 	
+	file << endl;
+
 	file << timeinfo->tm_year + 1900 << "/" << timeinfo->tm_mon + 1 << "/" << timeinfo->tm_mday << " ";
 	file << timeinfo->tm_hour << ":" <<timeinfo->tm_min << endl;
+
+	file << endl;
+
+	disassociateFile();
 }
 
 void Log::writeCreated(string objName)

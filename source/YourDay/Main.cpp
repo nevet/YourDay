@@ -62,7 +62,7 @@ int main(int arg, char** test)
 	//create a logger
 	Log log;
 	
-	log.updateLogFile();
+	log.writeTime();
 
 	Signal signal = CLEAR;
 	
