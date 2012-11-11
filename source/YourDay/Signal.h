@@ -21,7 +21,7 @@ enum Signal
 //for interpreting commands that is sent drom language handler
 	ADD_COMMAND		= 0x00000001,
 	DELETE_COMMAND	= 0x00000002,
-	EDIT_COMMAND	= 0x00000003,
+	UPDATE_COMMAND	= 0x00000003,
 	SEARCH_COMMAND	= 0x00000004,
 	UNDO_COMMAND	= 0x00000005,
 	EXIT_COMMAND    = 0x00000006,

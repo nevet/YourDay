@@ -371,7 +371,7 @@ void LangHandler::encoder(string input, Signal command)
 				break;
 
 			//format will be "index [date] [time] description [at location] [priority [high, mid, low]]"
-			case EDIT_COMMAND:
+			case UPDATE_COMMAND:
 				log.writeConditionEntered("edit command separation", true);
 				
 				pos = input.find(SPACE_BAR);
@@ -564,7 +564,7 @@ void LangHandler::setCommand(string userCommand)
 	else
 	if ( userCommand == "update" )
 	{
-		command = EDIT_COMMAND;
+		command = UPDATE_COMMAND;
 	}
 	else
 	if ( userCommand == "search" )
@@ -666,7 +666,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			
 			break;
 
-		case EDIT_COMMAND:
+		case UPDATE_COMMAND:
 			exe = new UpdateExecutor(generalEntryList, calendarEntryList, resultList, details, focusingField);
 			log.writeCreated("UpdateExecutor");
 			
