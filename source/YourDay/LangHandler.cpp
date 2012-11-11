@@ -3,8 +3,7 @@
     LangHandler.cpp
     Purpose: Encodes user's input and decodes stored entry
 
-    @author A0088455R
-    @version 0.1 10/13/2012
+    @author A0091847U
 */
 #include "LangHandler.h"
 
@@ -265,7 +264,7 @@ void LangHandler::splitLocation(string* str, string* location) throw (string)
 	*str = input;
 }
 
-void LangHandler::splitIndex(string* str, string* index) throw (string)
+void LangHandler::splitIndex(string* str, string* index, bool multiple) throw (string)
 {
 	string input = *str;
 	string potentialIndex;
@@ -273,27 +272,56 @@ void LangHandler::splitIndex(string* str, string* index) throw (string)
 	//extract the first term of the input and exam whether it is an integer
 	int pos = input.find(SPACE_BAR);
 	
-	//if multiple entries detected, an exception should be thown since we do
-	//not support multiple delete entries
-	if (pos == string::npos)
+	if (multiple)
 	{
-		potentialIndex = getPrefix(input, input.length());
+		//in this mode, we are handling update command, therefore if only index
+		//is specified, description missing exception should be thorwn
+		if (pos != string::npos)
+		{
+			potentialIndex = getPrefix(input, input.length());
 					
-		if (isInt(potentialIndex))
-		{
-			*index = potentialIndex;
-		} else
-		{
-			*index = NULL_STRING;
+			if (isInt(potentialIndex))
+			{
+				*index = potentialIndex;
+				input = getSuffix(input, pos);
+			} else
+			{
+				*index = NULL_STRING;
 						
-			log.writeException("Index error");
-			throw string ("Index error\n");
+				log.writeException("Index error");
+				throw string ("Index error\n");
+			}
 		}
-	}
-	else
+		else
+		{
+			log.writeException("New Description Missing!");
+			throw string("New Description Missing!\n");
+		}
+	} else
 	{
-		log.writeException("Input error");
-		throw string("Input error\n");
+		//in this mode, we are handling delete command, therefore if multiple
+		//entries detected, an exception should be thown since we do not
+		//support multiple delete entries
+		if (pos == string::npos)
+		{
+			potentialIndex = getPrefix(input, input.length());
+					
+			if (isInt(potentialIndex))
+			{
+				*index = potentialIndex;
+			} else
+			{
+				*index = NULL_STRING;
+						
+				log.writeException("Index error");
+				throw string ("Index error\n");
+			}
+		}
+		else
+		{
+			log.writeException("No Multiple Entry is Allowed!");
+			throw string("No Multiple Entry is Allowed!\n");
+		}
 	}
 
 	*str = input;
@@ -515,7 +543,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case DELETE_COMMAND:
 				log.writeConditionEntered("delete command separation", true);
 				
-				splitIndex(&input, &index);
+				splitIndex(&input, &index, false);
 
 				log.writeExecuted("LangHandler::splitDescription()");
 				log.writeData("input", input);
