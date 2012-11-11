@@ -367,7 +367,7 @@ SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
 
 bool SearchExecutor::unrelavent(matchInfo info, string key)
 {
-	return info.match <= key.length() / 3 || info.match <= info.str.length() / 3 || info.continuity > info.str.length() / 2;
+	return info.match <= key.length() / 2 || info.match <= info.str.length() / 2 || info.continuity > info.str.length() / 2;
 }
 
 void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
