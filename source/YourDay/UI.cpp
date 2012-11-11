@@ -161,42 +161,50 @@ void UI::highlightTitle()
 
 void UI::changeDisplayMode()
 {	
+	int curInitIndex;
+
 	switch (focusedField)
 	{
 	case GENERAL:
 		if (generalDisplayMode == FULL_MODE)
 		{
 			generalDisplayMode = PART_MODE;
-			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayPart, indexCurGeneralInitArray);
+			curInitIndex = generalInitArrayFull[indexCurGeneralInitArray];
+			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayPart, curInitIndex);
 		}
 		else
 		{
 			generalDisplayMode = FULL_MODE;
-			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, indexCurGeneralInitArray);
+			curInitIndex = generalInitArrayPart[indexCurGeneralInitArray];
+			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, curInitIndex);
 		}
 		break;
 	case CALENDAR:
 		if (calendarDisplayMode == FULL_MODE)
 		{
 			calendarDisplayMode = PART_MODE;
-			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayPart, indexCurCalendarInitArray);
+			curInitIndex = calendarInitArrayFull[indexCurCalendarInitArray];
+			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayPart, curInitIndex);
 		}
 		else
 		{
 			calendarDisplayMode = FULL_MODE;
-			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, indexCurCalendarInitArray);
+			curInitIndex = calendarInitArrayPart[indexCurCalendarInitArray];
+			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, curInitIndex);
 		}
 		break;
 	case SEARCH_RESULT:
 		if (resultDisplayMode == FULL_MODE)
 		{
 			resultDisplayMode = PART_MODE;
-			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayPart, indexCurResultInitArray);
+			curInitIndex = resultInitArrayFull[indexCurResultInitArray];
+			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayPart, curInitIndex);
 		}
 		else
 		{
 			resultDisplayMode = FULL_MODE;
-			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayFull, indexCurResultInitArray);
+			curInitIndex = resultInitArrayPart[indexCurResultInitArray];
+			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayFull, curInitIndex);
 		}
 		break;
 	}
@@ -462,9 +470,9 @@ void UI::initializeInitArrayIndices()
 
 void UI::initializeDisplayModes()
 {
-	generalDisplayMode = PART_MODE;
-	calendarDisplayMode = PART_MODE;
-	resultDisplayMode = PART_MODE;
+	generalDisplayMode = FULL_MODE;
+	calendarDisplayMode = FULL_MODE;
+	resultDisplayMode = FULL_MODE;
 	focusedField = GENERAL;	
 }
 
@@ -762,21 +770,71 @@ void UI::extractParts(string entry, string* partList)
 
 int UI::countPartLine(string part, int maxLength)
 {
-	int initIndex = 0;
-	int ans = 0;
+	string buffer = "";
+	string word = "";
+	istringstream ostring(part);
+	int blength;
+	int wlength;
+	int availLength;
+	int count = 0;
 
-	for (int i = 0; i < part.length() / maxLength; i++) 
+	while (ostring >> word)
 	{
-		ans++;
-		initIndex += maxLength;
+		blength = buffer.length();
+		wlength = word.length();
+
+		if (wlength > maxLength)
+		{
+			if (buffer != "")
+			{
+				availLength = maxLength - blength -1;
+				count ++;
+				buffer = "";
+				word = word.substr(availLength, wlength - availLength);
+				wlength = word.length();
+			}
+
+			while (wlength >= maxLength)
+			{
+				word = word.substr(maxLength, wlength - maxLength);
+				wlength = word.length();
+				count++;
+			}
+
+			buffer += word + " ";
+		}
+		else
+		{
+			if (blength + wlength < maxLength)
+			{
+				buffer += word + " ";
+			}
+			else if (blength + wlength == maxLength)
+			{
+				buffer += word;
+			}
+			else
+			{
+				buffer = "";
+				count ++;
+
+				if (blength + wlength < maxLength)
+				{
+					buffer += word + " ";
+				}
+				else if (blength + wlength == maxLength)
+				{
+					buffer += word;
+				}
+			}
+		}
+	}
+	if (buffer != "")
+	{
+		count ++;
 	}
 
-	if (part.length() % maxLength != 0)
-	{
-		ans ++;
-	}
-
-	return ans;
+	return count;  	
 }
 
 void UI::setGeneralInitArrayPart(vector<string>* generalEntryList)
@@ -957,25 +1015,81 @@ void UI::setResultInitArrayFull(vector<string>* resultList)
 
 void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition)
 {
-	int initIndex = 0;
-	int curLine = initY;
+	string buffer = "";
+	string word = "";
+	istringstream ostring(part);
+	int blength;
+	int wlength;
+	int availLength;
+	int curRow = initY;
 
-	for (int i = 0; i < part.length() / maxLength; i++) 
+	while (ostring >> word)
 	{
-		gotoxy(initX, curLine);
-		cout<< part.substr(initIndex, maxLength);
-		curLine ++;
-		initIndex += maxLength;
+		blength = buffer.length();
+		wlength = word.length();
+		
+		if (wlength > maxLength)
+		{
+			if (buffer != "")
+			{
+				availLength = maxLength - blength -1;
+				gotoxy(initX, curRow);
+				cout << word.substr(0,availLength);
+				curRow ++;
+				buffer = "";
+				word = word.substr(availLength, wlength - availLength);
+				wlength = word.length();
+			}
+
+			while (wlength >= maxLength)
+			{
+				gotoxy(initX, curRow);
+				cout << word.substr(0,maxLength);
+				word = word.substr(maxLength, wlength - maxLength);
+				wlength = word.length();
+				curRow++;
+			}
+
+			buffer += word + " ";
+		}
+		else
+		{
+			if (blength + wlength < maxLength)
+			{
+				buffer += word + " ";
+			}
+			else if (blength + wlength == maxLength)
+			{
+				buffer += word;
+			}
+			else
+			{
+				gotoxy(initX, curRow);
+				cout << buffer;
+				buffer = "";
+				blength = buffer.length();
+				curRow ++;
+
+				if (blength + wlength < maxLength)
+				{
+					buffer += word + " ";
+				}
+				else if (blength + wlength == maxLength)
+				{
+					buffer += word;
+				}
+			}
+		}
 	}
 
-	if (part.length() % maxLength != 0)
+	if (buffer != "")
 	{
-		gotoxy(initX, curLine);
-		cout<< part.substr(initIndex, part.length() % maxLength);
-		curLine ++;
+		gotoxy(initX, curRow);
+		cout << buffer;
+		curRow ++;
 	}
 
-	endPosition = curLine -1;
+	endPosition = curRow -1;
 }
 
 void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
