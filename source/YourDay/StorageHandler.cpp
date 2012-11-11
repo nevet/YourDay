@@ -20,10 +20,10 @@ StorageHandler::StorageHandler()
 	_mkdir("YourdayBin");
 
 	if(!checkFileExistence(FILEPATH, DataBaseGeneralFile))
-		ofstream writeFile(DataBaseGeneralFile);
+		ofstream writeFile(FILEPATH + DataBaseGeneralFile);
 
 	if(!checkFileExistence(FILEPATH, DataBaseCalendarFile))
-		ofstream writeFile(DataBaseCalendarFile);
+		ofstream writeFile(FILEPATH + DataBaseCalendarFile);
 }
 
 StorageHandler::~StorageHandler()
