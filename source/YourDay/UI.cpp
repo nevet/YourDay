@@ -4,6 +4,9 @@
 #include "UI.h"
 
 //@author A0088455R
+/*
+* These are predefined values for did you know hints.
+*/
 const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
 const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
 const string UI::DID_U_KNOW_EXIT = "To exit, press Enter";
@@ -12,6 +15,11 @@ const string UI::DID_U_KNOW_UPDATE = "To update an entry, type \"update\" follow
 const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
 const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
 
+/**
+* This function sets the screen/window size for the program
+* This function utilizes the Windows.h and conio.h library.
+* adapted from http://v2.cplusplus.com/forum/general/64928/
+**/
 void UI::setScreenSize()
 {
 	_COORD coord; 
@@ -35,7 +43,19 @@ void UI::setScreenSize()
 	assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
 
+/**
+* This method sets the background color of the console
+**/
+void UI::setBackground()
+{
+	SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+}
+
 //@author A0088455R
+/*
+* This method draws the Banner through hConsole colorings and arttributes
+*/
 void UI::drawBanner()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -69,11 +89,7 @@ void UI::gotoCommandBox()
 	gotoxy(8,COMMAND_INIT_Y);
 }
 
-void UI::setBackground()
-{
-	SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
-}
+
 
 void UI::clearBox(int startH, int height)
 {
@@ -92,6 +108,11 @@ void UI::clearBox(int startH, int height)
 		gotoxy(0,startH-1);
 }
 
+//@author A0088455R
+/*
+* This method allows the cursor to move by utilizing the Windows.h and conio.h
+* method libraries
+*/
 void UI :: gotoxy(int x, int y) //goes to x,y console
 {
 	COORD coord;
@@ -412,6 +433,9 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 }
 
 //@author A0088455R
+/*
+* sets the DidUKnow hints box status corresponding to user's input
+*/
 void UI::setDidUKnowStatus()
 {
 
@@ -454,7 +478,9 @@ void UI::setDidUKnowStatus()
 		diduknowStatus = DIDUKNOW_INIT;
 	}
 }
-
+/*
+* Initialized DidUKnow Hints box status when starting up the program for the first time
+*/
 void UI::initializeDidUKnowStatus()
 {
 	diduknowPrevStatus = DIDUKNOW_CLEAR;
@@ -1240,6 +1266,10 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 }
 
 //@author A0088455R
+/*
+* This method prints the DidUKnow hints box
+* The printing process will only be called if there is a change of DidUKnowStatus
+*/
 void UI::printDiduknowHints()
 {
 	clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
@@ -1452,6 +1482,11 @@ void UI::resultListDisplay(vector<string>* resultList)
 }
 
 //@author A0088455R
+/**
+* This Method Triggers the didUKnowHints display functionalities
+* This Method should be triggered everytim user gives an input
+**/
+
 void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
@@ -1626,6 +1661,9 @@ void UI::printSearchInfo()
 }
 
 //@author A0088455R
+/**
+* This method prints the starting screen display
+**/
 void UI::startingScreenDisplay()
 {
 	system("CLS");

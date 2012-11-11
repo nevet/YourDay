@@ -555,6 +555,9 @@ void LangHandler::encoder(string input, Signal command)
 }
 
 //@author A0088455R
+/**
+* Sets the command signal by checking user's command
+**/
 void LangHandler::setCommand(string userCommand)
 {	
 	//if user command is valid, set corresponding command type
@@ -614,6 +617,10 @@ Signal LangHandler::getStatus()
 }
 
 //@author A0088455R
+/**
+* This method seperates user's input to command and raw string entry
+* The encoder is envoked here to process the input
+**/
 void LangHandler::separate(string userInput) throw (string)
 {
 	log.writeEntered("LangHandler::separate()");

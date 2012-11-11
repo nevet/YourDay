@@ -122,7 +122,18 @@ private:
 	string searchKey;
 	vector<string> searchSuggest;
 
+	//@author A0088455R
+	/**
+	* Sets the window size of the program
+	* @param void
+	* @return void
+	**/
 	void setScreenSize();
+
+	//@author A0088455R
+	/**
+	* Sets the background color of a text 
+	**/
 	void setBackground();
 	
 	//@author A0088455R
@@ -134,6 +145,19 @@ private:
 	void gotoCommandBox();
 	void drawCommandBox();
 	void clearBox(int startH, int height);
+
+	//@author A0088455R
+	/**
+	* This method allows the cursor to move to the designated position
+	* @param x
+	*		is the x coordinate destination
+	* @param y
+	*		is the y coordinate destionation
+	* @return void
+	*
+	* after this operation, the cursor will move to x,y coordinate in
+	* the screen
+	*/
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);

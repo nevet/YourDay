@@ -63,7 +63,7 @@ private:
 	* after the operation, the return will be CS2103 and the manipulated string
 	* will be "meeting at UTown"
 	*/
-	string splitFirstTerm(string* manipulatedString);
+	string splitFirstTerm(string* rawString);
 	
 	const static int MONTH[12];
 	
@@ -208,8 +208,25 @@ private:
 	static bool cmp(matchInfo a, matchInfo b);
 	matchInfo compare(matchInfo a, matchInfo b);
 	void updateSuggestWords(string* suggestWords, string updWord);
-
+	
 	//@author A0088455R
+	/**
+	* Checks an Entry at index "index" for its matching level with the keyword and
+	* sets the rank
+	* @param index
+	*			is the index of the entry inside the list
+	* @param keyword
+	*			is the date keyword from the user's input
+	* @param rank
+	*			is the vector that keeps the rank of each entry of each keyword
+	* @param highest rank
+	*			is the currently highest rank inside the vector
+	* @return void
+	*
+	* The rank will set according to its predefined matching level
+	**/
+	void checkEntryDate(int index, vector<int>* rank, string keyword, int &highestRank);
+	
 	/*
 	* Searches the list for a matching date input
 	* @param keyword
@@ -221,6 +238,25 @@ private:
 	* This function will only be called if the input keyword is a date
 	*/
 	void searchDate(string keyword, vector<int>* rank);
+
+	/**
+	* Checks an Entry at index "index" for its matching level with the time keyword and
+	* sets the rank accordingly
+	* this method includes the searches between time ranges
+	* @param index
+	*			is the index of the entry inside the list
+	* @param keyword
+	*			is the date keyword from the user's input
+	* @param rank
+	*			is the vector that keeps the rank of each entry of each keyword
+	* @param highest rank
+	*			is the currently highest rank inside the vector
+	* @return void
+	*
+	* The rank will set according to its predefined matching level
+	**/
+	void checkEntryTime(int index, vector<int>* rank, string keyword , int &highestRank);
+
 	/*
 	* Searches the list for a matching time input
 	* @param keyword
