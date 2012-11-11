@@ -7,11 +7,16 @@
 /*
 * These are predefined values for did you know hints.
 */
-const string UI::DID_U_KNOW_ADD = "To add an entry, type \"add\" followed by the desctription.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
-const string UI::DID_U_KNOW_DELETE = "To delete an entry, type \"delete\" followed by the index.\n i.e.: delete 5\nThe index is the index of selected active field";
+const string UI::DID_U_KNOW_ADD_LINE1 = "To add an entry, type \"add\" followed by the desctription.\n";
+const string UI::DID_U_KNOW_ADD_LINE2 = "Format: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION]\n";
+const string UI::DID_U_KNOW_ADD_LINE3 = "If you want to mark as important, add \"!!!\" at the end of your input";
+const string UI::DID_U_KNOW_DELETE_LINE1 = "To delete an entry, type \"delete\" followed by the index.\n";
+const string UI::DID_U_KNOW_DELETE_LINE2 = "i.e.: delete 5\n";
+const string UI::DID_U_KNOW_DELETE_LINE3 = "The index is the index of selected active field";
 const string UI::DID_U_KNOW_EXIT = "To exit, press Enter";
 const string UI::DID_U_KNOW_SEARCH = "To search an entry, type \"search\" followed by the keyword(s). i.e.: search cs2103";
-const string UI::DID_U_KNOW_UPDATE = "To update an entry, type \"update\" followed by the description.\nFormat: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] priority [high/mid/low]";
+const string UI::DID_U_KNOW_UPDATE_LINE1 = "To update an entry, type \"update\" followed by the index and description.\n";
+const string UI::DID_U_KNOW_UPDATE_LINE2 = "Format: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] [mark/unmarked]";
 const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
 const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
 
@@ -1283,12 +1288,16 @@ void UI::printDiduknowHints()
 		}
 	case ADD_COMMAND:
 		{
-			cout<<DID_U_KNOW_ADD;
+			cout<<DID_U_KNOW_ADD_LINE1;
+			cout<<DID_U_KNOW_ADD_LINE2;
+			cout<<DID_U_KNOW_ADD_LINE3;
 			break;
 		}
 	case DELETE_COMMAND:
 		{
-			cout<<DID_U_KNOW_DELETE;
+			cout<<DID_U_KNOW_DELETE_LINE1;
+			cout<<DID_U_KNOW_DELETE_LINE2;
+			cout<<DID_U_KNOW_DELETE_LINE3;
 			break;
 		}
 	case EXIT_COMMAND:
@@ -1308,7 +1317,8 @@ void UI::printDiduknowHints()
 		}
 	case UPDATE_COMMAND:
 		{
-			cout<<DID_U_KNOW_UPDATE;
+			cout<<DID_U_KNOW_UPDATE_LINE1;
+			cout<<DID_U_KNOW_UPDATE_LINE2;
 			break;
 		}
 	default:
