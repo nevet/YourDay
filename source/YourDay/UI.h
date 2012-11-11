@@ -1,3 +1,4 @@
+
 #ifndef UI_H
 #define UI_H
 
@@ -16,7 +17,7 @@
 #define GENERAL_BOX_HEIGHT 12
 #define CALENDAR_TITLE_HEIGHT 3
 #define CALENDAR_BOX_HEIGHT (WINDOWS_HEIGHT-GENERAL_TITLE_HEIGHT-GENERAL_BOX_HEIGHT-CALENDAR_TITLE_HEIGHT-COMMAND_BOX_HEIGHT-BOTTOM_BOX_HEIGHT -1) 
-							// -1 because don't use the line before command box
+// -1 because don't use the line before command box
 #define COMMAND_BOX_HEIGHT 2
 #define BOTTOM_BOX_HEIGHT 7 
 #define DIDUKNOW_HEIGHT 4
@@ -136,14 +137,14 @@ private:
 	void setResultInitArrayPart(vector<string>* resultList);
 	void setResultInitArrayFull(vector<string>* resultList);
 	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	
+
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
 	int getCalendarInitIndex();
 	int getNextCalendarInitIndex(bool& isValid);
 	int getResultInitIndex();
 	int getNextResultInitIndex(bool& isValid);
-	int findNearestInitArrayIndex(int entryIndex);
+	int findNearestInitArrayIndex(vector<int>* initialIndexArray, int entryIndex);
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);

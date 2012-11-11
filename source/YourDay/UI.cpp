@@ -14,25 +14,25 @@ const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"s
 
 void UI::setScreenSize()
 {
-    _COORD coord; 
-    coord.X = WINDOWS_WIDTH; 
-    coord.Y = WINDOWS_HEIGHT; 
+	_COORD coord; 
+	coord.X = WINDOWS_WIDTH; 
+	coord.Y = WINDOWS_HEIGHT; 
 
-    _SMALL_RECT Rect; 
-    Rect.Top = 0; 
-    Rect.Left = 0; 
-    Rect.Bottom = WINDOWS_HEIGHT - 1; 
-    Rect.Right = WINDOWS_WIDTH - 1; 
+	_SMALL_RECT Rect; 
+	Rect.Top = 0; 
+	Rect.Left = 0; 
+	Rect.Bottom = WINDOWS_HEIGHT - 1; 
+	Rect.Right = WINDOWS_WIDTH - 1; 
 
-    // Get handle of the standard output 
-    HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE); 
-    assert (Handle, NULL);
-     
-    // Set screen buffer size to that specified in coord 
-    assert(SetConsoleScreenBufferSize(Handle, coord), false);
- 
-    // Set the window size to that specified in Rect 
-    assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
+	// Get handle of the standard output 
+	HANDLE Handle = GetStdHandle(STD_OUTPUT_HANDLE); 
+	assert (Handle, NULL);
+
+	// Set screen buffer size to that specified in coord 
+	assert(SetConsoleScreenBufferSize(Handle, coord), false);
+
+	// Set the window size to that specified in Rect 
+	assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
 
 //@author A0088455R
@@ -71,8 +71,8 @@ void UI::gotoCommandBox()
 
 void UI::setBackground()
 {
-	 SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+	SetConsoleTextAttribute(hConsole,  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 }
 
 void UI::clearBox(int startH, int height)
@@ -88,8 +88,8 @@ void UI::clearBox(int startH, int height)
 		{
 			cout<<"                                                                                                                        ";
 		}
-	
-	gotoxy(0,startH-1);
+
+		gotoxy(0,startH-1);
 }
 
 void UI :: gotoxy(int x, int y) //goes to x,y console
@@ -104,7 +104,7 @@ void UI::writeTitle(string words, int startX, int startY)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),128);
 	gotoxy(startX,startY);
-	
+
 	cout<<words<<endl;
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 	setBackground();
@@ -165,30 +165,36 @@ void UI::changeDisplayMode()
 		if (generalDisplayMode == FULL_MODE)
 		{
 			generalDisplayMode = PART_MODE;
+			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayPart, indexCurGeneralInitArray);
 		}
 		else
 		{
 			generalDisplayMode = FULL_MODE;
+			indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, indexCurGeneralInitArray);
 		}
 		break;
 	case CALENDAR:
 		if (calendarDisplayMode == FULL_MODE)
 		{
 			calendarDisplayMode = PART_MODE;
+			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayPart, indexCurCalendarInitArray);
 		}
 		else
 		{
 			calendarDisplayMode = FULL_MODE;
+			indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, indexCurCalendarInitArray);
 		}
 		break;
 	case SEARCH_RESULT:
 		if (resultDisplayMode == FULL_MODE)
 		{
 			resultDisplayMode = PART_MODE;
+			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayPart, indexCurResultInitArray);
 		}
 		else
 		{
 			resultDisplayMode = FULL_MODE;
+			indexCurResultInitArray = findNearestInitArrayIndex(&resultInitArrayFull, indexCurResultInitArray);
 		}
 		break;
 	}
@@ -375,7 +381,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				{
 					--currentChar;
 				}
-				
+
 				diduknowHintDisplay();
 			}
 			break;
@@ -428,11 +434,11 @@ void UI::setDidUKnowStatus()
 		diduknowStatus = DIDUKNOW_INIT;
 	}
 	else if ((diduknowStatus == ADD_COMMAND && input.find("add")) ||
-			(diduknowStatus == DELETE_COMMAND &&  input.find("delete")) ||
-			(diduknowStatus == EXIT_COMMAND && input.find("exit")) ||
-			(diduknowStatus == SEARCH_COMMAND && input.find("search")) ||
-			(diduknowStatus == UNDO_COMMAND && input.find("undo")) ||
-			(diduknowStatus == EDIT_COMMAND && input.find("update")))
+		(diduknowStatus == DELETE_COMMAND &&  input.find("delete")) ||
+		(diduknowStatus == EXIT_COMMAND && input.find("exit")) ||
+		(diduknowStatus == SEARCH_COMMAND && input.find("search")) ||
+		(diduknowStatus == UNDO_COMMAND && input.find("undo")) ||
+		(diduknowStatus == EDIT_COMMAND && input.find("update")))
 	{
 		diduknowStatus = DIDUKNOW_INIT;
 	}
@@ -624,17 +630,32 @@ int UI::getNextResultInitIndex(bool& isValid)
 	return ans;
 }
 
-//int UI::findNearestInitArrayIndex(int rowIndex)
-//{
-//	int ans;
-//	switch (focusedField)
-//	{
-//		case CALENDAR:
-//	for (int i = 0; i < )
-//	}
-//
-//	return ans;
-//}
+int UI::findNearestInitArrayIndex(vector<int>* initialIndexArray, int rowIndex)
+{
+	assert(initialIndexArray != NULL);
+	assert(initialIndexArray->size() != 0);
+
+	int ans;
+	int i = 0;
+	int size = initialIndexArray ->size();
+	int lastItem = initialIndexArray->at(size -1);
+
+	while (i < size -1 && initialIndexArray -> at (i+1) < rowIndex)
+	{
+		i++;
+	}
+
+	if (lastItem < rowIndex)
+	{
+		ans = size -1;
+	}
+	else
+	{
+		ans = i;
+	}
+
+	return ans;
+}
 
 void UI::extractParts(string entry, string* partList)
 {
@@ -711,7 +732,7 @@ void UI::setGeneralInitArrayFull(vector<string>* generalEntryList)
 		extractParts(row, partArray);
 		description = partArray[1];
 		location = partArray [2];
-		
+
 		descriptionLength = countPartLine(description, descriptionMaxLength);
 		locationLength = countPartLine(location, locationMaxLength);
 		lineOccupied = max(descriptionLength, locationLength);
@@ -999,43 +1020,43 @@ void UI::printDiduknowHints()
 	gotoxy(DIDUKNOW_INIT_X, DIDUKNOW_INIT_Y);
 	switch (diduknowStatus)
 	{
-		case DIDUKNOW_INIT:
-			{				
-				cout<<DID_U_KNOW_HINTS;
-				break;
-			}
-		case ADD_COMMAND:
-			{
-				cout<<DID_U_KNOW_ADD;
-				break;
-			}
-		case DELETE_COMMAND:
-			{
-				cout<<DID_U_KNOW_DELETE;
-				break;
-			}
-		case EXIT_COMMAND:
-			{
-				cout<<DID_U_KNOW_EXIT;
-				break;
-			}
-		case SEARCH_COMMAND:
-			{
-				cout<<DID_U_KNOW_SEARCH;
-				break;
-			}
-		case UNDO_COMMAND:
-			{
-				cout<<DID_U_KNOW_UNDO;
-				break;
-			}
-		case EDIT_COMMAND:
-			{
-				cout<<DID_U_KNOW_UPDATE;
-				break;
-			}
-		default:
+	case DIDUKNOW_INIT:
+		{				
+			cout<<DID_U_KNOW_HINTS;
 			break;
+		}
+	case ADD_COMMAND:
+		{
+			cout<<DID_U_KNOW_ADD;
+			break;
+		}
+	case DELETE_COMMAND:
+		{
+			cout<<DID_U_KNOW_DELETE;
+			break;
+		}
+	case EXIT_COMMAND:
+		{
+			cout<<DID_U_KNOW_EXIT;
+			break;
+		}
+	case SEARCH_COMMAND:
+		{
+			cout<<DID_U_KNOW_SEARCH;
+			break;
+		}
+	case UNDO_COMMAND:
+		{
+			cout<<DID_U_KNOW_UNDO;
+			break;
+		}
+	case EDIT_COMMAND:
+		{
+			cout<<DID_U_KNOW_UPDATE;
+			break;
+		}
+	default:
+		break;
 	}
 	diduknowPrevStatus=diduknowStatus;
 	cout<<endl;
@@ -1193,7 +1214,7 @@ void UI::resultListDisplay(vector<string>* resultList)
 		}
 
 		gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
-	
+
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
 		{
 			row = resultList ->at(entryIndex);
@@ -1211,7 +1232,7 @@ void UI::diduknowHintDisplay()
 {	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
 	setDidUKnowStatus();
-	
+
 	if (diduknowStatus != diduknowPrevStatus)
 	{
 		printDiduknowHints();
@@ -1223,7 +1244,7 @@ void UI::diduknowHintDisplay()
 void UI::startingScreenDisplay()
 {
 	system("CLS");
-	
+
 	setScreenSize();
 
 	drawBanner();
