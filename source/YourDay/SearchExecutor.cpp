@@ -7,8 +7,8 @@ const int SearchExecutor::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 3
 
 const int SearchExecutor::PERFECT_MATCH = 0;
 const int SearchExecutor::HIGH_MATCH = 1;
-const int SearchExecutor::NORMAL_MATCH = 2;
-const int SearchExecutor::MEDIOCORE_MATCH = 3;
+const int SearchExecutor::MEDIOCORE_MATCH = 2;
+const int SearchExecutor::LOW_MATCH = 3;
 const int SearchExecutor::NO_MATCH = 4;
 
 string SearchExecutor::splitFirstTerm(string* mString)

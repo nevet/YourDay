@@ -55,8 +55,8 @@ private:
 	
 	const static int PERFECT_MATCH;
 	const static int HIGH_MATCH;
-	const static int NORMAL_MATCH;
 	const static int MEDIOCORE_MATCH;
+	const static int LOW_MATCH;
 	const static int NO_MATCH;
 
 	bool isDate(string date);
