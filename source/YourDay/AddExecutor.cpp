@@ -74,6 +74,7 @@ void AddExecutor::addToPosition(vector<string>* _entryList, int index, string in
 	{
 		string dummyString = "";
 		_entryList -> push_back(dummyString);
+		listSize = _entryList->size();
 		for (i = (listSize - 1); i > index; i--)
 		{
 			(*_entryList)[i] = (*_entryList)[i-1];
@@ -186,7 +187,7 @@ void AddExecutor::execute() throw (string)
 	{
 		int index = searchIndex(_calendarEntryList, _details);
 		addToPosition(_calendarEntryList, index, _details);
-		addToPosition(_resultList,index,_details);
+		addToPosition(_resultList, index, _details);
 	}
 }
 
