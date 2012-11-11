@@ -53,7 +53,7 @@ protected:
 	* the method will try to find the second '#' occurance and returns
 	* the index where the '#' found 
 	*/
-	static int findBlockIndex(string details, int blockLocation);
+	int findBlockIndex(string details, int blockLocation);
 
 	/**
 	* Decodes the encoded string and retreives the index
@@ -75,7 +75,7 @@ protected:
 	* the method will try to find the next '#' occurance and returns
 	* string between the '#'s
 	*/
-    static string extractField(string details, int startLocation);
+    string extractField(string details, int startLocation);
 
 	/**
 	* Decodes the encoded string and retreives the index
@@ -95,7 +95,7 @@ protected:
 	* if index field is specified, the return will be the index number otherwise
 	* 0 will be returned.
 	*/
-	static int extractIndex(string details);
+	int extractIndex(string details);
 
 	/**
 	* Decodes the encoded string and retreives the description field
@@ -115,7 +115,7 @@ protected:
 	* if description field is specified, the return will be the description
 	* otherwise empty string.
 	*/
-	static string extractDescription(string details);
+	string extractDescription(string details);
 
 	/**
 	* Decodes the encoded string and retreives the location field
@@ -136,7 +136,7 @@ protected:
 	* if location field is specified, the return will be the location
 	* otherwise it returns an empty string.
 	*/
-	static string extractLocation(string details);
+	string extractLocation(string details);
 
 	/**
 	* Decodes the encoded string and retreives the time field
@@ -156,13 +156,14 @@ protected:
 	* if time field is specified, the return will be the time field
 	* otherwise it will return an empty string.
 	*/
-	static string extractTime(string details);
+	string extractTime(string details);
 
 	/**
 	* Decodes the encoded string and retreives the date field
 	*
 	* @param details
 	*			is a encoded string that needs to be decoded
+	*			format DD/MM/YYYY
 	* @return date
 	*			is the description of retrieved encoded  string
 	* 
@@ -176,28 +177,117 @@ protected:
 	* if date field is specified, the return will be the date field
 	* otherwise it will return an empty string.
 	*/
-	static string extractDate(string details);
+	string extractDate(string details);
 
 	/**
 	* Decodes the encoded string and retreives the priority field
 	*
 	* @param details
-	*			is a encoded string that needs to be decoded
+	*			is a encoded string that needs to be decoded	
+	*			format DD/MM/YYYY
 	* @return priority
 	*			is the priority field of retrieved from encoded 
 	* 
 	* if priority field is empty
 	* e.g.
 	* encoded	= "#cs2103 meeting#biz canteen####"
-	* priority will be returned as 0.
+	* priority will be returned as blank.
 	* 
 	* explanation:
 	*
 	* if priority field is specified, the return will be the priority otherwise
-	* 0 will be returned.
+	* blank will be returned.
 	*/
 	string extractPriority(string details);
 	
+	/**
+	* Extracts the day from a date string
+	*
+	* @param date
+	*			is properly formated date string that needs to be decoded
+	*			format DD/MM/YYYY
+	* @return day number
+	*			is the day from date string
+	* e.g
+	* if input = "27/10/2012"
+	* the return will be 27
+	*/
+	int extractDay(string date);
+
+	/**
+	* Extracts the month from a date string
+	*
+	* @param date
+	*			is properly formated date string that needs to be decoded
+	* @return month
+	*			is the month from date string 
+	* e.g
+	* if input = "27/10/2012"
+	* the return will be 10
+	*/
+	int extractMonth(string date);
+
+	/**
+	* Extracts the Year from a date string
+	*
+	* @param date
+	*			is properly formated date string that needs to be decoded
+	*			format DD/MM/YYYY
+	* @return Year
+	*			is the year from date string 
+	* e.g
+	* if input = "27/10/2012"
+	* the return will be 2012
+	*/
+	int extractYear(string date);
+
+	/**
+	* Extracts the hour from a time string
+	*
+	* @param time
+	*			is properly formated time string that needs to be decoded
+	*			format: HH:MM
+	* @return hour
+	*			is the hout from time string 
+	* e.g
+	* if input = "15:00"
+	* the return will be 15
+	*/
+	int extractHour(string time);
+
+	/**
+	* Extracts the minute from a time string
+	*
+	* @param time
+	*			is properly formated time string that needs to be decoded
+	*			format: HH:MM
+	* @return minute
+	*			is the minute from time string 
+	* e.g
+	* if input = "15:00"
+	* the return will be 0
+	*/
+	int extractMinute(string time);
+
+	/**
+	* Extracts the hour from a time string
+	*
+	* @param starr
+	*			is the container for properly formated start time string
+	*			format: HH:MM
+	* @param end
+	*			is the container for properly formated end time string
+	*			format: HH:MM
+	* @param time range
+	*			is properly formated time range string that needs to be decoded
+	*			format: HH:MM-HH:MM
+	* @return void
+	* e.g
+	* if input = "15:00-14:00"
+	* the start will be "15:00" and end will be "14:00"
+	*/
+	void splitStartEndTime(string* start, string* end, string timeRange);
+
 	int extractIndexFromDescription(string description);
 
 public:
