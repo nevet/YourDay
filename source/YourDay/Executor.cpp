@@ -56,7 +56,7 @@ int Executor :: extractIndex(string details)
 	int indexLocation;
 	indexLocation = findBlockIndex(details, INDEX_BLOCK_LOCATION);
 	tempIndex = extractField(details, indexLocation);
-	index = atoi(tempIndex.c_str());
+	index = atoi(tempIndex.c_str()) -1;
 	return index;
 }
 
@@ -193,7 +193,7 @@ int Executor :: extractIndexFromDescription(string description)
 
 	if(isAllNumber)
 	{
-		index = atoi(firstWord);
+		index = atoi(firstWord) - 1;
 		delete[] cstr;  
 		return index;
 	}

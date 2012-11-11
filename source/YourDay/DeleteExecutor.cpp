@@ -37,7 +37,7 @@ void DeleteExecutor::execute()
 	
 	index=extractIndex(_details);
 
-	if(index < 1)
+	if(index < 0)
 	{
 		throw string ("index is not existing\n");
 	}
@@ -47,7 +47,7 @@ void DeleteExecutor::execute()
 	}
 	else 
 	{
-		position = _focusingEntryList->begin() + index - 1;
+		position = _focusingEntryList->begin() + index ;
 		_focusingEntryList->erase(position);
 	
 	}
