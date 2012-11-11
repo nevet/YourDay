@@ -367,7 +367,7 @@ SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
 
 bool SearchExecutor::unrelavent(matchInfo info, string key)
 {
-	return info.match < key.length() / 3 || info.match < info.str.length() / 3;
+	return info.match <= key.length() / 3 || info.match <= info.str.length() / 3 || info.continuity > info.str.length() / 2;
 }
 
 void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
@@ -598,12 +598,7 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 
 	sort(best.begin(), best.end(), cmp);
 
-	noMatch = false;
-
-	if (best.empty() || unrelavent(best[0], key))
-	{
-		noMatch = true;
-	} else
+	if (!best.empty())
 	{
 		noMatch = false;
 
@@ -635,8 +630,6 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 			q++;
 		}
 
-		treshold += tempTreshold;
-
 		for (int i = 0; i < best.size() && suggestWords->size() < 4; i++)
 		{
 			if (unrelavent(best[i], key))
@@ -657,6 +650,8 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 			}
 		}
 	}
+
+	treshold += tempTreshold;
 }
 
 SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details)
