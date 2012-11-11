@@ -45,6 +45,8 @@ private:
 
 	int f[500][500];
 	int g[500][500];
+	
+	int treshold;
 
 	bool noMatch;
 
@@ -80,11 +82,12 @@ private:
 	void edit(string a, string b, matchInfo & ans);
 	static bool cmp(matchInfo a, matchInfo b);
 	matchInfo compare(matchInfo a, matchInfo b);
+	bool unrelavent(matchInfo info, string key);
 	void updateSuggestWords(string* suggestWords, string updWord);
 
 	void searchDate(string keyword, vector<int>* rank);
 	void searchTime(string keyword, vector<int>* rank);
-	void searchText(string keyword, vector<int>* rank, string* suggestWords);
+	void searchText(string keyword, vector<int>* rank, vector<string>* suggestWords, int suggestWordsCnt);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
