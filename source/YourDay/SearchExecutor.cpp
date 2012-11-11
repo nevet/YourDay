@@ -774,6 +774,7 @@ void SearchExecutor::execute() throw (string)
 			if (isLogicDate(currentKey))
 			{
 				searchDate(currentKey, &rank);
+				treshold += rank.size();
 			} else
 			{
 				log.writeException("date error");
@@ -785,6 +786,7 @@ void SearchExecutor::execute() throw (string)
 			if (isLogicTime(currentKey))
 			{
 				searchTime(currentKey, &rank);
+				treshold += rank.size();
 			} else
 			{
 				log.writeException("time error");
