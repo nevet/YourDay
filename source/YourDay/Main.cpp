@@ -64,8 +64,6 @@ int main(int arg, char** test)
 	
 	log.updateLogFile();
 
-	log.writeTime();
-
 	Signal signal = CLEAR;
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
@@ -81,6 +79,8 @@ int main(int arg, char** test)
 	{
 		try
 		{
+			log.updateLogFile();
+
 			ui.traceInput(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 			log.writeCreated("UI interface");
 			

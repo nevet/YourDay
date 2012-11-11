@@ -11,12 +11,16 @@ void Log::disassociateFile()
 	if (file.is_open()) file.close();
 }
 
-void Log::associateFile(string fileName, OPEN_TYPE mode)
+bool Log::associateFile(string fileName, OPEN_TYPE mode)
 {
+	bool openFail;
+	
 	switch (mode)
 	{
 		case IN_TYPE:
 			file.open(fileName.c_str(), fstream::in);
+			openFail = file.is_open();
+
 			break;
 	
 		case APP_TYPE:
@@ -31,6 +35,8 @@ void Log::associateFile(string fileName, OPEN_TYPE mode)
 		default:
 			break;
 	}
+
+	return openFail;
 }
 
 void Log::deleteLogFile()
@@ -38,27 +44,56 @@ void Log::deleteLogFile()
 	remove(fullLogPath.c_str());
 }
 
-bool Log::checkLogSize()
+Log::ERROR_TYPE Log::checkLogSize()
 {
-	bool flag;
+	bool openFail;
+
+	ERROR_TYPE err = DEFAULT;
 	
-	associateFile(fullLogPath.c_str(), IN_TYPE);
+	openFail = associateFile(fullLogPath.c_str(), IN_TYPE);
 
-	file.seekg(0, fstream::end);
-	logSize = file.tellg();
+	if (!openFail)
+	{
+		file.seekg(0, fstream::end);
+		logSize = file.tellg();
 
-	flag = (logSize > sizeThreshold);
+		if (logSize > sizeThreshold)
+		{
+			err = OVER_SIZE_ERR;
+		}
 
-	disassociateFile();
+		disassociateFile();
+	} else
+	{
+		err = OPEN_ERR;
+	}
 
-	return flag;
+	return err;
 }
 
 void Log::updateLogFile()
 {
-	if (checkLogSize())
+	ERROR_TYPE err = checkLogSize();
+	
+	switch (checkLogSize())
 	{
-		deleteLogFile();
+		case OVER_SIZE_ERR:
+			deleteLogFile();
+			associateFile(fullLogPath, APP_TYPE);
+
+			writeTime();
+
+			break;
+
+		case OPEN_ERR:
+			associateFile(fullLogPath, APP_TYPE);
+
+			writeTime();
+
+			break;
+
+		default:
+			break;
 	}
 }
 

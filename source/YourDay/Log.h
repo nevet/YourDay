@@ -19,6 +19,7 @@ class Log
 private:
 
 	enum OPEN_TYPE {APP_TYPE, OUT_TYPE, IN_TYPE};
+	enum ERROR_TYPE {DEFAULT, OPEN_ERR, OVER_SIZE_ERR};
 	
 	fstream file;
 
@@ -30,12 +31,12 @@ private:
 	int logSize;
 
 	void disassociateFile();
-	void associateFile(string fileName, OPEN_TYPE mode);
+	bool associateFile(string fileName, OPEN_TYPE mode);
 	void deleteLogFile();
 	
-	bool checkLogSize();
+	ERROR_TYPE checkLogSize();
 	
-public:
+public:	
 	void updateLogFile();
 
 	void writeTime();
