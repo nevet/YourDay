@@ -5,8 +5,11 @@
 //@author A0088455R
 const int SearchExecutor::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-const int SearchExecutor::PERFECT_MATCH = 3;
-const int SearchExecutor::MEDIOCORE_MATCH = 1;
+const int SearchExecutor::PERFECT_MATCH = 0;
+const int SearchExecutor::HIGH_MATCH = 1;
+const int SearchExecutor::NORMAL_MATCH = 2;
+const int SearchExecutor::MEDIOCORE_MATCH = 3;
+const int SearchExecutor::NO_MATCH = 4;
 
 string SearchExecutor::splitFirstTerm(string* mString)
 {
@@ -31,6 +34,7 @@ void SearchExecutor::formatSearchResult(int index, string result, string* format
 
 bool SearchExecutor::isLeap(int year)
 {
+
 	bool flag = false;
 	
 	if (year % 100 == 0)
@@ -122,53 +126,15 @@ bool SearchExecutor::isLogicTime(string time)
 
 	return flag;
 }
-//@author A0088455R
-int SearchExecutor::extractDay(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return day;
-}
-
-int SearchExecutor::extractMonth(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return month;
-}
-
-int SearchExecutor::extractYear(string date)
-{
-	int year, month, day;
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	return year;
-}
-
-int SearchExecutor::extractHour(string time)
-{
-	int hour, minute;
-	sscanf(time.c_str(), "%d:%d", &hour, &minute);
-	return hour;
-}
-
-int SearchExecutor::extractMinute(string time)
-{
-	int hour, minute;
-	sscanf(time.c_str(), "%d:%d", &hour, &minute);
-	return minute;
-}
-
-void SearchExecutor::splitStartEndTime(string* start, string* end, string timeRange)
-{
-	*start=timeRange.substr(0,5);
-	*end=timeRange.substr(6,5);
-}
 
 void SearchExecutor::initializeVectors(int totalSize, vector<int>* score, vector<int>* rank)
 {
+	assert(score != NULL);
+	assert(rank != NULL);
+
 	score->clear();
 	rank->clear();
-
+	//assigns NULL value to both arrays with the size of 
 	score->assign(totalSize, NULL);
 	rank->assign(totalSize, NULL);
 }
@@ -402,6 +368,7 @@ void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
 	*suggestWords = *suggestWords + updWord + '#';
 }
 
+//@author A0088455R
 void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 {	
 	assert(keyword!="");
@@ -428,7 +395,7 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 
 		if (toBeCompared == "")
 		{
-			setRank( i, 4, rank, &highestRank);
+			setRank( i, NO_MATCH, rank, &highestRank);
 		}
 		else
 		{
@@ -444,23 +411,23 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 				{
 					if (entryDay == keywordDay)
 					{
-						setRank( i, 0, rank, &highestRank);
+						setRank( i, PERFECT_MATCH, rank, &highestRank);
 						noMatch = false;
 					}
 					else
 					{
-						setRank( i, 1, rank, &highestRank);
+						setRank( i, HIGH_MATCH, rank, &highestRank);
 						noMatch = false;
 					}
 				}
 				else if (entryDay == keywordDay)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
@@ -468,23 +435,23 @@ void SearchExecutor::searchDate(string keyword, vector<int>* rank)
 			{
 				if (entryDay == keywordDay)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
 			else if (entryDay == keywordDay)
 			{
-				setRank( i, 2, rank, &highestRank);
+				setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 				noMatch = false;
 			}
 			else
 			{
-				setRank( i, 3, rank, &highestRank);
+				setRank( i, LOW_MATCH, rank, &highestRank);
 			}
 		}
 	}
@@ -521,7 +488,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 		entryTimeRange=extractTime(_combinedEntryList[i]);
 		if (entryTimeRange == "")
 		{
-			setRank( i, 4, rank, &highestRank);
+			setRank( i, NO_MATCH, rank, &highestRank);
 		}
 		else
 		{
@@ -536,17 +503,17 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 			{
 				if (entryStartMinute == keywordMinute)
 				{
-					setRank( i, 0, rank, &highestRank);
+					setRank( i, PERFECT_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else if (entryStartMinute < keywordMinute)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
@@ -554,28 +521,28 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 			{
 				if (entryEndMinute == keywordMinute)
 				{
-					setRank( i, 0, rank, &highestRank);
+					setRank( i, PERFECT_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else if (entryEndMinute < keywordMinute)
 				{
-					setRank( i, 1, rank, &highestRank);
+					setRank( i, HIGH_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 				else
 				{
-					setRank( i, 2, rank, &highestRank);
+					setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 					noMatch = false;
 				}
 			}
 			else if ((entryStartHour < keywordHour) && (entryEndHour > keywordHour))
 			{
-				setRank( i,2, rank, &highestRank);
+				setRank( i, MEDIOCORE_MATCH, rank, &highestRank);
 				noMatch = false;
 			}
 			else
 			{
-				setRank( i, 3, rank, &highestRank);
+				setRank( i, LOW_MATCH, rank, &highestRank);
 			}
 		}
 	}
@@ -635,12 +602,20 @@ void SearchExecutor::searchText(string key, vector<int>* rank, string* suggestWo
 
 		int p = 0;
 		int q = 1;
+		int r;
 
 		while (p < tot)
 		{
 			while (q < tot && !cmp(best[q - 1], best[q])) q++;
 
-			for (int r = tot - p; p < q; p++)
+			r = tot - p;
+
+			if (best[p].match == 0)
+			{
+				r = 0;
+			}
+
+			for (; p < q; p++)
 			{
 				(*rank)[best[p].index] = r;
 			}
@@ -732,18 +707,19 @@ void SearchExecutor::execute() throw (string)
 
 	for (int i = 0; i < totalEntries; i++)
 	{
+		if (score[i] == 0) continue;
 		tempMatchedList.push_back(integerPair(score[i], i));
 	}
 
-	sort(tempMatchedList.rbegin(), tempMatchedList.rend());
-
-	if (!score[0])
+	if (tempMatchedList.empty())
 	{
 		log.writeException("No Match Found");
 		throw string("No Match Found\n");
 	} else
 	{
-		for (int i = 0; i < totalEntries; i++)
+		sort(tempMatchedList.rbegin(), tempMatchedList.rend());
+
+		for (int i = 0; i < tempMatchedList.size(); i++)
 		{
 			int curRecord = tempMatchedList[i].second;
 		
