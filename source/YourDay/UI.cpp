@@ -1035,7 +1035,7 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 
 void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 {
-	assert(entry!= "");
+	//assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
 
 	int colorArray[NUMBER_OF_ENTRY_PARTS] = {INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR};
@@ -1169,7 +1169,8 @@ void UI::printDiduknowHints()
 		break;
 	}
 	diduknowPrevStatus=diduknowStatus;
-	cout<<endl;
+	cout<<endl;	
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 bool UI::isGeneral(string row)
@@ -1347,7 +1348,6 @@ void UI::diduknowHintDisplay()
 	{
 		printDiduknowHints();
 	}
-	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 void UI::processResultList(vector<string>* resultList, string& info)

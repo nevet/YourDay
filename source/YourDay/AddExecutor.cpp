@@ -19,33 +19,76 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	_undoGeneralEntryList = *generalEntryList;
 }
 
-int AddExecutor::partition(vector<string> &entryList, int low, int high)
+int AddExecutor::searchIndex(vector<string>* _entryList, string input)
 {
-	if (low == high) return low;
-	string pivot = entryList[low];
-	
-	int m = low;
-	for ( int k = low+1; k <= high; ++k )
-	{
-		if ( isEarlier(entryList[k], pivot))
-		{		
-			++m;
-			swap(entryList[k], entryList[m]);
-		}
-    }
+	assert(_entryList != NULL);
+	assert(input != "");
+	int listSize = _entryList->size();
 
-  swap(entryList[low], entryList[m]);  	
-  return m;
+	if (listSize == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return binarySearch(_entryList, input, 0, listSize-1);
+	}
 }
 
-void AddExecutor::quickSort(vector<string> &entryList, int low, int high)
+int AddExecutor::binarySearch(vector<string>* _entryList, string key, int imin, int imax)
 {
-	int pivotIdx;
-	if (low < high)
+	assert(_entryList != NULL);
+	assert(key != "");
+	int imid;
+	imid = (imin + imax) / 2;
+	if ((( imin + imax) % 2 ) == 1)
 	{
-		pivotIdx = partition(entryList, low, high);
-		quickSort(entryList, low, pivotIdx - 1);
-		quickSort(entryList, pivotIdx + 1, high);
+		imid += 1;
+	}
+	while (imax >= imin)
+	{
+		if (isEarlier((*_entryList)[imid],key))
+		{
+			imin = imid + 1;
+		}
+		else if (isEarlier(key,(*_entryList)[imid]))
+		{
+			imax = imid - 1;
+		}
+		else
+		{
+			return imid;
+		}			
+		imid = (imin + imax) / 2;
+		if ((( imin + imax) % 2 ) == 1)
+		{
+			imid += 1;
+		}
+	}
+	return imid;
+}
+
+void AddExecutor::addToPosition(vector<string>* _entryList, int index, string input)
+{
+	assert(_entryList != NULL);
+	assert(input != "");
+	int listSize = _entryList->size();
+	int i;
+
+	if (listSize == 0)
+	{
+		_entryList -> push_back(input);
+	}
+	else
+	{
+		string dummyString = "";
+		_entryList -> push_back(dummyString);
+		listSize = _entryList->size();
+		for (i = (listSize - 1); i > index; i--)
+		{
+			(*_entryList)[i] = (*_entryList)[i-1];
+		}
+		(*_entryList)[index] = input;
 	}
 }
 
@@ -151,10 +194,9 @@ void AddExecutor::execute() throw (string)
 	}
 	else
 	{
-		_calendarEntryList -> push_back(_details);
-		_resultList->push_back(_details);
-
-		quickSort(*_calendarEntryList,0,_calendarEntryList->size()-1);
+		int index = searchIndex(_calendarEntryList, _details);
+		addToPosition(_calendarEntryList, index, _details);
+		addToPosition(_resultList, index, _details);
 	}
 }
 
@@ -163,5 +205,5 @@ void AddExecutor::undo()
 	*_generalEntryList = _undoGeneralEntryList;
 	*_calendarEntryList = _undoCalendarEntryList;
 	
-	_resultList->pop_back();
+	//_resultList->pop_back();
 }
