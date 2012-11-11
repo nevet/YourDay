@@ -8,13 +8,13 @@
 #include "Signal.h"
 
 //@author A0088455R
-const int INDEX_BLOCK_LOCATION			= 1;  
-const int DESCRIPTION_BLOCK_LOCATION	= 2;
-const int LOCATION_BLOCK_LOCATION		= 3;
-const int TIME_BLOCK_LOCATION			= 4;
-const int DATE_BLOCK_LOCATION			= 5;
-const int PRIORITY_BLOCK_LOCATION		= 6;
-const int NO_INDEX_IN_DESCRIPTION = -1;
+
+/**
+* These are the predefined values of the block locations for each
+* field inside the encoded string
+* format: "#index#description#location#time#date#priority#"
+*/
+
 
 using namespace std;
 
@@ -28,6 +28,19 @@ class Executor
 //we set status as protected variable so that subclass is able to make change
 protected:
 	Signal status;
+
+	/**
+	* These are the predefined values of the block locations for each
+	* field inside the encoded string
+	* format: "#index#description#location#time#date#priority#"
+	*/
+	const static int INDEX_BLOCK_LOCATION;  
+	const static int DESCRIPTION_BLOCK_LOCATION;
+	const static int LOCATION_BLOCK_LOCATION;
+	const static int TIME_BLOCK_LOCATION;
+	const static int DATE_BLOCK_LOCATION;
+	const static int PRIORITY_BLOCK_LOCATION;
+	const static int NO_INDEX_IN_DESCRIPTION;
 
 	Log log;
 	
@@ -272,7 +285,7 @@ protected:
 	/**
 	* Extracts the hour from a time string
 	*
-	* @param starr
+	* @param start
 	*			is the container for properly formated start time string
 	*			format: HH:MM
 	* @param end

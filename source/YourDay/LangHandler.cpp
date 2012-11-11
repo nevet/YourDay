@@ -553,6 +553,7 @@ void LangHandler::encoder(string input, Signal command)
 	}
 }
 
+//@author A0088455R
 void LangHandler::setCommand(string userCommand)
 {	
 	//if user command is valid, set corresponding command type
@@ -611,6 +612,7 @@ Signal LangHandler::getStatus()
 	return langStatus;
 }
 
+//@author A0088455R
 void LangHandler::separate(string userInput) throw (string)
 {
 	log.writeEntered("LangHandler::separate()");
