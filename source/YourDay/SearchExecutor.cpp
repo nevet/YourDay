@@ -375,18 +375,50 @@ void SearchExecutor::edit(string a, string b, matchInfo & ans)
 
 bool SearchExecutor::cmp(matchInfo a, matchInfo b)
 {
-	if (a.match > b.match) return true; else
-	if (a.match < b.match) return false; else
-	if (a.continuity < b.continuity) return true; else
-	if (a.continuity > b.continuity) return false; else
-	if (a.ms < b.ms) return true; else
-	if (a.ms > b.ms) return false; else
-	if (a.change < b.change) return true; else
-	if (a.change > b.change) return false; else
-	if (a.str < b.str) return true; else
-	if (a.str > b.str) return false;
+	bool flag = false;
+	
+	if (a.match > b.match)
+	{
+		flag = true;
+	} else
+	if (a.match < b.match)
+	{
+		flag = false;
+	} else
+	if (a.continuity < b.continuity)
+	{
+		flag = true;
+	} else
+	if (a.continuity > b.continuity)
+	{
+		flag = false;
+	} else
+	if (a.ms < b.ms)
+	{
+		flag = true;
+	} else
+	if (a.ms > b.ms)
+	{
+		flag = false;
+	} else
+	if (a.change < b.change)
+	{
+		flag = true;
+	} else
+	if (a.change > b.change)
+	{
+		flag = false;
+	} else
+	if (a.str < b.str)
+	{
+		flag = true;
+	} else
+	if (a.str > b.str)
+	{
+		flag = false;
+	}
 
-	return false;
+	return flag;
 }
 
 SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
@@ -405,9 +437,45 @@ bool SearchExecutor::unrelavent(matchInfo info, string key)
 	return info.match <= key.length() / 2 || info.match <= info.str.length() / 2 || info.continuity > info.str.length() / 2;
 }
 
+void SearchExecutor::examRelavence(vector<matchInfo>* list, string key)
+{
+	vector<matchInfo> newList;
+	
+	int oldSize = list->size();
+
+	newList.clear();
+
+	for (int i = 0; i < oldSize; i++)
+	{
+		if (!unrelavent((*list)[i], key))
+		{
+			newList.push_back((*list)[i]);
+		}
+	}
+
+	*list = newList;
+}
+
 void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
 {
 	*suggestWords = *suggestWords + updWord + '#';
+}
+
+void SearchExecutor::encodeIndex(string* encodedEntry, int index)
+{
+	char inx[5];
+
+	sprintf(inx, "%d", index);
+	
+	string tempInx(inx);
+	
+	if (index < _generalEntryList->size())
+	{
+		*encodedEntry = "#g" + tempInx + encodedEntry->substr(1);
+	} else
+	{
+		*encodedEntry = "#c" + tempInx + encodedEntry->substr(1);
+	}
 }
 
 //@author A0088455R
@@ -621,7 +689,7 @@ void SearchExecutor::searchTime(string keyword, vector<int>* rank)
 	adjustRank(rank, highestRank);
 }
 
-void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* suggestWords, int suggestWordsCnt)
+void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* suggestWords)
 {
 	int tot = _combinedEntryList.size();
 	int tempTreshold = -1;
@@ -663,6 +731,8 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 
 	sort(best.begin(), best.end(), cmp);
 
+	examRelavence(&best, key);
+
 	if (!best.empty())
 	{
 		noMatch = false;
@@ -670,22 +740,13 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 		int p = 0;
 		int q = 1;
 		int r = tot;
+		int relaventEntrySize = best.size();
 
-		while (p < tot)
-		{
-			if (unrelavent(best[p], key) && tempTreshold == -1)
-			{
-				tempTreshold = r;
-			}
-			
-			while (q < tot && !cmp(best[q - 1], best[q])) q++;
+		while (p < relaventEntrySize)
+		{			
+			while (q < relaventEntrySize && !cmp(best[q - 1], best[q])) q++;
 
 			r = tot - p;
-
-			if (best[p].match == 0)
-			{
-				r = 0;
-			}
 
 			for (; p < q; p++)
 			{
@@ -695,14 +756,11 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 			q++;
 		}
 
+		tempTreshold = r;
+
 		for (int i = 0; i < best.size() && suggestWords->size() < 4; i++)
 		{
-			if (unrelavent(best[i], key))
-			{
-				break;
-			}
-
-			if (best[i].match != best[i].str.length())
+			if (best[i].match != best[i].str.length() || best[i].match != key.length())
 			{
 				if (suggestWords->empty())
 				{
@@ -794,12 +852,7 @@ void SearchExecutor::execute() throw (string)
 			}
 		} else
 		{
-			searchText(currentKey, &rank, &suggestWords, suggestWordsCnt);
-			
-			if (suggestWordsCnt < 8)
-			{
-				suggestWordsCnt *= 2;
-			}
+			searchText(currentKey, &rank, &suggestWords);
 		}
 
 		//if there is no match, weight will be zero, i.e. this key is omitted
@@ -828,8 +881,11 @@ void SearchExecutor::execute() throw (string)
 		for (int i = 0; i < tempMatchedList.size(); i++)
 		{
 			int curRecord = tempMatchedList[i].second;
+			string curEncodedEntry = _combinedEntryList[curRecord];
+
+			encodeIndex(&curEncodedEntry, curRecord);
 		
-			_matchedEntryList->push_back(_combinedEntryList[curRecord]);
+			_matchedEntryList->push_back(curEncodedEntry);
 			log.writeData("record", _matchedEntryList->back());
 		}
 		
