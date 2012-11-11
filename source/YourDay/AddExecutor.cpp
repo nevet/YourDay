@@ -176,9 +176,8 @@ void AddExecutor::addToPosition(vector<string>* _entryList, int index, string in
 	else
 	{
 		string dummyString = "";
-		shiftList(_entryList, index);
 		_entryList -> push_back(dummyString);
-		
+		shiftList(_entryList, index);		
 		(*_entryList)[index] = input;
 	}
 }
