@@ -47,6 +47,7 @@ private:
 	int g[500][500];
 
 	bool noMatch;
+	int treshold;
 
 	//@author A0088455R
 	/**
@@ -208,7 +209,7 @@ private:
 	static bool cmp(matchInfo a, matchInfo b);
 	matchInfo compare(matchInfo a, matchInfo b);
 	void updateSuggestWords(string* suggestWords, string updWord);
-	
+	bool unrelavent(matchInfo info, string key);
 	//@author A0088455R
 	/**
 	* Checks an Entry at index "index" for its matching level with the keyword and
@@ -268,7 +269,7 @@ private:
 	*/
 	void searchTime(string keyword, vector<int>* rank);
 
-	void searchText(string keyword, vector<int>* rank, string* suggestWords);
+	void searchText(string key, vector<int>* rank, vector<string>* suggestWords, int suggestWordsCnt);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
