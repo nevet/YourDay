@@ -19,7 +19,7 @@ void UI::setScreenSize()
 	coord.Y = WINDOWS_HEIGHT; 
 
 	_SMALL_RECT Rect; 
-	Rect.Top = 0; 
+	Rect.Top = 0;
 	Rect.Left = 0; 
 	Rect.Bottom = WINDOWS_HEIGHT - 1; 
 	Rect.Right = WINDOWS_WIDTH - 1; 
@@ -428,7 +428,7 @@ void UI::setDidUKnowStatus()
 	}
 	else if (input =="update")
 	{
-		diduknowStatus = EDIT_COMMAND;
+		diduknowStatus = UPDATE_COMMAND;
 	}
 	else if (input == "")
 	{
@@ -439,7 +439,7 @@ void UI::setDidUKnowStatus()
 		(diduknowStatus == EXIT_COMMAND && input.find("exit")) ||
 		(diduknowStatus == SEARCH_COMMAND && input.find("search")) ||
 		(diduknowStatus == UNDO_COMMAND && input.find("undo")) ||
-		(diduknowStatus == EDIT_COMMAND && input.find("update")))
+		(diduknowStatus == UPDATE_COMMAND && input.find("update")))
 	{
 		diduknowStatus = DIDUKNOW_INIT;
 	}
@@ -460,9 +460,9 @@ void UI::initializeInitArrayIndices()
 
 void UI::initializeDisplayModes()
 {
-	generalDisplayMode = FULL_MODE;
-	calendarDisplayMode = FULL_MODE;
-	resultDisplayMode = FULL_MODE;
+	generalDisplayMode = PART_MODE;
+	calendarDisplayMode = PART_MODE;
+	resultDisplayMode = PART_MODE;
 	focusedField = GENERAL;	
 }
 
@@ -488,7 +488,7 @@ void UI::setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>
 	setResultInitArrayFull(resultList);
 }
 
-void UI::handleInitialGeneralIndex()
+void UI::handleInitialGeneralIndexOverflow()
 {	
 	assert(generalInitArrayFull.size() != 0);
 	assert(generalInitArrayPart.size() != 0);
@@ -511,7 +511,7 @@ void UI::handleInitialGeneralIndex()
 
 }
 
-void UI::handleInitialCalendarIndex()
+void UI::handleInitialCalendarIndexOverflow()
 {	
 	assert(calendarInitArrayFull.size() != 0);
 	assert(calendarInitArrayPart.size() != 0);
@@ -534,7 +534,7 @@ void UI::handleInitialCalendarIndex()
 
 }
 
-void UI::handleInitialResultIndex()
+void UI::handleInitialResultIndexOverflow()
 {	
 	assert(resultInitArrayFull.size() != 0);
 	assert(resultInitArrayPart.size() != 0);
@@ -557,11 +557,11 @@ void UI::handleInitialResultIndex()
 
 }
 
-void UI::handleInitialIndices()
+void UI::handleInitialIndicesOverflow()
 {
-	handleInitialGeneralIndex();
-	handleInitialCalendarIndex();
-	handleInitialResultIndex();
+	handleInitialGeneralIndexOverflow();
+	handleInitialCalendarIndexOverflow();
+	handleInitialResultIndexOverflow();
 }
 
 int UI::getGeneralInitIndex()
@@ -722,7 +722,7 @@ int UI::findNearestInitArrayIndex(vector<int>* initialIndexArray, int rowIndex)
 		i++;
 	}
 
-	if (lastItem < rowIndex)
+	if (lastItem <= rowIndex)
 	{
 		ans = size -1;
 	}
@@ -1044,6 +1044,14 @@ void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 	extractParts(entry, partArray);
 
+	if (index == highlightCalendarRowIndex)
+	{
+		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
+		{
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+		}
+	}
+
 	switch (calendarDisplayMode)
 	{
 	case PART_MODE:
@@ -1068,6 +1076,14 @@ void UI::printGeneralEntry(int index, string entry, int& rowPosition)
 		GENERAL_TIME_INIT_X, GENERAL_DATE_INIT_X, GENERAL_PRIORITY_INIT_X};
 	string partArray[NUMBER_OF_ENTRY_PARTS];
 	extractParts(entry, partArray);
+
+	if (index == highlightGeneralRowIndex)
+	{
+		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
+		{
+			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+		}
+	}
 
 	switch (generalDisplayMode)
 	{
@@ -1144,7 +1160,7 @@ void UI::printDiduknowHints()
 			cout<<DID_U_KNOW_UNDO;
 			break;
 		}
-	case EDIT_COMMAND:
+	case UPDATE_COMMAND:
 		{
 			cout<<DID_U_KNOW_UPDATE;
 			break;
@@ -1334,25 +1350,111 @@ void UI::diduknowHintDisplay()
 	}
 }
 
-void UI::handleResultList(vector<string>* resultList)
+void UI::processResultList(vector<string>* resultList, string& info)
 {
 	int resultSize = resultList ->size();
-	
-	if (prevCommand == ADD_COMMAND && resultSize ==1)
+	string feedbackString;
+
+	if (prevCommand == SEARCH_COMMAND)
 	{
+		assert (resultSize != 0);
+		feedbackString = resultList->back();
 		resultList->pop_back();
 	}
-	else if (prevCommand == DELETE_COMMAND && resultSize == 1)
+	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && resultSize > 0 )
 	{
-		resultList ->pop_back();
+		feedbackString = resultList->back();
+		resultList->pop_back();
 	}
-	else if (prevCommand == EDIT_COMMAND && resultSize == 1)
+
+	info = feedbackString;
+}
+
+
+void UI::handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList)
+{
+
+	if (prevCommand == SEARCH_COMMAND && info != "")
 	{
-		resultList ->pop_back();
+		processSearchInfo(info);
 	}
-	else if (prevCommand == SEARCH_COMMAND && resultSize >0)
+	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && info != "")
 	{
-		resultList ->pop_back();
+		processAddUpdateInfo(info,generalList, calendarList);
+	}
+}
+
+void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList)
+{
+	string row;
+	bool isFound = false;
+	int generalSize = generalList->size();
+	int calendarSize = calendarList->size();
+	int i;
+
+	if (isGeneral(info))
+	{
+		i = generalSize -1;
+		while (i >= 0 && !isFound)	
+		{
+			row = generalList->at(i);
+			if (row == info)
+			{
+				if (generalDisplayMode == PART_MODE)
+				{
+					indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayPart, i);
+				}
+				else if (generalDisplayMode == FULL_MODE)
+				{
+					indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, i);
+				}
+				highlightGeneralRowIndex = i +1;
+				isFound = true;
+			}
+			i--;
+		}
+	}
+	else
+	{
+		i = calendarSize -1;
+
+		while (i >=0 && !isFound)	
+		{
+			row = calendarList->at(i);
+			if (row == info)
+			{
+				if (calendarDisplayMode == PART_MODE)
+				{
+					indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayPart, i);
+				}
+				else if (generalDisplayMode == FULL_MODE)
+				{
+					indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, i);
+				}
+				highlightCalendarRowIndex = i +1;
+				isFound = true;
+			}
+			i--;
+		}
+		
+	}
+}
+
+void UI::processSearchInfo(string info)
+{
+	// format: #keyWord#suggestion #suggestion#...#
+	int i =1;
+	int length = info.length();
+	string temp = "";
+	char ch;
+
+	while (i < length)
+	{
+		ch = info[i];
+		if (ch != '#')
+		{
+			temp += ch;
+		}
 	}
 }
 
@@ -1385,11 +1487,16 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	setBackground();
 	system("CLS");
 
+	highlightCalendarRowIndex = -1;
+	highlightCalendarRowIndex = -1;
+
 	highlightTitle(resultList->size());
 
-	handleResultList(resultList);
+	string info;
+	processResultList(resultList, info);
 	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
-	handleInitialIndices();
+	handleResultInfo(info, generalEntryList, calendarEntryList);
+	handleInitialIndicesOverflow();
 
 	if(resultList->size() !=0 )
 		focusedField = SEARCH_RESULT;
@@ -1413,6 +1520,7 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeInitArrayIndices();
 	initializeDidUKnowStatus();
 	initializeFocusedField();
+	prevCommand = CLEAR;
 
 	startingScreenDisplay();
 	mainScreenDisplay( calendarEntryList, generalEntryList, resultList);
