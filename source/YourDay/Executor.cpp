@@ -100,14 +100,14 @@ string Executor :: extractDate(string details)
 	return tempDate;
 }
 
-string Executor :: extractPriority(string details)
+string Executor :: extractMark(string details)
 {
 	assert(details!="");
-	string priority = "";
+	string mark = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
-	priority = extractField(details, indexLocation);
-	return priority;
+	mark = extractField(details, indexLocation);
+	return mark;
 }
 
 int Executor::extractDay(string date)
