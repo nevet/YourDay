@@ -19,8 +19,13 @@ private:
 	
 	fstream file;
 
+	string filePath;
+	string fileName;
+
 	void disassociateFile();
 	void associateFile(string fileName, OPEN_TYPE mode);
+
+	void checkFileSize();
 	
 public:
 

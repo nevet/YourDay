@@ -157,7 +157,7 @@ void LangHandler::eliminateSpaces(string& str)
 			trail--;
 		}
 
-		if (lead < trail)
+		if (lead <= trail)
 		{
 			str = str.substr(lead, trail - lead + 1);
 		} else
@@ -212,6 +212,7 @@ void LangHandler::encoder(string input, Signal command)
 				if (pos != string::npos)
 				{
 					priority = input.substr(pos + PRIORITY_INDICATOR.length());
+					eliminateSpaces(priority);
 					//get rid of priority info
 					input = input.substr(0, pos);
 				}
@@ -229,6 +230,7 @@ void LangHandler::encoder(string input, Signal command)
 				if (pos != string::npos)
 				{
 					location = input.substr(pos + LOCATION_INDICATOR.length());
+					eliminateSpaces(location);
 					//get rid of location info
 					input = input.substr(0, pos);
 				}
@@ -344,6 +346,7 @@ void LangHandler::encoder(string input, Signal command)
 			case DELETE_COMMAND:
 				log.writeConditionEntered("delete command separation", true);
 				
+				log.writeData("Input eliminates spaces", input);
 				pos = input.find(SPACE_BAR);
 				
 				if (pos == string::npos)
@@ -357,7 +360,7 @@ void LangHandler::encoder(string input, Signal command)
 						
 						log.writeException("Index error");
 						throw string ("Index error\n");
-					}	
+					}
 				}
 				else
 				{
@@ -380,6 +383,7 @@ void LangHandler::encoder(string input, Signal command)
 				} else
 				{
 					index = input.substr(0, pos);
+					log.writeData("index", index);
 					log.writeExecuted("edit command separation/index separation");
 					
 					if (!isInt(index))
@@ -402,6 +406,7 @@ void LangHandler::encoder(string input, Signal command)
 						if (pos != string::npos)
 						{
 							priority = input.substr(pos + PRIORITY_INDICATOR.length());
+							eliminateSpaces(priority);
 							//get rid of priority info
 							input = input.substr(0, pos);
 						}
@@ -417,6 +422,7 @@ void LangHandler::encoder(string input, Signal command)
 						if (pos != string::npos)
 						{
 							location = input.substr(pos + LOCATION_INDICATOR.length());
+							eliminateSpaces(location);
 							//get rid of location info
 							input = input.substr(0, pos);
 						}
@@ -529,6 +535,7 @@ void LangHandler::encoder(string input, Signal command)
 				
 				description = input;
 				
+				log.writeData("description", input);
 				log.writeExecuted("search command separation/description saperated");
 				
 				break;
@@ -642,7 +649,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 	switch (command)
 	{
 		case ADD_COMMAND:
-			exe = new AddExecutor(generalEntryList, calendarEntryList, details);
+			exe = new AddExecutor(generalEntryList, calendarEntryList, resultList, details);
 			log.writeCreated("AddExecutor");
 			
 			break;
@@ -660,7 +667,7 @@ Executor* LangHandler::pack(bool* quit, Signal focusingField,
 			break;
 
 		case EDIT_COMMAND:
-			exe = new UpdateExecutor(generalEntryList, calendarEntryList, details, focusingField);
+			exe = new UpdateExecutor(generalEntryList, calendarEntryList, resultList, details, focusingField);
 			log.writeCreated("UpdateExecutor");
 			
 			break;

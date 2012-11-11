@@ -5,20 +5,29 @@
 #include <algorithm>
 #include <sstream>
 #include "Executor.h"
-#include "Log.h"
 
 using namespace std;
 
 class SearchExecutor : public Executor
 {
 private:
+	typedef pair<int, int> integerPair;
+	
 	struct matchInfo
 	{
 		int continuity, ms, ms_trail, ms_lead, match, change, dis, index;
+		string str;
 
 		matchInfo()
 		{
 			continuity = ms = ms_trail = ms_lead = match = change = dis = index = 0;
+			str = "";
+		}
+
+		matchInfo(string s)
+		{
+			continuity = ms = ms_trail = ms_lead = match = change = dis = index = 0;
+			str = s;
 		}
 	};
 
@@ -31,15 +40,13 @@ private:
 	vector<string> _undoMatchedEntryList;
 	
 	vector<string> _combinedEntryList;
-
-	bool noMatch;
+	
+	string _details;
 
 	int f[500][500];
 	int g[500][500];
 
-	string _details;
-	
-	Log log;
+	bool noMatch;
 
 	string splitFirstTerm(string* mString);
 	
@@ -64,7 +71,6 @@ private:
 
 	void splitStartEndTime(string* start, string* end, string timeRange);
 	void splitWords(string encodedInput, vector<string>* list);
-	
 
 	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
 	void initializeRank(int totalSize, vector<int>* rank);
@@ -77,10 +83,11 @@ private:
 	void edit(string a, string b, matchInfo & ans);
 	static bool cmp(matchInfo a, matchInfo b);
 	matchInfo compare(matchInfo a, matchInfo b);
+	void updateSuggestWords(string* suggestWords, string updWord);
 
 	void searchDate(string keyword, vector<int>* rank);
 	void searchTime(string keyword, vector<int>* rank);
-	void searchText(string keyword, vector<int>* rank);
+	void searchText(string keyword, vector<int>* rank, string* suggestWords);
 
 	/**
 	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
