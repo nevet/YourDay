@@ -1,5 +1,11 @@
 # include "Log.h"
 
+const string Log::logPath = "YourdayBin/";
+const string Log::logName = "log.txt";
+const string Log::fullLogPath = logPath + logName;
+
+const int Log::sizeThreshold = SIZE_THRESHOLD * KILO_BYTE;
+
 void Log::disassociateFile()
 {
 	if (file.is_open()) file.close();
@@ -9,6 +15,10 @@ void Log::associateFile(string fileName, OPEN_TYPE mode)
 {
 	switch (mode)
 	{
+		case IN_TYPE:
+			file.open(fileName.c_str(), fstream::in);
+			break;
+	
 		case APP_TYPE:
 			file.open(fileName.c_str(), fstream::app);
 			
@@ -23,12 +33,41 @@ void Log::associateFile(string fileName, OPEN_TYPE mode)
 	}
 }
 
+void Log::deleteLogFile()
+{
+	remove(fullLogPath.c_str());
+}
+
+bool Log::checkLogSize()
+{
+	bool flag;
+	
+	associateFile(fullLogPath.c_str(), IN_TYPE);
+
+	file.seekg(0, fstream::end);
+	logSize = file.tellg();
+
+	flag = (logSize > sizeThreshold);
+
+	disassociateFile();
+
+	return flag;
+}
+
+void Log::updateLogFile()
+{
+	if (checkLogSize())
+	{
+		deleteLogFile();
+	}
+}
+
 void Log::writeTime()
 {
 	time_t seconds = time(NULL);
 	struct tm * timeinfo = localtime(&seconds);
 	
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << timeinfo->tm_year + 1900 << "/" << timeinfo->tm_mon + 1 << "/" << timeinfo->tm_mday << " ";
 	file << timeinfo->tm_hour << ":" <<timeinfo->tm_min << endl;
@@ -36,7 +75,7 @@ void Log::writeTime()
 
 void Log::writeCreated(string objName)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << objName << " is created." << endl;
 	
@@ -45,7 +84,7 @@ void Log::writeCreated(string objName)
 
 void Log::writeRetrieved(string varName)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << varName << " is retrieved." << endl;
 	
@@ -54,7 +93,7 @@ void Log::writeRetrieved(string varName)
 
 void Log::writeEntered(string fxName)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << fxName << "is entered." << endl;
 	
@@ -63,7 +102,7 @@ void Log::writeEntered(string fxName)
 
 void Log::writeExecuted(string fxName)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << fxName << "is executed." << endl;
 	
@@ -72,7 +111,7 @@ void Log::writeExecuted(string fxName)
 
 void Log::writeConditionEntered(string condition, bool boolValue)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << "condition: " << condition << " is evaluated as " << boolValue << endl;
 	
@@ -81,7 +120,7 @@ void Log::writeConditionEntered(string condition, bool boolValue)
 	
 void Log::writeData(string dataName, string data)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << dataName << " = " << data << endl;
 	
@@ -90,7 +129,7 @@ void Log::writeData(string dataName, string data)
 
 void Log::writeData(string dataName, Signal data)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << dataName << " = " << data << endl;
 	
@@ -99,7 +138,7 @@ void Log::writeData(string dataName, Signal data)
 
 void Log::writeData(string dataName, bool data)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << dataName << " = " << data << endl;
 	
@@ -108,7 +147,7 @@ void Log::writeData(string dataName, bool data)
 	
 void Log::writeException(string exception)
 {
-	associateFile("log.txt", APP_TYPE);
+	associateFile(fullLogPath, APP_TYPE);
 	
 	file << "exception threw: " << exception << endl;
 	
