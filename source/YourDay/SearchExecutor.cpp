@@ -464,17 +464,23 @@ void SearchExecutor::updateSuggestWords(string* suggestWords, string updWord)
 void SearchExecutor::encodeIndex(string* encodedEntry, int index)
 {
 	char inx[5];
-
-	sprintf(inx, "%d", index);
-	
-	string tempInx(inx);
 	
 	if (index < _generalEntryList->size())
 	{
-		*encodedEntry = "#g" + tempInx + encodedEntry->substr(1);
+		*encodedEntry = "#G" + tempInx + encodedEntry->substr(1);
+		
+		sprintf(inx, "%d", index);
+
+		string tempInx(inx);
 	} else
 	{
-		*encodedEntry = "#c" + tempInx + encodedEntry->substr(1);
+		index -= _generalEntryList->size();
+		
+		sprintf(inx, "%d", index);
+
+		string tempInx(inx);
+		
+		*encodedEntry = "#C" + tempInx + encodedEntry->substr(1);
 	}
 }
 
