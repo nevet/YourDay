@@ -120,14 +120,14 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	setBackground();
 }
 
-void UI::highlightTitle(int searchBoxSize)
+void UI::highlightTitle()
 {
 	switch (focusedField)
 	{
 	case GENERAL:
 		writeHighlightedTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
-		if (searchBoxSize != 0)
+		if (isResultDisplay)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
@@ -137,7 +137,7 @@ void UI::highlightTitle(int searchBoxSize)
 	case CALENDAR:
 		writeTitle("General: ", 1,0);
 		writeHighlightedTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
-		if (searchBoxSize != 0)
+		if (isResultDisplay)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
@@ -147,7 +147,7 @@ void UI::highlightTitle(int searchBoxSize)
 	case SEARCH_RESULT:
 		writeTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
-		if (searchBoxSize != 0)
+		if (isResultDisplay)
 		{
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
@@ -155,6 +155,7 @@ void UI::highlightTitle(int searchBoxSize)
 		}
 		break;
 	}
+	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 void UI::changeDisplayMode()
@@ -228,9 +229,8 @@ void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* gener
 	}
 }
 
-void UI::changeFocusedField(vector<string>* resultList)
+void UI::changeFocusedField()
 {
-	int sizeOfResultList = resultList->size();
 
 	switch (focusedField)
 	{
@@ -238,7 +238,7 @@ void UI::changeFocusedField(vector<string>* resultList)
 		focusedField = CALENDAR;
 		break;
 	case CALENDAR:
-		if (sizeOfResultList == 0)
+		if (!isResultDisplay)
 		{
 			focusedField = GENERAL;
 		}
@@ -253,7 +253,7 @@ void UI::changeFocusedField(vector<string>* resultList)
 	default:
 		assert(false);
 	}
-	highlightTitle(sizeOfResultList);
+	highlightTitle();
 }
 
 void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
@@ -370,7 +370,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 			}
 			break;
 		case TAB:	
-			changeFocusedField(resultList);
+			changeFocusedField();
 			break;
 		case BACKSPACE:
 			if (input.size()>0)
@@ -381,7 +381,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				{
 					--currentChar;
 				}
-
+				
 				diduknowHintDisplay();
 			}
 			break;
@@ -393,6 +393,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				input += keyIn;
 				currentChar++;
 
+				isResultDisplay = false;
 				diduknowHintDisplay();
 			}
 			break;
@@ -1318,11 +1319,8 @@ void UI::resultListDisplay(vector<string>* resultList)
 		int nextInitIndex = getNextResultInitIndex(isValid);
 		string row;
 
-		if(resultSize>0)
-		{
-			clearBox(COMMAND_INIT_Y+5,1);
-			highlightTitle(resultSize);
-		}
+		clearBox(COMMAND_INIT_Y+5,1);
+		highlightTitle();
 
 		gotoxy(OPERATION_RESULT_X, OPERATION_RESULT_Y);
 
@@ -1373,10 +1371,13 @@ void UI::processResultList(vector<string>* resultList, string& info)
 
 void UI::handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList)
 {
+	string keyWord;
+	vector<string> suggestion;
 
 	if (prevCommand == SEARCH_COMMAND && info != "")
 	{
-//		processSearchInfo(info);
+		processSearchInfo(info, keyWord, &suggestion);
+		printSearchInfo(keyWord, &suggestion);
 	}
 	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && info != "")
 	{
@@ -1440,13 +1441,15 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 	}
 }
 
-void UI::processSearchInfo(string info)
+void UI::processSearchInfo(string info, string& keyWord, vector<string>* suggestion)
 {
 	// format: #keyWord#suggestion #suggestion#...#
 	int i =1;
 	int length = info.length();
 	string temp = "";
 	char ch;
+	int countPart = 0;
+	suggestion->clear();
 
 	while (i < length)
 	{
@@ -1454,6 +1457,47 @@ void UI::processSearchInfo(string info)
 		if (ch != '#')
 		{
 			temp += ch;
+		}
+		else
+		{
+			if (countPart == 0)
+			{
+				keyWord = temp;
+				countPart ++;
+			}
+			else
+			{
+				suggestion->push_back(temp);
+			}
+
+			temp = "";
+		}
+		i++;
+	}
+}
+
+void UI::printSearchInfo(string info, vector<string>* suggestion)
+{
+	int suggestionSize = suggestion->size();
+	string row;
+
+	gotoxy(28,COMMAND_INIT_Y + 2);
+	cout << "Keyword: " << info;
+	if (suggestionSize != 0)
+	{
+		cout << "Do you mean: ";
+		for (int i = 0; i< suggestionSize; i++)
+		{
+			row = suggestion->at(i);
+			cout << row;
+			if (i != suggestionSize -1)
+			{
+				cout << ", ";
+			}
+			else
+			{
+				cout << " ?";
+			}
 		}
 	}
 }
@@ -1490,7 +1534,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	highlightCalendarRowIndex = -1;
 	highlightCalendarRowIndex = -1;
 
-	highlightTitle(resultList->size());
+	highlightTitle();
 
 	string info;
 	processResultList(resultList, info);
@@ -1499,8 +1543,11 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	handleInitialIndicesOverflow();
 
 	if(resultList->size() !=0 )
+	{
+		isResultDisplay = true;
 		focusedField = SEARCH_RESULT;
-	indexCurResultInitArray = 0;
+		indexCurResultInitArray = 0;
+	}
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
@@ -1521,6 +1568,7 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeDidUKnowStatus();
 	initializeFocusedField();
 	prevCommand = CLEAR;
+	isResultDisplay = false;
 
 	startingScreenDisplay();
 	mainScreenDisplay( calendarEntryList, generalEntryList, resultList);

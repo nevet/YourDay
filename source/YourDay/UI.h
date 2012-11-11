@@ -99,6 +99,7 @@ private:
 	Signal prevCommand;
 
 	int currentChar;
+	bool isResultDisplay;
 
 	vector<int> generalInitArrayPart;
 	vector<int> generalInitArrayFull;
@@ -123,7 +124,7 @@ private:
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
-	void highlightTitle(int searchBoxSize);
+	void highlightTitle();
 
 	void initializeDidUKnowStatus();
 	void initializeInitArrayIndices();
@@ -151,7 +152,7 @@ private:
 
 	void changeDisplayMode();
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void changeFocusedField(vector<string>* resultList);
+	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void setDidUKnowStatus();
@@ -177,8 +178,8 @@ private:
 	void processResultList(vector<string>* resultList, string& info);
 	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
 	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
-	void processSearchInfo(string info);
-	void printSearchInfo(string key, string suggestion);
+	void processSearchInfo(string info, string& keyWord, vector<string>* suggestion);
+	void printSearchInfo(string key, vector<string>* suggestion);
 
 	void handleInitialGeneralIndexOverflow();
 	void handleInitialCalendarIndexOverflow();
