@@ -19,10 +19,11 @@
 
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-const string LangHandler::NULL_STRING = "";
+
 const string LangHandler::PRIORITY_INDICATOR = " priority ";
 const string LangHandler::LOCATION_INDICATOR = " at ";
 const string LangHandler::SPACE_BAR = " ";
+const string LangHandler::NULL_STRING = "";
 const string LangHandler::DELIMINATOR = "#";
 
 bool LangHandler::isLeap(int year)
