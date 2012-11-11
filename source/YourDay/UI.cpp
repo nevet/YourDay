@@ -455,6 +455,14 @@ void UI::setDidUKnowStatus()
 	}
 }
 
+string UI::intToString(int number)
+{
+	ostringstream ostring;
+	ostring << number;
+
+	return ostring.str();
+}
+
 void UI::initializeDidUKnowStatus()
 {
 	diduknowPrevStatus = DIDUKNOW_CLEAR;
@@ -1092,7 +1100,7 @@ void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY
 	endPosition = curRow -1;
 }
 
-void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
+void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, string index, int rowPosition)
 {
 	string part;
 	int maxPartLength;
@@ -1118,7 +1126,7 @@ void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArr
 	cout <<endl;
 }
 
-void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition)
+void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition)
 {
 	string description = partArray[1];
 	string location = partArray[2];
@@ -1149,7 +1157,7 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 	rowPosition = max(descriptionEnd, locationEnd);
 }
 
-void UI::printCalendarEntry(int index, string entry, int& rowPosition)
+void UI::printCalendarEntry(string index, string entry, int& rowPosition)
 {
 	assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
@@ -1182,7 +1190,7 @@ void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 	}
 }
 
-void UI::printGeneralEntry(int index, string entry, int& rowPosition)
+void UI::printGeneralEntry(string index, string entry, int& rowPosition)
 {
 	assert(entry!= "");
 	assert(rowPosition >= 0 && rowPosition <= WINDOWS_HEIGHT);
@@ -1215,15 +1223,18 @@ void UI::printGeneralEntry(int index, string entry, int& rowPosition)
 	}
 }
 
-void UI::printResultEntry(int index, string row, int &rowPosition)
+void UI::printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition)
 {
 	Signal temp;
+	string index;
 
 	if (isGeneral(row))
 	{
 		temp = generalDisplayMode;
 		generalDisplayMode = resultDisplayMode;
-
+		
+		generalIndex ++;
+		index = "G" + intToString(generalIndex);
 		printGeneralEntry(index, row, rowPosition);
 
 		generalDisplayMode = temp;
@@ -1233,6 +1244,8 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 		temp = calendarDisplayMode;
 		calendarDisplayMode = resultDisplayMode;
 
+		calendarIndex ++;
+		index = "C" + intToString(calendarIndex);
 		printCalendarEntry(index, row, rowPosition);
 
 		calendarDisplayMode = temp;
@@ -1377,13 +1390,15 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 		int nextInitIndex = getNextGeneralInitIndex(isValid);
 		int rowPosition = GENERAL_INIT_Y;
 		string row;
+		string indexString;
 
 		gotoxy(GENERAL_INIT_X, GENERAL_INIT_Y);
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfGeneral))
 		{
 			row = generalEntryList ->at(entryIndex);
-			printGeneralEntry(entryIndex + 1, row, rowPosition);
+			indexString = intToString(entryIndex + 1);
+			printGeneralEntry(indexString, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1405,13 +1420,15 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 		int nextInitIndex = getNextCalendarInitIndex(isValid);
 		int rowPosition = CALENDAR_INIT_Y;
 		string row;
+		string indexString;
 
 		gotoxy(CALENDAR_INIT_X, CALENDAR_INIT_Y);
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfCalendar))
 		{
 			row = calendarEntryList ->at(entryIndex);
-			printCalendarEntry(entryIndex + 1, row, rowPosition);
+			indexString = intToString(entryIndex + 1);
+			printCalendarEntry(indexString, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1433,6 +1450,8 @@ void UI::resultListDisplay(vector<string>* resultList)
 		bool isValid = true;
 		int nextInitIndex = getNextResultInitIndex(isValid);
 		string row;
+		int generalIndex = 0;
+		int calendarIndex = 0;
 
 		clearBox(COMMAND_INIT_Y+5,1);
 		highlightTitle();
@@ -1442,7 +1461,8 @@ void UI::resultListDisplay(vector<string>* resultList)
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
 		{
 			row = resultList ->at(entryIndex);
-			printResultEntry(entryIndex + 1, row, rowPosition);
+			
+			printResultEntry(generalIndex, calendarIndex, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
 		}
@@ -1534,7 +1554,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 				{
 					indexCurGeneralInitArray = findNearestInitArrayIndex(&generalInitArrayFull, i);
 				}
-				highlightGeneralRowIndex = i +1;
+				highlightGeneralRowIndex = intToString(i +1);
 				isFound = true;
 			}
 			i--;
@@ -1558,7 +1578,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 				{
 					indexCurCalendarInitArray = findNearestInitArrayIndex(&calendarInitArrayFull, i);
 				}
-				highlightCalendarRowIndex = i +1;
+				highlightCalendarRowIndex = intToString(i +1);
 				isFound = true;
 			}
 			i--;
