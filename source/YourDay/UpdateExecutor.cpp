@@ -166,6 +166,7 @@ string UpdateExecutor::constructNewEntry(string oldEntry)
 			newEntry = newEntry + oldAndNewEntries[OLD_ENTRY][numOfField] + DELIMINATOR;
 		}
 	}
+	return newEntry;
 }
 
 bool UpdateExecutor::isIndexValid(int index)
@@ -182,5 +183,6 @@ bool UpdateExecutor::isIndexValid(int index)
 
 void UpdateExecutor::undo()
 {
-	*_focusingEntryList = _undoFocusingEntryList;
+	*_generalEntryList = _undoGeneralEntryList;
+	*_calendarEntryList = _undoCalendarEntryList;
 }
