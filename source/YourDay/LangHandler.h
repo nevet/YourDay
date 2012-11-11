@@ -67,6 +67,8 @@ private:
 	bool isLogicTime(string time);
 
 	void fillUpDate(string* date);
+	void regulateDate(string* date);
+	void regulateTime(string* time);
 
 	/**
 	* This operation is used to eliminate leading and trailing spaces of a

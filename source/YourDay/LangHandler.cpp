@@ -171,11 +171,37 @@ void LangHandler::fillUpDate(string* date)
 
 	char tempDate[15];
 
+	*date = NULL_STRING;
+
 	sprintf(tempDate, "%02d/%02d/%d", day, month, year);
 
-	string tempDateStr(tempDate);
+	*date += tempDate;
+}
 
-	*date = tempDateStr;
+void LangHandler::regulateDate(string* date)
+{
+	int year, month, day;
+	
+	char tempDate[15];
+
+	sscanf(date->c_str(), "%d/%d/%d", &day, &month, &year);
+	sprintf(tempDate, "%02d/%02d/%d", day, month, year);
+
+	*date = NULL_STRING;
+	*date += tempDate;
+}
+
+void LangHandler::regulateTime(string* time)
+{
+	int h1, h2, m1, m2;
+
+	char tempTime[15];
+
+	sscanf(time->c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
+	sprintf(tempTime, "%02d:%02d-%02d:%02d", h1, m1, h2, m2);
+
+	*time = NULL_STRING;
+	*time += tempTime;
 }
 
 void LangHandler::encoder(string input, Signal command)
@@ -341,15 +367,29 @@ void LangHandler::encoder(string input, Signal command)
 					log.writeException("empty description error");
 					throw string ("empty description error\n");
 				}
-				if (!date.empty() && !isLogicDate(date))
+
+				if (!date.empty())
 				{
-					log.writeException("date error");
-					throw string ("date error\n");
-				} else
-				if (!time.empty() && !isLogicTime(time))
+					if (!isLogicDate(date))
+					{
+						log.writeException("date error");
+						throw string ("date error\n");
+					} else
+					{
+						regulateDate(&date);
+					}
+				}
+
+				if (!time.empty())
 				{
-					log.writeException("time error");
-					throw string ("time error\n");
+					if (!isLogicTime(time))
+					{
+						log.writeException("time error");
+						throw string ("time error\n");
+					} else
+					{
+						regulateTime(&time);
+					}
 				}
 
 				break;
@@ -529,15 +569,28 @@ void LangHandler::encoder(string input, Signal command)
 						
 						//after have done separating, we need to exmaine each field
 						//to make sure they are logic, if applicable
-						if (!date.empty() && !isLogicDate(date))
+						if (!date.empty())
 						{
-							log.writeException("date error");
-							throw string ("date error\n");
-						} else
-						if (!time.empty() && !isLogicTime(time))
+							if (!isLogicDate(date))
+							{
+								log.writeException("date error");
+								throw string ("date error\n");
+							} else
+							{
+								regulateDate(&date);
+							}
+						}
+
+						if (!time.empty())
 						{
-							log.writeException("time error");
-							throw string ("time error\n");
+							if (!isLogicTime(time))
+							{
+								log.writeException("time error");
+								throw string ("time error\n");
+							} else
+							{
+								regulateTime(&time);
+							}
 						}
 					}
 				}
