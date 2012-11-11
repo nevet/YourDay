@@ -20,7 +20,9 @@
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 
-const string LangHandler::PRIORITY_INDICATOR = " priority ";
+const string LangHandler::ADD_MARK_INDICATOR = " !!!";
+const string LangHandler::UPDATE_MARK_INDICATOR = " marked";
+const string LangHandler::UPDATE_UNMARK_INDICATOR = " unmarked";
 const string LangHandler::LOCATION_INDICATOR = " at ";
 const string LangHandler::SPACE_BAR = " ";
 const string LangHandler::NULL_STRING = "";
@@ -138,11 +140,6 @@ bool LangHandler::isLogicTime(string time)
 	return flag;
 }
 
-bool LangHandler::isLogicPriority(string priority)
-{
-	return (priority == "high") || (priority == "mid") || (priority == "low");
-}
-
 void LangHandler::eliminateSpaces(string& str)
 {
 	int len = str.length();
@@ -212,12 +209,12 @@ void LangHandler::encoder(string input, Signal command)
 				//add a space in front to avoid indicator missing
 				input = " " + input;
 				//check whether we have priority
-				pos = input.rfind(PRIORITY_INDICATOR);
+				pos = input.rfind(ADD_MARK_INDICATOR);
 				//contains priority info
 				if (pos != string::npos)
 				{
-					priority = input.substr(pos + PRIORITY_INDICATOR.length());
-					eliminateSpaces(priority);
+					priority = "*";
+					//eliminateSpaces(priority);
 					//get rid of priority info
 					input = input.substr(0, pos);
 				}
@@ -329,11 +326,6 @@ void LangHandler::encoder(string input, Signal command)
 					log.writeException("empty description error");
 					throw string ("empty description error\n");
 				}
-				if (!priority.empty() && !isLogicPriority(priority))
-				{
-					log.writeException("priority error");
-					throw string ("priority error\n");
-				} else
 				if (!date.empty() && !isLogicDate(date))
 				{
 					log.writeException("date error");
@@ -406,16 +398,24 @@ void LangHandler::encoder(string input, Signal command)
 						
 						input = " " + input;
 						//check whether we have priority
-						pos = input.rfind(PRIORITY_INDICATOR);
-						//contains priority info
+						pos = input.rfind(UPDATE_MARK_INDICATOR);
+
 						if (pos != string::npos)
 						{
-							priority = input.substr(pos + PRIORITY_INDICATOR.length());
-							eliminateSpaces(priority);
+							priority = "*";
 							//get rid of priority info
 							input = input.substr(0, pos);
 						}
-						
+
+						pos = input.rfind(UPDATE_UNMARK_INDICATOR);
+
+						if (pos != string::npos)
+						{
+							priority = " ";
+							//get rid of priority info
+							input = input.substr(0, pos);
+						}
+
 						eliminateSpaces(input);
 						log.writeData("Input after eliminated spaces", input);
 						log.writeExecuted("edit command separation/priority separation");
@@ -514,11 +514,6 @@ void LangHandler::encoder(string input, Signal command)
 						
 						//after have done separating, we need to exmaine each field
 						//to make sure they are logic, if applicable
-						if (!priority.empty() && !isLogicPriority(priority))
-						{
-							log.writeException("priority error");
-							throw string ("priority error\n");
-						} else
 						if (!date.empty() && !isLogicDate(date))
 						{
 							log.writeException("date error");

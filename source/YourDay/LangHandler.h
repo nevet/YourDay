@@ -40,19 +40,19 @@ private:
 
 	const static int MONTH[12];
 	
-	const static string PRIORITY_INDICATOR;
+	const static string ADD_MARK_INDICATOR;
 	const static string LOCATION_INDICATOR;
 	const static string SPACE_BAR;
 	const static string NULL_STRING;
 	const static string DELIMINATOR;
-
+	const static string UPDATE_MARK_INDICATOR;
+	const static string UPDATE_UNMARK_INDICATOR;
 	bool isLeap(int year);
 	bool isDate(string date);
 	bool isTime(string time);
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
-	bool isLogicPriority(string priority);
 
 	/**
 	* This operation is used to eliminate leading and trailing spaces of a

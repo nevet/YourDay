@@ -64,7 +64,7 @@ int Executor :: extractIndex(string details)
 	int indexLocation;
 	indexLocation = findBlockIndex(details, INDEX_BLOCK_LOCATION);
 	tempIndex = extractField(details, indexLocation);
-	index = atoi(tempIndex.c_str());
+	index = atoi(tempIndex.c_str()) -1;
 	return index;
 }
 
@@ -108,14 +108,14 @@ string Executor :: extractDate(string details)
 	return tempDate;
 }
 
-string Executor :: extractPriority(string details)
+string Executor :: extractMark(string details)
 {
 	assert(details!="");
-	string priority = "";
+	string mark = "";
 	int indexLocation;
 	indexLocation = findBlockIndex(details, PRIORITY_BLOCK_LOCATION);
-	priority = extractField(details, indexLocation);
-	return priority;
+	mark = extractField(details, indexLocation);
+	return mark;
 }
 
 int Executor::extractDay(string date)
@@ -202,7 +202,7 @@ int Executor :: extractIndexFromDescription(string description)
 
 	if(isAllNumber)
 	{
-		index = atoi(firstWord);
+		index = atoi(firstWord) - 1;
 		delete[] cstr;  
 		return index;
 	}
