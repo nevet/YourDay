@@ -3,8 +3,7 @@
     LangHandler.h
     Purpose: Calculates the total of 6 checks
 
-    @author a0088455R
-    @version 0.1 10/13/2012
+    @author A0091847U
 */
 #ifndef LANGHANDLER_H
 #define LANGHANDLER_H
@@ -73,7 +72,7 @@ private:
 
 	void splitPriority(string* str, string* priority) throw (string);
 	void splitLocation(string* str, string* location) throw (string);
-	void splitIndex(string* str, string* index) throw (string);
+	void splitIndex(string* str, string* index, bool multiple) throw (string);
 	void splitDate(string* str, string* date) throw (string);
 	void splitTime(string* str, string* time, string* date) throw (string);
 	void splitDescription(string* str, string* description) throw (string);
