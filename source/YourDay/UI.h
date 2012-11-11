@@ -85,11 +85,16 @@ private:
 	* These are the predefined values for hints string
 	* These hints are going to be printed at the didUKnow Box
 	*/
-	static const string DID_U_KNOW_ADD;
-	static const string DID_U_KNOW_DELETE;
+	static const string DID_U_KNOW_ADD_LINE1;
+	static const string DID_U_KNOW_ADD_LINE2;
+	static const string DID_U_KNOW_ADD_LINE3;
+	static const string DID_U_KNOW_DELETE_LINE1;
+	static const string DID_U_KNOW_DELETE_LINE2;
+	static const string DID_U_KNOW_DELETE_LINE3;
 	static const string DID_U_KNOW_EXIT;
 	static const string DID_U_KNOW_SEARCH;
-	static const string DID_U_KNOW_UPDATE;
+	static const string DID_U_KNOW_UPDATE_LINE1;
+	static const string DID_U_KNOW_UPDATE_LINE2;
 	static const string DID_U_KNOW_UNDO;
 	static const string DID_U_KNOW_HINTS;
 
