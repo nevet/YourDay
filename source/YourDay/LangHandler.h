@@ -12,16 +12,27 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <cstring>
+#include <cstdio>
+#include <map>
+#include <ctime>
+#include <cassert>
+
 #include "Signal.h"
+
 #include "StatusHandler.h"
 #include "StorageHandler.h"
+
 #include "Executor.h"
-#include "Log.h"
 #include "AddExecutor.h"
 #include "DeleteExecutor.h"
 #include "SearchExecutor.h"
 #include "UpdateExecutor.h"
 #include "ExitExecutor.h"
+
+#include "Log.h"
+
 
 using namespace std;
 
@@ -47,12 +58,15 @@ private:
 	const static string DELIMINATOR;
 	const static string UPDATE_MARK_INDICATOR;
 	const static string UPDATE_UNMARK_INDICATOR;
+
 	bool isLeap(int year);
 	bool isDate(string date);
 	bool isTime(string time);
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
+
+	void fillUpDate(string* date);
 
 	/**
 	* This operation is used to eliminate leading and trailing spaces of a

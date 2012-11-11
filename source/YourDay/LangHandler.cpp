@@ -6,15 +6,6 @@
     @author A0088455R
     @version 0.1 10/13/2012
 */
-
-#include <sstream>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <map>
-#include <ctime>
-#include <cassert>
-
 #include "LangHandler.h"
 
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -169,6 +160,24 @@ void LangHandler::eliminateSpaces(string& str)
 	}
 }
 
+void LangHandler::fillUpDate(string* date)
+{
+	time_t seconds = time(NULL);
+	struct tm * timeInfo = localtime(&seconds);
+
+	int year = timeInfo->tm_year + 1900;
+	int month = timeInfo->tm_mon + 1;
+	int day = timeInfo->tm_mday;
+
+	char tempDate[15];
+
+	sprintf(tempDate, "%02d/%02d/%d", day, month, year);
+
+	string tempDateStr(tempDate);
+
+	*date = tempDateStr;
+}
+
 void LangHandler::encoder(string input, Signal command)
 {
 	log.writeEntered("LangHandler::encoder()");
@@ -318,6 +327,12 @@ void LangHandler::encoder(string input, Signal command)
 				log.writeData("Input after eliminated spaces", input);
 
 				description = input;
+
+				if (!time.empty() && date.empty())
+				{
+					fillUpDate(&date);
+					log.writeData("date after auto fill up", date);
+				}
 
 				//after have done separating, we need to exmaine each field
 				//to make sure they are logic, if applicable
