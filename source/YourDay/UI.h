@@ -73,6 +73,11 @@ class UI
 {
 private:
 
+	//@author A0088455R
+	/**
+	* These are the predefined values for hints string
+	* These hints are going to be printed at the didUKnow Box
+	*/
 	static const string DID_U_KNOW_ADD;
 	static const string DID_U_KNOW_DELETE;
 	static const string DID_U_KNOW_EXIT;
@@ -109,13 +114,40 @@ private:
 	string highlightCalendarRowIndex;
 	string searchKey;
 	vector<string> searchSuggest;
-
+	//@author A0088455R
+	/**
+	* Sets the window size of the program
+	* @param void
+	* @return void
+	**/
 	void setScreenSize();
+	/**
+	* Sets the background color of a text 
+	* @param void
+	* @return void
+	**/
 	void setBackground();
+	/*
+	* This function draws the Banner of YOURDAY program
+	* designed by A0088455R
+	*/
 	void drawBanner();
 	void gotoCommandBox();
 	void drawCommandBox();
 	void clearBox(int startH, int height);
+
+	//@author A0088455R
+	/**
+	* This method allows the cursor to move to the designated position
+	* @param x
+	*		is the x coordinate destination
+	* @param y
+	*		is the y coordinate destionation
+	* @return void
+	*
+	* after this operation, the cursor will move to x,y coordinate in
+	* the screen
+	*/
 	void gotoxy(int x, int y);
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
@@ -123,6 +155,12 @@ private:
 
 	string intToString(int number);
 
+	//@author A0088455R
+	/*
+	* Initializes the DidUKnow hints box status when the program starts up
+	* @param void
+	* @return void
+	*/
 	void initializeDidUKnowStatus();
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
@@ -138,6 +176,16 @@ private:
 	void setResultInitArrayPart(vector<string>* resultList);
 	void setResultInitArrayFull(vector<string>* resultList);
 	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	//@author A0088455R
+	/**
+	* This function will set the didUKnow hints box status when there is a change of input
+	* @param void
+	* @return void
+	*
+	* This function will change the didUknow status if and only if the user changed their command
+	* or backspaces all of his/her input.
+	*/
+	void setDidUKnowStatus();
 
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
@@ -152,8 +200,7 @@ private:
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void setDidUKnowStatus();
-
+	
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
 	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, string index, int rowPosition);
 	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, string index, int& rowPosition);
@@ -162,6 +209,12 @@ private:
 	void printCalendarEntry(int index, string row, int &rowPosition);
 	void printGeneralEntry(string index, string row, int &rowPosition);
 	void printResultEntry(int& generalIndex, int& calendarIndex, string row, int &rowPosition);
+	//@author A0088455R
+	/**
+	* This method prints the didUKnow hints box is a change of didUknow status.
+	* @param void
+	* @return void
+	*/
 	void printDiduknowHints();
 
 	void printGeneralFooter();
@@ -171,6 +224,13 @@ private:
 	void generalEntryListDisplay(vector<string>* generalEntryList);
 	void calendarEntryListDisplay(vector<string>* calendarEntryList);
 	void resultListDisplay(vector<string>* resultList);
+
+	//@author A0088455R
+	/**
+	* This method triggers printing and status change of didUKnow hints box
+	* @param void
+	* @return void
+	*/
 	void diduknowHintDisplay();
 	void lockResultDisplay();
 
@@ -185,6 +245,12 @@ private:
 	void handleInitialResultIndexOverflow();
 	void handleInitialIndicesOverflow();
 
+	//@author A0088455R
+	/*
+	* Prints the starting screen
+	* @param void
+	* @return void
+	*/
 	void startingScreenDisplay();
 public:
 	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
