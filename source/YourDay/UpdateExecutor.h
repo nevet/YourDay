@@ -3,15 +3,26 @@
 
 #include <vector>
 #include "Executor.h"
+#include <string>
 
-using namespace std;
+
 //@author A0091734A
+const static string NULL_STRING = "";
+const static string DELIMINATOR = "#";
+static const string MESSAGE_INDEX_NOT_VALID = "Sorry, There is no such entry with this index :) \n";
+static const int TOTAL_NO_OF_FIELDS = 5;
+static const int CHOICES_OF_ENTRY = 2;
 
-
+enum {OLD_ENTRY, NEW_ENTRY};
+enum {DESCRIPTION_FIELD, LOCATION_FIELD, TIME_FIELD, DATE_FIELD, PRIORITY_FIELD};
+using namespace std;
 /**
-* UpdateExecutor is used to update the information of existing entry. 
+* UpdateExecutor is used to update the information of existing entry.
+* The UpdateExecutor is able to modify the time/date/description/index/location/priority of any entry,
+* according to the user input.
 * It derives from Executor supper class, so it contains execute() and undo()method.
-* 
+* The execute will update according to the current storage and the user input.
+* The encoded user input is saved in a string called "details"
 */
 class UpdateExecutor : public Executor
 {
@@ -22,13 +33,18 @@ private:
 	vector<string>* _resultList;
 
 	vector<string> _undoFocusingEntryList;
-
+	//signal indicates which area the user choose
 	Signal _focusingField;
-	string _details;
+	string _encodedUserInput;
 
+	bool isIndexValid(int index);
+	string constructNewEntry(string oldEntry);
+	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);
+	int extractNewIndex(string newEntry);
+	bool verifyTheFiledChange(string newEntry);
 public:
 	UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, 
-				   string details, Signal focusingField);
+				   string encodedUserInput, Signal focusingField);
 
 	void execute();
 	void undo();
