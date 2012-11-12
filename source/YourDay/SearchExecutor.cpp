@@ -217,8 +217,6 @@ void SearchExecutor::adjustRank()
 	}
 }
 
-	
-
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
 	string sentence = extractDescription(encoded) + " " + extractLocation(encoded);
@@ -434,18 +432,20 @@ bool SearchExecutor::unrelavent(matchInfo info, string key)
 {
 	bool flag;
 
-	if (info.match <= key.length() / 2)
+	if (info.match <= key.length() / 2 && key.length() > 4 ||
+		info.match < key.length() / 2 && key.length() <= 4)
 	{
 		flag = true;
 	} else
-	if (info.match <= info.str.length() / 2)
+	if (info.match <= info.str.length() / 2 && info.str.length() > 4 ||
+		info.match < info.str.length() / 2 && info.str.length() <= 4)
 	{
-		if (info.continuity > info.str.length() / 2)
-		{
-			flag = true;
-		} else
+		if (info.continuity <= info.str.length() / 2 && info.change == 0)
 		{
 			flag = false;
+		} else
+		{
+			flag = true;
 		}
 	} else
 	if (info.continuity > info.str.length() / 2)
@@ -845,7 +845,6 @@ void SearchExecutor::execute() throw (string)
 	vector<integerPair> tempMatchedList;
 
 	int weight;
-	int suggestWordsCnt = 1;
 	
 	string key = extractDescription(_details);
 	string currentKey;
