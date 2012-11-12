@@ -101,7 +101,8 @@ private:
 
 	/**
 	* The following methods assesses whether the data passed are correct
-	* Most of them are modified functions from language handler
+	* Most of them are modified functions from language handler to fit the
+	* specification of SearchExecutor
 	*/
 
 	/*
@@ -329,10 +330,6 @@ private:
 	*/
 	void searchText(string key, vector<int>* rank, vector<string>* suggestWords);
 
-	/**
-	* Format:  #[index of result in the entry list]#[details]#[location]#[time]#[date]#[priority]#
-	*/
-	void formatSearchResult(int index, string result, string* formattedResult);
 public:
 	SearchExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* matchedEntryList, string details);
 
