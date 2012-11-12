@@ -108,15 +108,15 @@ void UpdateExecutor::addNewEntryToRightPosition(string newEntry,int index, int n
 		if(isIndexValid(newIndex))
 		{
 			tempEntry = _focusingEntryList -> at(index );
-			position = _focusingEntryList->begin() +newIndex ;
 			//There are two situation when updating the index to newIndex. 
 			if( index >= newIndex)
 				thresholdValue = -1;
 			else 
 				thresholdValue = 0;
-		
-			_focusingEntryList->insert(position + thresholdValue +1 , tempEntry);
-			position = _focusingEntryList->begin() +index -thresholdValue;
+
+			position = _focusingEntryList->begin() +newIndex ;
+			_focusingEntryList->insert(position + (1 + thresholdValue) , tempEntry);
+			position = _focusingEntryList->begin() +(index -thresholdValue);
 			_focusingEntryList->erase(position);	
 		}
 		else
