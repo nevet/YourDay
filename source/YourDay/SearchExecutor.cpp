@@ -434,7 +434,31 @@ SearchExecutor::matchInfo SearchExecutor::compare(matchInfo a, matchInfo b)
 
 bool SearchExecutor::unrelavent(matchInfo info, string key)
 {
-	return info.match <= key.length() / 2 || info.match <= info.str.length() / 2 || info.continuity > info.str.length() / 2;
+	bool flag;
+
+	if (info.match <= key.length() / 2)
+	{
+		flag = true;
+	} else
+	if (info.match <= info.str.length() / 2)
+	{
+		if (info.continuity > info.str.length() / 2)
+		{
+			flag = true;
+		} else
+		{
+			flag = false;
+		}
+	} else
+	if (info.continuity > info.str.length() / 2)
+	{
+		flag = true;
+	} else
+	{
+		flag = false;
+	}
+
+	return flag;
 }
 
 void SearchExecutor::examRelavence(vector<matchInfo>* list, vector<int>* rank, string key)
