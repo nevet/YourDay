@@ -267,14 +267,14 @@ TEST(update_executor,updating_index_test)
 	}
 	//This sub-test-case test when the old index is smaller than new index.
 	focusingField = GENERAL;
-	EncodedUserInput = "#1#2####"; 
+	EncodedUserInput = "#1#2#####"; 
 	UpdateExecutor uptExec(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput ,focusingField);
 	uptExec.execute();
 	ASSERT_EQ(testGeneralVector[0],"##2.Meeting CS2103#UTown###*#");
 	ASSERT_EQ(testGeneralVector[1],"##1.Meeting CS2103#UTown###*#");
 
 	//This sub-test-case test when the new index is smaller than old index.
-	EncodedUserInput = "#3#1####"; 
+	EncodedUserInput = "#3#1#####"; 
 	UpdateExecutor uptExec3(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput ,focusingField);
 	uptExec3.execute();
 
@@ -294,20 +294,20 @@ TEST(basic_test,search_executor)
 	 testGeneralVector.clear();
 
 	 //build a new database for testing
-	 EncodedUserInput = "##I am Wu Pei, the test leader of our group.####";
+	 EncodedUserInput = "##I am Wu Pei, the test leader of our group.#####";
 	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
-	 EncodedUserInput =  "##Sometimes I feel sad, because as a tester, I find it is harder.####";
+	 EncodedUserInput =  "##Sometimes I feel sad, because as a tester, I find it is harder.#####";
 	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec2.execute();
-	 EncodedUserInput =  "##But most time I am still happy, because I am in a nice group.####";
+	 EncodedUserInput =  "##But most time I am still happy, because I am in a nice group.#####";
 	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec3.execute();
-	 EncodedUserInput =  "##So, I am painful but happy now.####";
+	 EncodedUserInput =  "##So, I am painful but happy now.#####";
 	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec4.execute();
 	 
-	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wupei####");
-	// searchExec.execute();
+	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wupei#####");
+	 searchExec.execute();
     //this is only one entry containing "wupei".
 	// ASSERT_EQ(matchedList[0],"#G0#I am Wu Pei, the test leader of our group.####");
 	 
@@ -330,20 +330,20 @@ TEST(basic_test,search_executor)
 	 testCalendarVector.clear();
 	 testGeneralVector.clear();
 
-	 EncodedUserInput = "##Wu Pei####";
+	 EncodedUserInput = "##Wu Pei#####";
 	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec1.execute();
-	 EncodedUserInput =  "##Ignatius Damai####";
+	 EncodedUserInput =  "##Ignatius Damai#####";
 	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec2.execute();
-	 EncodedUserInput =  "##Nhu Thao Nguyen####";
+	 EncodedUserInput =  "##Nhu Thao Nguyen#####";
 	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec3.execute();
-	 EncodedUserInput =  "##Da Huang####";
+	 EncodedUserInput =  "##Da Huang#####";
 	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec4.execute();
 
-	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##Soe Myat####");
+	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##Soe Myat#####");
 	 searchExec.execute();
 	 //As nothing matched, there should be no result.
 	ASSERT_EQ(matchedList.size(),0);
@@ -364,22 +364,22 @@ TEST(basic_test,search_executor)
 	 testGeneralVector.clear();
 
 	 //build a new database for testing
-	 EncodedUserInput = "##I am going to have lunch with Damai####";
+	 EncodedUserInput = "##I am going to have lunch with Damai#####";
 	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
-	 EncodedUserInput =  "##Due Yourday in next 10 minutes####";
+	 EncodedUserInput =  "##Due Yourday in next 10 minutes#####";
 	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec2.execute();
-	 EncodedUserInput =  "##Group meeting for CG2271 makes me die####";
+	 EncodedUserInput =  "##Group meeting for CG2271 makes me die#####";
 	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec3.execute();
-	 EncodedUserInput =  "##Start to do the CG2271 term assignment.####";
+	 EncodedUserInput =  "##Start to do the CG2271 term assignment.#####";
 	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, EncodedUserInput);
 	 addExec4.execute();
 	 //searching test constructor
-	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##asignment####");
+	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##asignment#####");
 	 searchExec1.execute();
 	 //Compare actual result with expected result.
-	 ASSERT_EQ(matchedList[0],"#G3#Start to do the CG2271 term assignment.####");
+	 ASSERT_EQ(matchedList[0],"#G3#Start to do the CG2271 term assignment.#####");
  }
 
  /**

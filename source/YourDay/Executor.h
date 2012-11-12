@@ -304,7 +304,7 @@ protected:
 	* the start will be "15:00" and end will be "14:00"
 	*/
 	void splitStartEndTime(string* start, string* end, string timeRange);
-
+	//@ author A0091734A
 	int extractIndexFromDescription(string description);
 
 public:
