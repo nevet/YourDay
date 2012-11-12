@@ -481,6 +481,15 @@ void UI::setDidUKnowStatus()
 		diduknowStatus = DIDUKNOW_INIT;
 	}
 }
+
+string UI::intToString(int number)
+{
+	ostringstream ostring;
+
+	ostring << number;
+	return ostring.str();
+}
+
 /*
 * Initialized DidUKnow Hints box status when starting up the program for the first time
 */
@@ -1136,10 +1145,17 @@ void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArr
 {
 	string part;
 	int maxPartLength;
+	string temp;
 
+	if (partArray[0] == "")
+	{
+		temp = intToString(index) + ".";
+		partArray[0] = temp;
+	}
+	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
 	gotoxy(positionArray[0], rowPosition);
-	cout<<index<<". ";
+	cout<<partArray[0];
 
 
 	for (int i = 1; i < NUMBER_OF_ENTRY_PARTS; i++)
@@ -1170,11 +1186,17 @@ void UI::printEntryFullMode(int* positionArray, int* colorArray, string* partArr
 	int locationMaxLength = positionArray[3]- positionArray[2] -1;
 	int descriptionEnd;
 	int locationEnd;
+	string temp;
+
+	if (partArray[0] == "")
+	{
+		temp = intToString(index) + ".";
+		partArray[0] = temp;
+	}
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[0]);
 	gotoxy(positionArray[0], rowPosition);
-	cout<<index<<". ";
-
+	cout<<partArray[0];
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),colorArray[1]);
 	printLimitedLengthPart(description, descriptionMaxLength, positionArray[1], rowPosition, descriptionEnd);
 

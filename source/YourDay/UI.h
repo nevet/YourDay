@@ -167,6 +167,8 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle();
 
+	string intToString(int number);
+
 	//@author A0088455R
 	/*
 	* Initializes the DidUKnow hints box status when the program starts up
