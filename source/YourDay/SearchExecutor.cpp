@@ -142,11 +142,11 @@ bool SearchExecutor::isLogicTime(string time)
 /**
 * This method uses assign function of vector to assign a predefined value of 0
 **/
-void SearchExecutor::initializeScore(int totalSize)
+void SearchExecutor::initializeScore()
 {
 	score.clear();
 	//assigns NULL value to both arrays with the size of totalSize
-	score.assign(totalSize, NULL);
+	score.assign(totalEntries, NULL);
 }
 
 /**
@@ -154,11 +154,11 @@ void SearchExecutor::initializeScore(int totalSize)
 * the ranks are going to be demoted later according to the match level
 * highest rank = totalSize, lowest rank = 0
 **/
-void SearchExecutor::initializeRank(int totalSize)
+void SearchExecutor::initializeRank()
 {
 	rank.clear();
 
-	rank.assign(totalSize,totalSize);
+	rank.assign(totalEntries,totalEntries);
 }
 
 /**
@@ -201,13 +201,13 @@ void SearchExecutor::setRank(int index, int level)
 **/
 void SearchExecutor::adjustRank()
 {
-	int listSize = _combinedEntryList.size();
+	int totalEntries = _combinedEntryList.size();
 	int i;
 	if ( highestRank >= 1 )
 	{
-		for (i = 0; i < listSize; i++)
+		for (i = 0; i < totalEntries; i++)
 		{
-			rank[i] += ( listSize-highestRank  );
+			rank[i] += ( totalEntries-highestRank  );
 			// The rank cannot be less than 0.
 			if ( rank[i] < 0 )
 			{
@@ -579,14 +579,14 @@ void SearchExecutor::searchDate(string keyword)
 
 	noMatch = true;
 
-	int listSize = _combinedEntryList.size();
+	
 
 	highestRank=0;
 
 
-	initializeRank(listSize);
+	
 
-	for (i = 0; i < listSize; i++)
+	for (i = 0; i < totalEntries; i++)
 	{
 		checkEntryDate(i, keyword);
 	}
@@ -684,12 +684,9 @@ void SearchExecutor::searchTime(string keyword)
 
 	noMatch = true;
 
-	int listSize = _combinedEntryList.size();
-
+	int totalEntries = _combinedEntryList.size();
 	
-	initializeRank(listSize);
-
-	for (i=0; i<listSize; i++)
+	for (i=0; i<totalEntries; i++)
 	{
 		checkEntryTime(i, keyword);
 	}
@@ -803,6 +800,13 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 
 	treshold = 0;
 
+	initializeCombinedEntry();
+	
+	totalEntries = _combinedEntryList.size();
+
+	initializeRank();
+	initializeScore();
+
 	_undoCalendarEntryList = *calendarEntryList;
 	_undoGeneralEntryList = *generalEntryList;
 	_undoMatchedEntryList = *matchedEntryList;
@@ -822,13 +826,7 @@ void SearchExecutor::execute() throw (string)
 	string key = extractDescription(_details);
 	string currentKey;
 
-	updateSuggestWords(&encodedSuggestWords, key);
-	
-	initializeCombinedEntry();
-	
-	int totalEntries = _combinedEntryList.size();
-
-	initializeScore(totalEntries);
+	updateSuggestWords(&encodedSuggestWords, key);	
 	
 	//while we can still extract keywords from the input
 	while (!key.empty())

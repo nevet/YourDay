@@ -1310,6 +1310,7 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 */
 void UI::printDiduknowHints()
 {
+	int lines;
 	if (isDiduknowDisplay)
 	{	
 		clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
@@ -1362,7 +1363,13 @@ void UI::printDiduknowHints()
 			break;
 		}
 		cout<<endl;	
-		gotoxy(8+currentChar,COMMAND_INIT_Y);
+		lines = currentChar/ FIRST_LINE_INPUT_WIDTH;
+		currentChar = currentChar % FIRST_LINE_INPUT_WIDTH;
+		if ( lines >= 1 )
+		{
+
+			gotoxy(INPUT_START_X+currentChar,INPUT_START_Y);
+		}
 	}
 	diduknowPrevStatus=diduknowStatus;
 }
