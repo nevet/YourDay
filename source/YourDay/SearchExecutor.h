@@ -254,7 +254,20 @@ private:
 	*			is the structure stored the match info
 	*/
 	void calInfo(int i, int j, string a, string b, string & x, string & y, matchInfo & t);
+
+	/**
+	* This operation is used to tell whether a and b are the same.
+	*
+	* The operation is called in editing distance dynamic programming.
+	*/
 	int notsame(char a, char b);
+
+	/**
+	* This operation is used to calculate editing distance of two strings and
+	* store the match info of match string.
+	*
+	* 
+	*/
 	void edit(string a, string b, matchInfo & ans);
 	static bool cmp(matchInfo a, matchInfo b);
 	matchInfo compare(matchInfo a, matchInfo b);
