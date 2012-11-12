@@ -109,6 +109,7 @@ private:
 
 	int currentChar;
 	bool isResultDisplay;
+	bool isDiduknowDisplay;
 
 	vector<int> generalInitArrayPart;
 	vector<int> generalInitArrayFull;

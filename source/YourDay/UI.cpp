@@ -176,7 +176,6 @@ void UI::highlightTitle()
 			clearBox (COMMAND_INIT_Y +2, 1);
 			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
 			printResultFooter();
-			printSearchInfo();
 		}
 		break;
 	}
@@ -425,8 +424,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 				cout << keyIn;
 				input += keyIn;
 				currentChar++;
-
-				lockResultDisplay();
+				
 				diduknowHintDisplay();
 			}
 			break;
@@ -1438,6 +1436,7 @@ void UI::printResultFooter()
 		cout << "Page " << indexCurResultInitArray + 1<< "/" << resultInitArrayFull.size();
 		break;
 	}
+	printSearchInfo();
 }
 
 void UI::generalEntryListDisplay(vector<string>* generalEntryList)
@@ -1535,12 +1534,15 @@ void UI::resultListDisplay(vector<string>* resultList)
 
 void UI::diduknowHintDisplay()
 {	
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
-	setDidUKnowStatus();
-
-	if (diduknowStatus != diduknowPrevStatus)
+	if (isDiduknowDisplay)
 	{
-		printDiduknowHints();
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+		setDidUKnowStatus();
+
+		if (diduknowStatus != diduknowPrevStatus)
+		{
+			printDiduknowHints();
+		}
 	}
 }
 
@@ -1754,6 +1756,11 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 		focusedField = SEARCH_RESULT;
 		indexCurResultInitArray = 0;
 	}
+	else
+	{
+		isResultDisplay = false;
+	}
+	isDiduknowDisplay = !isResultDisplay;
 
 	generalEntryListDisplay(generalEntryList);
 	calendarEntryListDisplay(calendarEntryList);
