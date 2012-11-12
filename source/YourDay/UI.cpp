@@ -176,6 +176,23 @@ void UI::highlightTitle()
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
+void UI::gotoCurChar()
+{
+	int lines;
+	int newLineCharCount;
+
+	lines = currentChar/ FIRST_LINE_INPUT_WIDTH;
+	newLineCharCount = currentChar % FIRST_LINE_INPUT_WIDTH;
+	if ( lines >= 1 )
+	{
+		gotoxy(newLineCharCount,INPUT_START_Y);
+	}
+	else
+	{
+		gotoxy(INPUT_START_X+currentChar,INPUT_START_Y);
+	}
+}
+
 void UI::changeDisplayMode()
 {	
 	int curInitIndex;
@@ -236,17 +253,17 @@ void UI::displayNewMode()
 	case GENERAL:
 		clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT);
 		generalEntryListDisplay();
-		drawCommandBox();
+		gotoCurChar();
 		break;
 	case CALENDAR:
 		clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT);
 		calendarEntryListDisplay();
-		drawCommandBox();
+		gotoCurChar();
 		break;
 	case SEARCH_RESULT:
 		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
 		resultListDisplay();
-		drawCommandBox();
+		gotoCurChar();
 		break;
 	default:
 		assert (false);
@@ -356,11 +373,11 @@ void UI::traceMovementKey()
 	{
 	case UP_ARROW:
 		scrollUp();
-		gotoxy(currentChar+INPUT_START_X,COMMAND_INIT_Y);
+		gotoCurChar();
 		break;
 	case DOWN_ARROW:
 		scrollDown();
-		gotoxy(currentChar+INPUT_START_X,COMMAND_INIT_Y);
+		gotoCurChar();
 		break;
 	case PAGE_UP:
 		changeDisplayMode();
@@ -1231,8 +1248,7 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 */
 void UI::printDiduknowHints()
 {
-	int lines;
-	int newLineCharCount;
+
 	if (isDiduknowDisplay)
 	{	
 		clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
@@ -1285,17 +1301,7 @@ void UI::printDiduknowHints()
 			break;
 		}
 		cout<<endl;	
-		lines = currentChar/ FIRST_LINE_INPUT_WIDTH;
-		newLineCharCount = currentChar % FIRST_LINE_INPUT_WIDTH;
-		if ( lines >= 1 )
-		{
-			gotoxy(newLineCharCount,INPUT_START_Y);
-		}
-		else
-		{
-			gotoxy(INPUT_START_X+currentChar,INPUT_START_Y);
-		}
-
+		gotoCurChar();
 	}
 	diduknowPrevStatus=diduknowStatus;
 }
@@ -1335,7 +1341,7 @@ void UI::printGeneralFooter()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, GENERAL_INIT_Y - 2);
 	cout << "                             ";
-	gotoxy(15, COMMAND_INIT_Y +2);
+	gotoxy(15, GENERAL_INIT_Y -2);
 
 	switch (generalDisplayMode)
 	{
@@ -1353,7 +1359,7 @@ void UI::printCalendarFooter()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, CALENDAR_INIT_Y -2);
 	cout << "                             ";
-	gotoxy(15, COMMAND_INIT_Y +2);
+	gotoxy(15, CALENDAR_INIT_Y -2);
 
 	switch (calendarDisplayMode)
 	{
@@ -1474,7 +1480,7 @@ void UI::resultListDisplay()
 //@author A0088455R
 /**
 * This Method Triggers the didUKnowHints display functionalities
-* This Method should be triggered everytim user gives an input
+* This Method should be triggered everyting user gives an input
 **/
 
 void UI::diduknowHintDisplay()
