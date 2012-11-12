@@ -1716,7 +1716,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	system("CLS");
 
 	highlightCalendarRowIndex = -1;
-	highlightCalendarRowIndex = -1;
+	highlightGeneralRowIndex = -1;
 
 	highlightTitle();
 
