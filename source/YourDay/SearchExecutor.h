@@ -412,6 +412,7 @@ private:
 	*/
 	void searchTime(string keyword);
 
+	//@author A0091847U
 	/**
 	* This operation will search plain-text key from all the entries, then
 	* assign ranks to each entries and put the suggesting words inside a vector
