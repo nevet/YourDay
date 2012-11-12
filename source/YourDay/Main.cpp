@@ -31,7 +31,6 @@
 #include "UI.h"
 #include "Log.h"
 #include "Signal.h"
-#include "StatusHandler.h"
 #include "FunctionHandler.h"
 
 //This header is for testing purpose
@@ -64,9 +63,7 @@ int main(int arg, char** test)
 	//create a logger
 	Log log;
 	
-	log.writeTime();
-
-	Signal signal = CLEAR;                                                                                 
+	log.writeTime();                                                                             
 	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	log.writeCreated("FunctionHandler instance");
@@ -100,7 +97,6 @@ int main(int arg, char** test)
 							 &diduknowBoxList);
 			log.writeExecuted("FunctionHandler::execute()");
 
-			signal = function.getStatus();
 			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 		}
 		catch (string excpt)

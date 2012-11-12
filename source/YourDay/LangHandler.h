@@ -20,7 +20,6 @@
 
 #include "Signal.h"
 
-#include "StatusHandler.h"
 #include "StorageHandler.h"
 
 #include "Executor.h"
@@ -37,14 +36,10 @@ using namespace std;
 
 class LangHandler
 {
-private:
-
-	StatusHandler sh;
-	
+private:	
 	Log log;
 
 	Signal command;
-	Signal langStatus;
 
 	string details;
 
@@ -155,13 +150,6 @@ private:
 public :
 	
 	LangHandler();
-
-	/**
-	* Signals will be:
-	* SUCCESS		User input has been successfully proceeded;
-	* Exception signals threw by separate
-	*/
-	Signal getStatus();
 
 	//@author A0088455R
 	/**

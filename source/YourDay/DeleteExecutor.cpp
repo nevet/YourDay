@@ -8,6 +8,8 @@ DeleteExecutor::DeleteExecutor(vector<string>* generalEntryList, vector<string>*
 	assert(calendarEntryList!=NULL);
 	assert(focusingField!=GENERAL || focusingField!=CALENDAR);
 
+	_undoEnable = true;
+
 	switch (focusingField)
 	{
 		case GENERAL:
