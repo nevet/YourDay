@@ -592,18 +592,13 @@ void SearchExecutor::searchDate(string keyword)
 	int i;
 
 	noMatch = true;
-
-	
-
-	highestRank=0;
-
-
-	
+	highestRank=0;	
 
 	for (i = 0; i < totalEntries; i++)
 	{
 		checkEntryDate(i, keyword);
 	}
+
 	adjustRank();	
 }
 
@@ -694,16 +689,15 @@ void SearchExecutor::searchTime(string keyword)
 	assert(keyword!="");
 
 	int i;
+
 	highestRank=0;
-
 	noMatch = true;
-
-	int totalEntries = _combinedEntryList.size();
 	
 	for (i=0; i<totalEntries; i++)
 	{
 		checkEntryTime(i, keyword);
 	}
+
 	adjustRank();
 }
 
