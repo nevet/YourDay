@@ -36,7 +36,7 @@ UpdateExecutor::UpdateExecutor(vector<string>* generalEntryList, vector<string>*
 	_undoCalendarEntryList = *calendarEntryList;
 	_undoGeneralEntryList = *generalEntryList;
 }
-
+//The overall logic flow of UpdateExecutor
 void UpdateExecutor::execute()
 {
 	int index, newIndex;

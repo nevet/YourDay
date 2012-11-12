@@ -198,8 +198,6 @@ int Executor :: extractIndexFromDescription(string description)
 		}
 	}
 	
-
-
 	if(isAllNumber)
 	{
 		index = atoi(firstWord) - 1;
