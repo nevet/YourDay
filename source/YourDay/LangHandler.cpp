@@ -9,15 +9,23 @@
 
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-const char LangHandler::SPACE_BAR = ' ';
-const char LangHandler::DELIMINATOR = '#';
-const char LangHandler::PRIORITY_INDICATOR = '*';
+const char LangHandler::SPACE_BAR			= ' ';
+const char LangHandler::DELIMINATOR			= '#';
+const char LangHandler::PRIORITY_INDICATOR	= '*';
 
-const string LangHandler::ADD_MARK_INDICATOR = " !!!";
-const string LangHandler::UPDATE_MARK_INDICATOR = " marked";
-const string LangHandler::UPDATE_UNMARK_INDICATOR = " unmarked";
-const string LangHandler::LOCATION_INDICATOR = " at ";
-const string LangHandler::NULL_STRING = "";
+const bool LangHandler::DELETE_MULTIPLE_INDEX_ENABLE	= false;
+const bool LangHandler::UPDATE_MULTIPLE_INDEX_ENABLE	= true;
+const bool LangHandler::ADD_DATE_AUTOFILL_ENABLE		= true;
+const bool LangHandler::UPDATE_DATE_AUTOFILL_ENABLE		= false;
+const bool LangHandler::ADD_EMPTY_DESCRIPTION_ENABLE	= false;
+const bool LangHandler::UPDATE_EMPTY_DESCRIPTION_ENABLE	= true;
+const bool LangHandler::SEARCH_EMPTY_DESCRIPTION_ENABLE	= false;
+
+const string LangHandler::ADD_MARK_INDICATOR		= " !!!";
+const string LangHandler::UPDATE_MARK_INDICATOR		= " marked";
+const string LangHandler::UPDATE_UNMARK_INDICATOR	= " unmarked";
+const string LangHandler::LOCATION_INDICATOR		= " at ";
+const string LangHandler::NULL_STRING				= "";
 
 bool LangHandler::isLeap(int year)
 {
@@ -517,14 +525,14 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				log.writeData("input", input);
 				log.writeData("date", date);
 
-				splitTime(&input, &time, &date, true);
+				splitTime(&input, &time, &date, ADD_DATE_AUTOFILL_ENABLE);
 				regulateTime(&time);
 
 				log.writeExecuted("LangHandler::splitTime()");
 				log.writeData("input", input);
 				log.writeData("time", time);
 
-				splitDescription(&input, &description, false);
+				splitDescription(&input, &description, ADD_EMPTY_DESCRIPTION_ENABLE);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
@@ -537,7 +545,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case DELETE_COMMAND:
 				log.writeConditionEntered("delete command separation", true);
 				
-				splitIndex(&input, &index, false);
+				splitIndex(&input, &index, DELETE_MULTIPLE_INDEX_ENABLE);
 
 				log.writeExecuted("LangHandler::splitIndex()");
 				log.writeData("input", input);
@@ -549,7 +557,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case UPDATE_COMMAND:
 				log.writeConditionEntered("edit command separation", true);
 
-				splitIndex(&input, &index, true);
+				splitIndex(&input, &index, UPDATE_MULTIPLE_INDEX_ENABLE);
 
 				log.writeExecuted("LangHandler::splitIndex()");
 				log.writeData("input", input);
@@ -581,14 +589,14 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				log.writeData("input", input);
 				log.writeData("date", date);
 
-				splitTime(&input, &time, &date, false);
+				splitTime(&input, &time, &date, UPDATE_DATE_AUTOFILL_ENABLE);
 				regulateTime(&time);
 
 				log.writeExecuted("LangHandler::splitTime()");
 				log.writeData("input", input);
 				log.writeData("time", time);
 
-				splitDescription(&input, &description, true);
+				splitDescription(&input, &description, UPDATE_EMPTY_DESCRIPTION_ENABLE);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
@@ -601,7 +609,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case SEARCH_COMMAND:
 				log.writeConditionEntered("search command separation", true);
 				
-				splitDescription(&input, &description, false);
+				splitDescription(&input, &description, SEARCH_EMPTY_DESCRIPTION_ENABLE);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
@@ -672,13 +680,6 @@ void LangHandler::setCommand(string userCommand)
 
 LangHandler::LangHandler()
 {
-	//set default value for language handler status
-	langStatus = CLEAR;
-}
-
-Signal LangHandler::getStatus()
-{
-	return langStatus;
 }
 
 //@author A0088455R
@@ -712,6 +713,7 @@ void LangHandler::separate(string userInput) throw (string)
 	log.writeData("details", details);
 }
 
+//A0091847U
 Executor* LangHandler::pack(bool* quit, Signal focusingField,
 										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,

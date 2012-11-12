@@ -29,14 +29,6 @@ class StorageHandler
 {
 public :
 	StorageHandler();
-
-	/**
-	Sets the status of the language handler after input processing
-	
-	@param void
-	@return void
-	*/
-	void setStatus();
 	
 	/**
 	Read the data stored in the file, and put it in a vector of string.
@@ -77,9 +69,6 @@ private :
 	static const string DataBaseCalendarFile;
 	static const string FILEPATH;
 	static const string ENTRY_STORE_FORMAT;
-	Signal status;
-
-
 };
 
 
