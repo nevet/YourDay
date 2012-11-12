@@ -1,4 +1,3 @@
-
 #ifndef UI_H
 #define UI_H
 
@@ -11,13 +10,22 @@
 #include <conio.h>
 #include "Signal.h"
 
+#define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
+#define DESCRIPTION_COLOR FOREGROUND_INTENSITY |FOREGROUND_BLUE | FOREGROUND_GREEN
+#define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_RED
+#define TIME_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
+#define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN 
+#define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
+#define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED
+#define HIGHLIGHT_COLOR 1|BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY
+
 #define WINDOWS_HEIGHT 40
 #define WINDOWS_WIDTH 120
 #define GENERAL_TITLE_HEIGHT 2
 #define GENERAL_BOX_HEIGHT 12
 #define CALENDAR_TITLE_HEIGHT 3
 #define CALENDAR_BOX_HEIGHT (WINDOWS_HEIGHT-GENERAL_TITLE_HEIGHT-GENERAL_BOX_HEIGHT-CALENDAR_TITLE_HEIGHT-COMMAND_BOX_HEIGHT-BOTTOM_BOX_HEIGHT -1) 
-// -1 because don't use the line before command box
+							// -1 because don't use the line before command box
 #define COMMAND_BOX_HEIGHT 2
 #define BOTTOM_BOX_HEIGHT 7 
 #define DIDUKNOW_HEIGHT 4
@@ -31,12 +39,11 @@
 #define COMMAND_INIT_X 0
 #define INPUT_START_X 8
 #define INPUT_START_Y COMMAND_INIT_Y
+#define FIRST_LINE_INPUT_WIDTH (WINDOWS_WIDTH - INPUT_START_X)
 #define DIDUKNOW_INIT_X 0
 #define DIDUKNOW_INIT_Y (COMMAND_INIT_Y + COMMAND_BOX_HEIGHT)
 #define OPERATION_RESULT_Y (DIDUKNOW_INIT_Y +2)
 #define OPERATION_RESULT_X 0
-
-#define NUMBER_OF_ENTRY_PARTS 6
 
 //INDEX_COLOR, DESCRIPTION_COLOR, LOCATION_COLOR, TIME_COLOR, DATE_COLOR, PRIORITY_COLOR
 #define CALENDAR_INDEX_INIT_X 2
@@ -53,19 +60,17 @@
 #define GENERAL_DATE_INIT_X 113
 #define GENERAL_PRIORITY_INIT_X 113
 
-#define INDEX_COLOR FOREGROUND_INTENSITY | FOREGROUND_BLUE
-#define DESCRIPTION_COLOR FOREGROUND_INTENSITY |FOREGROUND_BLUE | FOREGROUND_GREEN
-#define LOCATION_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_RED
-#define TIME_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN
-#define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN 
-#define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
-
-#define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED
+#define COMMAND_STRING_LENGTH 8 
 
 #define TAB 9
 #define ENTER 13
 #define BACKSPACE 8
+#define MOVEMENT_SIGN -32
+#define UP_ARROW 72
+#define DOWN_ARROW 80
+#define PAGE_UP 73
 
+#define NUMBER_OF_ENTRY_PARTS 6
 #define MAX_INPUT_SIZE (WINDOWS_WIDTH * 2 -9)
 
 using namespace std;
@@ -73,12 +78,6 @@ using namespace std;
 class UI
 {
 private:
-
-	static const string CLEAR_SIGNAL_MESSAGE;
-	static const string ADD_SUCCESSFUL_MESSAGE;
-	static const string UPDATE_SUCCESSFUL_MESSAGE;
-	static const string DELETE_SUCCESSFUL_MESSAGE;
-	static const string ONE_EMPTY_LINE;
 
 	//@author A0088455R
 	/**
@@ -96,7 +95,9 @@ private:
 	static const string DID_U_KNOW_UPDATE_LINE1;
 	static const string DID_U_KNOW_UPDATE_LINE2;
 	static const string DID_U_KNOW_UNDO;
-	static const string DID_U_KNOW_HINTS;
+	static const string DID_U_KNOW_HINTS_LINE1;
+	static const string DID_U_KNOW_HINTS_LINE2;
+	static const string DID_U_KNOW_HINTS_LINE3;
 
 	HANDLE hConsole;
 	string input;
@@ -108,8 +109,9 @@ private:
 	Signal diduknowPrevStatus;
 	Signal prevCommand;
 
-	int currentChar;
-	bool isResultDisplay;
+	vector<string> calendarList;
+	vector<string> generalList;
+	vector<string> resultList;
 
 	vector<int> generalInitArrayPart;
 	vector<int> generalInitArrayFull;
@@ -126,6 +128,12 @@ private:
 	int highlightCalendarRowIndex;
 	string searchKey;
 	vector<string> searchSuggest;
+
+	int currentChar;
+
+	bool isResultDisplay;
+	bool isDiduknowDisplay;
+
 
 	//@author A0088455R
 	/**
@@ -168,6 +176,8 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle();
 
+	string intToString(int number);
+
 	//@author A0088455R
 	/*
 	* Initializes the DidUKnow hints box status when the program starts up
@@ -178,17 +188,18 @@ private:
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
 	void initializeFocusedField();
+	void initializeHighlightIndices();
 
 	void extractParts(string entry, string* partArray);
 	int countPartLine(string part, int maxLength);
 	bool isGeneral(string row);
-	void setGeneralInitArrayPart(vector<string>* generalEntryList);
-	void setGeneralInitArrayFull(vector<string>* generalEntryList);
-	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
-	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
-	void setResultInitArrayPart(vector<string>* resultList);
-	void setResultInitArrayFull(vector<string>* resultList);
-	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void setGeneralInitArrayPart();
+	void setGeneralInitArrayFull();
+	void setCalendarInitArrayPart();
+	void setCalendarInitArrayFull();
+	void setResultInitArrayPart();
+	void setResultInitArrayFull();
+	void setInitialIndexArrays();
 
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
@@ -199,10 +210,12 @@ private:
 	int findNearestInitArrayIndex(vector<int>* initialIndexArray, int entryIndex);
 
 	void changeDisplayMode();
-	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void displayNewMode();
 	void changeFocusedField();
-	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void scrollUp();
+	void scrollDown();
+	void traceMovementKey();
+	void processBackspace();
 
 	//@author A0088455R
 	/**
@@ -236,9 +249,9 @@ private:
 	void printCalendarFooter();
 	void printResultFooter();
 
-	void generalEntryListDisplay(vector<string>* generalEntryList);
-	void calendarEntryListDisplay(vector<string>* calendarEntryList);
-	void resultListDisplay(vector<string>* resultList);
+	void generalEntryListDisplay();
+	void calendarEntryListDisplay();
+	void resultListDisplay();
 
 	//@author A0088455R
 	/**
@@ -250,9 +263,9 @@ private:
 
 	void lockResultDisplay();
 
-	void processResultList(vector<string>* resultList, string& info);
-	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
-	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
+	void processResultList(string& info);
+	void handleResultInfo(string info);
+	void processAddUpdateInfo(string info);
 	void processSearchInfo(string info);
 	void printSearchInfo();
 
@@ -260,6 +273,8 @@ private:
 	void handleInitialCalendarIndexOverflow();
 	void handleInitialResultIndexOverflow();
 	void handleInitialIndicesOverflow();
+	
+	void copyList(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
 
 	//@author A0088455R
 	/*
@@ -269,10 +284,10 @@ private:
 	*/
 	void startingScreenDisplay();
 public:
-	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
 
-	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
+	void traceInput();
 
 	string retrieveInput();
 	Signal retrieveFocusedField();

@@ -24,10 +24,6 @@ StorageHandler::StorageHandler()
 		ofstream writeFile(FILEPATH + DataBaseCalendarFile);
 }
 
-void StorageHandler::setStatus()
-{
-	status = CLEAR;
-}
 //read data from database
 void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {	

@@ -6,7 +6,6 @@
 
 Executor::Executor()
 {
-	status = CLEAR;
 }
 
 const int Executor::INDEX_BLOCK_LOCATION		= 1;  
@@ -14,7 +13,7 @@ const int Executor::DESCRIPTION_BLOCK_LOCATION	= 2;
 const int Executor::LOCATION_BLOCK_LOCATION		= 3;
 const int Executor::TIME_BLOCK_LOCATION			= 4;
 const int Executor::DATE_BLOCK_LOCATION			= 5;
-const int Executor::MARK_BLOCK_LOCATION		= 6;
+const int Executor::MARK_BLOCK_LOCATION			= 6;
 const int Executor::NO_INDEX_IN_DESCRIPTION		= -1;
 
 int Executor :: findBlockIndex(string details, int blockLocation)
@@ -48,7 +47,7 @@ string Executor :: extractField(string details, int startLocation)
 	string extracted = "";
 	// this loop will extract characters by characters of the field between
 	// 2 '#'s
-	while (details[++index] != '#')
+	while ((index+1)<details.size()&&details[++index] != '#')
 	{
 		extracted += details[index];
 	}
@@ -115,6 +114,7 @@ string Executor :: extractMark(string details)
 	int indexLocation;
 	indexLocation = findBlockIndex(details, MARK_BLOCK_LOCATION);
 	mark = extractField(details, indexLocation);
+
 	return mark;
 }
 
@@ -221,7 +221,7 @@ void Executor::undo()
 {
 }
 
-Signal Executor::getStatus()
+bool Executor::isUndoAble()
 {
-	return status;
+	return _undoEnable;
 }

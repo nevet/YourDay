@@ -13,29 +13,12 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 	assert(calendarEntryList!=NULL);
 	assert(resultList!=NULL);
 
-	//set default value for function handler status
-	fxStatus = CLEAR;
-	
-	//generalEntryList->clear();
-	//calendarEntryList->clear();
-	//resultList->clear();
-
 	while (!undoStk.empty())
 	{
 		undoStk.pop();
 	}
 
 	store.readData(generalEntryList, calendarEntryList);
-}
-
-Signal FunctionHandler::getStatus()
-{
-	return fxStatus;
-}
-
-void FunctionHandler::clearStatus()
-{
-	fxStatus = CLEAR;
 }
 
 void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
@@ -70,12 +53,16 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 		if (exe != NULL)
 		{
 			log.writeConditionEntered("exe != NULL", true);
+
 			//then we execute the executor and caught the exception threw by it
 			exe->execute();
 			log.writeExecuted("Executor::execute()");
 			
-			undoStk.push(exe);
-			log.writeExecuted("stack::push()");
+			if (exe->isUndoAble())
+			{
+				undoStk.push(exe);
+				log.writeExecuted("stack::push()");
+			}
 
 			store.writeData(generalEntryList, calendarEntryList);
 		} else
@@ -86,7 +73,7 @@ void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 			{
 				log.writeConditionEntered("undoStk is empty", true);
 				
-				throw string ("Undo error\n");
+				throw string ("There is nothing to undo!\n");
 			}
 			else
 			{
