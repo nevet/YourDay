@@ -108,9 +108,9 @@ private:
 	Signal diduknowPrevStatus;
 	Signal prevCommand;
 
-	int currentChar;
-	bool isResultDisplay;
-	bool isDiduknowDisplay;
+	vector<string> calendarList;
+	vector<string> generalList;
+	vector<string> resultList;
 
 	vector<int> generalInitArrayPart;
 	vector<int> generalInitArrayFull;
@@ -127,6 +127,12 @@ private:
 	int highlightCalendarRowIndex;
 	string searchKey;
 	vector<string> searchSuggest;
+
+	int currentChar;
+
+	bool isResultDisplay;
+	bool isDiduknowDisplay;
+
 
 	//@author A0088455R
 	/**
@@ -181,17 +187,18 @@ private:
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
 	void initializeFocusedField();
+	void initializeHighlightIndices();
 
 	void extractParts(string entry, string* partArray);
 	int countPartLine(string part, int maxLength);
 	bool isGeneral(string row);
-	void setGeneralInitArrayPart(vector<string>* generalEntryList);
-	void setGeneralInitArrayFull(vector<string>* generalEntryList);
-	void setCalendarInitArrayPart(vector<string>* calendarEntryList);
-	void setCalendarInitArrayFull(vector<string>* calendarEntryList);
-	void setResultInitArrayPart(vector<string>* resultList);
-	void setResultInitArrayFull(vector<string>* resultList);
-	void setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void setGeneralInitArrayPart();
+	void setGeneralInitArrayFull();
+	void setCalendarInitArrayPart();
+	void setCalendarInitArrayFull();
+	void setResultInitArrayPart();
+	void setResultInitArrayFull();
+	void setInitialIndexArrays();
 
 	int getGeneralInitIndex();
 	int getNextGeneralInitIndex(bool& isValid);
@@ -201,12 +208,12 @@ private:
 	int getNextResultInitIndex(bool& isValid);
 	int findNearestInitArrayIndex(vector<int>* initialIndexArray, int entryIndex);
 
-	void changeDisplayMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void changeDisplayMode();
+	void displayNewMode();
 	void changeFocusedField();
-	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void traceMovementKey(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void scrollUp();
+	void scrollDown();
+	void traceMovementKey();
 	void processBackspace();
 
 	//@author A0088455R
@@ -241,9 +248,9 @@ private:
 	void printCalendarFooter();
 	void printResultFooter();
 
-	void generalEntryListDisplay(vector<string>* generalEntryList);
-	void calendarEntryListDisplay(vector<string>* calendarEntryList);
-	void resultListDisplay(vector<string>* resultList);
+	void generalEntryListDisplay();
+	void calendarEntryListDisplay();
+	void resultListDisplay();
 
 	//@author A0088455R
 	/**
@@ -255,9 +262,9 @@ private:
 
 	void lockResultDisplay();
 
-	void processResultList(vector<string>* resultList, string& info);
-	void handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList);
-	void processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList);
+	void processResultList(string& info);
+	void handleResultInfo(string info);
+	void processAddUpdateInfo(string info);
 	void processSearchInfo(string info);
 	void printSearchInfo();
 
@@ -265,6 +272,8 @@ private:
 	void handleInitialCalendarIndexOverflow();
 	void handleInitialResultIndexOverflow();
 	void handleInitialIndicesOverflow();
+	
+	void copyList(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
 
 	//@author A0088455R
 	/*
@@ -274,10 +283,10 @@ private:
 	*/
 	void startingScreenDisplay();
 public:
-	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
 
-	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
-	void traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
+	void traceInput();
 
 	string retrieveInput();
 	Signal retrieveFocusedField();

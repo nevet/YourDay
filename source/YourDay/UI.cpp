@@ -176,7 +176,7 @@ void UI::highlightTitle()
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
-void UI::changeDisplayMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList )
+void UI::changeDisplayMode()
 {	
 	int curInitIndex;
 
@@ -226,30 +226,26 @@ void UI::changeDisplayMode(vector<string>* calendarEntryList, vector<string>* ge
 		break;
 	}
 
-	displayNewMode(calendarEntryList, generalEntryList, resultList);
+	displayNewMode();
 }
 
-void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::displayNewMode()
 {
-	assert(resultList!=NULL);
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-
 	switch (focusedField)
 	{
 	case GENERAL:
 		clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT);
-		generalEntryListDisplay(generalEntryList);
+		generalEntryListDisplay();
 		drawCommandBox();
 		break;
 	case CALENDAR:
 		clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT);
-		calendarEntryListDisplay(calendarEntryList);
+		calendarEntryListDisplay();
 		drawCommandBox();
 		break;
 	case SEARCH_RESULT:
 		clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT);
-		resultListDisplay(resultList);
+		resultListDisplay();
 		drawCommandBox();
 		break;
 	default:
@@ -285,33 +281,29 @@ void UI::changeFocusedField()
 	highlightTitle();
 }
 
-void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::scrollUp()
 {
-	assert(resultList!=NULL);
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-
 	switch (focusedField)
 	{
 	case GENERAL:
 		if (indexCurGeneralInitArray > 0)
 		{
 			indexCurGeneralInitArray --;
-			generalEntryListDisplay(generalEntryList);
+			generalEntryListDisplay();
 		}
 		break;
 	case CALENDAR:
 		if (indexCurCalendarInitArray > 0)
 		{	
 			indexCurCalendarInitArray --;
-			calendarEntryListDisplay(calendarEntryList);
+			calendarEntryListDisplay();
 		}
 		break;
 	case SEARCH_RESULT:
 		if (indexCurResultInitArray > 0)
 		{
 			indexCurResultInitArray --;
-			resultListDisplay(resultList);
+			resultListDisplay();
 		}
 
 		break;
@@ -320,12 +312,8 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 	}
 }
 
-void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::scrollDown()
 {
-	assert(resultList!=NULL);
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-
 	bool isValid;
 
 	switch (focusedField)
@@ -335,7 +323,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{	
 			indexCurGeneralInitArray ++ ;
-			generalEntryListDisplay(generalEntryList);
+			generalEntryListDisplay();
 		}
 		break;
 	case CALENDAR:
@@ -343,7 +331,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{
 			indexCurCalendarInitArray ++;
-			calendarEntryListDisplay(calendarEntryList);
+			calendarEntryListDisplay();
 		}
 		break;
 	case SEARCH_RESULT:
@@ -351,7 +339,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{
 			indexCurResultInitArray ++;
-			resultListDisplay(resultList);
+			resultListDisplay();
 		}
 		break;
 	default:
@@ -359,7 +347,7 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 	}
 }
 
-void UI::traceMovementKey(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::traceMovementKey()
 {
 	char keyIn;
 
@@ -367,15 +355,15 @@ void UI::traceMovementKey(vector<string>* calendarEntryList, vector<string>* gen
 	switch (keyIn)
 	{
 	case UP_ARROW:
-		scrollUp(calendarEntryList, generalEntryList, resultList);
-		gotoxy(currentChar+8,COMMAND_INIT_Y);
+		scrollUp();
+		gotoxy(currentChar+COMMAND_STRING_LENGTH,COMMAND_INIT_Y);
 		break;
 	case DOWN_ARROW:
-		scrollDown(calendarEntryList, generalEntryList, resultList);
-		gotoxy(currentChar+8,COMMAND_INIT_Y);
+		scrollDown();
+		gotoxy(currentChar+COMMAND_STRING_LENGTH,COMMAND_INIT_Y);
 		break;
 	case PAGE_UP:
-		changeDisplayMode(calendarEntryList, generalEntryList, resultList);
+		changeDisplayMode();
 		break;
 	}
 }
@@ -402,12 +390,8 @@ void UI::processBackspace()
 	}
 }
 
-void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::traceInput()
 {
-	assert(resultList!=NULL);
-	assert(generalEntryList!=NULL);
-	assert(calendarEntryList!=NULL);
-
 	diduknowStatus = DIDUKNOW_INIT;
 	char keyIn;
 	currentChar = 0;
@@ -418,7 +402,7 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 		switch (keyIn)
 		{
 		case MOVEMENT_SIGN:
-			traceMovementKey(calendarEntryList, generalEntryList, resultList);
+			traceMovementKey();
 			break;
 		case TAB:	
 			changeFocusedField();
@@ -526,7 +510,13 @@ void UI::initializeFocusedField()
 	focusedField = GENERAL;	
 }
 
-void UI::setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::initializeHighlightIndices()
+{
+	highlightCalendarRowIndex = -1;
+	highlightGeneralRowIndex = -1;
+}
+
+void UI::setInitialIndexArrays()
 {
 	generalInitArrayPart.clear();
 	generalInitArrayFull.clear();
@@ -535,12 +525,12 @@ void UI::setInitialIndexArrays(vector<string>* calendarEntryList, vector<string>
 	resultInitArrayPart.clear();
 	resultInitArrayFull.clear();
 
-	setGeneralInitArrayPart(generalEntryList);
-	setGeneralInitArrayFull(generalEntryList);
-	setCalendarInitArrayPart(calendarEntryList);
-	setCalendarInitArrayFull(calendarEntryList);
-	setResultInitArrayPart(resultList);
-	setResultInitArrayFull(resultList);
+	setGeneralInitArrayPart();
+	setGeneralInitArrayFull();
+	setCalendarInitArrayPart();
+	setCalendarInitArrayFull();
+	setResultInitArrayPart();
+	setResultInitArrayFull();
 }
 
 void UI::handleInitialGeneralIndexOverflow()
@@ -882,10 +872,10 @@ int UI::countPartLine(string part, int maxLength)
 	return count;  	
 }
 
-void UI::setGeneralInitArrayPart(vector<string>* generalEntryList)
+void UI::setGeneralInitArrayPart()
 {
 	int index = 0;
-	int generalSize = generalEntryList ->size();
+	int generalSize = generalList.size();
 
 	while (index < generalSize)
 	{
@@ -899,9 +889,9 @@ void UI::setGeneralInitArrayPart(vector<string>* generalEntryList)
 	}
 }
 
-void UI::setGeneralInitArrayFull(vector<string>* generalEntryList)
+void UI::setGeneralInitArrayFull()
 {
-	int generalSize = generalEntryList->size();
+	int generalSize = generalList.size();
 	string row;
 	string description;
 	string location;
@@ -917,7 +907,7 @@ void UI::setGeneralInitArrayFull(vector<string>* generalEntryList)
 
 	for (int i =0; i < generalSize; i++)
 	{
-		row = generalEntryList->at(i);
+		row = generalList.at(i);
 		extractParts(row, partArray);
 		description = partArray[1];
 		location = partArray [2];
@@ -937,10 +927,10 @@ void UI::setGeneralInitArrayFull(vector<string>* generalEntryList)
 	generalInitArrayFull.push_back(index);
 }
 
-void UI::setCalendarInitArrayPart(vector<string>* calendarEntryList)
+void UI::setCalendarInitArrayPart()
 {
 	int index = 0;
-	int calendarSize = calendarEntryList ->size();
+	int calendarSize = calendarList.size();
 
 	while (index < calendarSize)
 	{
@@ -954,9 +944,9 @@ void UI::setCalendarInitArrayPart(vector<string>* calendarEntryList)
 	}
 }
 
-void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
+void UI::setCalendarInitArrayFull()
 {
-	int calendarSize = calendarEntryList->size();
+	int calendarSize = calendarList.size();
 	string row;
 	string description;
 	string location;
@@ -972,7 +962,7 @@ void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
 
 	for (int i =0; i < calendarSize; i++)
 	{
-		row = calendarEntryList->at(i);
+		row = calendarList.at(i);
 		extractParts(row, partArray);
 		description = partArray[1];
 		location = partArray [2];
@@ -992,10 +982,10 @@ void UI::setCalendarInitArrayFull(vector<string>* calendarEntryList)
 	calendarInitArrayFull.push_back(index);
 }
 
-void UI::setResultInitArrayPart(vector<string>* resultList)
+void UI::setResultInitArrayPart()
 {
 	int index = 0;
-	int resultSize = resultList ->size();
+	int resultSize = resultList.size();
 
 	while (index < resultSize)
 	{
@@ -1009,9 +999,9 @@ void UI::setResultInitArrayPart(vector<string>* resultList)
 	}
 }
 
-void UI::setResultInitArrayFull(vector<string>* resultList)
+void UI::setResultInitArrayFull()
 {
-	int resultSize = resultList->size();
+	int resultSize = resultList.size();
 	string row;
 	string description;
 	string location;
@@ -1027,7 +1017,7 @@ void UI::setResultInitArrayFull(vector<string>* resultList)
 
 	for (int i =0; i < resultSize; i++)
 	{
-		row = resultList->at(i);
+		row = resultList.at(i);
 		extractParts(row, partArray);
 		description = partArray[1];
 		location = partArray [2];
@@ -1453,11 +1443,9 @@ void UI::printResultFooter()
 	printSearchInfo();
 }
 
-void UI::generalEntryListDisplay(vector<string>* generalEntryList)
+void UI::generalEntryListDisplay()
 {	
-	assert(generalEntryList, NULL);
-
-	int sizeOfGeneral = generalEntryList->size();
+	int sizeOfGeneral = generalList.size();
 	clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 
 	if (sizeOfGeneral > 0 )
@@ -1472,7 +1460,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfGeneral))
 		{
-			row = generalEntryList ->at(entryIndex);
+			row = generalList.at(entryIndex);
 			printGeneralEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
@@ -1482,10 +1470,9 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	}
 }
 
-void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
+void UI::calendarEntryListDisplay()
 {
-	assert(calendarEntryList, NULL);
-	int sizeOfCalendar = calendarEntryList->size();
+	int sizeOfCalendar = calendarList.size();
 	clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT +1);
 
 	if (sizeOfCalendar > 0)
@@ -1501,7 +1488,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < sizeOfCalendar))
 		{
-			row = calendarEntryList ->at(entryIndex);
+			row = calendarList.at(entryIndex);
 			printCalendarEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
@@ -1511,11 +1498,10 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 	}
 }
 
-void UI::resultListDisplay(vector<string>* resultList)
+void UI::resultListDisplay()
 {	
-	assert(resultList!=NULL);
-
-	int resultSize = resultList->size();
+	
+	int resultSize = resultList.size();
 	clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 
 	if (resultSize > 0 )
@@ -1533,7 +1519,7 @@ void UI::resultListDisplay(vector<string>* resultList)
 
 		while ((isValid && entryIndex < nextInitIndex) || (!isValid && entryIndex < resultSize ))
 		{
-			row = resultList ->at(entryIndex);
+			row = resultList.at(entryIndex);
 			printResultEntry(entryIndex + 1, row, rowPosition);
 			entryIndex ++;
 			rowPosition ++;
@@ -1569,27 +1555,27 @@ void UI::lockResultDisplay()
 	}
 }
 
-void UI::processResultList(vector<string>* resultList, string& info)
+void UI::processResultList(string& info)
 {
-	int resultSize = resultList ->size();
+	int resultSize = resultList.size();
 	string feedbackString;
 
 	if (prevCommand == SEARCH_COMMAND)
 	{
 		assert (resultSize != 0);
-		feedbackString = resultList->back();
-		resultList->pop_back();
+		feedbackString = resultList.back();
+		resultList.pop_back();
 	}
 	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && resultSize > 0 )
 	{
-		feedbackString = resultList->back();
-		resultList->pop_back();
+		feedbackString = resultList.back();
+		resultList.pop_back();
 	}
 
 	info = feedbackString;
 }
 
-void UI::handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList)
+void UI::handleResultInfo(string info)
 {
 	string keyWord;
 	vector<string> suggestion;
@@ -1600,16 +1586,16 @@ void UI::handleResultInfo(string info, vector<string>* generalList, vector<strin
 	}
 	if ((prevCommand == ADD_COMMAND || prevCommand == UPDATE_COMMAND) && info != "")
 	{
-		processAddUpdateInfo(info,generalList, calendarList);
+		processAddUpdateInfo(info);
 	}
 }
 
-void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<string>* calendarList)
+void UI::processAddUpdateInfo(string info)
 {
 	string row;
 	bool isFound = false;
-	int generalSize = generalList->size();
-	int calendarSize = calendarList->size();
+	int generalSize = generalList.size();
+	int calendarSize = calendarList.size();
 	int i;
 
 	if (isGeneral(info))
@@ -1617,7 +1603,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 		i = generalSize -1;
 		while (i >= 0 && !isFound)	
 		{
-			row = generalList->at(i);
+			row = generalList.at(i);
 			if (row == info)
 			{
 				if (generalDisplayMode == PART_MODE)
@@ -1641,7 +1627,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 
 		while (i >=0 && !isFound)	
 		{
-			row = calendarList->at(i);
+			row = calendarList.at(i);
 			if (row == info)
 			{
 				if (calendarDisplayMode == PART_MODE)
@@ -1723,6 +1709,13 @@ void UI::printSearchInfo()
 	}
 }
 
+void UI::copyList(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList)
+{
+	calendarList = *calendarEntryList;
+	generalList = *generalEntryList;
+	resultList = *operationResultList;
+}
+
 //@author A0088455R
 /**
 * This method prints the starting screen display
@@ -1746,27 +1739,25 @@ void UI::startingScreenDisplay()
 	while ((c = getch()) != ENTER);
 }
 
-void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList)
 {	
-	currentChar=0;
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
-	assert(resultList!=NULL);
+	assert(operationResultList!=NULL);
 	setBackground();
 	system("CLS");
 
-	highlightCalendarRowIndex = -1;
-	highlightGeneralRowIndex = -1;
-
-	highlightTitle();
+	copyList(calendarEntryList, generalEntryList, operationResultList);
+	initializeHighlightIndices();
 
 	string info;
-	processResultList(resultList, info);
-	setInitialIndexArrays(calendarEntryList, generalEntryList, resultList);
-	handleResultInfo(info, generalEntryList, calendarEntryList);
+	currentChar=0;
+	processResultList(info);
+	setInitialIndexArrays();
+	handleResultInfo(info);
 	handleInitialIndicesOverflow();
 
-	if(resultList->size() !=0 )
+	if(operationResultList->size() !=0 )
 	{
 		isResultDisplay = true;
 		focusedField = SEARCH_RESULT;
@@ -1782,17 +1773,18 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	}
 	isDiduknowDisplay = !isResultDisplay;
 
-	generalEntryListDisplay(generalEntryList);
-	calendarEntryListDisplay(calendarEntryList);
+	highlightTitle();
+	generalEntryListDisplay();
+	calendarEntryListDisplay();
 	initializeDidUKnowStatus();
 	diduknowHintDisplay();
-	resultListDisplay(resultList);
+	resultListDisplay();
 
 	diduknowPrevStatus = DIDUKNOW_CLEAR;
 	drawCommandBox();
 }
 
-UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList)
 {
 	input = "";
 
@@ -1804,7 +1796,7 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	isResultDisplay = false;
 
 	startingScreenDisplay();
-	mainScreenDisplay( calendarEntryList, generalEntryList, resultList);
+	mainScreenDisplay( calendarEntryList, generalEntryList, operationResultList);
 }
 
 string UI::retrieveInput()
