@@ -614,7 +614,7 @@ void SearchExecutor::searchDate(string keyword)
 	{
 		checkEntryDate(i, keyword);
 	}
-	adjustRank(highestRank);	
+	adjustRank();	
 }
 
 /**
@@ -862,7 +862,7 @@ void SearchExecutor::execute() throw (string)
 		{
 			if (isLogicDate(currentKey))
 			{
-				searchDate(currentKey, &rank);
+				searchDate(currentKey);
 				treshold += rank.size();
 			} else
 			{
@@ -874,7 +874,7 @@ void SearchExecutor::execute() throw (string)
 		{
 			if (isLogicTime(currentKey))
 			{
-				searchTime(currentKey, &rank);
+				searchTime(currentKey);
 				treshold += rank.size();
 			} else
 			{
