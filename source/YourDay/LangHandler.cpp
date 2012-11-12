@@ -672,13 +672,6 @@ void LangHandler::setCommand(string userCommand)
 
 LangHandler::LangHandler()
 {
-	//set default value for language handler status
-	langStatus = CLEAR;
-}
-
-Signal LangHandler::getStatus()
-{
-	return langStatus;
 }
 
 //@author A0088455R
@@ -712,6 +705,7 @@ void LangHandler::separate(string userInput) throw (string)
 	log.writeData("details", details);
 }
 
+//A0091847U
 Executor* LangHandler::pack(bool* quit, Signal focusingField,
 										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,
