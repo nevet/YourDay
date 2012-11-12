@@ -42,9 +42,12 @@ private:
 	vector<string> _undoGeneralEntryList;
 	vector<string> _undoCalendarEntryList;
 	vector<string> _undoMatchedEntryList;
-	
+
+	vector<int> rank;
+	vector<int> score;
 	vector<string> _combinedEntryList;
 	
+	int highestRank;
 	string _details;
 
 	int f[50][50];
@@ -157,7 +160,7 @@ private:
 	* @param rank
 	*			is the vector that keeps the rank of each entry of each keyword
 	*/
-	void initializeVectors(int totalSize, vector<int>* score, vector<int>* rank);
+	void initializeScore(int totalSize);
 
 	/*
 	* Initializes the Rank Vectors to the same value of total size.
@@ -171,7 +174,7 @@ private:
 	* e.g. there are 100 entries in total
 	*			each entry should have initial rank value of 100
 	*/
-	void initializeRank(int totalSize, vector<int>* rank);
+	void initializeRank(int totalSize);
 
 	/*
 	* Initializes the _combinedEntryList vector which contains both general entry and
@@ -194,7 +197,7 @@ private:
 	*			contains the current highest rank
 	* @return void
 	*/
-	void setRank(int index, int level, vector<int>* rank, int* currentHighest);
+	void setRank(int index, int level);
 	/*
 	* Adjust the Rank Vectors that ensures one of the entry has the highes match
 	* with the maximum value (in other words, totalSize)
@@ -204,7 +207,7 @@ private:
 	*			is the currently highest rank inside the vector
 	* @return void
 	*/
-	void adjustRank(vector<int>* rank, int currentHighest);
+	void adjustRank();
 
 	void splitWords(string encodedInput, vector<string>* list);
 	void calInfo(int i, int j, string a, string b, string & x, string & y, matchInfo & t);
@@ -234,7 +237,7 @@ private:
 	*
 	* The rank will set according to its predefined matching level
 	**/
-	void checkEntryDate(int index, vector<int>* rank, string keyword, int &highestRank);
+	void checkEntryDate(int index, string keyword);
 	
 	/*
 	* Searches the list for a matching date input
@@ -246,7 +249,7 @@ private:
 	*			is the currently highest rank inside the vector
 	* This function will only be called if the input keyword is a date
 	*/
-	void searchDate(string keyword, vector<int>* rank);
+	void searchDate(string keyword);
 
 	/**
 	* Checks an Entry at index "index" for its matching level with the time keyword and
@@ -264,7 +267,7 @@ private:
 	*
 	* The rank will set according to its predefined matching level
 	**/
-	void checkEntryTime(int index, vector<int>* rank, string keyword , int &highestRank);
+	void checkEntryTime(int index, string keyword);
 
 	/*
 	* Searches the list for a matching time input
@@ -275,7 +278,7 @@ private:
 	* This function will only be called if the input keyword is a time
 	* THis search function includes checking whether a user's input is in time range.
 	*/
-	void searchTime(string keyword, vector<int>* rank);
+	void searchTime(string keyword);
 
 	void searchText(string key, vector<int>* rank, vector<string>* suggestWords);
 
