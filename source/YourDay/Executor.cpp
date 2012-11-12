@@ -3,7 +3,6 @@
 #include "Executor.h"
 
 //@author A0088455R
-
 Executor::Executor()
 {
 }

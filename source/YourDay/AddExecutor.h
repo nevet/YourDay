@@ -53,9 +53,6 @@ private:
 	*/
 	bool isEarlier(string &entry1, string &entry2);
 
-
-
-	//@author A0088455R	
 	/**
 	* Searches the correct index to add the current user's input
 	*
@@ -114,6 +111,7 @@ private:
 	* the return should be the correct index where the entry should be added
 	**/
 	void shiftList(vector<string>* _entryList,int index);
+
 	/**
 	* This method adds the user's encoded string to the correct position
 	*
