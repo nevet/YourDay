@@ -150,8 +150,10 @@ int AddExecutor::binarySearch(vector<string>* _entryList, string key, int imin, 
 void AddExecutor::shiftList(vector<string>* _entryList, int index)
 {
 		int i;
-		int listSize = _entryList->size();
+		string dummyString = "";
+		_entryList -> push_back(dummyString);
 
+		int listSize = _entryList->size();
 		for (i = (listSize - 1); i > index; i--)
 		{
 			(*_entryList)[i] = (*_entryList)[i-1];
@@ -175,8 +177,6 @@ void AddExecutor::addToPosition(vector<string>* _entryList, int index, string in
 	}
 	else
 	{
-		string dummyString = "";
-		_entryList -> push_back(dummyString);
 		shiftList(_entryList, index);		
 		(*_entryList)[index] = input;
 	}

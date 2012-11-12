@@ -52,7 +52,7 @@ int main(int arg, char** test)
 {
  
 	//runTest(arg,test);
-
+	
 	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
@@ -107,6 +107,5 @@ int main(int arg, char** test)
 			ui.displayMessage(excpt);
 		}
 	}
-	
 	return EXIT_SUCCESS;
 }
