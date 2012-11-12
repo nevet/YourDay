@@ -34,16 +34,6 @@ string SearchExecutor::splitFirstTerm(string* rawString)
 	return firstTerm;
 }
 
-void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
-{
-	assert(result!="");
-
-	ostringstream ostring;
-	ostring << "#" << index << result.substr(1,result.size()-1);
-
-	*formattedResult = ostring.str();
-}
-
 bool SearchExecutor::isLeap(int year)
 {
 
@@ -602,18 +592,13 @@ void SearchExecutor::searchDate(string keyword)
 	int i;
 
 	noMatch = true;
-
-	
-
-	highestRank=0;
-
-
-	
+	highestRank=0;	
 
 	for (i = 0; i < totalEntries; i++)
 	{
 		checkEntryDate(i, keyword);
 	}
+
 	adjustRank();	
 }
 
@@ -704,16 +689,15 @@ void SearchExecutor::searchTime(string keyword)
 	assert(keyword!="");
 
 	int i;
+
 	highestRank=0;
-
 	noMatch = true;
-
-	int totalEntries = _combinedEntryList.size();
 	
 	for (i=0; i<totalEntries; i++)
 	{
 		checkEntryTime(i, keyword);
 	}
+
 	adjustRank();
 }
 
