@@ -311,7 +311,7 @@ TEST(basic_test,search_executor)
 	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wu pei#####");
 	 searchExec.execute();
     //this is only one entry containing "wupei".
-	 ASSERT_EQ(matchedList[0],"#C0#So, I am painful but happy now.#####");
+	 ASSERT_EQ(matchedList[0],"#G2#But most time I am still happy, because I am in a nice group.#####");
 	  matchedList.clear();
 	 SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##time#####");
 	 searchExec2.execute();
