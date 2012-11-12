@@ -48,6 +48,14 @@ private:
 	const static char SPACE_BAR;
 	const static char DELIMINATOR;
 	const static char PRIORITY_INDICATOR;
+
+	const static bool DELETE_MULTIPLE_INDEX_ENABLE;
+	const static bool UPDATE_MULTIPLE_INDEX_ENABLE;
+	const static bool ADD_DATE_AUTOFILL_ENABLE;
+	const static bool UPDATE_DATE_AUTOFILL_ENABLE;
+	const static bool ADD_EMPTY_DESCRIPTION_ENABLE;
+	const static bool UPDATE_EMPTY_DESCRIPTION_ENABLE;
+	const static bool SEARCH_EMPTY_DESCRIPTION_ENABLE;
 	
 	const static string ADD_MARK_INDICATOR;
 	const static string LOCATION_INDICATOR;
