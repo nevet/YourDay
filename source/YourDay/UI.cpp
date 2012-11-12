@@ -1699,7 +1699,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	handleResultInfo(info);
 	handleInitialIndicesOverflow();
 
-	if(operationResultList->size() !=0 )
+	if(resultList.size() !=0 )
 	{
 		isResultDisplay = true;
 		focusedField = SEARCH_RESULT;
