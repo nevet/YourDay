@@ -238,21 +238,7 @@ void LangHandler::splitPriority(string* str, string* priority, string indicator,
 	//if we cannot find the indicator, we leave priority field unchange
 	if (pos != string::npos)
 	{
-		if (*priority != token_s)
-		{
-			*priority = token_s;
-		} else
-		{
-			if (token_s == NULL_STRING)
-			{
-				log.writeException("The Entry was UNMARKED!");
-				throw string ("The Entry was UNMARKED!\n");
-			} else
-			{
-				log.writeException("The Entry was MARKED!");
-				throw string ("The Entry was MARKED!\n");
-			}
-		}
+		*priority = token_s;
 	}
 	
 	//get rid of priority info
