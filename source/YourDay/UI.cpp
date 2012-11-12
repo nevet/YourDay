@@ -77,7 +77,7 @@ void UI::drawBanner()
 	cout<<"                                                                                                                        ";
 
 }
-
+//@author A0091734A
 void UI::drawCommandBox()
 {
 	gotoxy(0,COMMAND_INIT_Y);
@@ -88,14 +88,12 @@ void UI::drawCommandBox()
 	cout<<"                                                                                                                        ";
 	gotoxy(8,COMMAND_INIT_Y);
 }
-
+//@author A0091734A
 void UI::gotoCommandBox()
 {
 	gotoxy(8,COMMAND_INIT_Y);
 }
-
-
-
+//@author A0091734A
 void UI::clearBox(int startH, int height)
 {
 	//setBackground();
@@ -125,7 +123,7 @@ void UI :: gotoxy(int x, int y) //goes to x,y console
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-
+//@author A0091734A
 void UI::writeTitle(string words, int startX, int startY)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),128);
@@ -135,7 +133,7 @@ void UI::writeTitle(string words, int startX, int startY)
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 	setBackground();
 }
-
+//@author A0091734A
 void UI::writeHighlightedTitle(string words,int startX, int startY)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),1|BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY);
@@ -1123,7 +1121,7 @@ void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY
 	endPosition = curRow -1;
 }
 
-
+//@author A0091734A
 void UI::printMark(string mark)
 {
 	if(mark=="*")
@@ -1552,7 +1550,6 @@ void UI::processResultList(vector<string>* resultList, string& info)
 
 	info = feedbackString;
 }
-
 
 void UI::handleResultInfo(string info, vector<string>* generalList, vector<string>* calendarList)
 {

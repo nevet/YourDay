@@ -39,10 +39,12 @@ private:
 	string _encodedUserInput;
 
 	bool isIndexValid(int index);
-	string constructNewEntry(string oldEntry);
-	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);
-	int extractNewIndex(string newEntry);
 	bool verifyTheFiledChange(string newEntry);
+
+	int extractNewIndex(string newEntry);
+	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);
+	string constructNewEntry(string oldEntry);
+
 public:
 	UpdateExecutor(vector<string>* generalEntryList, vector<string>* calendarEntryList, vector<string>* resultList, 
 				   string encodedUserInput, Signal focusingField);

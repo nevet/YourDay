@@ -27,7 +27,7 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 **/
 string AddExecutor::manipulateEntryDate(string entry)
 {
-	assert(entry != "");
+	//assert(entry != "");
 
 	ostringstream dateContender;
 	ostringstream monthContender;
@@ -68,8 +68,8 @@ string AddExecutor::manipulateEntryDate(string entry)
 **/
 bool AddExecutor::isEarlier(string &entry1, string &entry2)
 {
-	assert(entry1 != "");
-	assert(entry2 != "");
+	//assert(entry1 != "");
+	//assert(entry2 != "");
 
 	string entry1Date = manipulateEntryDate(entry1);
 	string entry2Date = manipulateEntryDate(entry2);

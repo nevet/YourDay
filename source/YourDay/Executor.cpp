@@ -172,7 +172,7 @@ void Executor::splitStartEndTime(string* start, string* end, string timeRange)
 //@author A0091734
 int Executor :: extractIndexFromDescription(string description)
 {
-	assert(description!="");
+	//assert(description!="");
 	char * cstr;
 	char * firstWord;
 	int length;
