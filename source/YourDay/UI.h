@@ -99,6 +99,10 @@ private:
 	static const string DID_U_KNOW_HINTS_LINE2;
 	static const string DID_U_KNOW_HINTS_LINE3;
 
+	int calendarPositionArray[NUMBER_OF_ENTRY_PARTS];
+	int generalPositionArray[NUMBER_OF_ENTRY_PARTS];
+	int colorArray[NUMBER_OF_ENTRY_PARTS];
+
 	HANDLE hConsole;
 	string input;
 	Signal focusedField;
@@ -193,12 +197,12 @@ private:
 	void extractParts(string entry, string* partArray);
 	int countPartLine(string part, int maxLength);
 	bool isGeneral(string row);
-	void setGeneralInitArrayPart();
-	void setGeneralInitArrayFull();
-	void setCalendarInitArrayPart();
-	void setCalendarInitArrayFull();
-	void setResultInitArrayPart();
-	void setResultInitArrayFull();
+	int findMaxInt(int* intArray, int size);
+	int countLineOccupied(string entry, int* maxLengthArray);
+	void setInitArrayPart(vector<string> entryList, vector<int>* ansArray, int boxHeight);
+	void setInitArrayFull(vector<string> entryList, vector<int>* ansArray, int boxHeight, 
+						  int* generalMaxLengthArray, int* calendarMaxLengthArray);
+	void setMaxLengthArray(int* locationArray, int size, int* ansArray);
 	void setInitialIndexArrays();
 
 	int getGeneralInitIndex();
