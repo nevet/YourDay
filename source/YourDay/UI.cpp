@@ -1335,7 +1335,7 @@ void UI::printGeneralFooter()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, GENERAL_INIT_Y - 2);
 	cout << "                             ";
-	gotoxy(15, COMMAND_INIT_Y +2);
+	gotoxy(15, GENERAL_INIT_Y -2);
 
 	switch (generalDisplayMode)
 	{
@@ -1353,7 +1353,7 @@ void UI::printCalendarFooter()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, CALENDAR_INIT_Y -2);
 	cout << "                             ";
-	gotoxy(15, COMMAND_INIT_Y +2);
+	gotoxy(15, CALENDAR_INIT_Y -2);
 
 	switch (calendarDisplayMode)
 	{
@@ -1474,7 +1474,7 @@ void UI::resultListDisplay()
 //@author A0088455R
 /**
 * This Method Triggers the didUKnowHints display functionalities
-* This Method should be triggered everytim user gives an input
+* This Method should be triggered everyting user gives an input
 **/
 
 void UI::diduknowHintDisplay()
