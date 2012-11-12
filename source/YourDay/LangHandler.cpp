@@ -220,14 +220,8 @@ void LangHandler::splitPriority(string* str, string* priority, string indicator,
 {
 	string input = *str;
 	string token_s;
-
-	if (token == SPACE_BAR)
-	{
-		token_s = NULL_STRING;
-	} else
-	{
-		token_s = token;
-	}
+	
+	token_s = token;
 	
 	//add a space in front to avoid indicator missing
 	input = SPACE_BAR + input;
