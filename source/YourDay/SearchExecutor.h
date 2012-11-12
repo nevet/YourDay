@@ -10,6 +10,9 @@
 
 using namespace std;
 
+#define MAX_ENTRY 50
+#define MONTH_NUMBER 12
+
 class SearchExecutor : public Executor
 {
 private:
@@ -17,8 +20,15 @@ private:
 	
 	struct matchInfo
 	{
-		int continuity, match, change, dis, index;
-		int ms, ms_trail, ms_lead;
+		int continuity;
+		int match;
+		int change;
+		int dis;
+		int index;
+
+		int ms;
+		int ms_trail;
+		int ms_lead;
 
 		string str;
 
@@ -51,8 +61,10 @@ private:
 	int totalEntries;
 	string _details;
 
-	int f[50][50];
-	int g[50][50];
+	//memo tables used to record the result of dynamic programming result of
+	//editing distance
+	int f[MAX_ENTRY][MAX_ENTRY];
+	int g[MAX_ENTRY][MAX_ENTRY];
 
 	bool noMatch;
 	int treshold;
@@ -74,7 +86,7 @@ private:
 	*/
 	string splitFirstTerm(string* rawString);
 	
-	const static int MONTH[12];
+	const static int MONTH[MONTH_NUMBER];
 	
 	/**
 	* These are the initiation for the values for how good is the match
@@ -212,7 +224,34 @@ private:
 	*/
 	void adjustRank();
 
+	//@author A0091847U
+	/**
+	* This operation will extract description and location info from the encoded
+	* input passed in and then split it words by words and put it into a vetor.
+	*
+	* @param encodedInput
+	*			is the encoded input one wants to split
+	* @param list
+	*			is the list contains spliting result
+	*/
 	void splitWords(string encodedInput, vector<string>* list);
+
+	/**
+	* This operation is used to calculate match info of match string.
+	* 
+	* @param i, j
+	*			is the posistion info, used for backtrack, entrace will be
+	*			(len_pattern, len_match)
+	* @param a
+	*			is the pattern, i.e. the key
+	* @param b
+	*			is the match string, i.e. the string under match
+	* @param x, y
+	*			are strings after editting for a and b correspondingly, for
+	*			debuging using
+	* @param t
+	*			is the structure stored the match info
+	*/
 	void calInfo(int i, int j, string a, string b, string & x, string & y, matchInfo & t);
 	int notsame(char a, char b);
 	void edit(string a, string b, matchInfo & ans);
@@ -283,6 +322,11 @@ private:
 	*/
 	void searchTime(string keyword);
 
+	/**
+	* This operation will search plain-text key from all the entries, then
+	* assign ranks to each entries and put the suggesting words inside a vector
+	* pass in.
+	*/
 	void searchText(string key, vector<int>* rank, vector<string>* suggestWords);
 
 	/**
