@@ -21,6 +21,7 @@ FunctionHandler::FunctionHandler(vector<string>* generalEntryList,
 	store.readData(generalEntryList, calendarEntryList);
 }
 
+//@author A0091847U
 void FunctionHandler::execute(string input, bool* quit, Signal focusingField,
 							  vector<string>* generalEntryList,
 							  vector<string>* calendarEntryList,
