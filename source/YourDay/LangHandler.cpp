@@ -48,24 +48,6 @@ bool LangHandler::isLeap(int year)
 	return flag;
 }
 
-bool LangHandler::isDate(string date)
-{
-	int day, month, year;
-	
-	bool flag = (sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3);
-
-	return flag;
-}
-
-bool LangHandler::isTime(string time)
-{
-	int h1, h2, m1, m2;
-
-	bool flag = (sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4);
-
-	return flag;
-}
-
 bool LangHandler::isInt(string inx)
 {
 	int x;
@@ -80,30 +62,35 @@ bool LangHandler::isLogicDate(string date)
 	bool flag = true;
 
 	//extract year, month and day from the string
-	sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year);
-	if (year > 9999 || year < 1000)
+	if (sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3)
 	{
-		flag = false;
-	} else
-	if (month > 12 || month < 1)
-	{
-		flag = false;
-	} else
-	if (day < 1)
-	{
-		flag = false;
-	} else
-	{
-		if (day > MONTH[month - 1])
+		if (year > 9999 || year < 1000)
+		{
+			flag = false;
+		} else
+		if (month > 12 || month < 1)
+		{
+			flag = false;
+		} else
+		if (day < 1)
 		{
 			flag = false;
 		} else
 		{
-			if (!isLeap(year) && month == 2 && day == 29)
+			if (day > MONTH[month - 1])
 			{
-				flag =false;
+				flag = false;
+			} else
+			{
+				if (!isLeap(year) && month == 2 && day == 29)
+				{
+					flag =false;
+				}
 			}
 		}
+	} else
+	{
+		flag = false;
 	}
 
 	return flag;
@@ -115,25 +102,29 @@ bool LangHandler::isLogicTime(string time)
 
 	bool flag = true;
 
-	sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2);
-
-	if (h1 > 23 || h1 < 0 || h2 > 23 || h2 < 0)
+	if (sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4)
 	{
-		flag = false;
-	} else
-	if (m1 > 59 || m1 < 0 || m2 > 59 || m2 < 0)
-	{
-		flag = false;
-	} else
-	{
-		if (h1 > h2)
+		if (h1 > 23 || h1 < 0 || h2 > 23 || h2 < 0)
 		{
 			flag = false;
 		} else
-		if (h1 == h2 && m1 > m2)
+		if (m1 > 59 || m1 < 0 || m2 > 59 || m2 < 0)
 		{
 			flag = false;
+		} else
+		{
+			if (h1 > h2)
+			{
+				flag = false;
+			} else
+			if (h1 == h2 && m1 > m2)
+			{
+				flag = false;
+			}
 		}
+	} else
+	{
+		flag = false;
 	}
 
 	return flag;
@@ -349,19 +340,16 @@ void LangHandler::splitDate(string* str, string* date) throw (string)
 	//exception; else if it is not even a date, date field should be left
 	//unchange since nowhere else can find a date, and the input should remain
 	//unchange as well.
-	if (isDate(potentialDate))
+	if (isLogicDate(potentialDate))
 	{
-		if (isLogicDate(potentialDate))
-		{
-			*date = potentialDate;
-			input = getSuffix(input, pos);
-		} else
-		{
-			*date = NULL_STRING;
+		*date = potentialDate;
+		input = getSuffix(input, pos);
+	} else
+	{
+		*date = NULL_STRING;
 			
-			log.writeException("date error");
-			throw string ("date error\n");
-		}
+		log.writeException("date error");
+		throw string ("date error\n");
 	}
 
 	*str = input;
@@ -388,19 +376,16 @@ void LangHandler::splitTime(string* str, string* time, string* date, bool autoFi
 	//exception; else if it is not even a time, date field should be left
 	//unchange since nowhere else can find a time, and the input should remain
 	//unchange.
-	if (isTime(potentialTime))
+	if (isLogicTime(potentialTime))
 	{
-		if (isLogicTime(potentialTime))
-		{
-			*time = potentialTime;
-			input = getSuffix(input, pos);
-		} else
-		{
-			*time = NULL_STRING;
+		*time = potentialTime;
+		input = getSuffix(input, pos);
+	} else
+	{
+		*time = NULL_STRING;
 			
-			log.writeException("time error");
-			throw string ("time error\n");
-		}
+		log.writeException("time error");
+		throw string ("time error\n");
 	}
 
 	//if auto_fill_date is allowed and if date field is omitted with time
@@ -713,7 +698,7 @@ void LangHandler::separate(string userInput) throw (string)
 	log.writeData("details", details);
 }
 
-//A0091847U
+//@author A0091847U
 Executor* LangHandler::pack(bool* quit, Signal focusingField,
 										vector<string>* generalEntryList,
 										vector<string>* calendarEntryList,
