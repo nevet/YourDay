@@ -138,7 +138,7 @@ void UI::writeTitle(string words, int startX, int startY)
 //@author A0091734A
 void UI::writeHighlightedTitle(string words,int startX, int startY)
 {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),1|BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),HIGHLIGHT_COLOR);
 	gotoxy(startX,startY);
 
 	cout<<words<<endl;
@@ -146,6 +146,7 @@ void UI::writeHighlightedTitle(string words,int startX, int startY)
 	setBackground();
 }
 
+//@author A0088469H
 void UI::highlightTitle()
 {
 	switch (focusedField)
@@ -155,9 +156,7 @@ void UI::highlightTitle()
 		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (isResultDisplay)
 		{
-			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
-			printResultFooter();
 		}
 		break;
 	case CALENDAR:
@@ -165,26 +164,19 @@ void UI::highlightTitle()
 		writeHighlightedTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
 		if (isResultDisplay)
 		{
-			clearBox (COMMAND_INIT_Y +2, 1);
 			writeTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
-			printResultFooter();
 		}
 		break;
 	case SEARCH_RESULT:
 		writeTitle("General: ", 1,0);
 		writeTitle("Calendar: ", 1, CALENDAR_INIT_Y -2);	
-		if (isResultDisplay)
-		{
-			clearBox (COMMAND_INIT_Y +2, 1);
-			writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
-			printResultFooter();
-		}
-		break;
+		writeHighlightedTitle("SearchBox: ", 0, COMMAND_INIT_Y+2);
+	break;
 	}
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
-void UI::changeDisplayMode()
+void UI::changeDisplayMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList )
 {	
 	int curInitIndex;
 
@@ -233,6 +225,8 @@ void UI::changeDisplayMode()
 		}
 		break;
 	}
+
+	displayNewMode(calendarEntryList, generalEntryList, resultList);
 }
 
 void UI::displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
@@ -287,6 +281,7 @@ void UI::changeFocusedField()
 	default:
 		assert(false);
 	}
+
 	highlightTitle();
 }
 
@@ -302,7 +297,6 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (indexCurGeneralInitArray > 0)
 		{
 			indexCurGeneralInitArray --;
-			clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 			generalEntryListDisplay(generalEntryList);
 		}
 		break;
@@ -310,7 +304,6 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (indexCurCalendarInitArray > 0)
 		{	
 			indexCurCalendarInitArray --;
-			clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT +1 );
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
@@ -318,7 +311,6 @@ void UI::scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntr
 		if (indexCurResultInitArray > 0)
 		{
 			indexCurResultInitArray --;
-			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 			resultListDisplay(resultList);
 		}
 
@@ -343,7 +335,6 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{	
 			indexCurGeneralInitArray ++ ;
-			clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 			generalEntryListDisplay(generalEntryList);
 		}
 		break;
@@ -352,7 +343,6 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{
 			indexCurCalendarInitArray ++;
-			clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT + 1);
 			calendarEntryListDisplay(calendarEntryList);
 		}
 		break;
@@ -361,12 +351,47 @@ void UI::scrollDown(vector<string>* calendarEntryList, vector<string>* generalEn
 		if (isValid)
 		{
 			indexCurResultInitArray ++;
-			clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 			resultListDisplay(resultList);
 		}
 		break;
 	default:
 		assert (false);
+	}
+}
+
+void UI::traceMovementKey(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList)
+{
+	char keyIn;
+
+	keyIn = getch();
+	switch (keyIn)
+	{
+	case UP_ARROW:
+		scrollUp(calendarEntryList, generalEntryList, resultList);
+		gotoxy(currentChar+8,COMMAND_INIT_Y);
+		break;
+	case DOWN_ARROW:
+		scrollDown(calendarEntryList, generalEntryList, resultList);
+		gotoxy(currentChar+8,COMMAND_INIT_Y);
+		break;
+	case PAGE_UP:
+		changeDisplayMode(calendarEntryList, generalEntryList, resultList);
+		break;
+	}
+}
+
+void UI::processBackspace()
+{
+	if (input.size()>0)
+	{
+		input = input.substr(0, input.size()-1);
+		cout << "\b \b";
+		if(currentChar>0)
+		{
+			--currentChar;
+		}
+
+		diduknowHintDisplay();
 	}
 }
 
@@ -385,39 +410,14 @@ void UI::traceInput(vector<string>* calendarEntryList, vector<string>* generalEn
 	{
 		switch (keyIn)
 		{
-		case -32:
-			keyIn = getch();
-			switch (keyIn)
-			{
-			case 72:
-				scrollUp(calendarEntryList, generalEntryList, resultList);
-				gotoxy(currentChar+8,COMMAND_INIT_Y);
-				break;
-			case 80:
-				scrollDown(calendarEntryList, generalEntryList, resultList);
-				gotoxy(currentChar+8,COMMAND_INIT_Y);
-				break;
-			case 73:
-				changeDisplayMode();
-				displayNewMode(calendarEntryList, generalEntryList, resultList);
-				break;
-			}
+		case MOVEMENT_SIGN:
+			traceMovementKey(calendarEntryList, generalEntryList, resultList);
 			break;
 		case TAB:	
 			changeFocusedField();
 			break;
 		case BACKSPACE:
-			if (input.size()>0)
-			{
-				input = input.substr(0, input.size()-1);
-				cout << "\b \b";
-				if(currentChar>0)
-				{
-					--currentChar;
-				}
-				
-				diduknowHintDisplay();
-			}
+			processBackspace();
 			break;
 		default:
 			if (keyIn != ENTER && input.size() < MAX_INPUT_SIZE)
@@ -1231,7 +1231,7 @@ void UI::printCalendarEntry(int index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+			colorArray[i] = HIGHLIGHT_COLOR;
 		}
 	}
 
@@ -1264,7 +1264,7 @@ void UI::printGeneralEntry(int index, string entry, int& rowPosition)
 	{
 		for (int i = 1; i< NUMBER_OF_ENTRY_PARTS; i++)
 		{
-			colorArray[i] = BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY;
+			colorArray[i] = HIGHLIGHT_COLOR;
 		}
 	}
 
@@ -1451,6 +1451,7 @@ void UI::generalEntryListDisplay(vector<string>* generalEntryList)
 	assert(generalEntryList, NULL);
 
 	int sizeOfGeneral = generalEntryList->size();
+	clearBox(GENERAL_INIT_Y, GENERAL_BOX_HEIGHT +1);
 
 	if (sizeOfGeneral > 0 )
 	{
@@ -1478,6 +1479,7 @@ void UI::calendarEntryListDisplay(vector<string>* calendarEntryList)
 {
 	assert(calendarEntryList, NULL);
 	int sizeOfCalendar = calendarEntryList->size();
+	clearBox(CALENDAR_INIT_Y, CALENDAR_BOX_HEIGHT +1);
 
 	if (sizeOfCalendar > 0)
 	{
@@ -1507,6 +1509,7 @@ void UI::resultListDisplay(vector<string>* resultList)
 	assert(resultList!=NULL);
 
 	int resultSize = resultList->size();
+	clearBox(OPERATION_RESULT_Y, RESULT_BOX_HEIGHT +1);
 
 	if (resultSize > 0 )
 	{
@@ -1623,6 +1626,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 			}
 			i--;
 		}
+		focusedField = GENERAL;
 	}
 	else
 	{
@@ -1646,6 +1650,7 @@ void UI::processAddUpdateInfo(string info, vector<string>* generalList, vector<s
 			}
 			i--;
 		}
+		focusedField = CALENDAR;
 		
 	}
 }
@@ -1762,6 +1767,10 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	}
 	else
 	{
+		if (focusedField == SEARCH_RESULT)
+		{
+			changeFocusedField();
+		}
 		isResultDisplay = false;
 	}
 	isDiduknowDisplay = !isResultDisplay;
