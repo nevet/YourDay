@@ -1,3 +1,11 @@
+//@author A0088469H
+/**
+* UI class is used for user interact through command line interface
+* It traces and passes user input to main(), and control the screen displaying
+* Main things to display: general entry list, calendar entry list, search result list, search key word, suggestion key word, 
+*	and the "did you know" instruction to user
+* Main interaction: tab, up arrow, down arrow, page up key
+*/
 #ifndef UI_H
 #define UI_H
 
@@ -97,6 +105,7 @@ private:
 	static const string DID_U_KNOW_HINTS_LINE2;
 	static const string DID_U_KNOW_HINTS_LINE3;
 
+	//@author A0088469H
 	int calendarPositionArray[NUMBER_OF_ENTRY_PARTS];
 	int generalPositionArray[NUMBER_OF_ENTRY_PARTS];
 	int colorArray[NUMBER_OF_ENTRY_PARTS];
@@ -157,7 +166,6 @@ private:
 	* designed by A0088455R
 	*/
 	void drawBanner();
-	void gotoCommandBox();
 	void drawCommandBox();
 	void clearBox(int startH, int height);
 
@@ -174,10 +182,18 @@ private:
 	* the screen
 	*/
 	void gotoxy(int x, int y);
+
 	void writeTitle(string words, int startH, int startW);
 	void writeHighlightedTitle(string words,int startH, int startW);
+
+	//@author A0088469H
+	/**This operation is used to display titles with the highlighting
+	*/
 	void highlightTitle();
 
+	//@author A0088469H
+	/** This operation is used to move the cursor to current position of the input the user is typing
+	*/
 	void gotoCurChar();
 	string intToString(int number);
 
@@ -188,6 +204,8 @@ private:
 	* @return void
 	*/
 	void initializeDidUKnowStatus();
+
+	//@author A0088469H
 	void initializeInitArrayIndices();
 	void initializeDisplayModes();
 	void initializeFocusedField();
@@ -231,6 +249,7 @@ private:
 	*/
 	void setDidUKnowStatus();
 
+	//@author A0088469H
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
 	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
 	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
@@ -248,6 +267,7 @@ private:
 	*/
 	void printDiduknowHints();
 
+	//@author A0088469H
 	void printGeneralFooter();
 	void printCalendarFooter();
 	void printResultFooter();
@@ -264,6 +284,7 @@ private:
 	*/
 	void diduknowHintDisplay();
 
+	//@author A0088469H
 	void lockResultDisplay();
 
 	void processResultList(string& info);
@@ -287,6 +308,7 @@ private:
 	*/
 	void startingScreenDisplay();
 public:
+	//@author A0088469H
 	UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
 
 	void mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList);
