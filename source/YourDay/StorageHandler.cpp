@@ -13,6 +13,8 @@ const string StorageHandler::FILEPATH = "YourdayBin/";
 const string StorageHandler::DataBaseCalendarFile = "YourDayCEntry.yd";
 const string StorageHandler::DataBaseGeneralFile = "YourDayGEntry.yd";
 //@author A0091734A 
+// When the storageHandler is constructed, 
+// the storage folder would be constructed, and check the existence of storage file.
 StorageHandler::StorageHandler()
 {
 	_mkdir("YourdayBin");
@@ -76,6 +78,7 @@ void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>
 	return ;
 }
 
+//Some of functions might be used in this version, but may be used in future version.
 bool StorageHandler::checkFileExistence(string filePath, string fileName)
 {
 	fstream testFile;
