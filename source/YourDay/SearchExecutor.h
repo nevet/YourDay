@@ -185,6 +185,7 @@ private:
 	* and the calendar entry
 	*/
 	void initializeCombinedEntry();
+
 	/*
 	* Set's the rank of the entry with the same index as index parameter
 	* @param index
@@ -198,6 +199,7 @@ private:
 	* @return void
 	*/
 	void setRank(int index, int level);
+
 	/*
 	* Adjust the Rank Vectors that ensures one of the entry has the highes match
 	* with the maximum value (in other words, totalSize)
