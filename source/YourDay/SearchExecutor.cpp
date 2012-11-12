@@ -790,6 +790,8 @@ SearchExecutor::SearchExecutor(vector<string>* generalEntryList, vector<string>*
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
+	_undoEnable = false;
+
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_details = details;

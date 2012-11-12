@@ -9,6 +9,8 @@ AddExecutor::AddExecutor(vector<string>* generalEntryList, vector<string>* calen
 	assert(generalEntryList!=NULL);
 	assert(calendarEntryList!=NULL);
 
+	_undoEnable = true;
+
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_resultList = resultList;

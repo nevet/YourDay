@@ -9,6 +9,8 @@ ExitExecutor::ExitExecutor(vector<string>* generalEntryList,
 	assert(store!=NULL);
 	assert(quit!=NULL);
 
+	_undoEnable = false;
+
 	_generalEntryList = generalEntryList;
 	_calendarEntryList = calendarEntryList;
 	_store = store;

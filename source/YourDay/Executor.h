@@ -14,8 +14,6 @@
 * field inside the encoded string
 * format: "#index#description#location#time#date#priority#"
 */
-
-
 using namespace std;
 
 /**
@@ -27,7 +25,13 @@ class Executor
 {
 //we set status as protected variable so that subclass is able to make change
 protected:
-	Signal status;
+	/**
+	* This is the indicator of undo availability. The value should be set to
+	* TRUE is undo is available for the executor.
+	* 
+	* The value will be set only once in the constructor.
+	*/
+	bool _undoEnable;
 
 	/**
 	* These are the predefined values of the block locations for each
@@ -317,7 +321,7 @@ public:
 	*/
 	virtual void execute();
 	virtual void undo();
-	Signal getStatus();
+	bool isUndoAble();
 };
 
 #endif
