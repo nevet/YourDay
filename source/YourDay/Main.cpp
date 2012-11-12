@@ -31,7 +31,6 @@
 #include "UI.h"
 #include "Log.h"
 #include "Signal.h"
-#include "StatusHandler.h"
 #include "FunctionHandler.h"
 
 //This header is for testing purpose
