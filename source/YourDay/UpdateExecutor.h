@@ -49,23 +49,24 @@ private:
 	/**
 	* @param newEntry
 	* @return true if a general Entry was updated to a Calendar Entry
-			  false if not
+	*		  false if not
 	*/
 	bool verifyTheFiledChange(string newEntry);
 	
 	/**
 	* @param newEntry
-	* @return newIndex if user wants to update the index.
-		      if not , -1 would be returned.
+	* @return newIndex 
+	*		  if user wants to update the index.
+	*	      if not , -1 would be returned.
 	*/
 	int extractNewIndex(string newEntry);
 	/**
+	* This function add the new Entry to corresponding entry list
+	* based on the parameter listed above.
 	* @param newEntry
 	* @param index
 	* @param newIndex
 	* @param changToCalendar
-	* This function add the new Entry to corresponding entry list
-	* based on the parameter listed above.
 	* @return void
 	*/
 	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);

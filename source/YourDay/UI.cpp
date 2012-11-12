@@ -80,6 +80,9 @@ void UI::drawBanner()
 
 }
 //@author A0091734A
+/*
+* This method draw the command box and move the cursor to displaying area.
+*/
 void UI::drawCommandBox()
 {
 	gotoxy(0,COMMAND_INIT_Y);
@@ -92,6 +95,9 @@ void UI::drawCommandBox()
 }
 
 //@author A0091734A
+/*
+* This function will clear the whole line starting from startH, then clear #height lines.
+*/
 void UI::clearBox(int startH, int height)
 {
 	//setBackground();
@@ -122,6 +128,9 @@ void UI :: gotoxy(int x, int y) //goes to x,y console
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 //@author A0091734A
+/*
+* This function write the title for Calendar/General/SearchBox
+*/
 void UI::writeTitle(string words, int startX, int startY)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),128);
@@ -132,6 +141,9 @@ void UI::writeTitle(string words, int startX, int startY)
 	setBackground();
 }
 //@author A0091734A
+/*
+* This function write the highlighted title for Calendar/General/SearchBox
+*/
 void UI::writeHighlightedTitle(string words,int startX, int startY)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),HIGHLIGHT_COLOR);
@@ -1066,6 +1078,9 @@ void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY
 }
 
 //@author A0091734A
+/*
+* This function print the mark sign
+*/
 void UI::printMark(string mark)
 {
 	if(mark=="*")
