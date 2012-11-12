@@ -48,7 +48,7 @@ string Executor :: extractField(string details, int startLocation)
 	string extracted = "";
 	// this loop will extract characters by characters of the field between
 	// 2 '#'s
-	while (details[++index] != '#')
+	while ((index+1)<details.size()&&details[++index] != '#')
 	{
 		extracted += details[index];
 	}
@@ -115,6 +115,7 @@ string Executor :: extractMark(string details)
 	int indexLocation;
 	indexLocation = findBlockIndex(details, MARK_BLOCK_LOCATION);
 	mark = extractField(details, indexLocation);
+
 	return mark;
 }
 
