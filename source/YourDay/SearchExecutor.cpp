@@ -207,6 +207,7 @@ void SearchExecutor::adjustRank()
 	}
 }
 
+//@author A0091847U
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
 	string sentence = extractDescription(encoded) + " " + extractLocation(encoded);
@@ -701,6 +702,7 @@ void SearchExecutor::searchTime(string keyword)
 	adjustRank();
 }
 
+//@author A0091847U
 void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* suggestWords)
 {
 	int tot = _combinedEntryList.size();

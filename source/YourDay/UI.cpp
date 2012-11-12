@@ -49,7 +49,7 @@ void UI::setScreenSize()
 	// Set the window size to that specified in Rect 
 	assert(SetConsoleWindowInfo(Handle, TRUE, &Rect), false);
 }
-
+//@author A0088455R
 /**
 * This method sets the background color of the console
 **/
@@ -1694,12 +1694,12 @@ void UI::startingScreenDisplay()
 	setScreenSize();
 
 	drawBanner();
-	SetConsoleTextAttribute(hConsole, BACKGROUND_RED |15 );
+	SetConsoleTextAttribute(hConsole, SPLACHSCREEN_TEXT_COLOR );
 	cout<<"------------------------------------------------------------------------------------------------------------------------";
 	cout<<"|                                        YourDay - always making your day :)                                           |";
 	cout<<"------------------------------------------------------------------------------------------------------------------------";
-	SetConsoleTextAttribute(hConsole, 15);
-	gotoxy(50,18);
+	SetConsoleTextAttribute(hConsole, WHITE);
+	gotoxy(SPLASH_POSITION_X,SPLASH_POSITION_Y);
 	cout<<"Press Enter to continue";
 
 	char c;
