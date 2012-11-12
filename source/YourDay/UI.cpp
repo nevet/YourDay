@@ -18,7 +18,9 @@ const string UI::DID_U_KNOW_SEARCH = "To search an entry, type \"search\" follow
 const string UI::DID_U_KNOW_UPDATE_LINE1 = "To update an entry, type \"update\" followed by the index and description.\n";
 const string UI::DID_U_KNOW_UPDATE_LINE2 = "Format: DD/MM/YYYY HH:MM-HH:MM [DESCRIPTION] at [LOCATION] [mark/unmarked]";
 const string UI::DID_U_KNOW_UNDO = "To undo the last operation press Enter";
-const string UI::DID_U_KNOW_HINTS = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"";
+const string UI::DID_U_KNOW_HINTS_LINE1 = "Possible commands: \"add\", \"delete\", \"search\", \"update\", \"undo\", \"exit\"\n";
+const string UI::DID_U_KNOW_HINTS_LINE2 = "To switch between active field, press \"TAB\" key on the keyboard\n";
+const string UI::DID_U_KNOW_HINTS_LINE3 = "To scroll between pages in active field, press \"UP\" or \"DOWN\" cursor keys on the keyboard";
 
 /**
 * This function sets the screen/window size for the program
@@ -1319,7 +1321,9 @@ void UI::printDiduknowHints()
 		{
 		case DIDUKNOW_INIT:
 			{				
-				cout<<DID_U_KNOW_HINTS;
+				cout<<DID_U_KNOW_HINTS_LINE1;
+				cout<<DID_U_KNOW_HINTS_LINE2;
+				cout<<DID_U_KNOW_HINTS_LINE3;
 				break;
 			}
 		case ADD_COMMAND:

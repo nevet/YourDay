@@ -88,7 +88,9 @@ private:
 	static const string DID_U_KNOW_UPDATE_LINE1;
 	static const string DID_U_KNOW_UPDATE_LINE2;
 	static const string DID_U_KNOW_UNDO;
-	static const string DID_U_KNOW_HINTS;
+	static const string DID_U_KNOW_HINTS_LINE1;
+	static const string DID_U_KNOW_HINTS_LINE2;
+	static const string DID_U_KNOW_HINTS_LINE3;
 
 	HANDLE hConsole;
 	string input;
