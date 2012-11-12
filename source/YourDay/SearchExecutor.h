@@ -16,20 +16,43 @@ using namespace std;
 class SearchExecutor : public Executor
 {
 private:
+	//@author A0091847U
 	typedef pair<int, int> integerPair;
 	
+	/**
+	* This structure take down necessary info for judging similarity between
+	* a word with a key.
+	*/
 	struct matchInfo
 	{
+		//total number of spaces added inside the key, i.e. not leading or 
+		//trailing spaces, to achieve least editting distance between the key
+		//and the string under match
 		int continuity;
-		int match;
-		int change;
-		int dis;
-		int index;
 
+		//these three properties are recorded to calculate continuity
+
+		//total number of spaces added to the key to achieve least editting
+		//distance between the key and the string under match
 		int ms;
+		//total number of trailing spaces added to the key to achieve least
+		//editting distance between the key and the string under match
 		int ms_trail;
+		//total number of leading spaces added to the key to achieve least
+		//editting distance between the key and the string under match
 		int ms_lead;
 
+		//LCS between the key and the string under match
+		int match;
+		//number of letter change to achieve least editting distance between
+		//the key and the string under match
+		int change;
+		//editting distance between the key and the string under match
+		int dis;
+		//the index of the entry consists the string under match
+		int index;
+
+		//the string under match
 		string str;
 
 		matchInfo()
@@ -226,6 +249,7 @@ private:
 	void adjustRank();
 
 	//@author A0091847U
+
 	/**
 	* This operation will extract description and location info from the encoded
 	* input passed in and then split it words by words and put it into a vetor.
