@@ -169,7 +169,7 @@ string UpdateExecutor::constructNewEntry(string oldEntry)
 		oldAndNewEntries[i][LOCATION_FIELD] = extractLocation(entries[i]);
 		oldAndNewEntries[i][TIME_FIELD] = extractTime(entries[i]);
 		oldAndNewEntries[i][DATE_FIELD] = extractDate(entries[i]);
-		oldAndNewEntries[i][PRIORITY_FIELD] = extractMark(entries[i]);
+ 		oldAndNewEntries[i][PRIORITY_FIELD] = extractMark(entries[i]);
 	}
 	//The real process of constructing newEntry, if any field in userInput is empty,
 	//the field information would be inherited from oldEntry.
