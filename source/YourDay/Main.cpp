@@ -80,7 +80,7 @@ int main(int arg, char** test)
 		{
 			log.updateLogFile();
 
-			ui.traceInput(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			ui.traceInput();
 			log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
