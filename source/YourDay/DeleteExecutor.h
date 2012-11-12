@@ -5,7 +5,7 @@
 #include "Executor.h"
 
 using namespace std;
-//author A0091734A
+
 class DeleteExecutor : public Executor
 {
 private:

@@ -70,15 +70,11 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-	~StorageHandler();
-
 private :
 	char buffer[MAXMIUM_WORDS];
 
 	static const string DataBaseGeneralFile;
 	static const string DataBaseCalendarFile;
-	static const string GeneralFile;
-	static const string CalendarFile;
 	static const string FILEPATH;
 	static const string ENTRY_STORE_FORMAT;
 	Signal status;

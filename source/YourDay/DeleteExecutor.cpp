@@ -41,7 +41,7 @@ void DeleteExecutor::execute()
 	{
 		throw string ("index is not existing\n");
 	}
-	else if(index > (_focusingEntryList->size()))
+	else if(index >= (_focusingEntryList->size()))
 	{
 		throw string ("index is larger than list size\n");
 	}

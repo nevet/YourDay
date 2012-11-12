@@ -12,46 +12,29 @@ const string StorageHandler::FILEPATH = "YourdayBin/";
 
 const string StorageHandler::DataBaseCalendarFile = "YourDayCEntry.yd";
 const string StorageHandler::DataBaseGeneralFile = "YourDayGEntry.yd";
-const string StorageHandler::GeneralFile = "YourDayGEntry.txt";
-const string StorageHandler::CalendarFile = "YourDayCEntry.txt";
-
+//@author A0091734A 
 StorageHandler::StorageHandler()
 {
 	_mkdir("YourdayBin");
 
 	if(!checkFileExistence(FILEPATH, DataBaseGeneralFile))
-		ofstream writeFile(FILEPATH + GeneralFile);
+		ofstream writeFile(FILEPATH + DataBaseGeneralFile);
 
 	if(!checkFileExistence(FILEPATH, DataBaseCalendarFile))
-		ofstream writeFile(FILEPATH + CalendarFile);
-}
-
-StorageHandler::~StorageHandler()
-{
-
-	if(checkFileExistence(FILEPATH, GeneralFile))
-		renameFile(FILEPATH, GeneralFile, DataBaseGeneralFile);
-
-	if(checkFileExistence(FILEPATH, CalendarFile))
-		renameFile(FILEPATH, CalendarFile, DataBaseCalendarFile);
-	
-	
+		ofstream writeFile(FILEPATH + DataBaseCalendarFile);
 }
 
 void StorageHandler::setStatus()
 {
 	status = CLEAR;
 }
-
+//read data from database
 void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {	
 	assert(ramForGeneralList!=NULL);
 	assert(ramForCalendarList!=NULL);
 
-	renameFile(FILEPATH, DataBaseCalendarFile , CalendarFile);
-	renameFile(FILEPATH, DataBaseGeneralFile, GeneralFile);
-
-	ifstream infileG(FILEPATH + GeneralFile);
+	ifstream infileG(FILEPATH + DataBaseGeneralFile);
 	string textLine;
 	while(getline(infileG,textLine))
 	{
@@ -59,7 +42,7 @@ void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string> 
 	}
 	infileG.close();
 
-	ifstream infileC(FILEPATH + CalendarFile);
+	ifstream infileC(FILEPATH + DataBaseCalendarFile);
 	while(getline(infileC,textLine))
 	{
 		ramForCalendarList->push_back(textLine);
@@ -68,14 +51,14 @@ void StorageHandler::readData(vector<string> *ramForGeneralList, vector<string> 
 
 	return ;
 }
-
+//Write Data into the database
 void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList)
 {
 	assert(ramForGeneralList!=NULL);
 	assert(ramForCalendarList!=NULL);
 
-	ofstream clearFileG(FILEPATH + GeneralFile);
-	ofstream outfileG(FILEPATH + GeneralFile,ofstream::app);
+	ofstream clearFileG(FILEPATH + DataBaseGeneralFile);
+	ofstream outfileG(FILEPATH + DataBaseGeneralFile,ofstream::app);
 	
 	for(int i=0;i<ramForGeneralList->size();i++)
 	{
@@ -84,8 +67,8 @@ void StorageHandler::writeData(vector<string> *ramForGeneralList, vector<string>
 	
 	
 
-	ofstream clearFileC(FILEPATH + CalendarFile);
-	ofstream outfileC(FILEPATH + CalendarFile,ofstream::app);
+	ofstream clearFileC(FILEPATH + DataBaseCalendarFile);
+	ofstream outfileC(FILEPATH + DataBaseCalendarFile,ofstream::app);
 
 	for(int i=0;i<ramForCalendarList->size();i++)
 	{
@@ -131,7 +114,6 @@ void StorageHandler::associateFile(string filePath, string fileName,
 		break;
 	}
 }
-
 
 void StorageHandler::deleteFile(string filePath, string fileName)
 {
