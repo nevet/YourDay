@@ -516,8 +516,26 @@ void UI::initializeHighlightIndices()
 	highlightGeneralRowIndex = -1;
 }
 
+void UI::setMaxLengthArray(int* locationArray, int size, int* ansArray)
+{
+	for (int i = 0; i < size -1; i++)
+	{
+		ansArray[i] = locationArray[i+1] - locationArray[i] -1;
+	}
+	ansArray[size -1] = WINDOWS_WIDTH - locationArray[size -2] -1;
+}
+
 void UI::setInitialIndexArrays()
 {
+	int generalPositionArray[NUMBER_OF_ENTRY_PARTS] = {GENERAL_INDEX_INIT_X, GENERAL_DESCRIPTION_INIT_X, GENERAL_LOCATION_INIT_X,
+		GENERAL_TIME_INIT_X, GENERAL_DATE_INIT_X, GENERAL_PRIORITY_INIT_X};
+	int calendarPositionArray[NUMBER_OF_ENTRY_PARTS] = {CALENDAR_INDEX_INIT_X, CALENDAR_DESCRIPTION_INIT_X, CALENDAR_LOCATION_INIT_X,
+		CALENDAR_TIME_INIT_X, CALENDAR_DATE_INIT_X, CALENDAR_PRIORITY_INIT_X};
+	int generalMaxLengthArary[NUMBER_OF_ENTRY_PARTS];
+	int calendarMaxLengthArray[NUMBER_OF_ENTRY_PARTS];
+	setMaxLengthArray(generalPositionArray, NUMBER_OF_ENTRY_PARTS, generalMaxLengthArary);
+	setMaxLengthArray(calendarPositionArray, NUMBER_OF_ENTRY_PARTS, calendarMaxLengthArray);
+
 	generalInitArrayPart.clear();
 	generalInitArrayFull.clear();
 	calendarInitArrayPart.clear();
@@ -525,12 +543,12 @@ void UI::setInitialIndexArrays()
 	resultInitArrayPart.clear();
 	resultInitArrayFull.clear();
 
-	setGeneralInitArrayPart();
-	setGeneralInitArrayFull();
-	setCalendarInitArrayPart();
-	setCalendarInitArrayFull();
-	setResultInitArrayPart();
-	setResultInitArrayFull();
+	setInitArrayPart(generalList, &generalInitArrayPart, GENERAL_BOX_HEIGHT);
+	setInitArrayFull(generalList, &generalInitArrayFull, GENERAL_BOX_HEIGHT, generalMaxLengthArary, calendarMaxLengthArray);
+	setInitArrayPart(calendarList, &calendarInitArrayPart, CALENDAR_BOX_HEIGHT);
+	setInitArrayFull(calendarList, &calendarInitArrayFull, CALENDAR_BOX_HEIGHT, generalMaxLengthArary, calendarMaxLengthArray);
+	setInitArrayPart(resultList, &resultInitArrayPart, RESULT_BOX_HEIGHT);
+	setInitArrayFull(resultList, &resultInitArrayFull, RESULT_BOX_HEIGHT, generalMaxLengthArary, calendarMaxLengthArray);
 }
 
 void UI::handleInitialGeneralIndexOverflow()
@@ -872,180 +890,92 @@ int UI::countPartLine(string part, int maxLength)
 	return count;  	
 }
 
-void UI::setGeneralInitArrayPart()
+int UI::findMaxInt(int* intArray, int size)
+{
+	int maxInt = -1;
+
+	for (int i =0; i < size; i++)
+	{
+		assert (intArray[i] >= 0 );
+		if (intArray[i] > maxInt)
+		{
+			maxInt = intArray[i];
+		}
+	}
+
+	return maxInt;
+}
+
+int UI::countLineOccupied(string entry, int* maxLengthArray)
+{
+	int ans;
+	int maxLength;
+	string part;
+	string partArray[NUMBER_OF_ENTRY_PARTS];
+	int maxLine = 0;
+	int numberOfLine[NUMBER_OF_ENTRY_PARTS];
+	extractParts(entry, partArray);
+
+	for (int i = 0; i < NUMBER_OF_ENTRY_PARTS; i++)
+	{
+		part = partArray[i];
+		maxLength = maxLengthArray[i];
+		numberOfLine[i] = countPartLine(part, maxLength);
+	}
+
+	ans = findMaxInt(numberOfLine, NUMBER_OF_ENTRY_PARTS);
+	return ans;
+}
+
+void UI::setInitArrayPart(vector<string> entryList, vector<int>* ansArray, int boxHeight)
 {
 	int index = 0;
-	int generalSize = generalList.size();
+	int size = entryList.size();
 
-	while (index < generalSize)
+	while (index < size)
 	{
-		generalInitArrayPart.push_back(index);
-		index += GENERAL_BOX_HEIGHT;
+		ansArray->push_back(index);
+		index += boxHeight;
 	}
 	
-	if (generalSize == 0)
+	if (size == 0)
 	{
-		generalInitArrayPart.push_back(index);
+		ansArray->push_back(index);
 	}
 }
 
-void UI::setGeneralInitArrayFull()
+void UI::setInitArrayFull(vector<string> entryList, vector<int>* ansArray, int boxHeight, int* generalMaxLengthArray, int* calendarMaxLengthArray)
 {
-	int generalSize = generalList.size();
+	int size = entryList.size();
 	string row;
-	string description;
-	string location;
-	int descriptionLength;
-	int locationLength;
-	int descriptionMaxLength = GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1;
-	int locationMaxLength = GENERAL_TIME_INIT_X - GENERAL_LOCATION_INIT_X -1;
 	int lineOccupied;
-	string partArray[NUMBER_OF_ENTRY_PARTS];
-
 	int index = 0;
 	int countLine = 0;
+	int* maxLengthArray;
 
-	for (int i =0; i < generalSize; i++)
+	for (int i =0; i < size; i++)
 	{
-		row = generalList.at(i);
-		extractParts(row, partArray);
-		description = partArray[1];
-		location = partArray [2];
-
-		descriptionLength = countPartLine(description, descriptionMaxLength);
-		locationLength = countPartLine(location, locationMaxLength);
-		lineOccupied = max(descriptionLength, locationLength);
-
-		countLine += lineOccupied;
-		if (countLine > GENERAL_BOX_HEIGHT)		
-		{
-			generalInitArrayFull.push_back(index);
-			countLine = lineOccupied;
-			index = i;
-		}
-	}
-	generalInitArrayFull.push_back(index);
-}
-
-void UI::setCalendarInitArrayPart()
-{
-	int index = 0;
-	int calendarSize = calendarList.size();
-
-	while (index < calendarSize)
-	{
-		calendarInitArrayPart.push_back(index);
-		index += CALENDAR_BOX_HEIGHT;
-	}
-
-	if (calendarSize == 0)
-	{
-		calendarInitArrayPart.push_back(index);
-	}
-}
-
-void UI::setCalendarInitArrayFull()
-{
-	int calendarSize = calendarList.size();
-	string row;
-	string description;
-	string location;
-	int descriptionLength;
-	int locationLength;
-	int descriptionMaxLength = CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1;
-	int locationMaxLength = CALENDAR_TIME_INIT_X - CALENDAR_LOCATION_INIT_X -1;
-	int lineOccupied;
-	string partArray[NUMBER_OF_ENTRY_PARTS];
-
-	int index = 0;
-	int countLine = 0;
-
-	for (int i =0; i < calendarSize; i++)
-	{
-		row = calendarList.at(i);
-		extractParts(row, partArray);
-		description = partArray[1];
-		location = partArray [2];
-
-		descriptionLength = countPartLine(description, descriptionMaxLength);
-		locationLength = countPartLine(location, locationMaxLength);
-		lineOccupied = max(descriptionLength, locationLength);
-
-		countLine += lineOccupied;
-		if (countLine > CALENDAR_BOX_HEIGHT)		
-		{
-			calendarInitArrayFull.push_back(index);
-			countLine = lineOccupied;
-			index = i;
-		}
-	}
-	calendarInitArrayFull.push_back(index);
-}
-
-void UI::setResultInitArrayPart()
-{
-	int index = 0;
-	int resultSize = resultList.size();
-
-	while (index < resultSize)
-	{
-		resultInitArrayPart.push_back(index);
-		index += RESULT_BOX_HEIGHT;
-	}
-
-	if (resultSize == 0)
-	{
-		resultInitArrayPart.push_back(index);
-	}
-}
-
-void UI::setResultInitArrayFull()
-{
-	int resultSize = resultList.size();
-	string row;
-	string description;
-	string location;
-	int descriptionLength;
-	int locationLength;
-	int descriptionMaxLength;
-	int locationMaxLength;
-	int lineOccupied;
-	string partArray[NUMBER_OF_ENTRY_PARTS];
-
-	int index = 0;
-	int countLine = 0;
-
-	for (int i =0; i < resultSize; i++)
-	{
-		row = resultList.at(i);
-		extractParts(row, partArray);
-		description = partArray[1];
-		location = partArray [2];
-
+		row = entryList.at(i);
 		if (isGeneral(row))
-		{	
-			descriptionMaxLength = GENERAL_LOCATION_INIT_X - GENERAL_DESCRIPTION_INIT_X -1;
-			locationMaxLength = GENERAL_TIME_INIT_X - GENERAL_LOCATION_INIT_X -1;
+		{
+			maxLengthArray = generalMaxLengthArray;
 		}
 		else
 		{
-			descriptionMaxLength = CALENDAR_LOCATION_INIT_X - CALENDAR_DESCRIPTION_INIT_X -1;
-			locationMaxLength = CALENDAR_TIME_INIT_X - CALENDAR_LOCATION_INIT_X -1;
+			maxLengthArray = calendarMaxLengthArray;
 		}
 
-		descriptionLength = countPartLine(description, descriptionMaxLength);
-		locationLength = countPartLine(location, locationMaxLength);
-		lineOccupied = max(descriptionLength, locationLength);
-
+		lineOccupied = countLineOccupied(row, maxLengthArray);
 		countLine += lineOccupied;
-		if (countLine > RESULT_BOX_HEIGHT)		
+
+		if (countLine > boxHeight)		
 		{
-			resultInitArrayFull.push_back(index);
+			ansArray->push_back(index);
 			countLine = lineOccupied;
 			index = i;
 		}
 	}
-	resultInitArrayFull.push_back(index);
+	ansArray->push_back(index);
 }
 
 void UI::printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition)
@@ -1311,6 +1241,7 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 void UI::printDiduknowHints()
 {
 	int lines;
+	int newLineCharCount;
 	if (isDiduknowDisplay)
 	{	
 		clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
@@ -1364,12 +1295,16 @@ void UI::printDiduknowHints()
 		}
 		cout<<endl;	
 		lines = currentChar/ FIRST_LINE_INPUT_WIDTH;
-		currentChar = currentChar % FIRST_LINE_INPUT_WIDTH;
+		newLineCharCount = currentChar % FIRST_LINE_INPUT_WIDTH;
 		if ( lines >= 1 )
 		{
-
+			gotoxy(newLineCharCount,INPUT_START_Y);
+		}
+		else
+		{
 			gotoxy(INPUT_START_X+currentChar,INPUT_START_Y);
 		}
+
 	}
 	diduknowPrevStatus=diduknowStatus;
 }
