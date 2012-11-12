@@ -47,8 +47,8 @@ private:
 	
 	string _details;
 
-	int f[500][500];
-	int g[500][500];
+	int f[50][50];
+	int g[50][50];
 
 	bool noMatch;
 	int treshold;

@@ -421,16 +421,7 @@ void LangHandler::splitTime(string* str, string* time, string* date) throw (stri
 
 void LangHandler::splitDescription(string* str, string* description) throw (string)
 {
-	if (*str == NULL_STRING)
-	{
-		*description = NULL_STRING;
-		
-		log.writeException("Empty Description!");
-		throw string ("Empty Description!\n");
-	} else
-	{
-		*description = *str;
-	}
+	*description = *str;
 }
 
 void LangHandler::regulateDate(string* date)
