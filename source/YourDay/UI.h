@@ -60,8 +60,6 @@
 #define GENERAL_DATE_INIT_X 113
 #define GENERAL_PRIORITY_INIT_X 113
 
-#define COMMAND_STRING_LENGTH 8 
-
 #define TAB 9
 #define ENTER 13
 #define BACKSPACE 8
