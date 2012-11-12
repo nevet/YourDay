@@ -55,6 +55,24 @@ bool LangHandler::isInt(string inx)
 	return sscanf(inx.c_str(), "%d", &x) == 1;
 }
 
+bool LangHandler::isDate(string date)
+{
+	int day, month, year;
+	
+	bool flag = (sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) == 3);
+
+	return flag;
+}
+
+bool LangHandler::isTime(string time)
+{
+	int h1, h2, m1, m2;
+
+	bool flag = (sscanf(time.c_str(), "%d:%d-%d:%d", &h1, &m1, &h2, &m2) == 4);
+
+	return flag;
+}
+
 bool LangHandler::isLogicDate(string date)
 {
 	int year, month, day;
@@ -340,16 +358,19 @@ void LangHandler::splitDate(string* str, string* date) throw (string)
 	//exception; else if it is not even a date, date field should be left
 	//unchange since nowhere else can find a date, and the input should remain
 	//unchange as well.
-	if (isLogicDate(potentialDate))
+	if (isDate(potentialDate))
 	{
-		*date = potentialDate;
-		input = getSuffix(input, pos);
-	} else
-	{
-		*date = NULL_STRING;
+		if (isLogicDate(potentialDate))
+		{
+			*date = potentialDate;
+			input = getSuffix(input, pos);
+		} else
+		{
+			*date = NULL_STRING;
 			
-		log.writeException("date error");
-		throw string ("date error\n");
+			log.writeException("date error");
+			throw string ("date error\n");
+		}
 	}
 
 	*str = input;
@@ -376,16 +397,19 @@ void LangHandler::splitTime(string* str, string* time, string* date, bool autoFi
 	//exception; else if it is not even a time, date field should be left
 	//unchange since nowhere else can find a time, and the input should remain
 	//unchange.
-	if (isLogicTime(potentialTime))
+	if (isTime(potentialTime))
 	{
-		*time = potentialTime;
-		input = getSuffix(input, pos);
-	} else
-	{
-		*time = NULL_STRING;
+		if (isLogicTime(potentialTime))
+		{
+			*time = potentialTime;
+			input = getSuffix(input, pos);
+		} else
+		{
+			*time = NULL_STRING;
 			
-		log.writeException("time error");
-		throw string ("time error\n");
+			log.writeException("time error");
+			throw string ("time error\n");
+		}
 	}
 
 	//if auto_fill_date is allowed and if date field is omitted with time

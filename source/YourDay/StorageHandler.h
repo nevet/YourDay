@@ -52,6 +52,14 @@ public :
 	*/
 	void writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList);
 
+private :
+	char buffer[MAXMIUM_WORDS];
+
+	static const string DataBaseGeneralFile;
+	static const string DataBaseCalendarFile;
+	static const string FILEPATH;
+	static const string ENTRY_STORE_FORMAT;
+	
 	/**
 	A series file operations 
 	
@@ -68,13 +76,6 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-private :
-	char buffer[MAXMIUM_WORDS];
-
-	static const string DataBaseGeneralFile;
-	static const string DataBaseCalendarFile;
-	static const string FILEPATH;
-	static const string ENTRY_STORE_FORMAT;
 };
 
 

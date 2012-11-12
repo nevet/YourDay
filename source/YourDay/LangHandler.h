@@ -76,6 +76,30 @@ private:
 	bool isLeap(int year);
 
 	/**
+	* This function is used to check whether a string is in potential data
+	* form.
+	* 
+	* Potential date form is defined as: x/x/x
+	*
+	* The x in the form should be an integer.
+	*
+	* @return true if the date is in potential date form.
+	*/
+	bool isDate(string date);
+
+	/**
+	* This function is used to check whether a string is in potential time
+	* form.
+	* 
+	* Potential time form is defined as: x:x-x:x
+	*
+	* The x in the form should be an integer.
+	*
+	* @return true if the date is in potential time form.
+	*/
+	bool isTime(string time);
+
+	/**
 	* This function is used to check whether a string is an integer.
 	*
 	* @return true if the string is an integer.
