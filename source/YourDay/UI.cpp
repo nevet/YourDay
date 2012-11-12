@@ -385,11 +385,17 @@ void UI::processBackspace()
 	if (input.size()>0)
 	{
 		input = input.substr(0, input.size()-1);
-		cout << "\b \b";
-		if(currentChar>0)
+		if (currentChar == WINDOWS_WIDTH - COMMAND_STRING_LENGTH) 
 		{
-			--currentChar;
+			gotoxy(WINDOWS_WIDTH -1, COMMAND_INIT_Y);
+			cout << " \b";
 		}
+		else
+		{
+			cout << "\b \b";
+		}
+
+		--currentChar;
 
 		diduknowHintDisplay();
 	}
@@ -1781,7 +1787,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	diduknowHintDisplay();
 	resultListDisplay(resultList);
 
-	diduknowPrevStatus = CLEAR;
+	diduknowPrevStatus = DIDUKNOW_CLEAR;
 	drawCommandBox();
 }
 
@@ -1793,7 +1799,7 @@ UI::UI(vector<string>* calendarEntryList, vector<string>* generalEntryList, vect
 	initializeInitArrayIndices();
 	initializeDidUKnowStatus();
 	initializeFocusedField();
-	prevCommand = CLEAR;
+	prevCommand = DIDUKNOW_CLEAR;
 	isResultDisplay = false;
 
 	startingScreenDisplay();
@@ -1817,7 +1823,7 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
-	diduknowPrevStatus = ERR;
+	diduknowPrevStatus = DIDUKNOW_CLEAR;
 }
 
 UI::~UI()
