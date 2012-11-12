@@ -50,9 +50,8 @@ using namespace std;
 int main(int arg, char** test)
 {
  
-	runTest(arg,test);
+//	runTest(arg,test);
 
-	/*
 	//recording general entries
 	vector<string> generalEntryList;
 	//recording calendar entries
@@ -65,8 +64,6 @@ int main(int arg, char** test)
 	
 	log.writeTime();
 
-	Signal signal = CLEAR;                                                                                 
-	
 	FunctionHandler function(&generalEntryList, &calendarEntryList, &diduknowBoxList);
 	log.writeCreated("FunctionHandler instance");
 	
@@ -82,7 +79,7 @@ int main(int arg, char** test)
 		{
 			log.updateLogFile();
 
-			ui.traceInput(&calendarEntryList, &generalEntryList, &diduknowBoxList);
+			ui.traceInput();
 			log.writeCreated("UI interface");
 			
 			string userInput = ui.retrieveInput();
@@ -99,7 +96,6 @@ int main(int arg, char** test)
 							 &diduknowBoxList);
 			log.writeExecuted("FunctionHandler::execute()");
 
-			signal = function.getStatus();
 			ui.mainScreenDisplay(&calendarEntryList, &generalEntryList, &diduknowBoxList);
 		}
 		catch (string excpt)
@@ -108,5 +104,5 @@ int main(int arg, char** test)
 		}
 	}
 	
-	return EXIT_SUCCESS;*/
+	return EXIT_SUCCESS;
 }
