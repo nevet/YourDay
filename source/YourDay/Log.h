@@ -1,3 +1,4 @@
+//@author A0091847U
 #ifndef LOG_H
 #define LOG_H
 
@@ -26,17 +27,31 @@ private:
 	const static string logPath;
 	const static string logName;
 	const static string fullLogPath;
+	//indicates the largest tolerant log file size
 	const static int sizeThreshold;
 
+	//the current log file size
 	int logSize;
 
 	void disassociateFile();
 	void associateFile(string fileName, OPEN_TYPE mode);
 	void deleteLogFile();
 	
+	/**
+	* @return true if the current log file exceeds the largest log file size
+	*		  tolerance.
+	*/
 	bool checkLogSize();
 	
 public:	
+	/**
+	* This operation is used to limit the size of the log file.
+	* 
+	* It will delete the old log file and create a new one if the old log file
+	* size exceeds 50KB.
+	* 
+	* This operation is called after every iteration of main loop.
+	*/
 	void updateLogFile();
 
 	void writeTime();
