@@ -317,7 +317,7 @@ protected:
 	* @author A0091734A
 	*/
 	int extractIndexFromDescription(string description);
-
+	//@author A0091847U
 public:
 	/**
 	* Note that different subclass may take in different parameter, so this
@@ -331,7 +331,16 @@ public:
 	* corresponding subclass.
 	*/
 	virtual void execute();
+
+	/**
+	* This operation should be overwriten by its sub-class. The operation should
+	* contain all necessary undo messages.
+	*/
 	virtual void undo();
+
+	/**
+	* This function is used to tell whether the executor should allow undo operation
+	*/
 	bool isUndoAble();
 };
 
