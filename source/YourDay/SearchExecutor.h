@@ -266,15 +266,67 @@ private:
 	* This operation is used to calculate editing distance of two strings and
 	* store the match info of match string.
 	*
-	* 
+	* @param a
+	*			is the key string
+	* @param b
+	*			is the match string, i.e. the string under match
 	*/
 	void edit(string a, string b, matchInfo & ans);
+
+	/**
+	* This function is used to judge whether the first match info is more
+	* relavent than the other match info.
+	*
+	* @return true is a is more relavent than b
+	*/
 	static bool cmp(matchInfo a, matchInfo b);
+
+	/**
+	* This function is used to pick the more relavent match info from two
+	* match infos.
+	*/
 	matchInfo compare(matchInfo a, matchInfo b);
+
+	/**
+	* This operation will encode the suggest words in an encoded string for
+	* passing purpose.
+	*
+	* @param suggestWords
+	*			is the encoded string
+	* @param updWord
+	*			is the word that is to be encoded in the encoded string
+	*/
 	void updateSuggestWords(string* suggestWords, string updWord);
+
+	/**
+	* This function is used to tell whether a match info is unrelavent to a
+	* given key.
+	*
+	* @return true if match info is unrelavent to the key
+	*/
 	bool unrelavent(matchInfo info, string key);
+
+	/**
+	* This operation is used to exam relavence between match infos inside
+	* a vector and a given key and eliminate unrelavent entries from the vector.
+	*
+	* @param rank
+	*			is the rank assigned to each entries. It is passed in because
+	*			if the entry is unrelavent to the key, the rank will be
+	*			assigned as the lowest, i.e. 0
+	*/
 	void examRelavence(vector<matchInfo>* list, vector<int>* rank, string key);
 
+	/**
+	* This operation is used to encode generalized index into an encoded entry.
+	*
+	* Generalized index is defined as:
+	*
+	*			If an entry with index X and it's in general list, then its
+	*			generalized index will be GX;
+	*			If an entry with index X and it's in calendar list, then its
+	*			generalized index will be CX;
+	*/
 	void encodeIndex(string* encodedEntry, int index);
 
 	//@author A0088455R
