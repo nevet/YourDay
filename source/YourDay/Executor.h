@@ -304,7 +304,18 @@ protected:
 	* the start will be "15:00" and end will be "14:00"
 	*/
 	void splitStartEndTime(string* start, string* end, string timeRange);
-	//@ author A0091734A
+	
+	//@author A0091734A
+	/**
+	* @param description
+	*       the content stored in description field of EncodedUserInput
+	* If user wants to update index for one entry, the desired index would be stored in description.
+	* This function aims for extract this desired index
+	* eg."##100#####"  The extracted index would be 100;
+	* @return index
+	*       the desired index of user.  
+	* @author A0091734A
+	*/
 	int extractIndexFromDescription(string description);
 
 public:
