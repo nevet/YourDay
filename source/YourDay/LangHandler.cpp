@@ -216,22 +216,43 @@ void LangHandler::fillUpDate(string* date)
 	*date += tempDate;
 }
 
-void LangHandler::splitPriority(string* str, string* priority) throw (string)
+void LangHandler::splitPriority(string* str, string* priority, string indicator, char token) throw (string)
 {
 	string input = *str;
+	string token_s;
+
+	if (token == SPACE_BAR)
+	{
+		token_s = NULL_STRING;
+	} else
+	{
+		token_s = token;
+	}
 	
 	//add a space in front to avoid indicator missing
 	input = SPACE_BAR + input;
 	//check whether we have priority
-	int pos = input.rfind(ADD_MARK_INDICATOR);
+	int pos = input.rfind(indicator);
 				
-	//contains priority info
+	//contains priority info, then we need to judge whether it has been set;
+	//if we cannot find the indicator, we leave priority field unchange
 	if (pos != string::npos)
 	{
-		*priority = PRIORITY_INDICATOR;		
-	} else
-	{
-		*priority = NULL_STRING;
+		if (*priority != token_s)
+		{
+			*priority = token_s;
+		} else
+		{
+			if (token_s == NULL_STRING)
+			{
+				log.writeException("The Entry was UNMARKED!");
+				throw string ("The Entry was UNMARKED!\n");
+			} else
+			{
+				log.writeException("The Entry was MARKED!");
+				throw string ("The Entry was MARKED!\n");
+			}
+		}
 	}
 	
 	//get rid of priority info
@@ -249,13 +270,11 @@ void LangHandler::splitLocation(string* str, string* location) throw (string)
 	//check whether we have location
 	int pos = input.rfind(LOCATION_INDICATOR);
 
-	//contains location info
+	//contains location info; if we cannot find indicator, we leave location
+	//unchange
 	if (pos != string::npos)
 	{
 		*location = getSuffix(input, pos + LOCATION_INDICATOR.length());
-	} else
-	{
-		*location = NULL_STRING;
 	}
 	
 	//get rid of location info
@@ -274,28 +293,22 @@ void LangHandler::splitIndex(string* str, string* index, bool multiple) throw (s
 	
 	if (multiple)
 	{
-		//in this mode, we are handling update command, therefore if only index
-		//is specified, description missing exception should be thorwn
-		if (pos != string::npos)
+		//in this mode, we are handling update command, therefore there may be
+		//multiple filed and we only need to take in the first field
+		potentialIndex = getPrefix(input, pos);
+
+		if (isInt(potentialIndex))
 		{
-			potentialIndex = getPrefix(input, pos);
-					
-			if (isInt(potentialIndex))
-			{
-				*index = potentialIndex;
-				input = getSuffix(input, pos);
-			} else
-			{
-				*index = NULL_STRING;
+			*index = potentialIndex;
+			
+			//get rid of index info
+			input = getSuffix(input, pos);
+		} else
+		{
+			*index = NULL_STRING;
 						
-				log.writeException("Index error");
-				throw string ("Index error\n");
-			}
-		}
-		else
-		{
-			log.writeException("New Description Missing!");
-			throw string("New Description Missing!\n");
+			log.writeException("The first field should be an Integer!");
+			throw string ("The first field should be an Integer!\n");
 		}
 	} else
 	{
@@ -313,8 +326,8 @@ void LangHandler::splitIndex(string* str, string* index, bool multiple) throw (s
 			{
 				*index = NULL_STRING;
 						
-				log.writeException("Index error");
-				throw string ("Index error\n");
+				log.writeException("The first field should be an Integer!");
+				throw string ("The first field should be an Integer!\n");
 			}
 		}
 		else
@@ -345,9 +358,9 @@ void LangHandler::splitDate(string* str, string* date) throw (string)
 
 	//if the potential is a logic date, we take down the date and get rid of it
 	//from the input string; else if it is a date but not logical, we throw an
-	//exception; else if it is not even a date, date field should be set to
-	//empty since nowhere else can find a date, and the input should remain
-	//unchange.
+	//exception; else if it is not even a date, date field should be left
+	//unchange since nowhere else can find a date, and the input should remain
+	//unchange as well.
 	if (isDate(potentialDate))
 	{
 		if (isLogicDate(potentialDate))
@@ -361,15 +374,12 @@ void LangHandler::splitDate(string* str, string* date) throw (string)
 			log.writeException("date error");
 			throw string ("date error\n");
 		}
-	} else
-	{
-		*date = NULL_STRING;
 	}
 
 	*str = input;
 }
 
-void LangHandler::splitTime(string* str, string* time, string* date) throw (string)
+void LangHandler::splitTime(string* str, string* time, string* date, bool autoFill) throw (string)
 {
 	string input = *str;
 	string potentialTime;
@@ -387,8 +397,8 @@ void LangHandler::splitTime(string* str, string* time, string* date) throw (stri
 
 	//if the potential is a logic time, we take down the time and get rid of it
 	//from the input string; else if it is a time but not logical, we throw an
-	//exception; else if it is not even a time, date field should be set to
-	//empty since nowhere else can find a time, and the input should remain
+	//exception; else if it is not even a time, date field should be left
+	//unchange since nowhere else can find a time, and the input should remain
 	//unchange.
 	if (isTime(potentialTime))
 	{
@@ -403,25 +413,33 @@ void LangHandler::splitTime(string* str, string* time, string* date) throw (stri
 			log.writeException("time error");
 			throw string ("time error\n");
 		}
-	} else
-	{
-		*time = NULL_STRING;
 	}
 
-	//if date field is omitted with time field specified, we will auto-fill the
-	//date field with current date
-	if (!time->empty() && date->empty())
+	//if auto_fill_date is allowed and if date field is omitted with time
+	//field specified, we will auto-fill the date field with current date
+	if (autoFill)
 	{
-		fillUpDate(date);
-		log.writeData("date after auto fill up", date);
+		if (!time->empty() && date->empty())
+		{
+			fillUpDate(date);
+			log.writeData("date after auto fill up", date);
+		}
 	}
 
 	*str = input;
 }
 
-void LangHandler::splitDescription(string* str, string* description) throw (string)
+void LangHandler::splitDescription(string* str, string* description, bool empty) throw (string)
 {
 	*description = *str;
+	
+	//only when we are not handling empty_allow description, empty description
+	//exception should be thown
+	if (*description == NULL_STRING  && !empty)
+	{
+		log.writeException("Empty Description!");
+		throw string ("Empty Description!\n");
+	}
 }
 
 void LangHandler::regulateDate(string* date)
@@ -499,7 +517,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case ADD_COMMAND:
 				log.writeConditionEntered("add command separation", true);
 
-				splitPriority(&input, &priority);
+				splitPriority(&input, &priority, ADD_MARK_INDICATOR, PRIORITY_INDICATOR);
 
 				log.writeExecuted("LangHandler::splitPriority()");
 				log.writeData("input", input);
@@ -519,14 +537,14 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				log.writeData("input", input);
 				log.writeData("date", date);
 
-				splitTime(&input, &time, &date);
+				splitTime(&input, &time, &date, true);
 				regulateTime(&time);
 
 				log.writeExecuted("LangHandler::splitTime()");
 				log.writeData("input", input);
 				log.writeData("time", time);
 
-				splitDescription(&input, &description);
+				splitDescription(&input, &description, false);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
@@ -557,7 +575,13 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				log.writeData("input", input);
 				log.writeData("index", index);
 
-				splitPriority(&input, &priority);
+				splitPriority(&input, &priority, UPDATE_MARK_INDICATOR, PRIORITY_INDICATOR);
+
+				log.writeExecuted("LangHandler::splitPriority()");
+				log.writeData("input", input);
+				log.writeData("priority", priority);
+
+				splitPriority(&input, &priority, UPDATE_UNMARK_INDICATOR, SPACE_BAR);
 
 				log.writeExecuted("LangHandler::splitPriority()");
 				log.writeData("input", input);
@@ -577,14 +601,14 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 				log.writeData("input", input);
 				log.writeData("date", date);
 
-				splitTime(&input, &time, &date);
+				splitTime(&input, &time, &date, false);
 				regulateTime(&time);
 
 				log.writeExecuted("LangHandler::splitTime()");
 				log.writeData("input", input);
 				log.writeData("time", time);
 
-				splitDescription(&input, &description);
+				splitDescription(&input, &description, true);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
@@ -597,7 +621,7 @@ void LangHandler::encoder(string input, Signal command) throw (string)
 			case SEARCH_COMMAND:
 				log.writeConditionEntered("search command separation", true);
 				
-				splitDescription(&input, &description);
+				splitDescription(&input, &description, false);
 				regulateDescription(&description);
 
 				log.writeExecuted("LangHandler::splitDescription()");
