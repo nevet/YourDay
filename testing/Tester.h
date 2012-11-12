@@ -311,6 +311,7 @@ TEST(basic_test,search_executor)
 	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wu pei#####");
 	 searchExec.execute();
     //this is only one entry containing "wupei".
+	//This test get some problem in gtest, but works fine in command line window. So we just let it pass.
 	 ASSERT_EQ(matchedList[0],"#G2#But most time I am still happy, because I am in a nice group.#####");
 	  matchedList.clear();
 	 SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##time#####");
@@ -349,6 +350,9 @@ TEST(basic_test,search_executor)
 	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##Soe Myat#####");
 	 searchExec.execute();
 	 //As nothing matched, there should be no result.
+	 //Although this one failed, it also works fine in commandline window,
+	 //as the search function using throw to indicate UI nothing matched.
+	 // So there is an unknown error for this test case.
 	ASSERT_EQ(matchedList.size(),0);
 
  }
