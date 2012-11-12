@@ -1,3 +1,4 @@
+//@author A0091847U
 # include "Log.h"
 
 const string Log::logPath = "YourdayBin/";
