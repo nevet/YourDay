@@ -63,9 +63,39 @@ private:
 	const static string UPDATE_MARK_INDICATOR;
 	const static string UPDATE_UNMARK_INDICATOR;
 
+	/**
+	* These functions will verify whether thar param passed in is in a valid
+	* form or logical. Details of the functions will be listed below.
+	*/
+
+	/**
+	* This function is used to check whether the year passed in is a leap year.
+	*
+	* @return true if the year is a leap year.
+	*/
 	bool isLeap(int year);
+
+	/**
+	* This function is used to check whether a string is in potential data
+	* form.
+	* 
+	* Potential date form is defined as: x/x/x
+	*
+	* The x in the form should be an integer.
+	*
+	* @return true if the date is in potential date form.
+	*/
 	bool isDate(string date);
+
+	/**
+	*/
 	bool isTime(string time);
+
+	/**
+	* This function is used to check whether a string is an integer.
+	*
+	* @return true if the string is an integer.
+	*/
 	bool isInt(string inx);
 	bool isLogicDate(string date);
 	bool isLogicTime(string time);
