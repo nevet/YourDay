@@ -889,7 +889,7 @@ void SearchExecutor::execute() throw (string)
 			int curRecord = tempMatchedList[i].second;
 			string curEncodedEntry = _combinedEntryList[curRecord];
 
-			encodeIndex(&curEncodedEntry, curRecord);
+			encodeIndex(&curEncodedEntry, curRecord + 1);
 		
 			_matchedEntryList->push_back(curEncodedEntry);
 			log.writeData("record", _matchedEntryList->back());

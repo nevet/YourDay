@@ -70,12 +70,12 @@ private:
 	string getSuffix(string str, int pos);
 	string getPrefix(string str, int pos);
 
-	void splitPriority(string* str, string* priority) throw (string);
+	void splitPriority(string* str, string* priority, string indicator, char token) throw (string);
 	void splitLocation(string* str, string* location) throw (string);
 	void splitIndex(string* str, string* index, bool multiple) throw (string);
 	void splitDate(string* str, string* date) throw (string);
-	void splitTime(string* str, string* time, string* date) throw (string);
-	void splitDescription(string* str, string* description) throw (string);
+	void splitTime(string* str, string* time, string* date, bool autoFill) throw (string);
+	void splitDescription(string* str, string* description, bool empty) throw (string);
 
 	void fillUpDate(string* date);
 

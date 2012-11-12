@@ -59,10 +59,15 @@
 #define DATE_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN 
 #define PRIORITY_COLOR FOREGROUND_INTENSITY | FOREGROUND_RED
 #define FOOTER_COLOR FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED
+#define HIGHLIGHT_COLOR 1|BACKGROUND_BLUE|BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY
 
 #define TAB 9
 #define ENTER 13
 #define BACKSPACE 8
+#define MOVEMENT_SIGN -32
+#define UP_ARROW 72
+#define DOWN_ARROW 80
+#define PAGE_UP 73
 
 #define MAX_INPUT_SIZE (WINDOWS_WIDTH * 2 -9)
 
@@ -195,11 +200,13 @@ private:
 	int getNextResultInitIndex(bool& isValid);
 	int findNearestInitArrayIndex(vector<int>* initialIndexArray, int entryIndex);
 
-	void changeDisplayMode();
+	void changeDisplayMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void displayNewMode(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void changeFocusedField();
 	void scrollUp(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
 	void scrollDown(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void traceMovementKey(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* resultList);
+	void processBackspace();
 
 	//@author A0088455R
 	/**
