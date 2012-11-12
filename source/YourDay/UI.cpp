@@ -385,7 +385,7 @@ void UI::processBackspace()
 	if (input.size()>0)
 	{
 		input = input.substr(0, input.size()-1);
-		if (currentChar == WINDOWS_WIDTH - COMMAND_STRING_LENGTH +1) 
+		if (currentChar == WINDOWS_WIDTH - COMMAND_STRING_LENGTH) 
 		{
 			gotoxy(WINDOWS_WIDTH -1, COMMAND_INIT_Y);
 			cout << " \b";
@@ -1823,7 +1823,7 @@ void UI::displayMessage(string message)
 	setBackground();
 	cout << message <<endl;
 	drawCommandBox();
-	diduknowPrevStatus = ERR;
+	diduknowPrevStatus = DIDUKNOW_CLEAR;
 }
 
 UI::~UI()
