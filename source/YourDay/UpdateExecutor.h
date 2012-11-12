@@ -63,11 +63,17 @@ private:
 	* @param index
 	* @param newIndex
 	* @param changToCalendar
-	*
-	* @return newIndex if user wants to update the index.
-		      if not , -1 would be returned.
+	* This function add the new Entry to corresponding entry list
+	* based on the parameter listed above.
+	* @return void
 	*/
 	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);
+	/**
+	* @param oldEntry
+	* This function would choose oldEntry's field content as newEntry's content 
+	* if the newEntry's same filed content is empty. 
+	* @return newEntry
+	*/
 	string constructNewEntry(string oldEntry);
 
 public:
