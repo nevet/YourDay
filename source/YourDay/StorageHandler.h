@@ -68,6 +68,7 @@ private :
 	*/
 
 	//@return true->file exists,  false-> file doesn't exist
+	//Some of functions might be used in this version, but may be used in future version.
 	bool checkFileExistence(string filePath, string fileName);
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,

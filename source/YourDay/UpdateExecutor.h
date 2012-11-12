@@ -38,10 +38,35 @@ private:
 	Signal _focusingField;
 	string _encodedUserInput;
 
+	/**
+	* @param index
+	* @return true if the index valid
+			  false if invalid
+	*/
 	bool isIndexValid(int index);
-	bool verifyTheFiledChange(string newEntry);
 
+	/**
+	* @param newEntry
+	* @return true if a general Entry was updated to a Calendar Entry
+			  false if not
+	*/
+	bool verifyTheFiledChange(string newEntry);
+	
+	/**
+	* @param newEntry
+	* @return newIndex if user wants to update the index.
+		      if not , -1 would be returned.
+	*/
 	int extractNewIndex(string newEntry);
+	/**
+	* @param newEntry
+	* @param index
+	* @param newIndex
+	* @param changToCalendar
+	*
+	* @return newIndex if user wants to update the index.
+		      if not , -1 would be returned.
+	*/
 	void addNewEntryToRightPosition(string newEntry,int index, int newIndex, bool changeToCalendar);
 	string constructNewEntry(string oldEntry);
 
