@@ -1311,56 +1311,59 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 */
 void UI::printDiduknowHints()
 {
-	clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
-	gotoxy(DIDUKNOW_INIT_X, DIDUKNOW_INIT_Y);
-	switch (diduknowStatus)
-	{
-	case DIDUKNOW_INIT:
-		{				
-			cout<<DID_U_KNOW_HINTS;
-			break;
-		}
-	case ADD_COMMAND:
+	if (isDiduknowDisplay)
+	{	
+		clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
+		gotoxy(DIDUKNOW_INIT_X, DIDUKNOW_INIT_Y);
+		switch (diduknowStatus)
 		{
-			cout<<DID_U_KNOW_ADD_LINE1;
-			cout<<DID_U_KNOW_ADD_LINE2;
-			cout<<DID_U_KNOW_ADD_LINE3;
+		case DIDUKNOW_INIT:
+			{				
+				cout<<DID_U_KNOW_HINTS;
+				break;
+			}
+		case ADD_COMMAND:
+			{
+				cout<<DID_U_KNOW_ADD_LINE1;
+				cout<<DID_U_KNOW_ADD_LINE2;
+				cout<<DID_U_KNOW_ADD_LINE3;
+				break;
+			}
+		case DELETE_COMMAND:
+			{
+				cout<<DID_U_KNOW_DELETE_LINE1;
+				cout<<DID_U_KNOW_DELETE_LINE2;
+				cout<<DID_U_KNOW_DELETE_LINE3;
+				break;
+			}
+		case EXIT_COMMAND:
+			{
+				cout<<DID_U_KNOW_EXIT;
+				break;
+			}
+		case SEARCH_COMMAND:
+			{
+				cout<<DID_U_KNOW_SEARCH;
+				break;
+			}
+		case UNDO_COMMAND:
+			{
+				cout<<DID_U_KNOW_UNDO;
+				break;
+			}
+		case UPDATE_COMMAND:
+			{
+				cout<<DID_U_KNOW_UPDATE_LINE1;
+				cout<<DID_U_KNOW_UPDATE_LINE2;
+				break;
+			}
+		default:
 			break;
 		}
-	case DELETE_COMMAND:
-		{
-			cout<<DID_U_KNOW_DELETE_LINE1;
-			cout<<DID_U_KNOW_DELETE_LINE2;
-			cout<<DID_U_KNOW_DELETE_LINE3;
-			break;
-		}
-	case EXIT_COMMAND:
-		{
-			cout<<DID_U_KNOW_EXIT;
-			break;
-		}
-	case SEARCH_COMMAND:
-		{
-			cout<<DID_U_KNOW_SEARCH;
-			break;
-		}
-	case UNDO_COMMAND:
-		{
-			cout<<DID_U_KNOW_UNDO;
-			break;
-		}
-	case UPDATE_COMMAND:
-		{
-			cout<<DID_U_KNOW_UPDATE_LINE1;
-			cout<<DID_U_KNOW_UPDATE_LINE2;
-			break;
-		}
-	default:
-		break;
+		cout<<endl;	
+		gotoxy(8+currentChar,COMMAND_INIT_Y);
 	}
 	diduknowPrevStatus=diduknowStatus;
-	cout<<endl;	
-	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
 bool UI::isGeneral(string row)
@@ -1534,15 +1537,12 @@ void UI::resultListDisplay(vector<string>* resultList)
 
 void UI::diduknowHintDisplay()
 {	
-	if (isDiduknowDisplay)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
-		setDidUKnowStatus();
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+	setDidUKnowStatus();
 
-		if (diduknowStatus != diduknowPrevStatus)
-		{
-			printDiduknowHints();
-		}
+	if (diduknowStatus != diduknowPrevStatus)
+	{
+		printDiduknowHints();
 	}
 }
 

@@ -1,4 +1,3 @@
-
 #ifndef UI_H
 #define UI_H
 
@@ -72,12 +71,6 @@ using namespace std;
 class UI
 {
 private:
-
-	static const string CLEAR_SIGNAL_MESSAGE;
-	static const string ADD_SUCCESSFUL_MESSAGE;
-	static const string UPDATE_SUCCESSFUL_MESSAGE;
-	static const string DELETE_SUCCESSFUL_MESSAGE;
-	static const string ONE_EMPTY_LINE;
 
 	//@author A0088455R
 	/**
