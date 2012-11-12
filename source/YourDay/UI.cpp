@@ -90,11 +90,7 @@ void UI::drawCommandBox()
 	cout<<"                                                                                                                        ";
 	gotoxy(8,COMMAND_INIT_Y);
 }
-//@author A0091734A
-void UI::gotoCommandBox()
-{
-	gotoxy(8,COMMAND_INIT_Y);
-}
+
 //@author A0091734A
 void UI::clearBox(int startH, int height)
 {
@@ -176,6 +172,7 @@ void UI::highlightTitle()
 	gotoxy(8+currentChar,COMMAND_INIT_Y);
 }
 
+//@author A0088469H
 void UI::gotoCurChar()
 {
 	int lines;
@@ -481,6 +478,7 @@ void UI::setDidUKnowStatus()
 	}
 }
 
+//@author A0088469
 string UI::intToString(int number)
 {
 	ostringstream ostring;
@@ -489,6 +487,7 @@ string UI::intToString(int number)
 	return ostring.str();
 }
 
+//@author A0088445R
 /*
 * Initialized DidUKnow Hints box status when starting up the program for the first time
 */
@@ -498,6 +497,7 @@ void UI::initializeDidUKnowStatus()
 	diduknowStatus = DIDUKNOW_INIT;
 }
 
+//@author A0088469H
 void UI::initializeInitArrayIndices()
 {
 	indexCurCalendarInitArray = 0;
@@ -1076,6 +1076,8 @@ void UI::printMark(string mark)
 		cout<<" ";
 	}
 }
+
+//@author A0088469H
 void UI::printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition)
 {
 	string part;
@@ -1306,6 +1308,7 @@ void UI::printDiduknowHints()
 	diduknowPrevStatus=diduknowStatus;
 }
 
+//@author A0088469H
 bool UI::isGeneral(string row)
 {
 	assert(row != "");
@@ -1494,6 +1497,7 @@ void UI::diduknowHintDisplay()
 	}
 }
 
+//@author A0088469H
 void UI::lockResultDisplay()
 {
 	isResultDisplay = false;
@@ -1687,6 +1691,7 @@ void UI::startingScreenDisplay()
 	while ((c = getch()) != ENTER);
 }
 
+//@author A0088469H
 void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* generalEntryList, vector<string>* operationResultList)
 {	
 	assert(generalEntryList!=NULL);
