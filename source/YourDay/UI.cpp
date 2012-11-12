@@ -356,11 +356,11 @@ void UI::traceMovementKey()
 	{
 	case UP_ARROW:
 		scrollUp();
-		gotoxy(currentChar+COMMAND_STRING_LENGTH,COMMAND_INIT_Y);
+		gotoxy(currentChar+INPUT_START_X,COMMAND_INIT_Y);
 		break;
 	case DOWN_ARROW:
 		scrollDown();
-		gotoxy(currentChar+COMMAND_STRING_LENGTH,COMMAND_INIT_Y);
+		gotoxy(currentChar+INPUT_START_X,COMMAND_INIT_Y);
 		break;
 	case PAGE_UP:
 		changeDisplayMode();
@@ -373,16 +373,7 @@ void UI::processBackspace()
 	if (input.size()>0)
 	{
 		input = input.substr(0, input.size()-1);
-		//if (currentChar == WINDOWS_WIDTH - COMMAND_STRING_LENGTH) 
-		//{
-		//	gotoxy(WINDOWS_WIDTH -1, COMMAND_INIT_Y);
-		//	cout << " ";
-		//	gotoxy(WINDOWS_WIDTH -1, COMMAND_INIT_Y);
-		//}
-		//else
-		{
-			cout << "\b \b";
-		}
+		cout << "\b \b";
 
 		--currentChar;
 
@@ -1343,6 +1334,9 @@ void UI::printGeneralFooter()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, GENERAL_INIT_Y - 2);
+	cout << "                             ";
+	gotoxy(15, COMMAND_INIT_Y +2);
+
 	switch (generalDisplayMode)
 	{
 	case PART_MODE:
@@ -1358,6 +1352,9 @@ void UI::printCalendarFooter()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, CALENDAR_INIT_Y -2);
+	cout << "                             ";
+	gotoxy(15, COMMAND_INIT_Y +2);
+
 	switch (calendarDisplayMode)
 	{
 	case PART_MODE:
@@ -1373,6 +1370,9 @@ void UI::printResultFooter()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOOTER_COLOR);
 	gotoxy(15, COMMAND_INIT_Y +2);
+	cout << "                             ";
+	gotoxy(15, COMMAND_INIT_Y +2);
+
 	switch (resultDisplayMode)
 	{
 	case PART_MODE:
@@ -1699,7 +1699,7 @@ void UI::mainScreenDisplay(vector<string>* calendarEntryList, vector<string>* ge
 	handleResultInfo(info);
 	handleInitialIndicesOverflow();
 
-	if(operationResultList->size() !=0 )
+	if(resultList.size() !=0 )
 	{
 		isResultDisplay = true;
 		focusedField = SEARCH_RESULT;

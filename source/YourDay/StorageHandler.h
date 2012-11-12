@@ -1,3 +1,10 @@
+/**
+    YourDay
+    StorageHandler.h
+    Purpose: Read from/Write to the database of YourDay.
+
+    @author A0091734A
+*/
 #ifndef STORAGEHANDLER_H
 #define STORAGEHANDLER_H
 
@@ -20,11 +27,10 @@ using namespace std;
 * would be only called by CommandExecutor and FunctionHandler,which is used to
 * store data into the file or read data from file.
 * The storage file would be stored as .txt format, but the name would be changed to .yd to protect the content. 
-* Only Storage Handler directly operate the file system.
+* Only Storage Handler directly access the file system.
 *
-//@author A0091734A
+* @author A0091734A
 */
-
 class StorageHandler
 {
 public :
@@ -46,6 +52,14 @@ public :
 	*/
 	void writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList);
 
+private :
+	char buffer[MAXMIUM_WORDS];
+
+	static const string DataBaseGeneralFile;
+	static const string DataBaseCalendarFile;
+	static const string FILEPATH;
+	static const string ENTRY_STORE_FORMAT;
+	
 	/**
 	A series file operations 
 	
@@ -62,13 +76,6 @@ public :
 	void renameFile(string filePath, string oriName, string newName);
 	void replaceFile(string oriPath, string oriName, string repName);
 
-private :
-	char buffer[MAXMIUM_WORDS];
-
-	static const string DataBaseGeneralFile;
-	static const string DataBaseCalendarFile;
-	static const string FILEPATH;
-	static const string ENTRY_STORE_FORMAT;
 };
 
 
