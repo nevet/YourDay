@@ -9,15 +9,15 @@
 
 const int LangHandler::MONTH[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-const char LangHandler::SPACE_BAR = ' ';
-const char LangHandler::DELIMINATOR = '#';
-const char LangHandler::PRIORITY_INDICATOR = '*';
+const char LangHandler::SPACE_BAR			= ' ';
+const char LangHandler::DELIMINATOR			= '#';
+const char LangHandler::PRIORITY_INDICATOR	= '*';
 
-const string LangHandler::ADD_MARK_INDICATOR = " !!!";
-const string LangHandler::UPDATE_MARK_INDICATOR = " marked";
-const string LangHandler::UPDATE_UNMARK_INDICATOR = " unmarked";
-const string LangHandler::LOCATION_INDICATOR = " at ";
-const string LangHandler::NULL_STRING = "";
+const string LangHandler::ADD_MARK_INDICATOR		= " !!!";
+const string LangHandler::UPDATE_MARK_INDICATOR		= " marked";
+const string LangHandler::UPDATE_UNMARK_INDICATOR	= " unmarked";
+const string LangHandler::LOCATION_INDICATOR		= " at ";
+const string LangHandler::NULL_STRING				= "";
 
 bool LangHandler::isLeap(int year)
 {
