@@ -48,6 +48,7 @@ private:
 	vector<string> _combinedEntryList;
 	
 	int highestRank;
+	int totalEntries;
 	string _details;
 
 	int f[50][50];
@@ -160,7 +161,7 @@ private:
 	* @param rank
 	*			is the vector that keeps the rank of each entry of each keyword
 	*/
-	void initializeScore(int totalSize);
+	void initializeScore();
 
 	/*
 	* Initializes the Rank Vectors to the same value of total size.
@@ -174,7 +175,7 @@ private:
 	* e.g. there are 100 entries in total
 	*			each entry should have initial rank value of 100
 	*/
-	void initializeRank(int totalSize);
+	void initializeRank();
 
 	/*
 	* Initializes the _combinedEntryList vector which contains both general entry and
