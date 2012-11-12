@@ -227,11 +227,33 @@ private:
 	void setInitialIndexArrays();
 
 	int getGeneralInitIndex();
+
+	/**
+	* @param isValid is to check if we can get next general initial index in general initial indices array
+	* If reaches the end of the array, then cannot get the next item, isValid is returned false. Otherwise, it is returned true
+	*/
 	int getNextGeneralInitIndex(bool& isValid);
 	int getCalendarInitIndex();
+
+	/**
+	* @param isValid is to check if we can get next general initial index in calendar initial indices array
+	* If reaches the end of the array, then cannot get the next item, isValid is returned false. Otherwise, it is returned true
+	*/
 	int getNextCalendarInitIndex(bool& isValid);
 	int getResultInitIndex();
+
+	/**
+	* @param isValid is to check if we can get next general initial index in result initial indices array
+	* If reaches the end of the array, then cannot get the next item, isValid is returned false. Otherwise, it is returned true
+	*/
 	int getNextResultInitIndex(bool& isValid);
+
+	/** This operation is used to find the nearest item in an initial index array whose value is near to the entry index passed in
+	* It will be called when changing display mode or after an entry is added/updated by function executor in main
+	* @param initialIndexArray is the array to store the initial indices
+	*		It maybe generalInitialIndexArray or calendarInitialIndexArray
+	* @param entryIndex is the entry index that we need to find the item in initial index array that is nearest to it
+	*/
 	int findNearestInitArrayIndex(vector<int>* initialIndexArray, int entryIndex);
 
 	void changeDisplayMode();
@@ -264,9 +286,25 @@ private:
 	*/
 	void printLimitedLengthPart(string part, int maxLength, int initX, int initY, int& endPosition);
 
-	/** This operation is used to display an entry when the current displaying mode is 
+	/** This operation is used to display an entry when the current displaying mode is PART_MODE
+	* @param positionArray is the array that stores the initial positions for each part 
+	*	The parts are index, description, location, time, date, priority
+	* @param colorArray is the array that stores the color for each part
+	* @param partArray is the array that stores the parts to be display
+	* @param index is the up-counting index of the entry in its list
+	* @rowPosition is the vertical row position to print the entry
 	*/
 	void printEntryPartMode(int* positionArray, int* colorArray, string* partArray, int index, int rowPosition);
+
+	/** This operation is used to display an entry when the current displaying mode is FULL_MODE
+	* @param positionArray is the array that stores the initial positions for each part 
+	*	The parts are index, description, location, time, date, priority
+	* @param colorArray is the array that stores the color for each part
+	* @param partArray is the array that stores the parts to be display
+	* @param index is the up-counting index of the entry in its list
+	* @rowPosition is the vertical row position to print the entry
+	*		It will feedback the updated current line after printing the entry
+	*/
 	void printEntryFullMode(int* positionArray, int* colorArray, string* partArray, int index, int& rowPosition);
 	
 	void printMark(string mark);
