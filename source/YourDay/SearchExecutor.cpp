@@ -34,16 +34,6 @@ string SearchExecutor::splitFirstTerm(string* rawString)
 	return firstTerm;
 }
 
-void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
-{
-	assert(result!="");
-
-	ostringstream ostring;
-	ostring << "#" << index << result.substr(1,result.size()-1);
-
-	*formattedResult = ostring.str();
-}
-
 bool SearchExecutor::isLeap(int year)
 {
 
