@@ -178,6 +178,7 @@ private:
 	void writeHighlightedTitle(string words,int startH, int startW);
 	void highlightTitle();
 
+	void gotoCurChar();
 	string intToString(int number);
 
 	//@author A0088455R
