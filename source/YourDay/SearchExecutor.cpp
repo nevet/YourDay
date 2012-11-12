@@ -34,16 +34,6 @@ string SearchExecutor::splitFirstTerm(string* rawString)
 	return firstTerm;
 }
 
-void SearchExecutor::formatSearchResult(int index, string result, string* formattedResult)
-{
-	assert(result!="");
-
-	ostringstream ostring;
-	ostring << "#" << index << result.substr(1,result.size()-1);
-
-	*formattedResult = ostring.str();
-}
-
 bool SearchExecutor::isLeap(int year)
 {
 
@@ -216,8 +206,6 @@ void SearchExecutor::adjustRank()
 		}
 	}
 }
-
-	
 
 void SearchExecutor::splitWords(string encoded, vector<string>* list)
 {
@@ -434,18 +422,20 @@ bool SearchExecutor::unrelavent(matchInfo info, string key)
 {
 	bool flag;
 
-	if (info.match <= key.length() / 2)
+	if (info.match <= key.length() / 2 && key.length() > 4 ||
+		info.match < key.length() / 2 && key.length() <= 4)
 	{
 		flag = true;
 	} else
-	if (info.match <= info.str.length() / 2)
+	if (info.match <= info.str.length() / 2 && info.str.length() > 4 ||
+		info.match < info.str.length() / 2 && info.str.length() <= 4)
 	{
-		if (info.continuity > info.str.length() / 2)
-		{
-			flag = true;
-		} else
+		if (info.continuity <= info.str.length() / 2 && info.change == 0)
 		{
 			flag = false;
+		} else
+		{
+			flag = true;
 		}
 	} else
 	if (info.continuity > info.str.length() / 2)
@@ -602,18 +592,13 @@ void SearchExecutor::searchDate(string keyword)
 	int i;
 
 	noMatch = true;
-
-	
-
-	highestRank=0;
-
-
-	
+	highestRank=0;	
 
 	for (i = 0; i < totalEntries; i++)
 	{
 		checkEntryDate(i, keyword);
 	}
+
 	adjustRank();	
 }
 
@@ -704,16 +689,15 @@ void SearchExecutor::searchTime(string keyword)
 	assert(keyword!="");
 
 	int i;
+
 	highestRank=0;
-
 	noMatch = true;
-
-	int totalEntries = _combinedEntryList.size();
 	
 	for (i=0; i<totalEntries; i++)
 	{
 		checkEntryTime(i, keyword);
 	}
+
 	adjustRank();
 }
 
@@ -845,7 +829,6 @@ void SearchExecutor::execute() throw (string)
 	vector<integerPair> tempMatchedList;
 
 	int weight;
-	int suggestWordsCnt = 1;
 	
 	string key = extractDescription(_details);
 	string currentKey;
