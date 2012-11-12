@@ -42,6 +42,7 @@ private:
 	* @param index
 	* @return true if the index valid
 			  false if invalid
+	//The index is only valid when 0<=index<Total Number of Entry List
 	*/
 	bool isIndexValid(int index);
 
