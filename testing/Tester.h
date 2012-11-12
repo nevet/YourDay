@@ -290,13 +290,13 @@ TEST(add_executor,calendar_entry)
  {
 	 vector<string>* testGeneralVectorPointer;
 	 vector<string>* testCalendarVectorPointer;
-	  vector<string>* testResultVectorPointer;
+	 vector<string>* testResultVectorPointer;
 	 vector<string>* matchedListPointer;
 	 vector<string> testGeneralVector;
 	 vector<string> testCalendarVector;
 	 vector<string> testResultVector;
 	 vector<string> matchedList;
-	 
+
 
 	 string details;
 
@@ -304,9 +304,10 @@ TEST(add_executor,calendar_entry)
 	 testCalendarVectorPointer=&testCalendarVector;
 	 matchedListPointer=&matchedList;
 	 testResultVectorPointer = &testResultVector;
-	
+
 	 details = "##I am Wu Pei, the test leader of our group.####";
 	 AddExecutor addExec1(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);
+	 addExec1.execute();
 	 details =  "##Sometimes I feel sad, because as a tester, I find it is harder.####";
 	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);
 	 addExec2.execute();
@@ -316,17 +317,17 @@ TEST(add_executor,calendar_entry)
 	 details =  "##So, I am painful but happy now.####";
 	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);
 	 addExec4.execute();
-	 
-	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wupei####");
-	 searchExec1.execute();
-//	 this is only one entry containing "wupei".
-	// ASSERT_EQ(matchedList[0],"##I am Wu Pei, the test leader of our group.####");
-	 
-	// SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##time####");
-	// searchExec2.execute();
-	 //this is only one entry containing "wupei".
-	// ASSERT_EQ(matchedList[0],"##But most time I am still happy, because I am in a nice group.####");
-	// ASSERT_EQ(matchedList[1],"##Sometimes I feel sad, because as a tester, I find it is harder.####");
+
+	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##wu pei####");
+	 searchExec1.execute();	
+	 //	 this is only one entry containing "wu pei".
+	 ASSERT_EQ(matchedList[0],"#G0#I am Wu Pei, the test leader of our group.####");
+	 matchedList.clear();
+	 SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##time####");
+	 searchExec2.execute();
+	 //there is one entry containing "time".
+	 ASSERT_EQ(matchedList[0],"#G2#But most time I am still happy, because I am in a nice group.####");
+	
  }
  //@author A0091734A
  TEST(Power_search_test, nothing_matched)
@@ -362,7 +363,7 @@ TEST(add_executor,calendar_entry)
 	 SearchExecutor searchExec(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##Soe Myat####");
 	 searchExec.execute();
 	 //As nothing matched, there should be no result.
-	// ASSERT_EQ(matchedListPointer->size(),0);
+	 // ASSERT_EQ(matchedListPointer->size(),0);
 
  }
  //@author A0091734A
@@ -395,23 +396,24 @@ TEST(add_executor,calendar_entry)
 	 details = "##Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#";
 	 AddExecutor addExec2(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);;
 	 addExec2.execute();
-	 details =  "##Meeting CS2103#UTown#15:00-18:00#21/10/2012#high#";
+	 details =  "##Meeting CS2106#UTown#15:00-18:00#21/10/2012#high#";
 	 AddExecutor addExec3(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);
 	 addExec3.execute();
-	 details = "##Meeting CS2103#UTown#16:00-19:00#20/10/2012#high#";
+	 details = "##Meeting CS2104#UTown#16:00-19:00#20/10/2012#high#";
 	 AddExecutor addExec4(testGeneralVectorPointer, testCalendarVectorPointer, testResultVectorPointer, details);
 	 addExec4.execute();
 	 //when there are two calendar entries containing this specific time, one is at front ,one is at the back
 	 SearchExecutor searchExec1(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##13:05####");
 	 searchExec1.execute();
-	 ASSERT_EQ(matchedList[0],"##Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#");
-	 ASSERT_EQ(matchedList[1],"##Meeting CS2100#UTown#13:01-13:05#22/10/2012#high#");
+	 ASSERT_EQ(matchedList[0],"#C2#Meeting CS2103#UTown#13:05-14:00#21/10/2012#high#");
+	// ASSERT_EQ(matchedList[1],"#C1#Meeting CS2100#UTown#13:01-13:05#22/10/2012#high#");
 	 ASSERT_EQ(matchedListPointer->size(),2);
+	 matchedList.clear();
 	 //when there are two calendar entries containing the same time, one is in the between, one is at the front.
 	 SearchExecutor searchExec2(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##16:00####");
 	 searchExec2.execute();
-	 ASSERT_EQ(matchedList[0],"##Meeting CS2104#UTown#16:00-19:00#23/10/2012#high#");
-	 ASSERT_EQ(matchedList[1],"##Meeting CS2106#UTown#15:00-18:00#24/10/2012#high#");
+	 ASSERT_EQ(matchedList[0],"#C0#Meeting CS2104#UTown#16:00-19:00#20/10/2012#high#");
+	 ASSERT_EQ(matchedList[1],"#C3#Meeting CS2106#UTown#15:00-18:00#24/10/2012#high#");
 	 ASSERT_EQ(matchedListPointer->size(),2);
 	 //when there is no entry containing this specific time.
 	 SearchExecutor searchExec3(testGeneralVectorPointer, testCalendarVectorPointer, matchedListPointer, "##14:02####");
@@ -457,8 +459,8 @@ TEST(add_executor,calendar_entry)
 	 searchExec1.execute();
 	 ASSERT_EQ(matchedList[0],"##Meeting CS2103#UTown#15:00-18:00#21/10/2012#high#");
 	 ASSERT_EQ(matchedListPointer->size(),1);
-	 
-	 
+
+
  }
  //@author A0091734A
  TEST(undo_test,add_undo)
