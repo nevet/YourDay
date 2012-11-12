@@ -1241,7 +1241,7 @@ void UI::printResultEntry(int index, string row, int &rowPosition)
 void UI::printDiduknowHints()
 {
 	int lines;
-	string newLineCharCount;
+	int newLineCharCount;
 	if (isDiduknowDisplay)
 	{	
 		clearBox(DIDUKNOW_INIT_Y,BOTTOM_BOX_HEIGHT);
