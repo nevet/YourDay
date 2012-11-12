@@ -179,7 +179,6 @@ int Executor :: extractIndexFromDescription(string description)
 	int index;
 	bool isAllNumber = true;
 
-
 	int size=description.size();
 	cstr = new char [description.size()+1];
 	strcpy (cstr, description.c_str());	
@@ -189,7 +188,7 @@ int Executor :: extractIndexFromDescription(string description)
 
 	string mystring(firstWord);
 	length = mystring.size();
-
+	//only when the description stores only 
 	for(int i=0;i<length;i++)
 	{
 		if(!(firstWord[i]<='9' && firstWord[i]>='0'))
