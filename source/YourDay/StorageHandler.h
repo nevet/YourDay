@@ -53,6 +53,7 @@ public :
 	void writeData(vector<string> *ramForGeneralList, vector<string>  *ramForCalendarList);
 
 private :
+	//The maximum words stored for one line/entry.
 	char buffer[MAXMIUM_WORDS];
 
 	static const string DataBaseGeneralFile;
@@ -60,16 +61,15 @@ private :
 	static const string FILEPATH;
 	static const string ENTRY_STORE_FORMAT;
 	
+	//@return true->file exists,  false-> file doesn't exist
+	bool checkFileExistence(string filePath, string fileName);
+
 	/**
 	A series file operations 
 	
 	@param the name of the file and the the path of file	
 	@return void
 	*/
-
-	//@return true->file exists,  false-> file doesn't exist
-	bool checkFileExistence(string filePath, string fileName);
-
 	void disassociateFile(fstream & file);
 	void associateFile(string filePath, string fileName,
 		fstream & file, OPEN_TYPE mode);
