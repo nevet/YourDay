@@ -214,7 +214,7 @@ private:
 	matchInfo compare(matchInfo a, matchInfo b);
 	void updateSuggestWords(string* suggestWords, string updWord);
 	bool unrelavent(matchInfo info, string key);
-	void examRelavence(vector<matchInfo>* list, string key);
+	void examRelavence(vector<matchInfo>* list, vector<int>* rank, string key);
 
 	void encodeIndex(string* encodedEntry, int index);
 

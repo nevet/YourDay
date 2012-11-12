@@ -437,7 +437,7 @@ bool SearchExecutor::unrelavent(matchInfo info, string key)
 	return info.match <= key.length() / 2 || info.match <= info.str.length() / 2 || info.continuity > info.str.length() / 2;
 }
 
-void SearchExecutor::examRelavence(vector<matchInfo>* list, string key)
+void SearchExecutor::examRelavence(vector<matchInfo>* list, vector<int>* rank, string key)
 {
 	vector<matchInfo> newList;
 	
@@ -450,6 +450,9 @@ void SearchExecutor::examRelavence(vector<matchInfo>* list, string key)
 		if (!unrelavent((*list)[i], key))
 		{
 			newList.push_back((*list)[i]);
+		} else
+		{
+			(*rank)[(*list)[i].index] = 0;
 		}
 	}
 
@@ -737,7 +740,7 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 
 	sort(best.begin(), best.end(), cmp);
 
-	examRelavence(&best, key);
+	examRelavence(&best, rank, key);
 
 	if (!best.empty())
 	{
@@ -778,6 +781,9 @@ void SearchExecutor::searchText(string key, vector<int>* rank, vector<string>* s
 				}
 			}
 		}
+	} else
+	{
+		tempTreshold = 1;
 	}
 
 	treshold += tempTreshold;
